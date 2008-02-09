@@ -1,0 +1,102 @@
+\documentclass[12pt]{article}
+\usepackage{fullpage,setspace}
+
+\usepackage{tocbibind}
+
+% Change ToC title
+\renewcommand\contentsname{Table of Contents}
+
+% Section numbering only of main sections
+\setcounter{secnumdepth}{1}
+
+% Put an index into this manual
+\usepackage{makeidx}
+\makeindex
+
+
+\usepackage{sidecap}
+\usepackage{subfig}
+\usepackage{graphicx,amsmath,amssymb}
+\usepackage{pstricks}
+\usepackage{epic,eepic}
+\usepackage{url}
+\usepackage{listings}
+\usepackage{longtable}
+\usepackage{units}
+
+% make sure to put this last!!
+\usepackage[colorlinks]{hyperref}
+
+\newcommand{\gui}[1]{{\ttfamily "#1"}}
+\newcommand{\code}[1]{{\ttfamily "#1"}}
+\newcommand{\macroline}[1]{{\ttfamily "#1"}}
+\newcommand{\macrolinenoquotes}[1]{{\ttfamily #1}}
+\newcommand{\selectordeselect}[0]{\macrolinenoquotes{Select} or \macrolinenoquotes{Deselect} }
+
+
+% This is formatting for the source code and 
+% other files in my paper
+\lstset{numbers=left,columns=fixed}
+\lstset{basicstyle=\ttfamily}
+%\lstset{basicstyle=\ttfamily\small}
+\lstset{language=csh}
+\lstset{xleftmargin=3em,xrightmargin=3em}
+\lstset{frame=tb}
+%\lstset{commentstyle=\bfseries\color{black}\underbar}
+
+
+\begin{document}
+
+\title{X-ray Diffraction GUI Manual\footnote{The red text in this paper are links to other parts of the document or other webpages.}}
+\date{\today}
+\author{Joshua~Lande (\href{mailto:joshualande@gmail.com}{joshualande@gmail.com})}
+\maketitle
+
+\tableofcontents
+
+\section{Tips and Tricks}
+\index{Tips and Tricks}
+\input{tips_and_tricks_body}
+
+\section{Examples}
+\index{Examples}
+\input{examples}
+
+\section{Diffraction Theory and Detector Geometries}
+\index{Diffraction Theory}
+\index{Detector Geometries}
+\input{diffraction_theory}
+
+\section{Calibration}
+\label{calibration}
+\index{Calibration}
+\input{calibration}
+
+\section{Caking}
+\label{Caking}
+\input{caking}
+
+\section{Intensity Integration}
+\index{Intensity Integration}
+\input{intensity_integration}
+
+\section{Pixel Masking}
+\index{Pixel Masking}
+\input{pixel_masking}
+
+\section{Macros}
+\index{Macros}
+\input{macro}
+
+\section{Software Licensing}
+\index{Software Licensing}
+\input{licensing}
+
+\bibliographystyle{plain}
+\bibliography{AreaDiffractionMachineManual} 
+
+\printindex
+
+\end{document}
+
+

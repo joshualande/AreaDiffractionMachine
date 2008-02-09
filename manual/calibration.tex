@@ -1,0 +1,94 @@
+One of the most common types of analysis of diffraction data
+is to perform an intensity integration in $Q$. This will 
+create a plot of average intensity as a function of $Q$.
+Since powder diffraction procedures cones of light, this means
+that the intensity should be uniformly large for some $Q$
+values and uniformly low for others, leading to $Q$ values
+where the intensity sharply peaks. The $Q$ values that lead 
+to these peaks can be used to learn structural information
+about the crystals that are being diffracted. So in principle,
+using the transformations just described, it should be easy
+to convert all of the pixel coordinates $(x_d,y_d)$ into
+$Q$ values and then plot average intensity as a function of
+$Q$. The only problem we would face is that in order to do
+the transformation, we would need to know the values of the
+the parameters that characterize an experiment. These are
+$x_c$, $y_c$, $d$, $\lambda$, $\alpha$, $\beta$, and 
+$R$.\footnote{The pixel scale $ps$ is usually know in advance 
+as a uniform property of the detector being used.} Calibration
+then is the process used to find what we will now call the
+calibration values.
+
+\subsection{The Calibration Algorithm}\index{calibration}
+
+Although in principle all the calibration values could be
+experimentally measured, in practice they can not be
+directly measured to an acceptable level of precision. 
+Instead, a standard calibration procedure is used to 
+infer these values from real diffraction data. The 
+trick to doing this calibration is to image a standard
+while performing the diffraction analysis of an 
+unknown sample. Assuming that the diffraction machine
+was not changed between the collection of the 
+standard crystal and the diffraction of the unknown sample, 
+the calibration data corresponding to the two 
+images will be the same. So, if we can figure out the
+calibration values of the standard crystal, we can
+use these values when analyzing the unknown crystal.
+This is exactly what is done in practice.
+
+What it means to use a standard crystal is to know the
+particular $Q$ values for which the crystal preferentially
+scatters light. With this information, and the 
+calibration values for some particular experiment,
+we could in principle figure out exactly what diffraction
+pattern we should find. This do this, we could, for
+each $Q$ value, vary $\chi$ and calculate the 
+$(x_d,y_d)$ coordinate corresponding to that $(Q,\chi)$
+pair. After using enough $\chi$ values, we would be 
+able to fill in the rings as they would show up on 
+the detector.
+
+In fact, my program can do just this. If you load in 
+a set of $Q$ values (more about this in section 
+\ref{TheQValues})\index{$Q$ Values}
+and then put into the program some calibration values,
+and then push the \gui{Draw Q Values?} check box, 
+you can then see what the particular diffraction
+image would have shown up on the detector. 
+(NEED TO SHOW EXAMPLE HERE)
+
+Being able to do this still leaves us with a hard 
+problem to solve. For particular calibration values,
+we can eaisly calcualte what the defraction pattern 
+should look like. But what we really know is what
+the calibration values are for the known diffraction
+pattern of a standard crystal. In order to perform the
+real calibration, then, we can vary the calibration 
+values until they make the mattern that can be calculated
+to show up to match the pattern that was actually 
+captured. The process of image calibration then is a 
+procedure to `fit' the calibraiton values to a
+diffraciton patter with known $Q$ values.
+
+\subsubsection{The Fitting} 
+
+
+
+
+
+
+
+\begin{SCfigure}
+\centering
+\input{figures/Fitting.tex}
+\caption{Here is a schematic diagram of the peak finding 
+algorithm. For a particular $\chi$ slice, my code fits 
+Gaussian along the line to find the peaks.}
+\label{Fitting}
+\end{SCfigure}
+
+
+\subsection{Performing Image Calibration}
+
+\subsection{The $Q$ File Format}\label{TheQValues}

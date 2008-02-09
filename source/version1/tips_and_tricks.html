@@ -1,0 +1,386 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>Tips and Tricks</TITLE>
+<META NAME="description" CONTENT="Tips and Tricks">
+<META NAME="keywords" CONTENT="tips_and_tricks">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=utf-8">
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="tips_and_tricks.css">
+
+</HEAD>
+
+<BODY >
+
+<P>
+
+<H1 ALIGN=CENTER>Tips and Tricks</H1>
+<P ALIGN=CENTER><STRONG>Joshua&nbsp;Lande (joshualande@gmail.com)</STRONG>
+</P>
+<BR><P ALIGN=CENTER><B>Date:</B> February 9, 2008</P>
+
+<HR>
+
+<P>
+
+<H2><A NAME="SECTION00001000000000000000">
+Calibration</A>
+</H2>
+
+<P>
+The Calibration tab lets you load into the program 
+x-ray diffraction data and it lets you calibrate 
+this data to determine the experimental parameters 
+that characterize the diffraction experiment. You 
+can load in diffraction data using the 
+<TT>"Data File:"</TT> input. The program 
+recognizes <TT>"mar2300"</TT>, <TT>"mar3450"</TT>, 
+<TT>"mccd"</TT>, and <TT>"tiff"</TT> data. To load 
+multiple files at once, and work the with sum image, 
+you need to go into the file part of the menu and 
+select <TT>"Open Multiple Files"</TT>.
+
+<P>
+Image Calibration is used to infer the experimental 
+setup by analyzing standard diffraction data. This 
+program characterizes a diffraction experiment 
+with several parameters:
+
+<UL>
+<LI><TT>"xc:"</TT>, <TT>"yc:"</TT> - The <SPAN CLASS="MATH"><I>x</I></SPAN> 
+and <SPAN CLASS="MATH"><I>y</I></SPAN> coordinates on the detector where the incoming 
+x-ray beam would have hit the detector were there 
+no sample in the way (in pixels).
+</LI>
+<LI><TT>"d:"</TT> - Distance from sample to 
+        detector (in mm).
+</LI>
+<LI><TT>"E:"</TT> - Energy of the incoming beam (in eV).
+</LI>
+<LI><TT>"alpha:"</TT>, <TT>"beta:"</TT> 2 orthogonal tilt 
+        parameters of the detector (in degrees).
+</LI>
+<LI><TT>"R:"</TT> - The rotation of the detector 
+        around the center (in degrees).
+</LI>
+<LI><TT>"pl:"</TT> - The pixel length of the image. 
+        The width of one pixel (in microns).
+</LI>
+<LI><TT>"ph:"</TT> - The pixel height of the image. 
+        The height of one pixel (in microns).
+</LI>
+</UL>
+
+<P>
+Before calibrating an image, three things must be done. 
+First, you must load data taken of a standard calibration 
+sample. Then, you must load a <SPAN CLASS="MATH"><I>Q</I></SPAN> data file with <SPAN CLASS="MATH"><I>Q</I></SPAN> values 
+of peaks corresponding to the sample. Finally, the program 
+needs an initial guess at the calibration values. This can 
+be done with the <TT>"Parameters"</TT> inputs. You can sometimes 
+find some of the calibration data in the header of a 
+diffraction file. If the header contains any of this data, 
+you can push the <TT>"Get From Header"</TT> button to put the 
+header values into the inputs. Once an initial guess is 
+given, the <TT>"Do Fit"</TT> button will refine the calibration 
+parameters and get the best guess at the real experimental 
+parameters.
+
+<P>
+<SPAN CLASS="MATH">2<I>&#952;</I></SPAN> is the angle of scatter of a particular beam of light 
+which left the crystal and arrived at the detector at a certain 
+point. <SPAN CLASS="MATH">2<I>&#952;</I></SPAN> is a property of all points on the detector 
+dependent on exactly how the diffraction experiment is set up. 
+<SPAN CLASS="MATH"><I>Q</I></SPAN> is defined as <!-- MATH
+ $Q=4\pi \times \sin(2\theta/2)/\lambda$
+ -->
+<SPAN CLASS="MATH"><I>Q</I> = 4<I>&#960;</I>&#215;sin(2<I>&#952;</I>/2)/<I>&#955;</I></SPAN>, the 
+wavelength of the incoming beam. <SPAN CLASS="MATH"><I>D</I></SPAN> is defined as <SPAN CLASS="MATH">2<I>&#960;</I>/<I>Q</I></SPAN>.
+
+<P>
+If you prefer to deal with a photons' wavelength instead of its 
+energy, you can go into the Calibration menu and switch from
+<TT>"Work in eV"</TT> to <TT>"Work in Lambda"</TT>. If you do so, the
+calibration parameter <TT>"E:"</TT> will be replaced with
+<TT>"<SPAN CLASS="MATH"><I>&#955;</I></SPAN>:"</TT> and the current value will be converted. 
+The conversion between these is <!-- MATH
+ $E=hc/\lambda$
+ -->
+<SPAN CLASS="MATH"><I>E</I> = <I>hc</I>/<I>&#955;</I></SPAN>.
+
+<P>
+The <TT>"Q Data:"</TT> input lets you load in <SPAN CLASS="MATH"><I>Q</I></SPAN> data. The Format
+of a <SPAN CLASS="MATH"><I>Q</I></SPAN> data file is a 2 column space or tab separated plain
+text file. The first line must be <TT>"Q    dQ"</TT>. The rest of
+the file must be lines of <SPAN CLASS="MATH"><I>Q</I></SPAN> values followed by a <SPAN CLASS="MATH"><I>&#916;Q</I></SPAN>
+range. The <SPAN CLASS="MATH"><I>&#916;Q</I></SPAN> range gives the program a range in the
+image where it can find the real diffraction peaks. You can
+give a list of <SPAN CLASS="MATH"><I>D</I></SPAN> values instead. The first line must be of
+the form <TT>"D   dD"</TT> and this must be followed by lines of
+<SPAN CLASS="MATH"><I>D</I></SPAN> and <SPAN CLASS="MATH"><I>&#916;D</I></SPAN>. For the fit to work, no other diffraction
+peaks in the image can fall within a <SPAN CLASS="MATH"><I>Q</I></SPAN> range. This program
+stores many standard <SPAN CLASS="MATH"><I>Q</I></SPAN> files. To get at them, click the 
+<TT>"Calibration"</TT> option in the menu, then the <TT>"Standard Q"</TT>
+option, and pick the crystal that you are using.
+
+<P>
+You can modify the fit in a couple of ways. To do the fit,
+the calibration algorithm will look a certain number of 
+places in the image to find diffraction peak. It does by
+running from the center of the image out and looking for
+peaks in the <SPAN CLASS="MATH"><I>&#916;Q</I></SPAN> ranges. Once the program finds
+these peaks, it can store the peak list and use the same
+one when fitting again. This option can be changed using
+the <TT>"Use Old Peak List (if possible)?"</TT> selection. If
+you want to change the number of peaks that the program
+tries to find, you can use the <TT>"Number of Chi?"</TT> input.
+This tells the program how many of these radial slices from 
+the center should be done. The <TT>"Stddev?"</TT> input tell the 
+program what ratio higher the peak must be then the standard
+deviation of the background near the peak in order for the
+peak to be considered real. The higher the value, the more
+picky the program is about finding legitimate peaks.
+
+<P>
+If you know some of the experimental parameters exactly, you
+can push the <TT>"Fixed?"</TT> check box associated with that
+variable and it will be not refined when fitting. The pixel 
+length and pixel height are never refined.
+
+<P>
+To see how good the current calibration parameters are at
+characterizing the loaded data, you can use the 
+<TT>"Draw Q Lines?"</TT> check box to make the program draw
+on the diffraction image the lines of constant <SPAN CLASS="MATH"><I>Q</I></SPAN> given
+by the <SPAN CLASS="MATH"><I>Q</I></SPAN> data file. You can also draw the <SPAN CLASS="MATH"><I>Q</I></SPAN> range 
+specified in the <SPAN CLASS="MATH"><I>Q</I></SPAN> file using the <TT>"Draw dQ Lines?"</TT> 
+check box. To see what peaks the program found while doing the 
+fit, you can select the <TT>"Draw Peaks?"</TT> check box and the
+peaks will be displayed on top of the diffraction image.
+
+<P>
+You can zoom into the diffraction image by left clicking
+in the image, dragging your mouse, and then releasing.
+You can zoom out by right clicking on the image. You can
+pan across the image by shift clicking on the image and 
+then dragging. You can make the image bigger or smaller 
+by resizing the window.
+
+<P>
+In the file menu, you can use the <TT>"Save Image"</TT> option
+to save the current diffraction file in several popular
+image formats. The image will be saved with the current
+zoom level and any <SPAN CLASS="MATH"><I>Q</I></SPAN> lines, <SPAN CLASS="MATH"><I>&#916;Q</I></SPAN> lines, or peaks
+drawn on top of it.
+
+<P>
+
+<H2><A NAME="SECTION00002000000000000000">
+Masking</A>
+</H2>
+
+<P>
+You can make the program ignore certain pixels when doing
+diffraction analysis. This is all done on the <TT>"Masking"</TT>
+tab. To have the program ignore pixels above or below a 
+certain value, use the threshold masking option.
+You can have the program ignore all pixels that are larger 
+then a certain value by selecting 
+<TT>"Do Greater Than Mask?"</TT> and putting the particular value
+into the <TT>"(Pixels Can't Be) Greater Than Mask:"</TT> input.
+You can have the program ignore all pixels less than a certain
+value with the corresponding <TT>"Do Less Than Mask?"</TT>
+and the <TT>"(Pixel's Can't Be) Less Than Mask:"</TT> input.
+Once you set the threshold, these any pixel either too large
+or too small will be displayed on the diffraction and cake
+displays as a different color. That color is user 
+specified by the color inputs next to the checkboxes. 
+When you do an intensity integration, these pixels are 
+not used in the averages.
+
+<P>
+You can also have the program mask certain whole areas 
+of the image if those pixels are undesirable for some 
+reason. If you wish to do so, select the 
+<TT>"Do Polygon Mask?"</TT> option. To draw the image on the
+screen that you do not want, click <TT>"Add Polygon"</TT> and
+then then left click on the diffraction image for each 
+of the vertices of the polygon that you want to mask out.
+To draw the final vertex and finish the polygon, just
+use right click. To remove any polygon, push the 
+<TT>"Remove Polygon"</TT> button and click on the polygon that
+you want to get rid of. You can remove all the polygons
+in the program using the <TT>"Clear Mask"</TT> button, save
+all the polygons in the program to a file using the
+<TT>"Save Mask"</TT> button, and load saved polygons using
+the <TT>"Load Mask"</TT> button.
+
+<P>
+
+<H2><A NAME="SECTION00003000000000000000">
+Cake</A>
+</H2>
+
+<P>
+A caked image is a plot of diffraction data in <SPAN CLASS="MATH"><I>Q</I></SPAN>, 
+<SPAN CLASS="MATH"><I>&#967;</I></SPAN> space. <SPAN CLASS="MATH"><I>&#967;</I></SPAN> is a measure of the angle around 
+what would be the incoming x-ray beam if the beam was 
+not scattered. By convention, <SPAN CLASS="MATH"><I>&#967;</I></SPAN> is equal to 0
+degrees to the right of the pixel center of the image 
+and increases while going counterclockwise. To cake the
+data, you need to give the program a range and bin size 
+in both <SPAN CLASS="MATH"><I>Q</I></SPAN> and <SPAN CLASS="MATH"><I>&#967;</I></SPAN>. When you push <TT>"Do Cake"</TT>, the
+program will present a new window with the caked data in
+it. You can interact with the cake image just like with
+the diffraction image described above. If you have one of
+the <TT>"Draw Q Lines"</TT>, or <TT>"Draw dQ Lines"</TT> or 
+<TT>"Draw Peaks"</TT> boxes selected from the <TT>"Calibration"</TT> 
+tab, these will also be drawn on the cake image. In particular,
+the <SPAN CLASS="MATH"><I>Q</I></SPAN> and <SPAN CLASS="MATH"><I>&#916;Q</I></SPAN> lines are just vertical lines on the
+caked image. You can save the caked data as plain text 
+using the <TT>"Save Data"</TT> button. You can save the caked 
+image as a popular image format using the <TT>"Save Image"</TT>
+button. The image will have the <SPAN CLASS="MATH"><I>Q</I></SPAN> lines and peaks saved
+in the image if that option is selected when saving.
+
+<P>
+You can also apply a polarization correction to the caked
+data using the <TT>"Do Polarization Correction?"</TT> check box
+and the <TT>"P?"</TT> input. The formula to calculate a 
+polarization correction is:
+<BR>
+<DIV ALIGN="CENTER" CLASS="mathdisplay">
+<!-- MATH
+ \begin{eqnarray}
+I&=&Im/PF \\
+    PF&=&P(1 - (\sin(2\theta)\sin(\chi-90))^2) +
+    (1 - P)(1 - (\sin(2\theta)\cos(\chi-90))^2)
+\end{eqnarray}
+ -->
+<TABLE CELLPADDING="0" ALIGN="CENTER" WIDTH="100%">
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><I>I</I></TD>
+<TD WIDTH="10" ALIGN="CENTER" NOWRAP>=</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><I>Im</I>/<I>PF</I></TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+(<SPAN CLASS="arabic">1</SPAN>)</TD></TR>
+<TR VALIGN="MIDDLE"><TD NOWRAP WIDTH="50%" ALIGN="RIGHT"><I>PF</I></TD>
+<TD WIDTH="10" ALIGN="CENTER" NOWRAP>=</TD>
+<TD ALIGN="LEFT" NOWRAP WIDTH="50%"><I>P</I>(1 - (sin(2<I>&#952;</I>)sin(<I>&#967;</I> -90))<SUP>2</SUP>) + (1 - <I>P</I>)(1 - (sin(2<I>&#952;</I>)cos(<I>&#967;</I> -90))<SUP>2</SUP>)</TD>
+<TD CLASS="eqno" WIDTH=10 ALIGN="RIGHT">
+(<SPAN CLASS="arabic">2</SPAN>)</TD></TR>
+</TABLE></DIV>
+<BR CLEAR="ALL">
+
+with <SPAN CLASS="MATH"><I>Im</I></SPAN> the measured intensity. There is a convenient
+feature called AutoCake which picks a range of <SPAN CLASS="MATH"><I>Q</I></SPAN> and <SPAN CLASS="MATH"><I>&#967;</I></SPAN> 
+values and then cakes that range. AutoCake will pick the
+smallest cake range so that the whole image shows up in
+the cake. It will pick the bin size so that each pixel 
+displayed on the screen corresponds to a single bin.
+
+<P>
+
+<H2><A NAME="SECTION00004000000000000000">
+Integrate</A>
+</H2>
+
+<P>
+Intensity integration lets you calculate average intensity
+as a function of <SPAN CLASS="MATH"><I>Q</I></SPAN>, <SPAN CLASS="MATH"><I>&#967;</I></SPAN>, or <SPAN CLASS="MATH">2<I>&#952;</I></SPAN>. By default, the
+option is to integrate in <SPAN CLASS="MATH"><I>Q</I></SPAN> or <SPAN CLASS="MATH"><I>&#967;</I></SPAN>. If you want to 
+integrate in <SPAN CLASS="MATH">2<I>&#952;</I></SPAN>, you must click on the integrate 
+option of the menu and select <TT>"Work in 2theta"</TT> instead
+of <TT>"Work in Q"</TT>. To integrate intensity, you need to
+give a lower value, an upper value, and a bin size. With 
+these inputs, the <TT>"Integrate"</TT> button will perform the
+integration. This data will be plotted in a new window.
+By default, the integration will be over all possible values
+of the other independent variable. If you integrate in <SPAN CLASS="MATH"><I>Q</I></SPAN>,
+it will be for all <SPAN CLASS="MATH"><I>&#967;</I></SPAN>. This can be changed by using the
+constrain checkboxes. For example, to integrate in <SPAN CLASS="MATH"><I>Q</I></SPAN> only
+for the <SPAN CLASS="MATH"><I>&#967;</I></SPAN> values between 0 and 90, you would select the
+<TT>"Constraint With Range on Right?"</TT> option and the put in
+the <TT>"Chi Lower?"</TT> input the value 0 and the <TT>"Chi Upper?"</TT>
+input the value 90.  When you then pushed the integrate button, 
+the program would apply the proper constraints.
+
+<P>
+You can apply the same sort of polarization correcting when 
+integrating. You can also save integration data using the
+<TT>"Save Data"</TT> button. The output file will be many rows
+of two column plain text data. 
+
+<P>
+
+<H2><A NAME="SECTION00005000000000000000">
+Macro</A>
+</H2>
+
+<P>
+If you want to perform a complicated task many times, the
+easiest thing to do is to record a macro of all the commands
+and then run the macro instead of doing everything by hand.
+To record a macro, go into the Macro part of the menu and
+select <TT>"Start Record Macro"</TT>. After doing the tasks you
+want recorded, push <TT>"Stop Record Macro"</TT> and can save 
+these macro commands to a text file. To run a macro file,
+you can go into the Macro part of the menu and select
+<TT>"Run Saved Macro"</TT>. 
+
+<P>
+By editing macro files by hand, you can make them much more
+useful. Most macro commands are just the name of the GUI item
+possibly followed by whatever that thing would want (like a 
+filename or number). The macro command to load a diffraction 
+file is <TT>"Data File:"</TT> followed by a line with a
+filename such as <TT>"C:/somefolder/thefile.mar3450"</TT>.
+The filename line can be replaced by a list of filenames,
+a directory containing diffraction data, or some combination
+of both. The program will run the subsequent macro lines on
+every file given in the list and on all diffraction files found 
+in any folders given in the list. The loop over diffraction
+files will end with a subsequent <TT>"Data File:"</TT> line,
+a <TT>"END LOOP"</TT> line, or the end of the macro file.
+
+<P>
+When lopping over diffraction files, there is a special 
+markup which makes it easy to save files into the right 
+place. This can be done with the special markup names
+<TT>"BASENAME"</TT> and <TT>"FILENAME"</TT>. Whenever the
+program runs across <TT>"BASENAME"</TT> in the macro file,
+that string will be replaced with the current base of the 
+diffraction file that has been loaded. Similarly, 
+<TT>"FILENAME"</TT> will get replaced with the filename of
+the current diffraction file. In our previous example,
+<TT>"BASENAME"</TT> would get replaced with
+<TT>"C:/somefolder"</TT> and <TT>"PATHNAME"</TT> would get 
+replaced with <TT>"thefile"</TT>. You could recreate the 
+original file name with <TT>"PATHNAME/FILENAME.mar3450"</TT>.
+This markup can be used to save things with useful names. For
+example, the macro line <TT>"Save Integration Data"</TT>
+followed by the line
+<TT>"PATHNAME/FILENAME_q_i_integration.dat"</TT> would, for
+our previously loaded file, save the integrated intensity data
+as <TT>"C:/somefolder/thefile_q_i_integration.dat"</TT>. For
+all other diffraction data being looped over, the diffraction data
+would get saved next to the corresponding data file.
+
+<P>
+<BR><HR>
+<ADDRESS>
+Joshua Lande
+2008-02-09
+</ADDRESS>
+</BODY>
+</HTML>

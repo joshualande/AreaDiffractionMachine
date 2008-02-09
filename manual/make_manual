@@ -1,0 +1,32 @@
+#! /bin/csh -f
+
+# This is to fix a bug in LatexDraw
+# where the code improperly ouputs numbers
+# close to 0 in scientific notation and
+# putputs the color 'White' instead of
+# 'white'. This dose not always have to
+# be used.
+# foreach file (figures/*.tex)
+#    echo $file
+#    perl -pi~ -e "s/White/white/g" $file 
+#    perl -pi~ -e "s/\d+.\d+E-\d+/0/g" $file 
+# end
+
+latex AreaDiffractionMachineManual
+bibtex AreaDiffractionMachineManual
+makeindex AreaDiffractionMachineManual
+latex AreaDiffractionMachineManual
+latex AreaDiffractionMachineManual
+dvips -t letter -o AreaDiffractionMachineManual.ps AreaDiffractionMachineManual.dvi
+ps2pdf AreaDiffractionMachineManual.ps AreaDiffractionMachineManual.pdf
+rm AreaDiffractionMachineManual.log
+rm AreaDiffractionMachineManual.aux
+rm AreaDiffractionMachineManual.dvi
+rm AreaDiffractionMachineManual.ps
+rm AreaDiffractionMachineManual.toc
+rm AreaDiffractionMachineManual.out
+rm AreaDiffractionMachineManual.ilg
+rm AreaDiffractionMachineManual.idx
+rm AreaDiffractionMachineManual.blg
+rm AreaDiffractionMachineManual.ind
+rm AreaDiffractionMachineManual.bbl

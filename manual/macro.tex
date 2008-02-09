@@ -1,0 +1,257 @@
+The macro file format is pretty simple. A macro file contains many commands which automates the GUI. Each command in the GUI gets its own line. Each command has a fairly straightforward style. If you want to do something to the GUI, you look at the name on top of the thing or near the thing and macro command is exactly that string. This sounds confusing but it is not too bad. If you want to get the calibration data from the header of the image, the macro line is \macroline{Get From Header}. If you want to fit the calibration data, the macro line is \macroline{Do Fit}.
+
+Things get more interesting when what you want to do requires doing more then just pushing a button. For example, if you want to deselect the \gui{Draw Q Data?} checkbox, your macro needs to specify that you deselect this option instead of selecting it. To dos this, the first part of the macro command is the name of the checkbox \macroline{Cake} and the next line tells you what you want to do with it. Your macro would contain these lines:
+\begin{lstlisting}[caption={'Draw the $Q$ Lines on the Display'}]
+Draw Q Data?
+    Select
+# Or, to not display them:
+Draw Q Data?
+    Deselect
+\end{lstlisting}
+The exact same format is used for user input. To change the calibration values, your macro file would look like:
+\begin{lstlisting}[caption={'Input a Number'}]
+xc:
+    1752.3
+beta:
+    5.23
+\end{lstlisting}
+Finally, some of the Gui commands require a file name. For example, you must provide a file name to load a diffraction file or save a caked image. Whenever the command has a required file, the next line in the macro file should be that file name. For example, if you wantd to save the cake image, your macro file would contain the line: 
+\begin{lstlisting}[caption={'Save the Caked Image'}]
+Save Caked Image
+    C:/data/cake_output.jpg
+\end{lstlisting}
+
+If you look at the first page, there are three inputs: \gui{Get From Header:}, \gui{dark current:}, and \gui{Q data:}. The macro command to load any of these is a little bit ambiguous. When using the acutal GUI, you would, at least in principle, type in the name of a file and then press load. But there is no reason to make the GUI so redundant. So to load in any of these using a macro command, all you have to do is give the name of the input and then the filename. It will automatically load the file without you explicitly giving the \macroline{load} line. So, for example, to load in the $Q$ data, you would include the following lines:
+\begin{lstlisting}[caption={'Load the $Q$ Data'}]
+Q Data:
+    C:/data/q_data.dat
+\end{lstlisting}
+
+\subsection{Looping Over Diffraction Data}
+Suppose you want to do the same general analysis to many diffraction files at the same time. There is an easy way to do this. To analize one file at a time, you would simply issue the command
+\begin{lstlisting}[caption={'Load the Diffraction Data'}]
+Load Data:
+    C:/data/first.mar3450
+Integrate Q Lower?
+    .25
+Integrate Q-I
+# ...
+\end{lstlisting}
+To loop over multiple diffraction images at once, you could simply give more files after the first one. You can even give it whole directories. When you give it a directory to loop over, the program will (non-recursively) look for all the diffraction files in that directory and include them in the list. Just make sure to put all the files on the same line. The loop will end when one of the 3 things in the macro file happens. Either, a subsequent line in the macro file reads \macroline{END LOOP}, more diffraction data is loaded using the command \macroline{Load Data:}, or the macro file ends. For example, if we look at this macro file.
+\begin{lstlisting}[caption={'Loop Over Diffraction Data'}]
+Load Data:
+    C:/data/first.mar3450 C:/data/second_file.mar3450 
+Integrate Q Lower?
+    .25
+Integrate Q-I
+END_LOOP
+Draw Q Lines?
+    Select
+# ...
+\end{lstlisting}
+We see that it would get evaluated exactly like the following macro file:
+\begin{lstlisting}[caption={'An Equivalent Macro'}]
+Load Data:
+    C:/data/first.mar3450 
+Integrate Q Lower?
+    .25
+Integrate Q-I
+Load Data:
+    C:/data/second.mar3450 
+Integrate Q Lower?
+    .25
+Integrate Q-I
+Draw Q Lines?
+    Select
+# ...
+\end{lstlisting}
+
+Finally, there is a convenience markup which can help you make fancy macros. Whenever you have loaded data in, you can refer to the part name of the current diffraction file that is loaded using the string \macroline{PATHNAME} and you can refer to the file name itself using the string \macroline{FILENAME}. So, in our previous example, if we had loaded the file \macroline{C:/data/second\_file.mar3450}, \macroline{PATHNAME} would get chaned into \macroline{C:/data} and \macroline{PATHNAME} would get evaluated to \macroline{second\_file} without the extension. In effect, you can imagine building back the full name from \macroline{PATHNAME} and \macroline{FILENAME} using an equation line
+\begin{equation*}
+\text{\macrolinenoquotes{C:/data/second\_file.mar3450}=\macrolinenoquotes{FILENAME/PATHNAME.mar3450}}
+\end{equation*}
+These commands are useful because they allow you to loop over many files at once but still save things in useful places and with useful names. It would be easy, for example, to save the intensity data you calculate for each file being looped over using the macro command:
+\begin{lstlisting}[caption={'Using the FILENAME and PATHNAME Markup'}]
+Save Integration Data
+    FILENAME/PATHNAME\_intensity.dat
+\end{lstlisting}
+This would save, for example, \macroline{C:/data/first.mar3450}'s intensity data to \macroline{C:/data/first\_intensity.dat}, \macroline{C:/data/second.mar3450}'s intensity data to \macroline{C:/data/second\_intensity.dat}, and the same for all the others. This feature lets you have the macro to save each of the files to the right place and give it a useful name.
+
+\subsection{A More Interesting Example}
+
+\begin{lstlisting}[caption={'A Non-Trivial Macro'}]
+# Macro file to calibrate from one file and 
+# then analyze many others
+Data File:
+    C:\data\calibration\cal.mar3450
+Get From Header
+# Fix the energy before doing the fit
+E Fixed
+    Select
+Number of chi?
+    150
+stddev?
+    8
+# This would be standard Q values for the sample
+Q Data:
+    S:\data\calibration\Q_data.dat
+Do Fit
+Save Calibration
+    C:\data\calibration\cal_values.dat
+Draw Q lines?
+    Select
+Draw Peaks?
+    Select
+AutoCake
+Cake Data Hi
+    0.03
+Save Caked Image
+    C:\data\calibration\cal_cake.jpg
+# Load in a directory of data to analyze
+Data File:
+    S:\data\to_analyze\
+Integrate Q Lower?
+    .25
+Integrate Q Upper?
+    4.5
+Integrate Number of Q?
+    500
+Integrate Q-I data
+Save Integration Data
+    PATHNAME\FILENAME_Q_I_integration.dat
+\end{lstlisting}
+
+The macro first moves the GUI to the calibration tab. It then loads in a calibration image, $Q$ data, and uses as the initial guess for the calibration values number in the header of the file. It then does the fit and saves the fit calibration values to a file.  It then cakes the data and saves a cake of this calibration with the $Q$ lines and Peaks so that later visual inspection can show how good the fit was. Afterwards, it loops over a directory of diffraction dat and, using the same calibration data, sets the $Q$ range of the intensity integration, does the intensity integration, and saves integrated data next to the corresponding diffraction files. It should now be apparent that macro are both fun and easy.
+
+     
+\subsection{Little Tidbits}\label{Little Tidbits}
+\begin{itemize}
+\item Any of the macro commands themselves are case insensitive. The command \macroline{GeT fRoM hEaDeR} is just as valid as the command \macroline{gET fROM hEADER} and \macroline{Get From Header}. You don't have to sweat it. 
+\item White spaces at the beginning and end of the line are ignored. In the preceding examples, the spaces separating macro commands from input values such as file names are there only to increase readability. You don't need them if you don't want.
+\item New lines are ignored
+\item comment lines of the form \macroline{\# This would be a comment} are ignored.
+\item You don't have to worry about explicitly moving from tab to tab in the computer program. The computer program will move to the right automatically before performs the action.
+\item When you issue the macro command \macroline{E:} or \macroline{E Fixed}, the computer program will automatically set the GUI to \macroline{Work in eV}. If you issue the command or \macroline{lambda:} or \macroline{lambda fixed:} then the comptuer program will set the GUI to \macroline{Work in Lambda}. You can also explicitly set the GUI to either mode using the commadn \macroline{Work in eV} or \macroline{Work in Lambda}.
+\item I need to figure out what colors are allowed.
+\end{itemize}
+
+%Command&Followed By&Description\\
+
+\subsection{Macro Commands}
+
+
+\begin{center}
+
+\setlongtables % keeps the width uniform across both pages
+\begin{longtable}{|p{3cm}|p{4cm}|p{7cm}|}
+%\begin{longtable}{|l|l|l|}
+\caption{Macro Commands} \label{grid_mlmmh} \\
+
+\hline \multicolumn{1}{|c|}{Command} & \multicolumn{1}{c|}{Followed By} & \multicolumn{1}{c|}{Effect} \\ \hline 
+\endfirsthead
+
+\multicolumn{3}{c}%
+{{\bfseries \tablename\ \thetable{} -- continued from previous page}} \\
+
+\hline \multicolumn{1}{|c|}{Command} & \multicolumn{1}{c|}{Followed By} & \multicolumn{1}{c|}{Effect} \\ \hline 
+\endhead
+
+\hline \multicolumn{3}{|r|}{{Continued on next page}} \\ \hline
+\endfoot
+
+\hline 
+\endlastfoot
+\multicolumn{3}{|l|}{Calibration Values} \\
+\hline
+\macrolinenoquotes{Data File:}&Filename(s) and/or Directory(s)&Loops over loading in each file\\
+\macrolinenoquotes{Dark Current:}&Filename&Loads in the Dark Current \\
+\macrolinenoquotes{Q Data:}&Filename&Load in the $Q$ data\\
+\macrolinenoquotes{Get From Header:}&None&Sets the calibration data to the value stored in the image header.\\
+\macrolinenoquotes{Load From File:}&Filename&Loads a calibration data file.\\
+\macrolinenoquotes{Previous Values}&None&Loads the previously stored calibration values.\\
+\macrolinenoquotes{Save To File}&Filename&Saves the calibration data to a file.\\
+\macrolinenoquotes{xc:}&Number&Sets the $x$ center.\\
+\macrolinenoquotes{xc Fixed:} & \selectordeselect & Sets whether or not to fix the $x$ center while doing the fit.\\
+\macrolinenoquotes{yc:}&Number&Set the $y$ center.\\
+\macrolinenoquotes{yc Fixed:}& \selectordeselect &Sets whether or not to fix the $y$ center while doing the fit.\\
+\macrolinenoquotes{d:}&Number&Set the distance.\\
+\macrolinenoquotes{d Fixed:}& \selectordeselect &Sets whether or not to fix the distance while doing the fit.\\
+\macrolinenoquotes{E:}&Number&Sets the energy.\\
+\macrolinenoquotes{E Fixed:}& \selectordeselect &Sets whether or not to fix the energy while doing the fit.\\
+\macrolinenoquotes{lambda:}&Number&Sets the wavelength.\\
+\macrolinenoquotes{lambda Fixed:}& \selectordeselect &Sets whether or not to fix the wavelength while doing the fit.\\
+\macrolinenoquotes{alpha:}&Number&Sets the $\alpha$ angle.\\
+\macrolinenoquotes{alpha Fixed:}& \selectordeselect &Sets whether or not to fix the $\alpha$ angle while doing the fit.\\
+\macrolinenoquotes{beta:}&Number&Sets the $\beta$ angle.\\
+\macrolinenoquotes{beta Fixed:}& \selectordeselect &Sets whether or not to fix the $\beta$ angle while doing the fit.\\
+\macrolinenoquotes{R:}&Number&Sets the rotation angle.\\
+\macrolinenoquotes{R Fixed:}& \selectordeselect &Sets whether or not to fix the rotation angle while doing the fit.\\
+\macrolinenoquotes{Draw Q Lines?}&\selectordeselect&Sets wether or not to draw constant $Q$ lines on the screen.\\
+\macrolinenoquotes{Draw Q Lines Color?}&A color&Sets the color of the constant $Q$ lines\\
+\macrolinenoquotes{Draw dQ Lines?}&\selectordeselect&Draw the delta $Q$ lines on the diffraction image\\
+\macrolinenoquotes{Draw dQ Lines Color?}&A color&Change the color of the delta $Q$ lines\\
+\macrolinenoquotes{Draw Peaks?}&\selectordeselect&Draw the fit peaks on the diffraction and cake image\\
+\macrolinenoquotes{Draw Peaks Color?}&A color&Change the color of the peaks\\
+\macrolinenoquotes{Update}&None&Update the diffraction image\\
+\macrolinenoquotes{Do Fit}&None&Fit the calibration values to a loaded diffraction image\\
+\macrolinenoquotes{Make/Save Peak List}&Filename&Creates a peak list just as happens when doing the fit, but instead of acutally doing the fit it saves the peaks as an ASCII file for later use.\\
+\macrolinenoquotes{Use Old Peak List (if possible)?}&\selectordeselect&Uses the previously found peak list again when doing the fit.\\
+\macrolinenoquotes{Number of Chi?}&Value&The number of $\chi$ slices around the diffraction image to pick and use when doing the calibration\\
+\macrolinenoquotes{Stddev}&Value&The $\sigma$ threshold for allowing a peak.\\
+\hline    
+\multicolumn{3}{|l|}{Diffraction Display Options} \\
+\hline
+\macrolinenoquotes{Diffraction Data Colormaps}&A colormap name&Select the color map to use for the diffraction image.\\
+\macrolinenoquotes{Diffraction Data Invert?}&\selectordeselect&Invert the color map that is being used\\
+\macrolinenoquotes{Diffraction Data Log Scale?}&\selectordeselect&Take the log of all the data points before displaying them.\\
+\macrolinenoquotes{Diffraction Data Low?}&Value from 0 to 1&The normalized intensity value which will be scaled to \%0 of the image brightness when displaying the diffraction image.\\
+\macrolinenoquotes{Diffraction Data Hi?}&Value from 0 to 1&The normalized intensity value which will be scaled to \%100 of the image brightness when displaying the diffraction image.\\
+\macrolinenoquotes{Save Diffraction Image}&Filename&Save the diffraction image to a file (possibly including $Q$ lines and peaks.\\
+\macrolinenoquotes{Work in eV}&\selectordeselect&Change the GUI to deal with energy in units of eV\\
+\macrolinenoquotes{Work in Lambda}&\selectordeselect&Change the GUI to deal with energy in units of $\lambda$ using the conversion $E=hc/\lambda$.\\
+\hline    
+\multicolumn{3}{|l|}{Cake Macro Commands}\\
+\hline
+\macrolinenoquotes{AutoCake}&None&Make the computer pick a nice $Q$ and $\chi$ range and Cake the data.\\
+\macrolinenoquotes{Cake Q Lower?}&Value&The lower $Q$ value of the caked data.\\
+\macrolinenoquotes{Cake Q Upper?}&Value&The upper $Q$ value of the caked data.\\
+\macrolinenoquotes{Cake Number of Q?}&Value&The number of $Q$ bins to use while caking the data.\\
+\macrolinenoquotes{Cake Chi Lower?}&Value&The lower $\chi$ value of the caked data.\\
+\macrolinenoquotes{Cake Chi Upper?}&Value&The upper $\chi$ value of the caked data.\\
+\macrolinenoquotes{Cake Number of Chi?}&Value&The number of $\chi$ bins to use while caking the data.\\
+\macrolinenoquotes{Do Cake}&None&Cake the data.\\
+\macrolinenoquotes{Last Cake}&None&Go back to the previous cake values.\\
+\macrolinenoquotes{Save Caked Image}&Filename&\\
+\macrolinenoquotes{Save Caked Data}&Filename&\\
+\hline    
+\multicolumn{3}{|l|}{Cake Display Options} \\
+\hline
+\macrolinenoquotes{Cake Data Colormaps:}&Colormap&\\
+\macrolinenoquotes{Cake Data Invert?}&\selectordeselect&\\
+\macrolinenoquotes{Cake Data Log Scale?}&\selectordeselect&\\
+\macrolinenoquotes{Cake Data Low}&&\\
+\macrolinenoquotes{Cake Data Hi}&&\\
+\hline    
+\multicolumn{3}{|l|}{Intensity Integration Macro Commands}\\
+\hline
+\macrolinenoquotes{Integrate Q Lower?}&&\\
+\macrolinenoquotes{Integrate Q Upper?}&&\\
+\macrolinenoquotes{Integrate Number of Q?}&&\\
+\macrolinenoquotes{Integrate Chi Lower?}&&\\
+\macrolinenoquotes{Integrate Chi Upper?}&&\\
+\macrolinenoquotes{Integrate Number of Chi?}&&\\
+\macrolinenoquotes{Integrate Q-I Data}&&\\
+\macrolinenoquotes{Integrate Chi-I Data}&&\\
+\macrolinenoquotes{Save Integration Data}&&\\
+\end{longtable}
+\end{center}
+
+\subsection{What You Can't Do With Macros}
+
+Just to be clear:
+\begin{itemize}
+\item There is no way with a macro to zoom into the diffraction data, the cake data, or the intensity integrated data
+\item You can't draw individual polygon masks and you can't remove individual polygon masks. All you can do is load in polygon's from file and save all the current polygons to a file.
+\item Currently, you cannot load in and add together multiple images using the macro. I indent to code up this feature at some point. 
+\end{itemize}
+
