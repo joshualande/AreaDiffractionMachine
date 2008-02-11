@@ -124,7 +124,7 @@ web: http://www.stanford.edu/~swebb""")
 #    imlogo.load()
 #    logo=ImageTk.PhotoImage(imlogo)
 #    logo.paste(imlogo)
-    about=Pmw.AboutDialog(master,applicationname='XRDGUI')#,icon_image=logo)
+    about=Pmw.AboutDialog(master,applicationname='The Area Diffraction Program')#,icon_image=logo)
 #    about.component('icon').image=logo
 
 
@@ -637,7 +637,7 @@ class Main:
     def __init__(self,master):
         self.colorMaps = ColorMaps.ColorMaps('colormaps.txt')
         self.xrdwin=xrdwin=master
-        xrdwin.title("""XRDGUI Application Name""")
+        xrdwin.title("""The Area Diffraction Machine""")
         #Displays
 
         self.maindisp=Display(self.xrdwin,colorMaps=self.colorMaps,
