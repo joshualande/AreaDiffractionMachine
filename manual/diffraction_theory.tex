@@ -1,4 +1,4 @@
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
 \centering
 \input{figures/DiffractionSetup.tex}
 \caption{An X-Ray diffraction setup. X-rays scatter from a 
@@ -8,7 +8,7 @@ x-ray beam.}
 \label{DiffractionSetup}
 \end{SCfigure}
 
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
 \centering
 \input{figures/MeasureAngleFlatDetector.tex}
 \caption{The same setup as in figure~\ref{DiffractionSetup}. 
@@ -72,7 +72,7 @@ almost absolutely undecipherable. So to save you the
 misery of pooring through it yourself, I will do
 my best to cleanly work through his findings. 
 
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
 \centering
 \input{figures/HigherQValues.tex}
 \caption{This diagram illustrates how tilted geometries 
@@ -86,23 +86,33 @@ position coordinates on a tilted detector by relating
 them to more theoretically motivated quantities such as 
 the scattering angles that would lead to a beam hitting
 that particular point on the detector. This will be 
-the equation that is needed to do the diffraction 
+the equation that is needed in order to do the diffraction 
 analysis. In order to do this, we must first work
 out the transformation of points on a tilted detector
 to points on an untilted detector. This is to say
 that we want to figure out where on an untilted 
 detector the beam would have hit were it to hit
 that untilted detector instead of the tilted detector.
+The point on the titled detector can be though of
+as the shadow of the point on the untitled detector.
 We will call the point on the untilted detector
-$(x,y)$ as it is measured on the untilted detector
+$(x,y)$ as measured on the untilted detector
 and the point on the tilted detector
-$(x''',y''')$ as measured by the tilted detector. 
-The notation will become obvious
+$(x''',y''')$ as measured on the tilted detector. 
+The reason for three primeds will become obvious
 shortly. This is shown schematically in 
-figure~\ref{PhysicalSetup}.
+figure~\ref{PhysicalSetup}. Another way to think
+about this problem is to imagine putting your 
+head at the sample and then looking directly 
+at some point $(x''',y''')$ on the real
+tilted detector. What we want to figure out
+is some point $(x,y)$ on an imagined untilted 
+detector which would appear to be exactly out in
+the same direction as the point on the tilted 
+detector.
 
 
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
 \centering
 \input{figures/PhysicalSetup.tex}
 \caption{The setup of the experiment. Here, the detector 
@@ -110,69 +120,44 @@ is titled by some arbitrary angle with respect to the
 incoming beam. We will call some arbitrary point on 
 the tilted detector as $(x''',y''')$. We are interested in 
 relating this point to the point $(x,y)$ on some imagined 
-untilted detector where a scattered beam would have hit 
+un-tilted detector where a scattered beam would have hit 
 were that tilted detector set up instead of the tilted
 detector.}
 \label{PhysicalSetup}
 \end{SCfigure}
 
-What we are interested in figuring out is a way of relating 
-this point to some other point $(x,y)$ which would be on an 
-imagined on a plane perpendicular to the incomming beam 
-who's center coincides in 3 dimensional space with the 
-center of the tilted detector.
-
 \subsection{The Three Tilt Angels}
-\index{$\alpha$}\index{$\beta$}\index{Rotation}
+\index{$\alpha$} \index{$\beta$} \index{Rotation} \index{Tilt}
 In order to relate these points, we need to find a way to 
-describe some arbitrary tilt. To do so, we will need to 
-have 3 tilt parameters. We will characterize these tilts 
+describe some arbitrary tilt. To do so, we will 
+characterize some arbitrary detector tilt in terms of
+3 independent tilts. We will characterize these tilts 
 by two orthogonal rotations about the $x$ and $y$ axis 
-and one rotation about the center of the detector. These 
-three angles are shown in action in figure~\ref{ThreeTilts}.
+followed by one rotation about the center of the detector.
+These three angles are shown in action in figure~\ref{ThreeTilts}.
+In order to find this relationship, we will apply each of these 
+rotations separately, one after the other. 
 
 \begin{figure}
 \centering
-\subfloat[The tilt angle $\alpha$.]{
-\label{alpha}\input{figures/AlphaRotation.tex}}
-\subfloat[The tilt angle $\beta$.]{
+\subfloat[The tilt angle $\beta$. This angle characterizes
+a rotation around the $\hat{y}$ axis.]{
 \label{beta}\input{figures/BetaRotation.tex}}
-\subfloat[The rotation angle $R$.]{
+\subfloat[The tilt angle $\alpha$. This angle characterizes
+a rotation around the $\hat{x'}$ axis. What 
+exactly $\hat{x'}$ is will be described shortly]{
+\label{alpha}\input{figures/AlphaRotation.tex}}
+\subfloat[The rotation angle $R$. This is a rotation about
+a vector normal to $\hat{x}''$ and $\hat{y}''$. What exactly
+$\hat{x}''$ and $\hat{y}''$ are will be described shortly.]{
 \label{R}\input{figures/Rotation.tex}}
-\caption{Any detector rotation can be characterized 
-as a rotation by both $\alpha$ and $\beta$.}
+\caption{Any detector tilt can be characterized 
+as a rotation by $\beta$ followed by a rotation by $\alpha$
+followed by a rotation around the center of the image by
+$R$.}
 \label{ThreeTilts}
 \end{figure}
 
-In order to find this relationship, we will apply each of these 
-rotations separately, one after another. And the combination 
-of each of the three rotations will yield the total 
-transformation.
-
-
-\subsection{The $R$ Rotation}
-
-\begin{SCfigure}
-\centering
-\input{figures/RotationFormula.tex}
-\caption{This figure shows how points on a detector rotated 
-by angle $R$ relate to the unrotated points. Remember that
-a rotation of the plane is equivalent to the rotation of the
-coordinates on the plane (which is what I have drawn).}
-\label{RotationFormula}
-\end{SCfigure}
-
-We will first deal with the physical rotation by angle $R$ 
-of the plane. What we have to deal with is the point $(x,y)$
-on a plane being superimposed onto the point $(x',y')$ on 
-another plane which is rotated by an angle $R$. This is shown
-schematically in figure~\ref{RotationFormula}. The rotation of
-the plane is mathematically equivalent to rotating the coordinates
-and the equation describing the rotation of a plane is:
-\begin{eqnarray}
-    x&=&x'\cos R + y'cos R\\
-    y&=&y'\cos R - x'cos R
-\end{eqnarray}
 
 \subsection{The $\beta$ Tilt}
 
@@ -188,9 +173,15 @@ $\beta$ rotation has been applied.}
 \label{PitchX}
 \end{figure}
 
-We will now take the point $(x',y')$ and on the rotated plane 
+We will first apply a tilt around $\hat{y}$ by angle $\beta$.
+To do this, we will first consider a point $(x,y)$ on an
+untilted detector and see what point $(x',y')$ it is 
+project onto on a detector tilted by angle $\beta$ around
+$\hat{y}$
+
+We will now take the point $(x,y)$ on the rotated plane 
 and see what the coordinates of the corresponding point
-$(x'',y'')$ would be if the point was projected onto another
+$(x',y')$ would be if the point was projected onto another 
 plane titled by an angle $\beta$ around $\hat{y}$.
 This is to say that we will figure out where on the tilted
 plane a beam would hit were it not to hit that detector 
@@ -200,74 +191,128 @@ We can use the geometry of these diagrams to figure out
 the relationships between these coordinates. Using
 the property of similar triangles, we see that
 \begin{equation}
-    \frac{x'}{d}=\frac{x''\cos\beta}{d+x''\sin\beta}.
+    \frac{x}{d}=\frac{x'\cos\beta}{d+x'\sin\beta}.
 \end{equation}
 From this it follows that 
 \begin{equation}\label{xTermsxPrime}
-    \boxed{x' = \frac{dx''\cos\beta}{d+x''\sin\beta}.}
+    \boxed{x = \frac{dx'\cos\beta}{d+x'\sin\beta}.}
 \end{equation}
 Using similar triangles again, we see that
 \begin{eqnarray}
-    \frac{y'}{a}&=&\frac{y''}{a+b}\\
-    \frac{d}{a}&=&\frac{d+x''\sin\beta}{a+b}.
+    \frac{y}{a}&=&\frac{y'}{a+b}\\
+    \frac{d}{a}&=&\frac{d+x'\sin\beta}{a+b}.
 \end{eqnarray}
 from which it follows that
 \begin{equation}\label{yTermsxPrime}
-	\boxed{y'= \frac{dy''}{d+x''\sin\beta}.}
+	\boxed{y= \frac{dy'}{d+x'\sin\beta}.}
 \end{equation}
 So, equation~\ref{xTermsxPrime} and \ref{yTermsxPrime} give us 
 the proper geometrical equations for relating a point on the 
-un-tilted plane $(x',y')$ to the corresponding point 
-$(x'',y'')$ on the tilted plane.
-
+un-tilted plane $(x,y)$ to the corresponding point 
+$(x',y')$ on the tilted plane.
 
 \subsection{The $\alpha$ Roll}
-We can now take this point $(x'',y'')$ on the tilted 
+We can now take this point $(x',y')$ on the tilted 
 plane and project it onto another plane which has both 
 a tilt and roll by an angle $\alpha$ around $\hat{x}$ 
 applied to it. This is to say that we can determine 
 where beam that hit a point on the tilted detector 
 would have hit were it to instead hit a tilted and 
-rolled detector. This is shown schematically in 
-figure~\ref{PitchY_A}. A more geometric view of 
-the situation can be seen in figure~\ref{PitchY_B} and 
-a cross section of the $x$
-axis of this figure can be seen in figure~\ref{PitchY_C}.
+rolled detector. To do so, we take the plane which is
+rotated by an angle $\beta$ around $\hat{y}$ and then
+rotate it around the line $x'$ shown in figure~\ref{PitchX}.
+This is shown schematically in figure~\ref{PitchY_A}. 
+A more geometric view of the situation can be seen in 
+figure~\ref{PitchY_B} and a cross section of the $y=0$
+plane can be seen in figure~\ref{PitchY_C}.
+Unforntunately, tehse diagrams are particularly hard to
+stare at becaue since the $\alpha$ rotation is about the 
+line $x'$, the plane is effectivley comming at us. 
+I have done the best job that I can so you will just
+have to bear with me an do your best..
 
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
 \centering
 \input{figures/PitchY_A.tex} 
 \label{PitchY_A}
-\caption{In this figure, we see a tilted detector 
-and then a detector which is both tilted and rolled
-by an angle $\alpha$ around $\hat{x}$.}
+\caption{.}
 \end{SCfigure}
 
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
 \centering
 \input{figures/PitchY_B.tex} 
 \label{PitchY_B}
+\caption{.}
 \end{SCfigure}
 
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
 \centering
 \input{figures/PitchY_C.tex} 
 \label{PitchY_C}
-\caption{A cross section of the x axis of 
-figure~\ref{PitchY_A}. This figure helps bring out
-the three dimensional aspects of that figure. }
+\caption{.}
 \end{SCfigure}
 
-The final equations relating $(x,y)$ to $(x''',y''')$ are 
-\begin{equation}\label{xTermsXdoublePrime}
-    x=\frac{d x'' \cos(\beta)}{d+y'' 
-    \sin(\alpha) + x'' \sin(\beta)} 
-\end{equation}
-and
+We can use these figures to deterimine the equations 
+that we need. First, we can examine from figure~\ref{PitchY_C} 
+that $f=y''\sin\alpha\cos\beta$. From figure~\ref{PitchY_B},
+we see that $h=y''\cos\alpha$. Using the property of similar
+trianges, we see that
 \begin{equation}
-    y=\frac{d y'' \cos(\alpha)}{d+y'' 
-    \sin(\alpha) + x'' \sin(\beta)}.
+    \frac{y}{a} = \frac{y''\cos\alpha}{a+b+c}
 \end{equation}
+Using similar triangles again, we see that
+\begin{equation}
+    \frac{d}{a} = \frac{d+x''\sin\beta+f}{a+b+c}
+\end{equation}
+From which we can deduce that
+\begin{equation}
+    \boxed{y=\frac{dy''\cos\alpha}{
+    d+x''\sin\beta+y''\sin\alpha\cos\beta}.}
+\end{equation}
+We can now work out the $x$ term. First, we see that
+$g=y''\sin\alpha\sin\beta$ and that 
+$x''\cos\alpha=l+g$. Using similar triangles again, 
+we see that 
+\begin{equation}
+    \frac{x}{d} = \frac{l}{d+x''\sin\beta+
+    y''\sin\alpha\cos\beta}
+\end{equation}
+Plugging in and simplifying, we get
+\begin{equation}
+    \boxed{x=\frac{d(x''\cos\beta-y''\sin\alpha)}{
+    d+x''\sin\beta+y''\sin\alpha\cos\beta}.}
+\end{equation}
+
+
+\subsection{The $R$ Rotation}
+
+\begin{SCfigure}[1][htb]
+\centering
+\input{figures/RotationFormula.tex}
+\caption{This figure shows how points on a detector rotated 
+by angle $R$ relate to the unrotated points. Remember that
+a rotation of the plane is equivalent to the rotation of the
+coordinates on the plane (which is what I have drawn).}
+\label{RotationFormula}
+\end{SCfigure}
+
+We now have to deal with the final transformation. We will
+rotate the pitched and tilted coordinate $(x'',y'')$ on the
+pitched and tilted detector about the center of the
+detector (the point $(0,0)$). We will call this final
+rotated point $(x''',y''')$ and we will be able to calculate 
+our point $(x,y)$ on the untilted detector in terms of the 
+corresponding point $(x''',y''')$. This is shown schematically 
+in figure~\ref{RotationFormula}. The equation for rotating 
+around a point is just simply
+\begin{eqnarray}\label{rotation}
+    x''&=&x'''\cos R + y'''cos R\\
+    y''&=&y'''\cos R - x'''cos R
+\end{eqnarray}
+
+
+
+
 
 $(x''',y''')$ is suppose to represent what we actually
 measure on a real detector. Unfortunately, things are
@@ -298,22 +343,14 @@ we can relate $(x,y)$ and $(x_d,y_d)$ which are
 directly measurable experimental quantities.
 
 
+
 \subsection{Inverting the Equations}
 
-We can invert these formula to get
-\begin{equation}\label{ConvertToPrimed}
-    x''=\frac{yd}{d\cos(\beta) - 
-    x\sin(\beta)-y\cos(\beta)\tan(\alpha)} 
-\end{equation}
-and
-\begin{equation}
-    y''=\frac{xd \cos(\beta)/\cos(\alpha)}{d\cos(\beta) - 
-    x\sin(\beta)-y\cos(\beta)\tan(\alpha)}.
-\end{equation}
+We can invert these formula to get...
 
-\subsection{$Q$, $2\theta$, and $\chi$}
+\subsection{Relation to $Q$, $2\theta$, and $\chi$}
 
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
 \centering
 \input{figures/TwoTheta.tex}
 \caption{For a particular point $(x,y)$, we
@@ -412,51 +449,7 @@ Note that this function calculates $2\theta$ instead
 of $Q$ or $D$ but it takes a trivial amount of work
 to the additional conversion.
 \begin{lstlisting}[caption={The Code to convert pixel coordinates on a real detector into $(Q,\chi)$ coordinates},label=getTwoThetaChi]
-void getTwoThetaChi(double xCenter,double yCenter,double distance,
-        double xPixel,double yPixel,
-        double pixelLength,double pixelHeight,double rotation,
-        double cos_beta,double sin_beta,double cos_alpha,double sin_alpha,
-        double cos_rotation,double sin_rotation,
-        double *twoTheta,double *chi) {
-
-    double pixelLength_mm,pixelHeight_mm;
-    double xMeasured,yMeasured;
-    double bottom;
-    double xPhysical,yPhysical;
-
-    // pixellength comes in in units of micron
-    //convert pixelLength & pixelHeight into mm units so that
-    //they are comparable with distance (in units of mm)
-    pixelLength_mm = pixelLength/1000.0;
-    pixelHeight_mm = pixelHeight/1000.0;
-    
-    xMeasured = (xPixel-xCenter)*pixelLength_mm;
-    yMeasured = (yPixel-yCenter)*pixelHeight_mm;
-
-    bottom = distance+(yMeasured*cos_rotation-xMeasured*sin_rotation)*sin_alpha+
-            (xMeasured*cos_rotation+yMeasured*sin_rotation)*sin_beta;
-        
-    // calculate the x y cordinates on the imaginary detector using fancy math
-    xPhysical = distance*(xMeasured*cos_rotation+yMeasured*sin_rotation)*cos_beta/bottom;
-    yPhysical = distance*(yMeasured*cos_rotation-xMeasured*sin_rotation)*cos_alpha/bottom;
-
-    *twoTheta = atan2(sqrt(xPhysical*xPhysical+yPhysical*yPhysical),distance);
-    // Convert to radians
-    *twoTheta = *twoTheta * 180.0/PI;
-
-    // explicitly convert chi to degrees
-    *chi=atan2(yPhysical,xPhysical)*180.0/PI;
-    
-    // then add rotation to it so that chi alwasy points to the right.
-    // Also, we have to mulitply chi by -1 because we have been defining our
-    // angles the invers of the way they should be. There is a probably a better
-    // way to do this if I really thought through exactly how chi is defined.
-    // For the moment, through, this does exactly the right thing.
-    *chi = (*chi + rotation)*(-1);
-
-    // make sure that chi is b/n 0 and 360
-    *chi = mod(*chi, 360.0);
-}
+The Code will go here one of these days...
 \end{lstlisting}
 Listing~\ref{getXY} presents the function \code{getXY()} 
 which does the inverse transformation of 
@@ -464,59 +457,8 @@ function~\ref{getTwoThetaChi}. It uses the same
 terminology for parameters as that function.
 
 \begin{lstlisting}[caption={The Code to convert $(Q,\chi)$ values into pixel coordinates on a real detector},label=getXY]
-void getXY(double xCenter,double yCenter,double distance,double energy,
-        double q,double chi,double pixelLength,double pixelHeight,
-        double rotation,
-        double cos_beta,double sin_beta,double cos_alpha,double sin_alpha,
-        double cos_rotation,double sin_rotation,
-        double * xPixel,double * yPixel) {
-
-    double wavelength;
-    double twoTheta;
-    double xPhysical,yPhysical;
-    double bottom;
-    double pixelLength_mm,pixelHeight_mm;
-    double xMeasured,yMeasured;
-
-    double tan_chi;
-
-    wavelength = 12398.4172/energy;
-
-    // rotate chi back to point whatever way it is supposed to point
-    chi = chi*(-1) - rotation;
-
-    chi = mod(chi, 360.0);
-    
-    // explicitly convert chi to radians
-    chi*=PI/180.0;
-
-    twoTheta = 2.0*asin(wavelength*q/(4.0*PI));
-
-    tan_chi = tan(chi);
-    xPhysical = fabs(distance*tan(twoTheta)/sqrt(1.0+tan_chi*tan_chi));
-    // one must determine explicitly the sign of xPhysical by inspecting the diagram.
-    // This is b/c at one point we take a sqrt in our derivation.
-    if (chi>PI/2.0 && chi<3.0*PI/2.0) 
-        xPhysical = -1.0*xPhysical;
-
-    yPhysical=fabs(xPhysical*tan_chi);
-
-    // set the sign of y explicitly
-    if (chi > PI && chi < 2.0*PI)
-        yPhysical = -1.0*fabs(yPhysical);
-
-    // I should worry about cos_alpha being 0
-    bottom = distance*cos_beta-xPhysical*sin_beta-yPhysical*cos_beta*sin_alpha/cos_alpha;
-
-    xMeasured = (xPhysical*distance*cos_rotation-yPhysical*distance*(cos_beta/cos_alpha)*sin_rotation)/bottom;
-    yMeasured =  (xPhysical*distance*sin_rotation+yPhysical*distance*(cos_beta/cos_alpha)*cos_rotation)/bottom;
-
-    // convert pixelLength & pixelHeight into mm units so that
-    // they are comparable with distance (in units of mm)
-    pixelLength_mm = pixelLength/1000.0;
-    pixelHeight_mm = pixelHeight/1000.0;
-
-    *xPixel = xMeasured/pixelLength_mm + xCenter;
-    *yPixel = yMeasured/pixelHeight_mm + yCenter;
-}
+Other code will go here one of these days...
 \end{lstlisting}
+
+
+

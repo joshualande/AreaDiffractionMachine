@@ -6,11 +6,11 @@
 # putputs the color 'White' instead of
 # 'white'. This dose not always have to
 # be used.
-# foreach file (figures/*.tex)
-#    echo $file
-#    perl -pi~ -e "s/White/white/g" $file 
-#    perl -pi~ -e "s/\d+.\d+E-\d+/0/g" $file 
-# end
+foreach file (figures/*.tex)
+    echo $file
+    perl -pi~ -e "s/White/white/g" $file 
+    perl -pi~ -e "s/\d+.\d+E-\d+/0/g" $file 
+end
 
 latex AreaDiffractionMachineManual
 bibtex AreaDiffractionMachineManual
