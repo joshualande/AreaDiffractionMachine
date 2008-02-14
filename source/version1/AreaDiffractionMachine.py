@@ -1324,18 +1324,11 @@ class Main:
 
 
     def showclickhelp(self):
-        webbrowser.open_new('tips_and_tricks.html')
-        """
-        self.helpdialog = Pmw.TextDialog(self.xrdwin, scrolledtext_labelpos = 'n',title = 'Help',
-                defaultbutton = 0,label_text = 'Tricks and tips!')
-        file=open('tips_and_tricks.txt','r')
-        for line in file.readlines():
-            self.helpdialog.insert('end', line)
-        file.close()
-        self.helpdialog.configure(text_state = DISABLED)
-        self.helpdialog.show()
-        """
-        
+        # For some reason, on the Mac, the command:
+        #  > webbrowser.open_new('tips_and_tricks.html')
+        # crashes, but this seems to do the right thing.
+        webbrowser.open_new(os.path.abspath('tips_and_tricks.html'))
+
 
     # utility Functions
 
