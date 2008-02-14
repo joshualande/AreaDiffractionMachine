@@ -359,6 +359,17 @@ class DiffractionData:
             data.setPixelLength(self.getHeaderPixelLength())
         if self.getHeaderPixelHeight() != None:
             data.setPixelHeight(self.getHeaderPixelHeight())
+
+        if self.getHeaderCenterX() != None and \
+                self.getHeaderCenterY() != None and \
+                self.getHeaderDistance() != None and \
+                self.getHeaderWavelength() != None and \
+                self.getHeaderPixelLength() != None and \
+                self.getHeaderPixelHeight() != None:
+            data.setAlpha(0)
+            data.setBeta(0)
+            data.setRotation(0)
+
         return data
 
 
