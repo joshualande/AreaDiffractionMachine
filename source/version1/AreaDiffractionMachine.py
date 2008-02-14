@@ -1722,7 +1722,7 @@ class Main:
 
 
     def addUserInputCalibrationDataToObject(self):
-        # TRy to fill the calibration data.
+        # Try to fill the calibration data.
         calibration = CalibrationData()
 
         val = self.centerX.ef.getvalue()
@@ -2150,6 +2150,17 @@ class Main:
             raise UserInputException("Cannot draw the image until a diffraction image is set.")
 
         setstatus(self.status,"Drawing...")
+        
+        try:
+            # update calibrationData first. Note that if the calibration data 
+            # is not in the inpus, that is not necessarily a problem. So we should 
+            # just try to addd it in and do nothing if it fails.
+            # The reason to do so here is because if the image gets updated, we 
+            # want any changes to the calibrationData to be apperent when you
+            # move your curser around the image.
+            self.addUserInputCalibrationDataToObject()
+        except:
+            pass
 
         try:
             lower = float(self.maindisp.intenvarlo.get() )
