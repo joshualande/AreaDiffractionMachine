@@ -565,8 +565,8 @@ class MacroMode:
                 self.GUI.macroLines.append(button['name'])
 
         # these two can't be done by this function, so they will be called explicitly
-        #   self.allButtonsRequiringFilename = [
-        #   self.allMenuItemsRequiringFilename = [
+        #   self.allButtonsRequiringFilename 
+        #   self.allMenuItemsRequiringFilename 
 
         
 
@@ -716,13 +716,12 @@ class MacroMode:
         # Change the enabled/disabled status of a menuitem so you can't try to
         # run a macro while recording a macro. Code inspired by:
         # http://mail.python.org/pipermail/tkinter-discuss/2004-September/000204.html
-        macroComponent = self.GUI.menubar.component('Macro-menu')
-        macroComponent.entryconfig(
-            macroComponent.index('Start Record Macro'),state=DISABLED)
-        macroComponent.entryconfig(
-            macroComponent.index('Stop Record Macro'),state=NORMAL)
-        macroComponent.entryconfig(
-            macroComponent.index('Run Saved Macro'),state=DISABLED)
+        self.GUI.macromenu.entryconfig(
+            self.GUI.macromenu.index('Start Record Macro'),state=DISABLED)
+        self.GUI.macromenu.entryconfig(
+            self.GUI.macromenu.index('Stop Record Macro'),state=NORMAL)
+        self.GUI.macromenu.entryconfig(
+            self.GUI.macromenu.index('Run Saved Macro'),state=DISABLED)
 
 
     def stopRecordMacro(self):
@@ -732,13 +731,12 @@ class MacroMode:
         self.GUI.xrdwin.unbind_all(sequence='<ButtonRelease>')
         self.GUI.xrdwin.unbind_all(sequence='<KeyRelease>')
 
-        macroComponent = self.GUI.menubar.component('Macro-menu')
-        macroComponent.entryconfig(
-            macroComponent.index('Start Record Macro'),state=NORMAL)
-        macroComponent.entryconfig(
-            macroComponent.index('Stop Record Macro'),state=DISABLED)
-        macroComponent.entryconfig(
-            macroComponent.index('Run Saved Macro'),state=NORMAL)
+        self.GUI.macromenu.entryconfig(
+            self.GUI.macromenu.index('Start Record Macro'),state=NORMAL)
+        self.GUI.macromenu.entryconfig(
+            self.GUI.macromenu.index('Stop Record Macro'),state=DISABLED)
+        self.GUI.macromenu.entryconfig(
+            self.GUI.macromenu.index('Run Saved Macro'),state=NORMAL)
 
         if self.GUI.macroLines == None or len(self.GUI.macroLines) < 1:
             # no macro commands, nothing to do

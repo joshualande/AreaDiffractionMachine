@@ -662,102 +662,112 @@ class Main:
 
         self.integratedisp=GraphDisplay(self.xrdwin,title='Integration Data',logScaleVar=self.logVarIntegration)
         self.integratedisp.main.withdraw()
-        #Menu bar
-        menubar=Pmw.MenuBar(xrdwin)
+
+
+        #The Menu bar
+        menubar= Menu(xrdwin)
         self.menubar = menubar
-        #file menu
-        menubar.addmenu('File','')
-        menubar.addmenuitem('File','command',label='Open',command=self.selectDiffractionFile) 
-        menubar.addmenuitem('File','command',label='Open Multiple Files',command=self.selectMultipleDiffractionFiles) 
-        menubar.addmenuitem('File','separator')
+        root.config(menu=menubar)
 
-        menubar.addcascademenu('File', 'Opened File(s)',command=DISABLED)
-        menubar.addmenuitem('Opened File(s)', 'command', label='None',command=DISABLED)
+        # The file menu
+        filemenu = Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="File", menu=filemenu)
+        filemenu.add_command(label='Option',command=self.selectDiffractionFile) 
+        filemenu.add_command(label='Open Multiple Files',command=self.selectMultipleDiffractionFiles) 
+        filemenu.add_separator()
 
-        menubar.addmenuitem('File','separator')
-        self.saveDiffractionImageMenuItem=menubar.addmenuitem('File','command',label='Save Image',command=self.saveDiffractionImage)
-        menubar.addmenuitem('File','command',label='Save Caked Image',command=self.saveCakeImage)
-        menubar.addmenuitem('File','separator')       
-        menubar.addmenuitem('File','command',label='Save Caked Data',command=self.saveCakeData)
-        menubar.addmenuitem('File','command',label='Save Integration Data',command=self.saveIntegratedIntensity)
+        # THE 'opened file(s)' menu should go here
+        self.openedfilesmenu = Menu(filemenu, tearoff=0)
+        filemenu.add_cascade(label='Opened File(s)',menu=self.openedfilesmenu)
+        self.openedfilesmenu.add_command(label='None',command=DISABLED)
 
-    
-        menubar.addmenu('Calibration','')
-        menubar.addmenuitem('Calibration','command',label='Load Calibration',command=self.calibrationDataLoad)
-        menubar.addmenuitem('Calibration','command',label='Paramaters from Header',command=self.calibrationDataFromHeader)
-        menubar.addmenuitem('Calibration','separator')
-        menubar.addcascademenu('Calibration', 'Standard Q', 'Select Standard Q Values')
-        self.addStandardQ(menubar)
+        filemenu.add_separator()
+        self.saveDiffractionImageMenuItem=filemenu.add_command(label='Save Image',command=self.saveDiffractionImage)
+        filemenu.add_command(label='Save Caked Image',command=self.saveCakeImage)
+        filemenu.add_separator()
+        filemenu.add_command(label='Save Caked Data',command=self.saveCakeData)
 
-        self.qmenu = menubar.component('Standard Q-menu')
+        calibrationmenu = Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="Calibration",menu=calibrationmenu)
 
-        menubar.addmenuitem('Calibration','separator')
+        calibrationmenu.add_command(label='Load Calibration',command=self.calibrationDataLoad)
+        calibrationmenu.add_command(label='Paramaters from Header',command=self.calibrationDataFromHeader)
+        calibrationmenu.add_separator()
 
-        menubar.addmenuitem('Calibration', 'radiobutton', 
+        self.qmenu = Menu(calibrationmenu, tearoff=0)
+        calibrationmenu.add_cascade(label='Standard Q',menu=self.qmenu)
+        self.addStandardQ(self.qmenu)
+
+        self.qmenu.add_separator()
+
+        calibrationmenu.add_radiobutton(
                 label = 'Work in eV',
                 command = self.changeEVorLambda,
                 variable = self.eVorLambda)
 
-        menubar.addmenuitem('Calibration', 'radiobutton', 
+        calibrationmenu.add_radiobutton(
                 label = "Work in Lambda",
                 command = self.changeEVorLambda,
                 variable = self.eVorLambda)
 
-        menubar.addmenuitem('Calibration','separator')
-        menubar.addmenuitem('Calibration','command',
-                label='Save Calibration',command=self.calibrationDataSave)
-        menubar.addmenuitem('Calibration','separator')
-        menubar.addmenuitem('Calibration','command',
-                label='Do Fit',command=self.doFit)        
-        menubar.addmenuitem('Calibration','separator')
-        menubar.addmenuitem('Calibration','command',
-                label='Previous Values',command=self.calibrationDataUndo)
+        calibrationmenu.add_separator()
+        calibrationmenu.add_command(label='Save Calibration',command=self.calibrationDataSave)
+        calibrationmenu.add_command(label='Do Fit',command=self.doFit)        
+        calibrationmenu.add_command(label='Previous Values',command=self.calibrationDataUndo)
 
-        menubar.addmenu('Masking','')
-        menubar.addmenuitem('Masking','command',
-                label='Clear Mask',command=self.removePolygons)
-        menubar.addmenuitem('Masking','command',
-                label='Save Mask',command=self.savePolygonsToFile)
-        menubar.addmenuitem('Masking','command',
-                label='Load Mask',command=self.loadPolygonsFromFile)
+        maskingmenu = Menu(menubar,tearoff=0)
+        menubar.add_cascade(label="Masking",menu=maskingmenu)
+        maskingmenu.add_command(label='Clear Mask',command=self.removePolygons)
+        maskingmenu.add_command(label='Save Mask',command=self.savePolygonsToFile)
+        maskingmenu.add_command(label='Load Mask',command=self.loadPolygonsFromFile)
 
-        menubar.addmenu('Cake','')
-        menubar.addmenuitem('Cake','command',label='Do Cake',command=self.cakedisp.updateimage)
-        menubar.addmenuitem('Cake','command',label='Auto Cake',command=self.autoCake)
-        menubar.addmenuitem('Cake','separator')
-        menubar.addmenuitem('Cake','command',label='Last Cake',command=self.undoZoomCakeImage)
-        menubar.addmenuitem('Cake','separator')
-        menubar.addmenuitem('Cake','command',label='Save Caked Image',command=self.saveCakeImage)   
-        menubar.addmenuitem('Cake','command',label='Save Caked Data',command=self.saveCakeData)
-        
-        menubar.addmenu('Integrate','')
-        menubar.addmenuitem('Integrate','command',label='Integrate Q-I Data',command=self.integrateQOrTwoThetaI)
-        menubar.addmenuitem('Integrate','command',label='Integrate Chi-I Data',command=self.integrateChiI)
-        menubar.addmenuitem('Integrate','separator')
-        menubar.addmenuitem('Integrate','command',label='Save Integration Data',command=self.saveIntegratedIntensity)
-        menubar.addmenuitem('Integrate','separator')
+        cakemenu = Menu(menubar,tearoff=0)
+        menubar.add_cascade(label="Cake",menu=cakemenu)
+        cakemenu.add_command(label='Do Cake',command=self.cakedisp.updateimage)
+        cakemenu.add_command(label='Auto Cake',command=self.autoCake)
+        cakemenu.add_separator()
+        cakemenu.add_command(label='Last Cake',command=self.undoZoomCakeImage)
+        cakemenu.add_separator()
+        cakemenu.add_command(label='Save Caked Image',command=self.saveCakeImage)   
+        cakemenu.add_command(label='Save Caked Data',command=self.saveCakeData)
 
-        menubar.addmenuitem('Integrate', 'radiobutton', 
+        integratemenu = Menu(menubar,tearoff=0)
+        menubar.add_cascade(label="Integrate",menu=integratemenu)
+
+        integratemenu.add_command(label='Integrate Q-I Data',command=self.integrateQOrTwoThetaI)
+        integratemenu.add_command(label='Integrate Chi-I Data',command=self.integrateChiI)
+        integratemenu.add_separator()
+        integratemenu.add_command(label='Save Integration Data',command=self.saveIntegratedIntensity)
+        integratemenu.add_separator()
+
+        integratemenu.add_radiobutton(
                 label = 'Work in 2theta',
                 command = self.changeQor2Theta,
                 variable = self.Qor2Theta)
 
-        menubar.addmenuitem('Integrate', 'radiobutton', 
+        integratemenu.add_radiobutton(
                 label = "Work in Q",
                 command = self.changeQor2Theta,
                 variable = self.Qor2Theta)
 
-        menubar.addmenu('Macro','')
-        menubar.addmenuitem('Macro','command',label='Start Record Macro',command=self.startRecordMacro)
-        menubar.addmenuitem('Macro','command',label='Stop Record Macro',command=self.stopRecordMacro,state=DISABLED)
-        menubar.addmenuitem('Macro','separator')
-        menubar.addmenuitem('Macro','command',label='Run Saved Macro',command=self.runMacro)
+        self.macromenu = Menu(menubar,tearoff=0)
+        menubar.add_cascade(label="Macro",menu=self.macromenu)
 
-        menubar.addmenu('Help','',side=RIGHT)
-        menubar.addmenuitem('Help','command',label='About',command=self.callprogramabout)
-        menubar.addmenuitem('Help','separator')
-        menubar.addmenuitem('Help','command',label='Help',command=self.showclickhelp)
-        menubar.pack(side=TOP,fill=X)
+        self.macromenu.add_command(label='Start Record Macro',command=self.startRecordMacro)
+        self.macromenu.add_command(label='Stop Record Macro',command=self.stopRecordMacro,state=DISABLED)
+        self.macromenu.add_separator()
+        self.macromenu.add_command(label='Run Saved Macro',command=self.runMacro)
+
+        # this name="help" syntax makes the help menu show up in the right 
+        # place on the mac, where there is already a default help part of 
+        # the menu bar. I leared about how to do this here:
+        # http://coding.derkeiler.com/Archive/Python/comp.lang.python/2006-10/msg02418.html
+        helpmenu = Menu(menubar,tearoff=0,name="help")
+        menubar.add_cascade(label="Help",menu=helpmenu)
+
+        helpmenu.add_command(label='About',command=self.callprogramabout)
+        helpmenu.add_separator()
+        helpmenu.add_command(label='Help',command=self.showclickhelp)
 
         #notebook interior for major tabs
         self.xrdnb=Pmw.NoteBook(xrdwin)
@@ -1112,13 +1122,14 @@ class Main:
         Pmw.reporterrorstofile(FancyErrors(self.status))
 
 
-    def addStandardQ(self,menubar):
+    def addStandardQ(self,qmenu):
         files = os.listdir(self.standardQFolder) 
         for file in files:
             basename = os.path.splitext(file)[0]
             # I have to call this funny selectStandardQDataFile() function so that it will do the macro recording 
             load = (lambda file=file,standardQFolder=self.standardQFolder,self=self,basename=basename: self.selectStandardQDataFile(basename,standardQFolder+os.sep+file))
-            menubar.addmenuitem('Standard Q', 'command', label=basename,command=load)
+            qmenu.add_command(label=basename,command=load)
+            
         
 
     def resetGui(self):
@@ -1193,10 +1204,8 @@ class Main:
         self.allPeakListIDsCakeImage = []
 
         # rest the menu
-        removeAllItemsFromMenu(self.menubar.component('Opened File(s)-menu'))
-        self.menubar.addmenuitem('Opened File(s)', 'command', label='None',command=DISABLED)
-
-
+        removeAllItemsFromMenu(self.openedfilesmenu)
+        self.openedfilesmenu.add_command(label='None',command=DISABLED)
 
     def changeEVorLambda(self,to=None):
         if to != None:
@@ -3093,14 +3102,15 @@ class Main:
 
         self.maindisp.updateimage()
         self.addZoomAndPanBindingsDiffractionImage()
-        
-        removeAllItemsFromMenu(self.menubar.component('Opened File(s)-menu'))
+
+        removeAllItemsFromMenu(self.openedfilesmenu)
+        # if multiple images were loaded, put them all in the menu.
+        # otherwise, just put the one file name into the menu
         if type(filename) == type([]):
             for file in filename:
-                self.menubar.addmenuitem('Opened File(s)', 'command', label=file,command=DISABLED)
+                self.openedfilesmenu.add_command(label=file,command=DISABLED)
         else:
-            self.menubar.addmenuitem('Opened File(s)', 'command', label=filename,command=DISABLED)
-
+            self.openedfilesmenu.add_command(label=filename,command=DISABLED)
 
         # Make sure to explicitly record this macro thingy
         if self.macroLines != None:
