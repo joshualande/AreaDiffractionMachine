@@ -231,7 +231,7 @@ class IntegrateIntensity:
 
         if self.maskedPixelInfo.doLessThanMask:
             file.write("# A Less Than Mask was applied.\n")
-            file.write("#   Less than mask = %f (All pixels above %f were ignored)\n" % 
+            file.write("#   Less than mask = %f (All pixels below %f were ignored)\n" % 
                     (self.maskedPixelInfo.lessThanMask,self.maskedPixelInfo.lessThanMask))
         else:
             file.write("$ No less than mask applied.\n")
