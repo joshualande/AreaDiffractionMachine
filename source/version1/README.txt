@@ -2,7 +2,18 @@ In order to get Pmw to work with py2exe, I had to freeze it into the current fol
     
     python "C:\Program Files\Python21\Pmw\Pmw_1_2\bin\bundlepmw.py" "C:\Program Files\Python21\Pmw\Pmw_1_2\bin" 
 
-This command created the file Pmw.py inside of the current folder which could be used to include Pmw ih py2exe. This ne Pmw file can now be imported as "import Pmw" and py2exe will be happy. The only problem is that python gets confused about which Pmw.py I am trying to import. To fix this problem, I renamed this file to PmwFreeze.py. I then issued the command inside of my program "import PmwFreeze as Pmw" and it uniquely includes the right frozen Pmw. This lets me have Pmw widgets inside of an exe file!
+This command created the file Pmw.py inside of the current folder which could be used to include Pmw ih py2exe. This ne Pmw file can now be imported as "import Pmw" and py2exe will be happy. The only problem is that python gets confused about which Pmw.py I am trying to import. To fix this problem, I renamed this file to PmwFreeze.py. I then issued the command inside of my program "import PmwFreeze as Pmw" and it uniquely includes the right frozen Pmw. This lets me have Pmw widgets inside of an py2exe executable!
+
+On the mac, PmwFreeze.py was giving me this silly error:
+
+    File "/Users/jolande/xrd work/areadiffractionmachine/source/version1/PmwFreeze.py", line 1814, in _reporterror
+    msg = exc_type + ' Exception in Tk callback\n'
+
+So, I changed the line to:
+
+    msg = str(exc_type) + ' Exception in Tk callback\n'
+
+And everything worked after that.
 
 ---------------------------
 

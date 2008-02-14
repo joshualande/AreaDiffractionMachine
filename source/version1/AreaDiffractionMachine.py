@@ -61,9 +61,10 @@ from CalibrationData import CalibrationData
 import General
 from MacroMode import MacroMode
 from Axis import Axis
+import LinePlot
 
 
-root=Tix.Tk()
+root=Tkinter.Tk()
 Pmw.initialise(root)
 filepath=os.getcwd()+os.sep
 
@@ -86,11 +87,16 @@ def setcheckbox(checkbox,value):
     if value=='deselect':
         checkbox.deselect()
 
-
 class FancyErrors:
     def __init__(self,status):
+        # I think this is how linux/windows exceptions are formatted
         patternstring = r"""UserInputException: ['"](.*)['"]"""
         self.pattern = re.compile(patternstring, re.DOTALL)
+
+        # I think this is how Mac exceptions are formatted
+        otherpatternstring = r"""<class 'Exceptions.UserInputException'>: ['"](.*)['"]"""
+        self.otherpattern = re.compile(otherpatternstring, re.DOTALL)
+
         self.status=status
 
     def write(self,string):
@@ -106,12 +112,22 @@ class FancyErrors:
             pass
 
         match = self.pattern.search(string)
+        # see if the current exception is a windows/linux style
+        # UserInputException. If so, then print out just the exception
         if match:
             message = match.groups()[0]
             box=tkMessageBox.showerror('Error',message)
         else:
-            print string
-            box=tkMessageBox.showerror('UNKNOWN ERROR',string)
+            # see if the current exception is a mac style
+            # UserInputException. If so, then print out just the exception
+            othermatch = self.otherpattern.search(string)
+            if othermatch:
+                message = othermatch.groups()[0]
+                box=tkMessageBox.showerror('Error',message)
+            else:
+                # otherwise, dump out the whole exception in an ugly manner
+                print string
+                box=tkMessageBox.showerror('UNKNOWN ERROR',string)
         setstatus(self.status,'Ready')
 
 
@@ -275,7 +291,7 @@ class GraphDisplay:
         self.main.userdeletefunc(func=self.main.withdraw)
         h=self.main.interior()
 
-        self.graph=Pmw.Blt.Graph(h,plotbackground='white',height=350,width=550)
+        self.graph=LinePlot.LinePlot(h,plotbackground='white',height=350,width=550)
         self.graph.bind(sequence="<ButtonPress>",   func=self.mouseDown)
         self.graph.bind(sequence="<ButtonRelease>", func=self.mouseUp  )
         self.graph.bind(sequence="<Motion>", func=self.coordreport)
@@ -311,7 +327,7 @@ class GraphDisplay:
 
 
     def coordreport(self,event):
-        (x,y)=event.widget.invtransform(event.x,event.y)
+        (x,y)=self.graph.invtransform(event.x,event.y)
         xtext=self.xUpdateName+"="+str(x)
         ytext=self.yUpdateName+"="+str(y)
         xtext=xtext[:12]
@@ -388,6 +404,9 @@ class GraphDisplay:
     def rescaleplot(self):
         #get last off stack
         if self.zoomstack==[]:
+            # if there is no previous zoom, just to an auto scale
+            self.graph.xaxis_configure(min='',max='')
+            self.graph.yaxis_configure(min='',max='')
             return
         limit=self.zoomstack.pop()
         self.graph.xaxis_configure(min=limit[0],max=limit[1])
@@ -672,7 +691,7 @@ class Main:
         # The file menu
         filemenu = Menu(menubar, tearoff=0)
         menubar.add_cascade(label="File", menu=filemenu)
-        filemenu.add_command(label='Option',command=self.selectDiffractionFile) 
+        filemenu.add_command(label='Open',command=self.selectDiffractionFile) 
         filemenu.add_command(label='Open Multiple Files',command=self.selectMultipleDiffractionFiles) 
         filemenu.add_separator()
 

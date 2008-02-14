@@ -1,11 +1,8 @@
 from Tkinter import *
 import PmwFreeze as Pmw
+from math import pow,log10,fmod,ceil,exp
 
 from General import frange
-import ColorMaps
-
-from math import pow,log10,fmod,ceil
-
 
 def roundUp(a,b):
     """ Rounds a up to the smallest possible multiple of b larger then a. 
@@ -22,8 +19,18 @@ class Axis:
 
     def getNiceRange(self,lowestValue,highestValue):
 
+        if self.logscale:
+            if lowestValue < 1:
+                lowestValue = 1
+            if highestValue < 10:
+                highestValue = 10
+            niceStep = 1
+            lowestNiceValue = roundUp(log10(lowestValue),niceStep)
+            highestNiceValue = roundDown(log10(highestValue),niceStep)
+            return lowestNiceValue,highestNiceValue,niceStep
+
         interval = (highestValue - lowestValue)
-        niceStep = pow(10,ceil(log10(interval/10)))
+        niceStep = pow(10,ceil(log10(interval/10.0)))
 
         lowestNiceValue = roundUp(lowestValue,niceStep)
         highestNiceValue = roundDown(highestValue,niceStep)
@@ -51,12 +58,32 @@ class Axis:
         lowestValueToDisplay,highestValueToDisplay,stepSizeToDisplay=self.getNiceRange(self.lowestValue,self.highestValue)
 
         if self.side == "left":
-            self.allIDs.append( self.axis.create_line(self.width,0,self.width,self.height) )
+            self.allIDs.append( self.axis.create_line(self.width-1,0,self.width-1,self.height) )
         else:
             self.allIDs.append( self.axis.create_line(0,0,0,self.height) )
         for currentValueToDisplay in frange(lowestValueToDisplay,highestValueToDisplay+stepSizeToDisplay/100,stepSizeToDisplay):
 
-            canvasValue = (currentValueToDisplay-self.lowestValue)/(self.highestValue-self.lowestValue)*(self.height-1)
+            if self.logscale:
+                # if log scale, then the lowest possible value that can be put on the plot will be 1
+                lowestValue = self.lowestValue
+                if lowestValue < 1:
+                    lowestValue = 1
+                highestValue = self.highestValue
+                if highestValue < 10:
+                    highestValue = 10
+
+                # if log scale, then currentValueToDisplay is given as the log of it,
+                canvasValue = (currentValueToDisplay-log10(lowestValue))/(log10(highestValue)-
+                        log10(lowestValue))*(self.height-1)
+                currentValueToDisplay = pow(10,currentValueToDisplay)
+            else:
+                # otherwise, calculate the canvasValue regularly
+                canvasValue = (currentValueToDisplay-self.lowestValue)/(self.highestValue-self.lowestValue)*(self.height-1)
+
+            if self.flip:
+                # possibly flip the numbers
+                canvasValue = self.height-1 - canvasValue
+
             # don't display numbers too close to the edge
             if canvasValue < 10 or canvasValue > (self.height-1) - 10: continue
 
@@ -86,12 +113,17 @@ class Axis:
         lowestValueToDisplay,highestValueToDisplay,stepSizeToDisplay=self.getNiceRange(self.lowestValue,self.highestValue)
 
         if self.side == "bottom":
-            self.allIDs.append( self.axis.create_line(0,0,self.width,0) )
+            self.allIDs.append( self.axis.create_line(0,1,self.width,1) )
         else:
             self.allIDs.append( self.axis.create_line(0,self.height,self.width,self.height) )
+
         for currentValueToDisplay in frange(lowestValueToDisplay,highestValueToDisplay+stepSizeToDisplay/100,stepSizeToDisplay):
 
             canvasValue = (currentValueToDisplay-self.lowestValue)/(self.highestValue-self.lowestValue)*(self.width-1)
+            if self.flip:
+                # possibly flip the numbers
+                canvasValue = self.width-1 - canvasValue
+
             # don't display numbers too close to the edge
             if canvasValue < 10 or canvasValue > (self.width-1) - 10: continue
 
@@ -110,11 +142,16 @@ class Axis:
                 self.allIDs.append( self.axis.create_text(canvasValue,self.height*1.0/3,fill="black",anchor=anchor,text="%g" % currentValueToDisplay) )
             
 
-    def __init__(self,widget,lowestValue,highestValue,width,height,side):
-        """ To Draw nothing on the canvas yet, set highestValue = lowestValue = None """
+    def __init__(self,widget,lowestValue,highestValue,width,height,side,flip=0,logscale = 0):
+        """ To Draw nothing on the canvas yet, set highestValue = lowestValue = None.
+            The variable flip (if ture) will cause the numbers to be drawn in the 
+            reverse order"""
 
         if not side in ("left","right","top","bottom"):
             raise Exception("Argument side must have the value 'left', right', 'top', or 'bottom'.")
+
+        if logscale and side in ("top","bottom"):
+            raise Exception("Can only apply the log scale to the verticle axis.")
 
         self.allIDs = []
         self.lowestValue = lowestValue
@@ -122,6 +159,9 @@ class Axis:
         self.width = width
         self.height = height
         self.side = side
+        self.flip = flip 
+        self.logscale = logscale
+
         # setting the highlightthickeness to 0 is crutial to getting the axis to display right
         self.axis=Canvas(widget,width=self.width,height=self.height,
                 cursor='crosshair',
@@ -135,8 +175,8 @@ class Axis:
             self.makeHorizontalAxis()
          
 
-    def config(self,lowestValue=None,highestValue=None,width=None,height=None):
-        """ To remove everything and leave the canvas empty, set highestValue=lowestValue = None """
+    def config(self,lowestValue=None,highestValue=None,width=None,height=None,logscale=None):
+        """ To remove everything and leave the canvas empty, set highestValue=lowestValue=None """
         if width != None:
             self.width = width
             self.axis.config(width=self.width)
@@ -146,6 +186,9 @@ class Axis:
 
         self.lowestValue = lowestValue
         self.highestValue = highestValue
+
+        if logscale != None:
+            self.logscale = logscale
 
         if self.side in ("left","right"):
             self.makeVerticleAxis()
