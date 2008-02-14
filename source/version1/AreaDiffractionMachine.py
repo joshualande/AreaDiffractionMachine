@@ -899,9 +899,9 @@ class Main:
         self.useOldPeakListButton = Checkbutton(ffm, text="Use Old Peak List (if possible)?", variable=self.useOldPeakList)
         self.useOldPeakListButton.pack(side=TOP,padx=5,pady=2)
         self.numberOfChiInput = Pmw.EntryField(ffm,labelpos = 'w', label_text = "Number of Chi?",
-                                value = '300', entry_width=4,validate={'validator':'numeric','min':0,'max':9999})
+                                value = '360', entry_width=4,validate={'validator':'numeric','min':0,'max':9999})
         self.numberOfChiInput.pack(side=TOP,padx=5,pady=2)
-        self.stddev = Pmw.EntryField(ffm,entry_width=10, labelpos = 'w', value = '10',
+        self.stddev = Pmw.EntryField(ffm,entry_width=10, labelpos = 'w', value = '5',
                                      label_text ="Stddev?" , validate={'validator':'real','min':0 } )
         self.stddev.pack(side=TOP,padx=5,pady=2)
 
