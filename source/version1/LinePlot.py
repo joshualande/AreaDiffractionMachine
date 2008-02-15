@@ -183,7 +183,7 @@ class LinePlot:
             ymin = self.usedYmin    
             ymax = self.usedYmax
 
-        transX = (x-xmin)*(self.graphwidth-1)/(xmax-xmin)
+        transX = (x-xmin)*(self.graphwidth-1.0)/(xmax-xmin)
         if self.ylogscale:
             if y<=0:
                 # anything less then 0 must be forced outside the image 
@@ -199,11 +199,11 @@ class LinePlot:
                     ymin = 1
                 if ymax < 10:
                     ymax = 10
-                transY = (self.graphheight-1)*(log10(y)-log10(ymin))/(log10(ymax)-log10(ymin))
+                transY = (self.graphheight-1.0)*(log10(y)-log10(ymin))/(log10(ymax)-log10(ymin))
                 # coordiantes are weird b/c they go down not up, so we have to invert them
-                transY = self.graphheight-1-transY
+                transY = self.graphheight-1.0-transY
         else:
-            transY = (y-ymin)*(self.graphheight-1)/(ymax-ymin)
+            transY = (y-ymin)*(self.graphheight-1.0)/(ymax-ymin)
             # coordiantes are weird b/c they go down not up, so we have to invert them
             transY = self.graphheight-1-transY
 
@@ -231,15 +231,21 @@ class LinePlot:
             ymin = self.usedYmin    
             ymax = self.usedYmax
                            
-        transX = x*(self.usedXmax-self.usedXmin)/(self.graphwidth-1)
+        transX = self.usedXmin+x*(self.usedXmax-self.usedXmin)/(self.graphwidth-1.0)
         if self.ylogscale:
             # remember that the lowest possible value allowed in a log plot is 1.
             usedYmin = self.usedYmin
-            if usedYmin < 1:
-                usedYmin = 1
-            transY = pow(10,(self.graphheight-1-y)*(log10(self.usedYmax)-log10(usedYmin))/(self.graphheight-1))
+            if usedYmin < 1.0:
+                usedYmin = 1.0
+            usedYmax = self.usedYmax
+            if usedYmax < 10:
+                usedYmax = 10.0
+            print 'min,max = %f,%f' % (usedYmin,usedYmax)
+            print 'logmin,logmax = %f,%f' % (log10(usedYmin),log10(usedYmax))
+            print 'inside = ',((self.graphheight-1.0-y)/(self.graphheight-1.0))*(log10(usedYmax)-log10(usedYmin))-log10(usedYmin)
+            transY = pow(10,((self.graphheight-1.0-y)/(self.graphheight-1.0))*(log10(usedYmax)-log10(usedYmin))-log10(usedYmin))
         else:        
-            transY = (self.graphheight-1-y)*(self.usedYmax-self.usedYmin)/(self.graphheight-1)
+            transY = self.usedYmin+(self.graphheight-1.0-y)*(self.usedYmax-self.usedYmin)/(self.graphheight-1.0)
         return transX,transY
                      
 

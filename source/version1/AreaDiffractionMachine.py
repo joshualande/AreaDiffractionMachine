@@ -297,7 +297,7 @@ class GraphDisplay:
         self.graph.bind(sequence="<Motion>", func=self.coordreport)
         self.graph.bind(sequence="<Leave>", func=self.nocoordreport)
         self.graph.legend_configure(hide=1)
-        self.graph.pack(side=TOP,expand=1,fill='both')
+        self.graph.pack(side=TOP,expand=1,fill='both',padx=10,pady=10)
 
         #zoom stack
         self.zoomstack=[]
