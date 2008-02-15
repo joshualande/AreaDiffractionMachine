@@ -109,17 +109,19 @@ class DiffractionData:
 
     lastMaskedPixelInfo = None
 
-    def __init__(self,filename,extension = None):
+    def __init__(self,filenames,extension = None):
         """ Does everything to initialize the object. 
             Either you can pass in the type of file that you are using
             by explicitly giving its extension, or the program can try
-            to figure this out for you. If filename is a list, all of the
-            files will be opened and added together, but only if they
-            are the same type of file. """
+            to figure this out for you. filenames must be a list of all of the
+            files that will be opened and added together. If the list 
+            only has one file in it, then only that one will be loaeded. """
 
-        if type(filename) == type([]): 
-            # if a list is given, read all files
-            filenames = filename # explicitly SAy many files are given
+        if len(filenames) < 1:
+            raise Exception("Cannot initialize a DiffractionData object without being given at least one file to load in.")
+
+        if len(filenames) > 1:
+            # Many files to load
 
             if extension == None:
 
@@ -153,8 +155,9 @@ class DiffractionData:
 
             filename = ""
             # store all filenames in one string
-            for data in allData:
-                filename = filename + " " + data.filename
+            for index in range(len(allData)-1):
+                filename += allData[index].filename.strip() + ", "
+            filename += allData[len(allData)-1].filename.strip()
 
             self.theDiffractionData = allData.pop() # store all iamges in one
 
@@ -162,7 +165,13 @@ class DiffractionData:
             for data in allData:
                 self.theDiffractionData.data += data.data
 
-        else: # otherwise, only given one file so do the regular thing
+            # store the merged filename for later
+            self.theDiffractionData.filename = filename
+
+        else: 
+            # Only one file to load
+
+            filename = filenames[0] # get out the only file
 
             if extension == None:
                 split = os.path.basename(filename).split('.')

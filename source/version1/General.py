@@ -6,6 +6,35 @@ import Numeric
 
 from Exceptions import UserInputException
 
+def getStringFromList(list):
+    """ Returns a string made up out of a list by removing 
+        traling and leading white space from each of the 
+        list items and putting a comma between them. 
+            
+            >>> getStringFromList( ('a', '   b ', 'c    ') )
+            'a, b, c'
+        """
+    string = ''
+    for index in range(len(list)-1):
+        string+=list[index].strip()+', '
+    string +=list[len(list)-1].strip()
+    return string
+
+
+def getListFromString(string):
+    """ Returns a list forma  string of items split by commas.
+        It will also remove anyt trailing and leading white
+        spcae from each of the list items. 
+
+            >>> getListFromString('a, b, c')
+            ['a', 'b', 'c']
+        """
+    list = string.split(',')
+    for index in range(len(list)):
+        list[index] = list[index].strip()
+    return list
+
+
 def maxListIndex(list):
     """ Returns the index of the largest item in a python list. 
 

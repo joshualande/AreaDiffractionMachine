@@ -691,8 +691,7 @@ class Main:
         # The file menu
         filemenu = Menu(menubar, tearoff=0)
         menubar.add_cascade(label="File", menu=filemenu)
-        filemenu.add_command(label='Open',command=self.selectDiffractionFile) 
-        filemenu.add_command(label='Open Multiple Files',command=self.selectMultipleDiffractionFiles) 
+        filemenu.add_command(label='Data File',command=self.selectDiffractionFiles) 
         filemenu.add_separator()
 
         # THE 'opened file(s)' menu should go here
@@ -805,7 +804,7 @@ class Main:
         filepath=os.getcwd()+os.sep
 
         b=Button(filebar,bitmap="@"+filepath+"xbms"+os.sep+"openfolder.xbm",height=21,width=50,
-                command=self.selectDiffractionFile,bg='lightyellow') #get file name from directory
+                command=self.selectDiffractionFiles,bg='lightyellow') #get file name from directory
         b.pack(side=LEFT,padx=2,pady=2)
         b=Button(filebar,text="Load",bg='darkgreen',fg='snow',command=self.loadDiffractionFile) #load data file and display
         b.pack(side=LEFT,padx=2,pady=2)
@@ -2745,40 +2744,20 @@ class Main:
         self.cakedisp.updateimageNoComplain()
 
 
-    def selectMultipleDiffractionFiles(self):
-        self.multifd=Tix.ExFileSelectDialog(self.xrdwin)
-        self.multifd.fsbox.filelist.listbox.configure(selectmode=MULTIPLE)
-        self.multifd.fsbox.ok.configure(command=self.getmultilist)
-        self.multifd.popup()
-
-    def getmultilist(self):
-        multfn=self.multifd.fsbox.filelist.listbox.curselection()
-        multdlist=self.multifd.fsbox.filelist.listbox.get(0,END)
-        curdir=self.multifd.fsbox.dir.entry.get()
-        self.multifd.popdown()
-        if multfn != ():
-            # if we are given files, open them
-
-            filenames = []
-            for sel in multfn:
-                curfile = multdlist[int(sel)]
-                fulpath = curdir + os.sep + curfile
-                filenames.append(fulpath)
-
-            if len(filenames) == 1:
-                self.loadDiffractionFile(filenames[0])
-            else:
-                self.loadDiffractionFile(filenames)
-
-    def selectDiffractionFile(self):
-        filename = tkFileDialog.askopenfilename(
+    def selectDiffractionFiles(self):
+        filenames = tkFileDialog.askopenfilenames(
             filetypes=[ ('Mar PCK Format','*.mar2300 *.mar3450'), 
                 ('Mar CCD Format','*.mccd'), 
                 ('TIFF','*.tif *.tiff'), 
                 ("All files", "*"), ], title="Load Diffraction Image")
 
-        if filename in ['',()]: return 
-        self.loadDiffractionFile(filename)
+        if filenames in ['',()]: return 
+
+        # put the filename(s) into the input 
+        self.fileentry.setvalue(General.getStringFromList(filenames))
+
+        # load in the data
+        self.loadDiffractionFile()
 
 
     def setExtension(self, result):
@@ -3084,13 +3063,20 @@ class Main:
                 func=self.resizeDiffractionImage) 
 
 
-    def loadDiffractionFile(self,filename=''):
+    def loadDiffractionFile(self,filenames=()):
+        # Takes in a list of diffraction files to load in and add together
+
         self.extension = None
 
-        if filename == '':
-            filename = self.fileentry.getvalue()
+        if filenames in [(),[]]:
+            # if no filename(s) given, read filename(s) form user input
+            filenames=(General.getListFromString(self.fileentry.getvalue()))
 
-        if filename == '':
+        if not type(filenames) not in [type([]), type(())]:
+            # if a single filename was passed, make it into a list
+            filenames = (filenames)
+
+        if len(filenames) < 1:
             raise UserInputException("A filename must be given before that file can be loaded.")
 
         setstatus(self.status,"Loading...")
@@ -3098,16 +3084,19 @@ class Main:
         # reset the gui before you load a (possibly) new image
         self.resetGui()
 
-        if type(filename) == type([]):
-            self.fileentry.setvalue('MULTIPLE FILES')
-        else:
-            self.fileentry.setvalue(filename)
+        # put possibly all the filenames into the user input
+        # with each filename seperated by a comma
+        # seperation
+        self.fileentry.setvalue(General.getStringFromList(filenames))
 
         try:
             # if this dosen't work, we dont want to loose our old object
-            temp = DiffractionData(filename)
+
+            # load in the file(s)
+            temp = DiffractionData(filenames)
             self.diffractionData = temp
         except UnknownFiletypeException,e:
+
             # if the DiffractionData object can't open file, 
             # ask explicitly for the filetype and tell it to object
 
@@ -3123,25 +3112,24 @@ class Main:
             if self.extension != "mar3450" and self.extension != 'mar2300' \
                     and self.extension != "mccd" and self.extension != 'tiff': return 
 
-            self.diffractionData = DiffractionData(filename,extension=self.extension)
+            self.diffractionData = DiffractionData(filenames,extension=self.extension)
 
         self.maindisp.updateimage()
         self.addZoomAndPanBindingsDiffractionImage()
 
         removeAllItemsFromMenu(self.openedfilesmenu)
-        # if multiple images were loaded, put them all in the menu.
-        # otherwise, just put the one file name into the menu
-        if type(filename) == type([]):
-            for file in filename:
-                self.openedfilesmenu.add_command(label=file,command=DISABLED)
-        else:
-            self.openedfilesmenu.add_command(label=filename,command=DISABLED)
 
-        # Make sure to explicitly record this macro thingy
+        for file in filenames:
+            self.openedfilesmenu.add_command(label=file,command=DISABLED)
+
+        # Make sure to explicitly record this macro thingy. 
+        # This does not work properly when mulitple files are being loaded 
+        # because there is no macro command to do so.
         if self.macroLines != None:
-            self.macroMode.explicitMacroRecordTwoLines('Data File:','\t'+filename)
+            self.macroMode.explicitMacroRecordTwoLines('Data File:','\t'+filenames)
 
         setstatus(self.status,"Ready")
+
 
     def selectStandardQDataFile(self,basename,filename):
         self.qfileentry.setvalue(filename)

@@ -212,7 +212,7 @@ class IntegrateIntensity:
         else:
             raise Exception("This should never happen")
 
-        file.write("# File: %s\n" % (diffractionDataName) )
+        file.write("# Intensity integration of: %s\n" % diffractionDataName)
         file.write("# Data Integrated on "+time.asctime()+"\n")
         file.write("# Calibration data used:\n")
         self.calibrationData.writeCommentString(file)
