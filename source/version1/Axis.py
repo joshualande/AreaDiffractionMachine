@@ -17,6 +17,8 @@ def roundDown(a,b):
 
 class Axis:
 
+    title = None
+
     def getNiceRange(self,lowestValue,highestValue):
 
         if self.logscale:
@@ -90,18 +92,26 @@ class Axis:
             #if canvasValue < 2: canvasValue = 2 # tk bug 
 
             if self.side == "left": 
-                self.allIDs.append( self.axis.create_line(self.width*3.0/4,canvasValue,self.width,canvasValue) )
+                self.allIDs.append( self.axis.create_line(self.width*5.0/6.0,canvasValue,self.width,canvasValue) )
             else: 
-                self.allIDs.append( self.axis.create_line(0,canvasValue,self.width/4.0,canvasValue) )
+                self.allIDs.append( self.axis.create_line(0,canvasValue,self.width/6.0,canvasValue) )
 
             if self.side == "left":
                 anchor = 'e'
-
-                self.allIDs.append( self.axis.create_text(self.width*(3.0/4-1.0/16),canvasValue,fill="black",anchor=anchor,text="%g" % currentValueToDisplay) )
+                self.allIDs.append( self.axis.create_text(self.width*(3.0/4),
+                        canvasValue,fill="black",anchor=anchor,text="%g" % currentValueToDisplay) )
             else:
                 anchor = 'w'
-                self.allIDs.append( self.axis.create_text(self.width*(1.0/4+1.0/16),canvasValue,fill="black",anchor=anchor,text="%g" % currentValueToDisplay) )
+                self.allIDs.append( self.axis.create_text(self.width*(1.0/4),
+                        canvasValue,fill="black",anchor=anchor,text="%g" % currentValueToDisplay) )
             
+            if self.title != None:
+                if self.side == "left":
+                    self.allIDs.append(self.axis.create_text(0,self.height/2.0,fill="black",anchor="w",text=self.title))
+                else:
+                    self.allIDs.append(self.axis.create_text(self.width,self.height/2.0,fill="black",anchor="e",text=self.title))
+
+
 
     def makeHorizontalAxis(self):
         for id in self.allIDs:
@@ -130,17 +140,23 @@ class Axis:
             #if canvasValue < 2: canvasValue = 2 # tk bug 
 
             if self.side == "bottom": 
-                self.allIDs.append( self.axis.create_line(canvasValue,0,canvasValue,self.height/4.0) )
+                self.allIDs.append( self.axis.create_line(canvasValue,0,canvasValue,self.height/6.0) )
             else: 
-                self.allIDs.append( self.axis.create_line(canvasValue,self.height,canvasValue,self.height*3.0/4) )
+                self.allIDs.append( self.axis.create_line(canvasValue,self.height,canvasValue,self.height*5.0/6.0) )
 
             anchor = 'c'
 
             if self.side == "bottom":
-                self.allIDs.append( self.axis.create_text(canvasValue,self.height*2.0/3,fill="black",anchor=anchor,text="%g" % currentValueToDisplay) )
+                self.allIDs.append(self.axis.create_text(canvasValue,self.height*1.0/3,fill="black",anchor=anchor,text="%g" % currentValueToDisplay))
             else:
-                self.allIDs.append( self.axis.create_text(canvasValue,self.height*1.0/3,fill="black",anchor=anchor,text="%g" % currentValueToDisplay) )
+                self.allIDs.append(self.axis.create_text(canvasValue,self.height*2.0/3,fill="black",anchor=anchor,text="%g" % currentValueToDisplay))
             
+        if self.title != None:
+            if self.side == "bottom":
+                self.allIDs.append(self.axis.create_text((self.width-1.0)/2.0,self.height*2.0/3.0,fill="black",anchor="c",text=self.title))
+            else:
+                self.allIDs.append(self.axis.create_text((self.width-1.0)/2.0,self.height*1.0/3.0,fill="black",anchor="c",text=self.title))
+
 
     def __init__(self,widget,lowestValue,highestValue,width,height,side,flip=0,logscale = 0):
         """ To Draw nothing on the canvas yet, set highestValue = lowestValue = None.
@@ -175,17 +191,23 @@ class Axis:
             self.makeHorizontalAxis()
          
 
-    def config(self,lowestValue=None,highestValue=None,width=None,height=None,logscale=None):
-        """ To remove everything and leave the canvas empty, set highestValue=lowestValue=None """
+    def config(self,lowestValue=None,highestValue=None,width=None,
+            height=None,logscale=None,title=None):
+        """ To remove everything and leave the canvas empty, set 
+            highestValue=lowestValue=None """
         if width != None:
             self.width = width
             self.axis.config(width=self.width)
+
         if height != None: 
             self.height = height
             self.axis.config(height=self.height)
 
         self.lowestValue = lowestValue
         self.highestValue = highestValue
+
+        if title != None:
+            self.title = title
 
         if logscale != None:
             self.logscale = logscale

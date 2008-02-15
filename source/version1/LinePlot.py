@@ -240,9 +240,6 @@ class LinePlot:
             usedYmax = self.usedYmax
             if usedYmax < 10:
                 usedYmax = 10.0
-            print 'min,max = %f,%f' % (usedYmin,usedYmax)
-            print 'logmin,logmax = %f,%f' % (log10(usedYmin),log10(usedYmax))
-            print 'inside = ',((self.graphheight-1.0-y)/(self.graphheight-1.0))*(log10(usedYmax)-log10(usedYmin))-log10(usedYmin)
             transY = pow(10,((self.graphheight-1.0-y)/(self.graphheight-1.0))*(log10(usedYmax)-log10(usedYmin))-log10(usedYmin))
         else:        
             transY = self.usedYmin+(self.graphheight-1.0-y)*(self.usedYmax-self.usedYmin)/(self.graphheight-1.0)
@@ -252,7 +249,7 @@ class LinePlot:
     def xaxis_configure(self,title=None,min=None,max=None):
         """ If min == '' and max == '', then auto scale the graph """
         if title != None: 
-            print 'add title'
+            self.xaxis.config(title=title)
 
         # when min & max aren't passed in, then don't change the ranges
         if min != None and max != None:
@@ -277,7 +274,7 @@ class LinePlot:
         """ If min == '' and max == '', then auto scale the graph """
 
         if title != None: 
-            print 'add title'
+            self.yaxis.config(title=title)
 
         # when min & max aren't passed in, then don't change the ranges
         if min != None and max != None:

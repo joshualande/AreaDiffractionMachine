@@ -3720,7 +3720,7 @@ class Main:
 
             self.integratedisp.makegraph(xd=self.integrate.getValues(),
                     yd=self.integrate.getIntensityData(),
-                    yLabel='Average Intensity',xLabel='Q',
+                    yLabel='I',xLabel='Q',
                     xUpdateName='Q',yUpdateName='I',
                     dontConnectDataPointsWithValue=-1)
 
@@ -3740,7 +3740,7 @@ class Main:
 
             self.integratedisp.makegraph(xd=self.integrate.getValues(),
                     yd=self.integrate.getIntensityData(),
-                    yLabel='Average Intensity',xLabel='2theta',
+                    yLabel='I',xLabel='2theta',
                     xUpdateName='2theta',yUpdateName='I',
                     dontConnectDataPointsWithValue=-1)
         else:
@@ -3886,7 +3886,7 @@ class Main:
 
         self.integratedisp.makegraph(xd=self.integrate.getValues(),
                 yd=self.integrate.getIntensityData(),
-                yLabel='Average Intensity',xLabel='chi',
+                yLabel='I',xLabel='chi',
                 xUpdateName='chi',yUpdateName='I',
                 dontConnectDataPointsWithValue=-1)
 
