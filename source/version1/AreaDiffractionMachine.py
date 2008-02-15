@@ -717,7 +717,7 @@ class Main:
         calibrationmenu.add_cascade(label='Standard Q',menu=self.qmenu)
         self.addStandardQ(self.qmenu)
 
-        self.qmenu.add_separator()
+        calibrationmenu.add_separator()
 
         calibrationmenu.add_radiobutton(
                 label = 'Work in eV',
@@ -1144,11 +1144,13 @@ class Main:
     def addStandardQ(self,qmenu):
         files = os.listdir(self.standardQFolder) 
         for file in files:
-            basename = os.path.splitext(file)[0]
-            # I have to call this funny selectStandardQDataFile() function so that it will do the macro recording 
-            load = (lambda file=file,standardQFolder=self.standardQFolder,self=self,basename=basename: self.selectStandardQDataFile(basename,standardQFolder+os.sep+file))
-            qmenu.add_command(label=basename,command=load)
-            
+            (basename,extension) = os.path.splitext(file)
+            # only include standard Q files that end in .dat
+            if extension == '.dat':
+                # I have to call this funny selectStandardQDataFile() function so that it will do the macro recording 
+                load = (lambda file=file,standardQFolder=self.standardQFolder,self=self,basename=basename: self.selectStandardQDataFile(basename,standardQFolder+os.sep+file))
+                qmenu.add_command(label=basename,command=load)
+                
         
 
     def resetGui(self):
