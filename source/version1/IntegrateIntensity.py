@@ -210,31 +210,37 @@ class IntegrateIntensity:
         elif self.typeOfIntegration == 'chi':
             file.write("# Chi vs I Intensity Integration\n")
         else:
-            raise Exception("This should never happen.")
+            raise Exception("This should never happen")
 
         file.write("# File: %s\n" % (diffractionDataName) )
         file.write("# Data Integrated on "+time.asctime()+"\n")
         file.write("# Calibration data used:\n")
         self.calibrationData.writeCommentString(file)
         if self.doPolarizationCorrection:
-            file.write("# A polarization correction was applied.\n")
+            file.write("# A polarization correction was applied\n")
             file.write("#   P = %f\n" % self.P)
         else:
-            file.write("# No polarization correction was applied.\n")
+            file.write("# No polarization correction was applied\n")
 
         if self.maskedPixelInfo.doGreaterThanMask:
-            file.write("# A greater than mask was applied (All pixels above a certain value were ignored).\n")
+            file.write("# A greater than mask was applied\n")
             file.write("#   Greater than mask = %f (All pixels above %f were ignored)\n" % 
                     (self.maskedPixelInfo.greaterThanMask,self.maskedPixelInfo.greaterThanMask))
         else:
-            file.write("# No greater than mask applied.\n")
+            file.write("# No greater than mask applied\n")
 
         if self.maskedPixelInfo.doLessThanMask:
             file.write("# A Less Than Mask was applied.\n")
             file.write("#   Less than mask = %f (All pixels below %f were ignored)\n" % 
                     (self.maskedPixelInfo.lessThanMask,self.maskedPixelInfo.lessThanMask))
         else:
-            file.write("$ No less than mask applied.\n")
+            file.write("# No less than mask was applied\n")
+
+        if self.maskedPixelInfo.doPolygonMask and self.maskedPixelInfo.numPolygons() > 0:
+            file.write("# Polygon mask(s) were applied\n")
+            file.write(self.maskedPixelInfo.writePolygonCommentString())
+        else:
+            file.write("# No polygon masks were applied\n")
 
         if self.doConstraint:
             if self.typeOfConstraint == "2theta":

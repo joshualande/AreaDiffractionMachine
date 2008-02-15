@@ -176,22 +176,28 @@ class Cake:
         self.calibrationData.writeCommentString(file)
 
         if self.doPolarizationCorrection:
-            file.write("# A Polarization correction was applied.\n")
+            file.write("# A Polarization correction was applied\n")
             file.write("#   P = %f\n" % self.P)
         else:
-            file.write("# No polarization correction was applied.\n")
+            file.write("# No polarization correction was applied\n")
 
         if self.maskedPixelInfo.doGreaterThanMask:
-            file.write("# A greater than mask was applied.\n")
+            file.write("# A greater than mask was applied\n")
             file.write("#   Greater than mask = %f\n" % self.maskedPixelInfo.greaterThanMask)
         else:
-            file.write("# No greater than mask applied.\n")
+            file.write("# No greater than mask was applied\n")
 
         if self.maskedPixelInfo.doLessThanMask:
-            file.write("# A Less Than Mask was applied.\n")
+            file.write("# A Less Than Mask was applied\n")
             file.write("#   Less than mask = %f\n" % self.maskedPixelInfo.lessThanMask)
         else:
-            file.write("$ No less than mask applied.\n")
+            file.write("# No less than mask was applied\n")
+
+        if self.maskedPixelInfo.doPolygonMask and self.maskedPixelInfo.numPolygons() > 0:
+            file.write("# Polygon mask(s) were applied\n")  
+            file.write(self.maskedPixelInfo.writePolygonCommentString())
+        else:
+            file.write("# No polygon masks were applied\n")
 
         file.write("# Cake range:\n")
         file.write("#   qLower = %f\n" % self.qLower)
@@ -206,11 +212,13 @@ class Cake:
         file.write("# Note: pixels outside the diffraction image are saved as -1\n");
 
         if self.maskedPixelInfo.doGreaterThanMask:
-            file.write("#       pixels greater than the greater than mask are coded as -2\n");
+            file.write("#   Pixels greater than the greater than mask are saved as -2\n")
+
         if self.maskedPixelInfo.doLessThanMask:
-            file.write("#       pixels less than the less than mask are coded as -2\n");
+            file.write("#   Pixels less than the less than mask are saved as -3\n")
 
-
+        if self.maskedPixelInfo.doPolygonMask and self.maskedPixelInfo.numPolygons() > 0:
+            file.write("#   Pixels inside of a polygon masks are saved as -4\n")  
 
         file.write("# chi increased down. Q increases to the right\n")
 

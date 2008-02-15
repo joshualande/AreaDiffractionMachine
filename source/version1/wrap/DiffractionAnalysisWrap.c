@@ -291,7 +291,7 @@ static PyObject * DiffractionAnalysisWrap_cake(PyObject *self, PyObject *args) {
                     // the threshold, then we should assign its value to be -2 (by convention).
                     *(double *)(cake->data + chiBin*cake->strides[0] + qBin*cake->strides[1]) = -2;
                 } else if (doLessThanMask && intensity < lessThanMask) {
-                    // if we are doing teh lower than mask, if the current pixel is less then 
+                    // if we are doing the lower than mask, if the current pixel is less then 
                     // the threshold, then we should assign its value to be -3 (by convention)
                     *(double *)(cake->data + chiBin*cake->strides[0] + qBin*cake->strides[1]) = -3;
                 } else {

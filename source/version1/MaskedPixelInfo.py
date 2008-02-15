@@ -509,7 +509,6 @@ class MaskedPixelInfo:
             for j in range(size):
                 file.write(str(self.polygonsX[index+j])+
                         '\t'+str(self.polygonsY[index+j])+'\n')
-
             file.write('\n')
 
     def printPolygons(self):
@@ -519,6 +518,18 @@ class MaskedPixelInfo:
         print 'polygonsY = ',self.polygonsY 
         print 'beginning index = ',self.polygonBeginningsIndex 
         print 'number of items = ',self.polygonNumberOfItems 
+    
+    def writePolygonCommentString(self):
+        string = "# Polygon(s) used in the analysis:\n"
+
+        for i in range(self.polygonBeginningsIndex.shape[0]):
+            index = self.polygonBeginningsIndex[i]
+            size = self.polygonNumberOfItems[i]
+            for j in range(size):
+                string = string + "#   "+str(self.polygonsX[index+j]) + \
+                        '\t'+str(self.polygonsY[index+j])+'\n'
+            string += '#\n'
+        return string                
 
 
 
