@@ -20,9 +20,15 @@ def listdirFull(thedir):
 allXBMS = listdirFull(r"..\source\version1\xbms")
 allStandardQ = listdirFull(r"..\source\version1\StandardQ")
 
-setup(console=[r'..\source\version1\AreaDiffractionMachine.py'],
+setup(name='Area Diffraction Machine',
+      version='1',
+      description='Analyze x-ray diffraction data.',
+      console=[{"script":r"..\source\version1\AreaDiffractionMachine.py",
+      "icon_resources":[(1,"LandeBMWIcon.ico")]}],
       data_files = [('.',[r"..\source\version1\colormaps.txt",
                          r"..\source\version1\tips_and_tricks.html"]),
                     ('xbms',allXBMS),
                     ('StandardQ',allStandardQ)])
 
+
+# console=[r'..\source\version1\AreaDiffractionMachine.py'],
