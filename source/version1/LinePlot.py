@@ -98,10 +98,11 @@ class LinePlot:
             for key in self.lines.keys():
                 record = self.lines[key]
                 for index in range(len(record['y'])):
-                    if self.usedYmin == None or record['y'][index] < self.usedYmin:
-                        self.usedYmin = record['y'][index]
-                    if self.usedYmax == None or record['y'][index] > self.usedYmax:
-                        self.usedYmax = record['y'][index]
+                    if record['y'][index] > 0 or not self.ylogscale:
+                        if self.usedYmin == None or record['y'][index] < self.usedYmin:
+                            self.usedYmin = record['y'][index]
+                        if self.usedYmax == None or record['y'][index] > self.usedYmax:
+                            self.usedYmax = record['y'][index]
             
         else:
             self.usedYmin = self.inputYmin
@@ -193,12 +194,6 @@ class LinePlot:
                 # our too small pixels very large values
                 transY = 1000 
             else: 
-                # if doing long scale, the smallest allowed ymin value is 1
-                # and teh smallest allowed ymax value is 10
-                if ymin < 1:
-                    ymin = 1
-                if ymax < 10:
-                    ymax = 10
                 transY = (self.graphheight-1.0)*(log10(y)-log10(ymin))/(log10(ymax)-log10(ymin))
                 # coordiantes are weird b/c they go down not up, so we have to invert them
                 transY = self.graphheight-1.0-transY
@@ -233,14 +228,7 @@ class LinePlot:
                            
         transX = self.usedXmin+x*(self.usedXmax-self.usedXmin)/(self.graphwidth-1.0)
         if self.ylogscale:
-            # remember that the lowest possible value allowed in a log plot is 1.
-            usedYmin = self.usedYmin
-            if usedYmin < 1.0:
-                usedYmin = 1.0
-            usedYmax = self.usedYmax
-            if usedYmax < 10:
-                usedYmax = 10.0
-            transY = pow(10,((self.graphheight-1.0-y)/(self.graphheight-1.0))*(log10(usedYmax)-log10(usedYmin))-log10(usedYmin))
+            transY = pow(10,((self.graphheight-1.0-y)/(self.graphheight-1.0))*(log10(self.usedYmax)-log10(self.usedYmin))+log10(self.usedYmin))
         else:        
             transY = self.usedYmin+(self.graphheight-1.0-y)*(self.usedYmax-self.usedYmin)/(self.graphheight-1.0)
         return transX,transY

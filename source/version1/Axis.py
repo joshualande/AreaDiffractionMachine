@@ -22,10 +22,6 @@ class Axis:
     def getNiceRange(self,lowestValue,highestValue):
 
         if self.logscale:
-            if lowestValue < 1:
-                lowestValue = 1
-            if highestValue < 10:
-                highestValue = 10
             niceStep = 1
             lowestNiceValue = roundUp(log10(lowestValue),niceStep)
             highestNiceValue = roundDown(log10(highestValue),niceStep)
@@ -66,17 +62,9 @@ class Axis:
         for currentValueToDisplay in frange(lowestValueToDisplay,highestValueToDisplay+stepSizeToDisplay/100,stepSizeToDisplay):
 
             if self.logscale:
-                # if log scale, then the lowest possible value that can be put on the plot will be 1
-                lowestValue = self.lowestValue
-                if lowestValue < 1:
-                    lowestValue = 1
-                highestValue = self.highestValue
-                if highestValue < 10:
-                    highestValue = 10
-
                 # if log scale, then currentValueToDisplay is given as the log of it,
-                canvasValue = (currentValueToDisplay-log10(lowestValue))/(log10(highestValue)-
-                        log10(lowestValue))*(self.height-1)
+                canvasValue = (currentValueToDisplay-log10(self.lowestValue))/(log10(self.highestValue)-
+                        log10(self.lowestValue))*(self.height-1)
                 currentValueToDisplay = pow(10,currentValueToDisplay)
             else:
                 # otherwise, calculate the canvasValue regularly
