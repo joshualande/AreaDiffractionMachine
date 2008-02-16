@@ -22,7 +22,7 @@
 #ifndef _LM_H_
 #define _LM_H_
 
-/*#undef HAVE_LAPACK */  /* uncomment this to force not using LAPACK */
+#undef HAVE_LAPACK /* uncomment this to force not using LAPACK */
 
 /* to avoid the overhead of repeated mallocs(), routines in Axb.c can be instructed to
  * retain working memory between calls. Such a choice, however, renders these routines
