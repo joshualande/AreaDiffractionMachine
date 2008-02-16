@@ -1,4 +1,4 @@
-# Usage: sudo python setup_mac_version1.py py2app --iconfile=landeBMWIcon.icns
+# Usage: sudo pythonw setup_mac_version1.py py2app --iconfile=landeBMWIcon.icns
 import sys
 import os.path
 import shutil
@@ -16,6 +16,8 @@ allStandardQ = listdirFull(r"../source/version1/StandardQ")
 from setuptools import setup,Extension
 
 setup(
+    name = "Area Diffraction Machine",
+    version = "1",
     data_files = [('.',['../source/version1/colormaps.txt']),
                   ('xbms',allXBMS),
                   ('StandardQ',allStandardQ)
