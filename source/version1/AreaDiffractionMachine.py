@@ -66,6 +66,13 @@ import LinePlot
 
 root=Tkinter.Tk()
 Pmw.initialise(root)
+
+
+# This is here to fix a bug in py2app. You can read about it here:
+# http://www.thescripts.com/forum/thread543994.html
+if (sys.platform != "win32") and hasattr(sys, 'frozen'):
+root.tk.call('console', 'hide')
+
 filepath=os.getcwd()+os.sep
 
 
