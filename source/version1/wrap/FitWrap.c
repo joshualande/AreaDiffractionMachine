@@ -383,7 +383,7 @@ struct everything {
 };
 
 
-void residual(double *p, double *Qfit, int m, int n, void *data) {
+void residual(double *p, double *qFit, int m, int n, void *data) {
     register int i;
     struct everything * useful;
     double q,chi;
@@ -408,9 +408,29 @@ void residual(double *p, double *Qfit, int m, int n, void *data) {
             useful->pixelLength,useful->pixelHeight,rotation,cos_beta,
             sin_beta,cos_alpha,sin_alpha,cos_rotation,
             sin_rotation,&q,&chi);
-        Qfit[i] = q;
+        qFit[i] = q;
     }
 
+}
+
+
+double getTotalResidual(double *p, double *qReal, int m, int n, void *data) {
+    double * qFit;
+    int i;
+    double total;
+    total = 0;
+
+    qFit = malloc(n*sizeof(double));
+    residual(p,qFit,m,n,data);
+    for (i=0;i<n;i++) 
+        total += (qFit[i]-qReal[i])*(qFit[i]-qReal[i]);
+    free(qFit);
+
+    // normalize based upon the number of peaks to fit, so that
+    // the residual won't be significantly higher when more
+    // peaks are added to the fit.
+    total = total/n;
+    return total;
 }
 
 
@@ -555,13 +575,20 @@ static PyObject * FitWrap_fitCalibrationParameters(PyObject *self, PyObject *arg
         ub[6] = 360;
     }
 
+    printf(" - Before fitting, the calculated residual is %e\n",
+        getTotalResidual(p,(double *)qReal->data, 7, length, (void *)useful));
+
     printf(" - Doing the fitting\n");
     status=dlevmar_bc_dif(residual, p, (double *)qReal->data, 7, length, lb, ub,  
-            5000,NULL, info, NULL,(double *)covarianceMatrix->data,(void *)useful);
-    // the fit gets stored in p
+            10000,NULL, info, NULL,(double *)covarianceMatrix->data,(void *)useful);
+
+    printf(" - Before fitting, the calculated residual is %e\n",
+        getTotalResidual(p,(double *)qReal->data, 7, length, (void *)useful));
+
+    // the fit gets stored in p, so we can get rid of useful
     free(useful);
      
-    printf(" - Reason for quitting: %d-",(int)info[6]);
+    printf(" - Reason for quitting the fit: %d-",(int)info[6]);
     if (info[6] == 2) {
         printf("stopped by small gradient J^T e\n");
     } else if (info[6] == 2) {
@@ -585,7 +612,8 @@ static PyObject * FitWrap_fitCalibrationParameters(PyObject *self, PyObject *arg
         return 0;
     }
 
-    // the reason I have to do the N is described at http://mail.python.org/pipermail/python-list/2002-October/167549.html
+    // the reason I have to do the N is described at 
+    // http://mail.python.org/pipermail/python-list/2002-October/167549.html
     return Py_BuildValue("dddddddN",p[0],p[1],p[2],p[3],p[4],p[5],p[6],covarianceMatrix);
     // return the data to the user
 }

@@ -22,6 +22,7 @@ def getPeakList(data,qData,initialGuess,numberOfChi,stddev,verbose=1):
 
 def fit(data,initialGuess,peakList,verbose=1):
 
+    print 
     print 'Performing the image calibration'
 
     # create a nice Numeric data strucure to store all of the peak stuff in.
