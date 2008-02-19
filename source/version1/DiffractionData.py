@@ -12,7 +12,13 @@ import MakeDiffractionImage
 import CalibrationData
 import QData
 import Fit
-from Cake import Cake
+
+# Note that I need to call functions from inside of Cake
+# so I can't do a from Cake import Cake because then
+# it will be ambigous whether I would be calling a 
+# function from the file Cake or a function that
+# the object Cake has
+import Cake
 from IntegrateIntensity import IntegrateIntensity
 import ColorMaps
 import MarXXXX
@@ -487,7 +493,7 @@ class DiffractionData:
     def saveCakeData(self,filename,calibrationData,qLower,
             qUpper,numQ,chiLower,chiUpper,numChi,doPolarizationCorrection,P,maskedPixelInfo):
 
-        data = Cake(diffractionData = self.theDiffractionData.data,
+        data = Cake.Cake(diffractionData = self.theDiffractionData.data,
                 calibrationData = calibrationData,
                 qLower = qLower,
                 qUpper = qUpper,
@@ -507,7 +513,7 @@ class DiffractionData:
             width,height,colorMaps,colorMapName,
             lowerBound,upperBound,logScale=None,invert=None):
 
-        data = Cake(self.theDiffractionData.data,calibrationData,
+        data = Cake.Cake(self.theDiffractionData.data,calibrationData,
             qLower,qUpper,numQ,chiLower,chiUpper,numChi,doPolarizationCorrection,P,
             maskedPixelInfo)
 
