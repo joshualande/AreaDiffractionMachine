@@ -232,12 +232,12 @@ class DiffractionData:
 
             MakeDiffractionImage.addPeaksDiffractionImage(image,peakList,peakLinesColor)
 
-
         # by default, return entire image
         if pixel1X != None and pixel1Y != None and pixel2X != None and pixel2Y !=None:
-            image = image.crop((min(pixel1X,pixel2X), min(pixel1Y,pixel2Y), 
-                    max(pixel1X,pixel2X), max(pixel1Y,pixel2Y)))
-
+            image = image.crop((min(int(pixel1X),int(pixel2X)), 
+                    min(int(pixel1Y),int(pixel2Y)), 
+                    max(int(pixel1X),int(pixel2X)), 
+                    max(int(pixel1Y),int(pixel2Y))))
         try:
             image.save(filename)
         except Exception,e:
@@ -283,9 +283,11 @@ class DiffractionData:
                 return self.theImage
             return self.theImage.resize( (width, height), Image.BILINEAR )
 
-        temp = self.theImage.crop( (
-                min(pixel1X,pixel2X), min(pixel1Y,pixel2Y), 
-                max(pixel1X,pixel2X) ,max(pixel1Y,pixel2Y)) )
+        temp = self.theImage.crop((
+                min(int(pixel1X),int(pixel2X)), 
+                min(int(pixel1Y),int(pixel2Y)), 
+                max(int(pixel1X),int(pixel2X)),
+                max(int(pixel1Y),int(pixel2Y))))
         if width != None and height != None:
             temp = temp.resize( (width, height), Image.BILINEAR )
         return temp
