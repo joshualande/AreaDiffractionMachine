@@ -2886,9 +2886,8 @@ class Main:
                     self.addRemovePolygonRadioSelect.setvalue([])
                     return
 
-                # Begin removing polygons
-                # also, use this to deselect the Add Polygon Option if
-                # it is enabled
+                # Begin removing polygons also, use this to deselect the 
+                # Add Polygon Option if it is enabled
                 self.addRemovePolygonRadioSelect.setvalue( ['Remove Polygon'])
 
                 # also, check the do polygon mask button b/c you can't
@@ -2937,20 +2936,20 @@ class Main:
         # get the polygon that the mouse is hovering over
         self.currentPolygon = self.maskedPixelInfo.getPolygon(x,y)
         if self.currentPolygon == None:
-            # if there is no polygon to display:
+            # if we are no longer over a polygon, remove any 
+            # possible remaning polygon outline.
             if self.currentPolygonID != None:
                 self.maindisp.imframe.delete(self.currentPolygonID)
-            self.currentPolygonID = None
+                self.currentPolygonID = None
 
         else:
-            if self.currentPolygon:
-                if self.currentPolygonID == None:
-                    self.currentPolygonID = self.maindisp.imframe.create_polygon(
-                            self.convertPolygonFromImageToCanvasCoordinates(self.currentPolygon),
-                            outline='red',fill='')
-                else:
-                    self.maindisp.imframe.coords(self.currentPolygonID,
-                            Tkinter._flatten(self.currentPolygon))
+            if self.currentPolygonID == None:
+                self.currentPolygonID = self.maindisp.imframe.create_polygon(
+                        self.convertPolygonFromImageToCanvasCoordinates(self.currentPolygon),
+                        outline='red',fill='')
+            else:
+                self.maindisp.imframe.coords(self.currentPolygonID,
+                        self.convertPolygonFromImageToCanvasCoordinates(self.currentPolygon))
 
 
     def mouseButtonPressRemovePolygonDiffractionImage(self,event):
