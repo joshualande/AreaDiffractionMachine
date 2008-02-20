@@ -33,5 +33,5 @@ setup(name='Area Diffraction Machine',
 
 os.popen('RMDIR /s /q build')
 os.popen('move dist "Area Diffraction Machine"')
-os.popen('zip "Area Diffraction Machine.zip" "Area Diffraction Machine"')
+os.popen('zip -r "Area Diffraction Machine.zip" "Area Diffraction Machine"')
 os.popen('RMDIR /s /q "Area Diffraction Machine"')
