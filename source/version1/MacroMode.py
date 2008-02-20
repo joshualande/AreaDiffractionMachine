@@ -743,9 +743,10 @@ class MacroMode:
             self.GUI.macroLines = None
             return
             
-
+        defaultextension = ".dat"
         filename = tkFileDialog.asksaveasfilename(
                 filetypes=[ ('dat file','*.dat'), ("All files", "*"), ], 
+                defaultextension = defaultextension,
                 title="Save Macro")
 
         if filename in ['',()]: 
@@ -753,6 +754,11 @@ class MacroMode:
                 print '  '+line
             print
         else:
+            # on the mac, it won't give a default extension if you don't write
+            # it out explicitly, so make sure to do so automatically otherwise.
+            if os.path.splitext(filename)[1] == '':
+                filename += defaultextension
+
             file = open(filename,'w')
 
             file.write("# Macro File recorded on "+time.asctime()+"\n")

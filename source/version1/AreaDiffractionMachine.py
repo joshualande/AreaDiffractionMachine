@@ -1950,12 +1950,19 @@ class Main:
         # get the values from the GUI first
         self.addUserInputCalibrationDataToObject()
 
-        if filename == '':
+        if filename in ['',()]:
+            defaultextension = ".dat"
             filename = tkFileDialog.asksaveasfilename(
                     filetypes=[('Data File','*.dat'),('All Files','*')],
-                    defaultextension = ".dat",title="Save Calibration Data")
+                    defaultextension = defaultextension,
+                    title="Save Calibration Data")
 
-        if filename in ['',()]: return 
+            if filename in ['',()]: return 
+
+            # on the mac, it won't give a default extension if you don't write
+            # it out explicitly, so make sure to do so automatically otherwise
+            if os.path.splitext(filename)[1] == '':
+                filename += defaultextension
 
         if self.eVorLambda.get() == 'Work in eV':
             self.calibrationData[-1].toFile(filename,energyOrWavelength='Energy')
@@ -2297,14 +2304,22 @@ class Main:
                     thePixel2XToGive=self.diffractionImageZoomPixels[-1][1]['x']
                     thePixel2YToGive=self.diffractionImageZoomPixels[-1][1]['y']
 
-        if filename == '':
+        if filename in ['',()]:
+            defaultextension = ".jpg"
             filename = tkFileDialog.asksaveasfilename(
                     filetypes=[('JPEG','*.jpg'),('GIF','*.gif'),
                         ('EPS','*.eps'),('PDF','*.pdf'),('BMP','*.bmp'),('PNG','*.png'),
                         ('TIFF','*.tiff'), ('All Files','*')],
-                    defaultextension = ".jpg",title="Save Diffraction Image")
+                    defaultextension = defaultextension,
+                    title="Save Diffraction Image")
 
-        if filename in ['',()]: return 
+            if filename in ['',()]: 
+                return 
+                
+            # on the mac, it won't give a default extension if you don't write
+            # it out explicitly, so do so automatically otherwise
+            if os.path.splitext(filename)[1] == '':
+                filename += defaultextension
         
         setstatus(self.status,'Saving...')
 
@@ -2407,12 +2422,19 @@ class Main:
         if self.QData == None:
             raise UserInputException("Cannot save the peak list until the Q data is set.")
         
-        if filename == '':
+        if filename in ['',()]:
+            defaultextension = ".dat"
             filename = tkFileDialog.asksaveasfilename(
                     filetypes=[('Data File','*.dat'),('All Files','*')],
-                    defaultextension = ".dat",title="Save Peak List")
+                    defaultextension = defaultextension,
+                    title="Save Peak List")
 
-        if filename in ['',()]: return 
+            if filename in ['',()]: return 
+
+            # on the mac, it won't give a default extension if you don't write
+            # it out explicitly, so do so automatically otherwise
+            if os.path.splitext(filename)[1] == '':
+                filename += defaultextension
 
         setstatus(self.status,'Saving peak list')
 
@@ -2608,12 +2630,19 @@ class Main:
 
     def saveCakeData(self,filename=''):
 
-        if filename == '':
+        if filename  in ['',()]: 
+            defaultextension = ".dat"
             filename = tkFileDialog.asksaveasfilename(
                     filetypes=[('data','*.dat')],
-                    defaultextension = ".dat",title="Save Caked Data")
+                    defaultextension = defaultextension,
+                    title="Save Caked Data")
 
-        if filename in ['',()]: return 
+            if filename in ['',()]: return 
+
+            # on the mac, it won't give a default extension if you don't write
+            # it out explicitly, so do so automatically otherwise
+            if os.path.splitext(filename)[1] == '':
+                filename += defaultextension
 
         self.doCake() #redraw the image and make sure the user input is good.
 
@@ -2657,14 +2686,21 @@ class Main:
 
                     
     def saveCakeImage(self,filename=''):
-        if filename == '':
+        if filename in ['',()]: 
+            defaultextension = ".jpg"
             filename = tkFileDialog.asksaveasfilename(
                     filetypes=[('JPEG','*.jpg'),('GIF','*.gif'),
-                        ('EPS','*.eps'),('PDF','*.pdf'),('BMP','*.bmp'),('PNG','*.png'),
-                        ('TIFF','*.tiff'), ('All Files','*')],
-                    defaultextension = ".jpg",title="Save Caked Image")
+                        ('EPS','*.eps'),('PDF','*.pdf'),('BMP','*.bmp'),
+                        ('PNG','*.png'),('TIFF','*.tiff'),('All Files','*')],
+                    defaultextension = defaultextension,
+                    title="Save Caked Image")
 
-        if filename in ['',()]: return 
+            if filename in ['',()]: return 
+
+            # on the mac, it won't give a default extension if you don't write
+            # it out explicitly, so do so automatically otherwise
+            if os.path.splitext(filename)[1] == '':
+                filename += defaultextension
 
         self.doCake() #redraw the image and make sure the user input is good.
 
@@ -2815,13 +2851,19 @@ class Main:
 
     
     def savePolygonsToFile(self,filename=''):
-        if filename == '':
+        if filename in ['',()]: 
+            defaultextension = ".dat"
             filename = tkFileDialog.asksaveasfilename(
                     filetypes=[('Data File','*.dat'),('All Files','*')],
-                    defaultextension = ".dat",title="Load Polygon File")
+                    defaultextension = defaultextension,
+                    title="Load Polygon File")
 
-        if filename == '':
-            return
+            if filename in ['',()]: return
+
+            # on the mac, it won't give a default extension if you don't write
+            # it out explicitly, so make sure to do so automatically otherwise
+            if os.path.splitext(filename)[1] == '':
+                filename += defaultextension
 
         setstatus(self.status,"Saving...")
         self.maskedPixelInfo.savePolygonsToFile(filename)
@@ -3565,12 +3607,20 @@ class Main:
         if self.integrate == None:
             raise UserInputException("Cannot save the intensity integrated data until the integration has been performed")
         
-        if filename == '':
+        if filename in ['',()]: 
+            defaultextension = ".dat"
             filename = tkFileDialog.asksaveasfilename(
                     filetypes=[('Data File','*.dat'),('All Files','*')],
-                    defaultextension = ".dat",title="Save Integrated Intensity")
+                    defaultextension = defaultextension,
+                    title="Save Integrated Intensity")
 
-        if filename in ['',()]: return 
+            if filename in ['',()]: return 
+
+            # on the mac, it won't give a default extension if you don't write
+            # it out explicitly, so make sure to do so automatically otherwise
+            if os.path.splitext(filename)[1] == '':
+                filename += defaultextension
+
 
         self.integrate.toFile(filename,self.diffractionData.theDiffractionData.filename)
 
