@@ -3132,7 +3132,12 @@ class Main:
         # This does not work properly when mulitple files are being loaded 
         # because there is no macro command to do so.
         if self.macroLines != None:
-            self.macroMode.explicitMacroRecordTwoLines('Data File:','\t'+filenames)
+            if len(filenames) > 1:
+                print "Warning, macro files cannot currently be written to load and combined multiple diffraction files."
+                self.macroMode.explicitMacroRecordOneLine(
+                        "# Warning, macro files cannot currently be written to load and combined multiple diffraction files.")
+
+            self.macroMode.explicitMacroRecordTwoLines('Data File:','\t'+filenames[0])
 
         setstatus(self.status,"Ready")
 
