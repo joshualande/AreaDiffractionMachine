@@ -3083,9 +3083,9 @@ class Main:
             # if no filename(s) given, read filename(s) form user input
             filenames=(General.getListFromString(self.fileentry.getvalue()))
 
-        if not type(filenames) not in [type([]), type(())]:
+        if type(filenames) not in [type([]), type(())]:
             # if a single filename was passed, make it into a list
-            filenames = (filenames)
+            filenames = [filenames]
 
         if len(filenames) < 1:
             raise UserInputException("A filename must be given before that file can be loaded.")
