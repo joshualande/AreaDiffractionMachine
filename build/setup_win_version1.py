@@ -1,6 +1,6 @@
 # usage: python setup_win_version1.py py2exe
 import sys
-import os.path
+import os
 import shutil
 
 sys.path.append(r"..\source\version1")
@@ -30,5 +30,3 @@ setup(name='Area Diffraction Machine',
                     ('xbms',allXBMS),
                     ('StandardQ',allStandardQ)])
 
-
-# console=[r'..\source\version1\AreaDiffractionMachine.py'],

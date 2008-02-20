@@ -26,3 +26,10 @@ setup(
     app=["../source/version1/AreaDiffractionMachine.py"],
     setup_requires=['py2app'],
 )
+
+print "Creating the disk image"
+os.popen('sudo mv dist "Area Diffraction Machine"').close()
+os.popen('sudo rm -rf "Area Diffraction Machine.dmg"').close()
+os.popen('sudo hdiutil create -srcfolder "Area Diffraction Machine" Area\ Diffraction\ Machine.dmg').close()
+os.popen('sudo rm -rf "Area Diffraction Machine"').close()
+os.popen('sudo rm -rf "build"').close()
