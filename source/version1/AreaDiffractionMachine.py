@@ -68,8 +68,13 @@ root=Tkinter.Tk()
 
 # This is here to fix a bug in py2app. You can read about it here:
 # http://www.thescripts.com/forum/thread543994.html
-if (sys.platform != "win32") and hasattr(sys, 'frozen'):
-    root.tk.call('console', 'hide')
+try:
+    if (sys.platform != "win32") and hasattr(sys, 'frozen'):
+        root.tk.call('console', 'hide')
+except:
+    # if this dose not work for some reason, don't worry about it
+    # and run the program anyway
+    pass
 
 Pmw.initialise(root)
 
@@ -1333,9 +1338,9 @@ class Main:
 
     def showclickhelp(self):
         # For some reason, on the Mac, the command:
-        #  > webbrowser.open_new('tips_and_tricks.html')
+        #  > webbrowser.open('tips_and_tricks.html')
         # crashes, but this seems to do the right thing.
-        webbrowser.open_new(os.path.abspath('tips_and_tricks.html'))
+        webbrowser.open(os.path.abspath('tips_and_tricks.html'))
 
 
     # utility Functions

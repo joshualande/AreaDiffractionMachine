@@ -19,6 +19,7 @@ setup(
     name = "Area Diffraction Machine",
     version = "1",
     data_files = [('.',['../source/version1/colormaps.txt']),
+                  ('.',['../source/version1/tips_and_tricks.html']),
                   ('xbms',allXBMS),
                   ('StandardQ',allStandardQ)
                  ],
