@@ -106,13 +106,13 @@ class MacroMode:
         for widget in self.allCheckBoxes:
             widget['clean name'] = cleanstring(widget['name'])
 
-        self.allEntryFieldsRequiringFilename = [
+        self.allLoadEntryFieldsRequiringFilename = [
             {'name':'Data File:','widget':self.GUI.fileentry,
                     'move to page':moveToCalibration,'function':self.GUI.loadDiffractionFile},
             {'name':'Q Data:','widget':self.GUI.qfileentry,
                     'move to page':moveToCalibration,'function':self.GUI.selectQDataFile},
         ]
-        for widget in self.allEntryFieldsRequiringFilename:
+        for widget in self.allLoadEntryFieldsRequiringFilename:
             widget['clean name'] = cleanstring(widget['name'])
 
         self.allEntryFieldsRequiringFloat = [
@@ -167,18 +167,15 @@ class MacroMode:
         ]
         for widget in self.allColorMaps:
             widget['clean name'] = cleanstring(widget['name'])
-		
-        self.allButtonsRequiringFilename = [
-            {'name':'Load From File','widget':self.GUI.loadFromFileButton,
-                    'function':self.GUI.calibrationDataLoad,'move to page':moveToCalibration},
+
+
+        self.allSaveButtonsRequiringFilename = [
             {'name':'Save Calibration','widget':self.GUI.saveCalibrationButton,
                     'function':self.GUI.calibrationDataSave,'move to page':moveToCalibration},
             {'name':'Make/Save Peak List','widget':self.GUI.makeSavePeakListButton,
                     'function':self.GUI.savePeakList,'move to page':moveToCalibration},
             {'name':'Save Mask','widget':self.GUI.saveMask,
                     'function':self.GUI.savePolygonsToFile,'move to page':moveToMasking},
-            {'name':'Load Mask','widget':self.GUI.loadMask,
-                    'function':self.GUI.loadPolygonsFromFile,'move to page':moveToMasking},
             {'name':'Save Caked Image','widget':self.GUI.saveCakeImageButton,
                     'function':self.GUI.saveCakeImage,'move to page':moveToCake},
             {'name':'Save Caked Data','widget':self.GUI.saveCakeDataButton,
@@ -186,7 +183,16 @@ class MacroMode:
             {'name':'Save Integration Data','widget':self.GUI.saveIntegrationDataButton,
                     'function':self.GUI.saveIntegratedIntensity,'move to page':moveToIntegrate},
         ]
-        for widget in self.allButtonsRequiringFilename:
+        for widget in self.allSaveButtonsRequiringFilename:
+            widget['clean name'] = cleanstring(widget['name'])
+		
+        self.allLoadButtonsRequiringFilename = [
+            {'name':'Load From File','widget':self.GUI.loadFromFileButton,
+                    'function':self.GUI.calibrationDataLoad,'move to page':moveToCalibration},
+            {'name':'Load Mask','widget':self.GUI.loadMask,
+                    'function':self.GUI.loadPolygonsFromFile,'move to page':moveToMasking},
+        ]
+        for widget in self.allLoadButtonsRequiringFilename:
             widget['clean name'] = cleanstring(widget['name'])
 		
         self.allColorInputs = [
@@ -253,11 +259,11 @@ class MacroMode:
         for widget in self.allScales:
             widget['clean name'] = cleanstring(widget['name'])
 
-        self.allMenuItemsRequiringFilename = [
+        self.allSaveMenuItemsRequiringFilename = [
             {'name':'Save Diffraction Image','widget':self.GUI.saveDiffractionImageMenuItem,
              'function':self.GUI.saveDiffractionImage,},
         ]
-        for widget in self.allMenuItemsRequiringFilename:
+        for widget in self.allSaveMenuItemsRequiringFilename:
             widget['clean name'] = cleanstring(widget['name'])
 
 
@@ -312,7 +318,7 @@ class MacroMode:
             if VERBOSE: print ' - current: ',line 
 
             # deal w/ each type of GUI item seperately
-            for widget in self.allEntryFieldsRequiringFilename:
+            for widget in self.allLoadEntryFieldsRequiringFilename:
                 if cleanline == widget['clean name']:
                     widget['move to page']()
                     filename = macro.next()
@@ -320,7 +326,7 @@ class MacroMode:
                     # Set the filename
                     widget['function'](filename.strip())
 
-            for widget in self.allButtonsRequiringFilename:
+            for widget in self.allLoadButtonsRequiringFilename+self.allSaveButtonsRequiringFilename:
                 if cleanline == widget['clean name']:
                     widget['move to page']()
                     # get the filename
@@ -393,8 +399,12 @@ class MacroMode:
                 if cleanline == widget['clean name']:
                     widget['move to page']()
                     colormap = macro.next()
-                    if VERBOSE: print ' - current: ',colmap
-                    widget['widget'].setvalue(colormap)
+                    if VERBOSE: print ' - current: ',colormap
+
+                    # do the stripping b/c we don't want color 
+                    # maps that look like "   copper"
+                    # to be rejected.
+                    widget['widget'].setvalue(colormap.strip())
 
             for widget in self.allColorInputs:
                 if cleanline == widget['clean name']:
@@ -404,7 +414,7 @@ class MacroMode:
                     # set the color
                     widget['function'](color) 
 
-            for widget in self.allMenuItemsRequiringFilename: 
+            for widget in self.allSaveMenuItemsRequiringFilename: 
                 if cleanline == widget['clean name']:
                     filename = macro.next()
                     if VERBOSE: print ' - current: ',filename
@@ -489,7 +499,7 @@ class MacroMode:
                 return # no reason to look further
 
         # Do all the entry fields at once
-        for entryField in self.allEntryFieldsRequiringFilename+self.allEntryFieldsRequiringFloat+ \
+        for entryField in self.allLoadEntryFieldsRequiringFilename+self.allEntryFieldsRequiringFloat+ \
                 self.allEntryFieldsRequiringInt:
 
             if widget == entryField['widget'].component('entry'):
@@ -565,8 +575,9 @@ class MacroMode:
                 self.GUI.macroLines.append(button['name'])
 
         # these two can't be done by this function, so they will be called explicitly
-        #   self.allButtonsRequiringFilename 
-        #   self.allMenuItemsRequiringFilename 
+        #   self.allLoadButtonsRequiringFilename 
+        #   self.allSaveButtonsRequiringFilename 
+        #   self.allSaveMenuItemsRequiringFilename 
 
         
 
@@ -661,12 +672,23 @@ class MacroMode:
                     raise UserInputException('%s is not a valid macro file because line %d ("%s") must be followed by a line with a valid color map.' % (filename,linenumber,currentline) )
                 linenumber += 1
 
-            elif valueInListOfDict(self.allEntryFieldsRequiringFilename+self.allButtonsRequiringFilename+self.allMenuItemsRequiringFilename,'clean name',cleanline):
+            elif valueInListOfDict(self.standardQMenuItem,'clean name',cleanline):
+                nextline = file.readline().strip()
+                if not nextline: 
+                    file.close()
+                    raise UserInputException('%s is not a valid macro file because line %d ("%s") must be followed by a standard Q file name' % (filename,linenumber,currentline) )
+                linenumber += 1
+
+            elif valueInListOfDict(self.allLoadEntryFieldsRequiringFilename+ \
+                    self.allLoadButtonsRequiringFilename,'clean name',cleanline):
                 nextline = file.readline().strip()
                 if not nextline: 
                     file.close()
                     raise UserInputException('%s is not a valid macro file because line %d ("%s") must be followed by a filename' % (filename,linenumber,currentline) )
-                if not os.path.exists(nextline):
+                # if the filename does not contain "PATHNAME" and if it dose not contain
+                # "FILENAME" and if it dose not exist, then we must raise an error
+                if nextline.find('PATHNAME') == -1 and nextline.find('FILENAME') == -1 and \
+                        not os.path.exists(nextline):
                     file.close()
                     raise UserInputException('%s is not a valid macro file because line %d ("%s") is followed by the filename "%s" which does not exist' % (filename,linenumber,currentline,nextline) )
                 linenumber += 1
@@ -675,14 +697,12 @@ class MacroMode:
                 # Nothing to check with the other buttons
                 pass
 
-            elif valueInListOfDict(self.standardQMenuItem,'clean name',cleanline):
+            elif valueInListOfDict(self.allSaveMenuItemsRequiringFilename+ \
+                    self.allSaveButtonsRequiringFilename,'clean name',cleanline):
                 nextline = file.readline().strip()
                 if not nextline:
                     file.close()
                     raise UserInputException('%s is not a valid macro file because line %d ("%s") must be followed by a line with a Q data file.' % (filename,linenumber,currentline) )
-                if not os.path.exists(nextline):
-                    file.close()
-                    raise UserInputException('%s is not a valid macro file because line %d ("%s") is followed by the filename "%s" which does not exist' % (filename,linenumber,currentline,nextline) )
                 linenumber += 1
 
             elif valueInListOfDict(self.allColorInputs,'clean name',cleanline):
