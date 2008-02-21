@@ -49,9 +49,9 @@ class MacroMode:
         moveToMasking = lambda GUI=self.GUI: GUI.xrdnb.selectpage('Masking')
         moveToCake = lambda GUI=self.GUI: GUI.xrdnb.selectpage('Cake')
         moveToIntegrate = lambda GUI=self.GUI: GUI.xrdnb.selectpage('Integrate')
-        moveToMaindisp = lambda GUI=self.GUI: GUI.xrdnb.select('Calibration')
-        moveToCakedisp = lambda GUI=self.GUI: GUI.xrdnb.select('Cake')
-        moveToIntegratedisp = lambda GUI=self.GUI: GUI.xrdnb.select('Integrate')
+        moveToMaindisp = lambda GUI=self.GUI: GUI.xrdnb.selectpage('Calibration')
+        moveToCakedisp = lambda GUI=self.GUI: GUI.xrdnb.selectpage('Cake')
+        moveToIntegratedisp = lambda GUI=self.GUI: GUI.xrdnb.selectpage('Integrate')
 
         self.allCheckBoxes = [
             {'name':'xc Fixed:','widget':self.GUI.centerX.cb,
@@ -662,12 +662,14 @@ class MacroMode:
                 linenumber += 1
 
             elif valueInListOfDict(self.allEntryFieldsRequiringFilename+self.allButtonsRequiringFilename+self.allMenuItemsRequiringFilename,'clean name',cleanline):
-                nextline = cleanstring(file.readline())
-                if not nextline:
+                nextline = file.readline().strip()
+                if not nextline: 
                     file.close()
-                    raise UserInputException('%s is not a valid macro file because line %d ("%s") must be followed by a line with diffraction data.' % (filename,linenumber,currentline) )
+                    raise UserInputException('%s is not a valid macro file because line %d ("%s") must be followed by a filename' % (filename,linenumber,currentline) )
+                if not os.path.exists(nextline):
+                    file.close()
+                    raise UserInputException('%s is not a valid macro file because line %d ("%s") is followed by the filename "%s" which does not exist' % (filename,linenumber,currentline,nextline) )
                 linenumber += 1
-                print 'here is where it should check if the files to open exist'
 
             elif valueInListOfDict(self.allOtherButtons,'clean name',cleanline):
                 # Nothing to check with the other buttons
@@ -678,7 +680,9 @@ class MacroMode:
                 if not nextline:
                     file.close()
                     raise UserInputException('%s is not a valid macro file because line %d ("%s") must be followed by a line with a Q data file.' % (filename,linenumber,currentline) )
-                print 'Here is where it should check to see if the standard Q value given is valid'
+                if not os.path.exists(nextline):
+                    file.close()
+                    raise UserInputException('%s is not a valid macro file because line %d ("%s") is followed by the filename "%s" which does not exist' % (filename,linenumber,currentline,nextline) )
                 linenumber += 1
 
             elif valueInListOfDict(self.allColorInputs,'clean name',cleanline):

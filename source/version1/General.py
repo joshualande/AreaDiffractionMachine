@@ -253,7 +253,7 @@ def splitPaths(string):
         # If the current chunk is not a valid path name, append the next chunk 
         while not os.path.exists(filename):
             if len(list) < 1:
-                raise UserInputException("'%s' cannot be split into a bunch of file names becaues the name '%s' (or possibly some earlier chunks of it) does does not exist." % filename)
+                raise UserInputException("'%s' cannot be split into a bunch of file names becaues the name '%s' (or possibly some earlier chunks of it) does does not exist." % (filename,filename))
             # add the next item, remembering that the split removed 
             # the space so we have to explicitly add it back in.
             filename = filename + ' ' + list.pop(0)
