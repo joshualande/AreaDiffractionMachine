@@ -13,6 +13,7 @@ $Q$ values and then plot average intensity as a function of
 $Q$. The only problem we would face is that in order to do
 the transformation, we would need to know the values of the
 the parameters that characterize an experiment. These are
+\index{$\alpha$}\index{$\beta$}\index{Rotation}
 $x_c$, $y_c$, $d$, $\lambda$, $\alpha$, $\beta$, and 
 $R$.\footnote{The pixel scale $ps$ is usually know in advance 
 as a uniform property of the detector being used.} Calibration
@@ -60,34 +61,97 @@ image would have shown up on the detector.
 
 Being able to do this still leaves us with a hard 
 problem to solve. For particular calibration values,
-we can eaisly calcualte what the defraction pattern 
+we can easily calculate what the diffraction pattern 
 should look like. But what we really know is what
 the calibration values are for the known diffraction
 pattern of a standard crystal. In order to perform the
 real calibration, then, we can vary the calibration 
-values until they make the mattern that can be calculated
+values until they make the pattern that can be calculated
 to show up to match the pattern that was actually 
 captured. The process of image calibration then is a 
-procedure to `fit' the calibraiton values to a
-diffraciton patter with known $Q$ values.
+procedure to `fit' the calibration values to a
+diffraction patter with known $Q$ values.
 
 \subsection{The Fitting} 
+\index{Fitting}
+In order for the fitting algorithm to work, the program 
+must already have an initial guess of the real calibration 
+parameters. This initial guess does not have to be perfect, 
+but it should be somewhat close. The algorithm them requires 
+a list of the known $Q$ values. And it additionally requires 
+a range for each of these $Q$ values. In order for the 
+algorithm to work properly, inside of this $Q$ range (as 
+calculated by the initial calibration value guess) there 
+should be the peaks that we are interested in and no spurious 
+other peaks that would confuse the computer.
 
-In order for the fitting algorithm to work, the program must already have an initial guess of the real calibration parameters. This initial guess does not have to be perfect, but it should be somewhat close. The algorithm them requires a list of the known $Q$ values. And it additionally requires a range for each of these $Q$ values. In order for the algorithm to work properly, inside of this $Q$ range (as calculated by the initial calibration value guess) there should be the peaks that we are interested in and no spurious other peaks that would confuse the computer.
-
-
-
+With the $Q$ values specified along with $Q$ ranges, we can
+divided up any diffraction image several regions, where
+within each region we know there is a unique peak.
+(SHOWN AN EXAMPLE HERE).
 
 \begin{SCfigure}
 \centering
 \input{figures/Fitting.tex}
-\caption{Here is a schematic diagram of the peak finding 
-algorithm. For a particular $\chi$ slice, my code fits 
-Gaussian along the line to find the peaks.}
-\label{Fitting}
+\caption{Here is a diagram of the peak finding 
+algorithm. ADD MORE OF A CAPTION}
+\label{fitting}
 \end{SCfigure}
 
+Our algorithm first requires\index{Peak Finding}
+finding $(x,y)$ coordinates 
+of many diffraction peaks. To do so, the algorithm will 
+pick some $\chi$ value and then 
+spread radially out from the center of the diffraction
+image in this $\chi$ direction.\footnote{Remember
+that the center is specified by the initial calibration 
+values}. Between the given $Q$ range (for each of the $Q$ 
+ranges), the program stores an array of all the data point 
+on the line. It then fits a Gaussian to the data and the
+$(x,y)$ coordinate of the center of this Gaussian $(x,y)$ 
+is taken to be the peak. A diagram showing this algorithm
+is shown in figure~\ref{fitting}.
 
-\subsection{Performing Image Calibration}
+(PUT IN A NOTE ON WEEDING OUT BAD PEEKS)
+
+After compiling a list of diffraction peaks in the image,
+the program can then define a residual function which
+we can minimize to find the best fit calibration values.
+To do so, we can convert the $(x,y)$ coordinate
+of each of the peaks into a 
+$(Q_{\text{peak}},\chi_{\text{peak}})$ pair. 
+For each of these $(x,y)$ coordinates, we also
+know what the input $Q$ list says the experimental $Q$ 
+value for this peak should be (which we will call 
+$Q_{\text{exp}}$). We can therefore define
+the residual function as
+\begin{equation}
+    \text{Residual}(x_c,y_c,d,\lambda,\alpha,\beta,R) =  
+    \sum_{\text{$x,y$ pairs}} (Q_{\text{peak}} - Q_{\text{exp}})^2
+\end{equation}
+Note that the functional dependence comes in from
+calculating $Q_{\text{peak}}$ from a known
+$(x,y)$ coordinate. We see that the smaller the 
+Residual is, the closer we have come to finding 
+the real calibration values which characterized
+the diffraction experiment. If we had perfect
+calibration parameters, the residual should be
+equal to zero. But it is well defined for any
+calibration parameters. So we can take this 
+function of 7 variables and minimize it. 
+The value of this function at its minimized 
+is the best guess calibration values.
+There are plenty of computer algorithm that
+can minimize arbitrary multi-variable functions.
+The one that this code uses is called the 
+Levenberg-Marquardt\index{Least Squares Minimization}
+nonlinear least squares algorithm
+and the particular implementation that is used
+to to perform the calibration is Manolis Lourakis's
+levmar library\cite{lourakis04LM}. Ideallly, 
+once the minimization is done, a good guess at the
+calibration values is found.
+
+\subsection{How to Use the Calibration Algorithm}
 
 \subsection{The $Q$ File Format}\label{TheQValues}
