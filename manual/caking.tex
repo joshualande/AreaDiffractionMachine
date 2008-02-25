@@ -1,0 +1,82 @@
+\begin{center}
+    {\em ``Let Them Eat Cake''} -- Maria Theresa of Spain 
+\end{center}
+
+\subsection{The Cakeing Algorithm}
+
+The purpose of a caked plot is to make a radial 
+($r$ vs $\theta$) plot of the data as it would have 
+appeared on the imagined untiled detector shown in 
+figure~\ref{PhysicalSetup}. By plotting $r$ vs $\theta$,
+we will turn circle (of constant $r$ into straight lines 
+and we will really distort straight lines.
+To create this plot, we will work with the 
+convenient quantities $Q$ and $\chi$. Remember that
+from equation \ref{qterms2theta} that $Q$ is
+related by the sin function to $2\theta$ and that
+from equation \ref{2thetatermsr} that $2\theta$
+is related to the distance $r$ on the untilted 
+detector by the tangent function. 
+Consequently, although the relationship is not 
+strictly linear, $Q$ will increase as $r$ increases
+and therefore $Q$ is an analogous quantity to $r$.
+Also, $\chi$ directly meausres teh angle radially
+around the center of the image. So a cake is really
+defined as an intensity plot of the diffraction 
+image where the two axis are $Q$ and $\chi$.
+
+To calculate a cake plot, the program implements
+the following algorithm. The program has to somehow bin $Q$ and 
+$\chi$ space. The code itself can try to pick
+a range large enough to encompase all of the 
+pixels inside of the diffraction image. Alternately,
+the user can specify by hand the exact range that
+they want to have caked. But once the bins are
+specified, the program has to fill each bin with
+intensity values. Since each bin has some 
+particular $Q$ and $\chi$ value\footnote{Technically,
+each bin has a $Q$ and $\chi$ range, but we will
+take the middle of each of these ranges to be the
+particular $Q$ and $\chi$ value corresponding to the
+bin.} we can calculate the corresponding $(x''',y''')$
+pixel coordinate for this bin using 
+(USE EQUATION FOR INVERTED EQUATION). We can then
+look inside the loaded diffraction data for
+this particular intensity value corresponding
+to the $(x''',y''')$ value. This intensity then
+gets placed inside the bin. $(x''',y''')$
+is generally a floating point number so we should
+do a bilinear interpolation of the intensity values
+to get a best guess.
+
+In principle, the caking algorithm could be implemented
+differently. The way it is coded up is to loop over
+all the bins. But one could equally well have looped over
+all the pixels of diffraction data. Each pixel has a
+particular $(x''',y''')$ coordiante. We could use
+equations~\ref{ytermsydoubleprime} and
+equation~\ref{xtermsxdoubleprime} to calculate the $Q$
+and $\chi$ value corresponding to this coordiante. We
+could then add the intensity value corresponding to the
+$(x''',y''')$ value into the bin which contains the
+$Q$ and $\chi$ value. After doing this for all the pixels
+in the image, we could then average all the cake bins.
+This method would be more accurate because each of the 
+pixels in the diffraction image would be used in the analyis
+where as they are not necessarily all used above. The major
+downside to this implementation is that it does not 
+necessarily put an intensity value into all the bins, where 
+as the method above does. This code be overcome by applying
+the above algoirthm at the end only to the bins for which
+nothing was put into. But the biggest downside of this 
+algorithm is that it is substantially slower because there
+are usually significantly more pixels in the diffraction
+image then bins used in a cake. For example, mar3450 data
+holds $3450\times 3450$ pixels while cakes are typically set
+to have a resolution of $600\times 600$. Although
+this alternateive algorithm was not implemented in the code,
+it would in principle be easy to code up and it might
+be more desirable in some situations.
+
+\subsection{Cakeing with the Program}
+

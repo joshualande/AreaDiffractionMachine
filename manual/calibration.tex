@@ -110,9 +110,41 @@ ranges), the program stores an array of all the data point
 on the line. It then fits a Gaussian to the data and the
 $(x,y)$ coordinate of the center of this Gaussian $(x,y)$ 
 is taken to be the peak. A diagram showing this algorithm
-is shown in figure~\ref{fitting}.
+is shown in figure~\ref{fitting}. This method is
+then done for many different evenly spaced $\chi$ values
+and the particular value can be selected by the user
+for increased accuracy.
 
-(PUT IN A NOTE ON WEEDING OUT BAD PEEKS)
+The only really tricky part about this step is that
+there is not always a consistent diffraction ring 
+around the image and therefore some of these fits 
+should not find peaks. Whenever this occurs, the program
+just ignores the current fit and moves to the next. 
+But figuring out when some particular peak is bad
+is not particularly obvious. The method that this
+program uses is to ensure each peak passes a few
+tests. The first test is that the fit peak was
+too close to the edge of the image. So any peak where
+the Gaussian fit's center plus or minus twice the fit's
+standard deviation gets outside of the $Q$ range is
+considered too close to the edge of the image.
+The next test that is done is to calculate is the
+standard deviation of the data outside of the peak is
+significant when compared to the height of the peak
+fit. To do this, the code calculates the standard 
+deviation of all the pixels that are farther then twice
+the peak's fit standard deviation away from the
+center of the peak. If the height of the peak
+divided by this calculated background standard deviation
+is smaller then some particular value, the peak is
+considered bad. This value is called by the program
+\gui{Stddev} and can be specified by the user from user.
+\index{Stddev}
+Presumably, the higher that \gui{Stddev} is, the
+more picky the program is about what a good peak looks
+like. This isn't the most robust method for finding peaks,
+but it seems to work pretty well and it should be easy 
+in principle to add new tests to the algorithm.
 
 After compiling a list of diffraction peaks in the image,
 the program can then define a residual function which
@@ -152,6 +184,37 @@ levmar library\cite{lourakis04LM}. Ideallly,
 once the minimization is done, a good guess at the
 calibration values is found.
 
-\subsection{How to Use the Calibration Algorithm}
+\subsection{How to use the Calibration}
+
+\subsection{Save the peak list}
 
 \subsection{The $Q$ File Format}\label{TheQValues}
+\index{Q Data}
+Below is a valid Q Data File:
+\begin{lstlisting}[caption={Lanthanum Hexaboride.dat},label=LaB6]
+# This is Q Data for Lanthanum Hexaboride
+Q   dQ
+1.511543809 .05
+2.137646823 .05
+2.618102966 .05
+3.023087619 .05
+3.379873753 .05
+3.702525225 .05
+4.275148198 .05
+4.534631428 .05
+4.77990514  .05
+5.013313099 .05
+5.23603139  .05
+5.44989618  .05
+\end{lstlisting}
+Comment lines beginning with a \# are always ignored. The
+first line in the file should be of the form "Q  dQ" or "Q  delta Q" 
+to specify that this is a list of $Q$ values. The rest of the
+file should have $Q$ values followed a $\Delta Q$ range.
+All $Q$ values must be larger than 0. None of the $Q$ ranges can 
+overlap. Instead of inputting $Q$ values, the program can input
+$D$ values if the first line is instead "D dD" or "D delta D"
+The values should be given instead in $D$ space and the values
+will be converted using~\ref{DtermsQ}.
+
+
