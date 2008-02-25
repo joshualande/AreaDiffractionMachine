@@ -291,7 +291,7 @@ int fitPeak(double xCenter,double yCenter,double distance,double energy,
     sum = 0;
     num = 0;
 
-    // calculate variation of background outsize 3 sigma of fit
+    // calculate variation of background outsize 2 sigma of fit
     for (i=0;i<numValues;i++) {
         if (sliceQ[i] > *qFit+2* (*deviationFit) || sliceQ[i] < *qFit-2* (*deviationFit) ) {
             sum+=(sliceVal[i]-bgFit)*(sliceVal[i]-bgFit);
