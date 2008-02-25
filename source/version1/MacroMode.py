@@ -106,6 +106,13 @@ class MacroMode:
         for widget in self.allCheckBoxes:
             widget['clean name'] = cleanstring(widget['name'])
 
+        self.multipleDataFiles = [
+            {'name':'Multiple Data Files:','widget':self.GUI.fileentry,
+                    'move to page':moveToCalibration,'function':self.GUI.loadDiffractionFile},
+        ]
+        for widget in self.multipleDataFiles :
+            widget['clean name'] = cleanstring(widget['name'])
+
         self.allLoadEntryFieldsRequiringFilename = [
             {'name':'Data File:','widget':self.GUI.fileentry,
                     'move to page':moveToCalibration,'function':self.GUI.loadDiffractionFile},
@@ -316,6 +323,25 @@ class MacroMode:
             cleanline = cleanstring(line)
 
             if VERBOSE: print ' - current: ',line 
+
+            for widget in self.multipleDataFiles:
+                if cleanline == widget['clean name']:
+                    widget['move to page']()
+                    list = macro.next()
+
+                    # the macro line is of the form [ file_one.mar3450 file_two.mar3450 ]o
+                    # so lets split of the []
+                    patternstring = r"""[+*]"""
+                    self.pattern = re.compile(patternstring, re.DOTALL)
+
+                    match = self.pattern.search(list)
+                    if match:
+                        filenames= match.groups()[0]
+                    else:
+                        raise Exception("Malformed macro synatx, this error SHOULD have been caught earlier.")
+
+                    if VERBOSE: print ' - current: ',filename 
+                    widget['function'](filenames.strip())
 
             # deal w/ each type of GUI item seperately
             for widget in self.allLoadEntryFieldsRequiringFilename:
