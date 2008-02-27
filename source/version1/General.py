@@ -224,7 +224,7 @@ def joinPaths(list):
         implementation
             
             >>> joinPaths( ('a', '   b ', 'c    ') )
-            'a, b, c'
+            'a b c'
 
         """
     return string.join(list) 

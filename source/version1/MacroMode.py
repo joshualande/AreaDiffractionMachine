@@ -1298,6 +1298,11 @@ file because line %d ("%s") is followed by the line ("%s") which \
 contains the expression %s which cannot be parsed into unique \
 existing filenames.""" % (filename,linenumber,currentline,string,loop) )
 
+        # do no analysis on this bracketed list if there are
+        # no items in it
+        if len(split) < 1:
+            continue
+
         for each in split:
             # ensure all the files in each bracket exist
             if not os.path.isfile(each):
