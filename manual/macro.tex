@@ -1,6 +1,29 @@
-The macro file format is pretty simple. A macro file contains many commands which automates the GUI. Each command in the GUI gets its own line. Each command has a fairly straightforward style. If you want to do something to the GUI, you look at the name on top of the thing or near the thing and macro command is exactly that string. This sounds confusing but it is not too bad. If you want to get the calibration data from the header of the image, the macro line is \macroline{Get From Header}. If you want to fit the calibration data, the macro line is \macroline{Do Fit}.
+\subsection{Record Macros}
 
-Things get more interesting when what you want to do requires doing more then just pushing a button. For example, if you want to deselect the \gui{Draw Q Data?} checkbox, your macro needs to specify that you deselect this option instead of selecting it. To dos this, the first part of the macro command is the name of the checkbox \macroline{Cake} and the next line tells you what you want to do with it. Your macro would contain these lines:
+\subsection{Run Macros}
+
+\subsection{The Macro File Format}
+
+A macro file contains many commands which tell the program
+how to run. Each command in the GUI gets its own line. 
+The syntax for a command is pretty straightforeward.
+If you want to do
+something in the program, you find the text on top of
+or near the thing and then the macro command is exactly
+that text. If you want to get the calibration data from the
+header of the image, the macro line is
+\macroline{Get From Header}. If you want to fit the 
+calibration data, the macro line is \macroline{Do Fit}.
+
+Things get more interesting when what you want to do
+requires doing more then just pushing a button. For 
+example, if you want to deselect the \gui{Draw Q Data?} 
+checkbox, your macro needs to specify that you deselect
+this option instead of selecting it. To dos this, the 
+first part of the macro command is the name of the
+checkbox \macroline{Cake} and the next line tells
+you what you want to do with it. Your macro would
+contain these lines:
 \begin{lstlisting}[caption={'Draw the $Q$ Lines on the Display'}]
 Draw Q Data?
     Select
@@ -8,39 +31,68 @@ Draw Q Data?
 Draw Q Data?
     Deselect
 \end{lstlisting}
-The exact same format is used for user input. To change the calibration values, your macro file would look like:
+The exact same format is used for user input. To change
+the calibration values, your macro file would look like:
 \begin{lstlisting}[caption={'Input a Number'}]
 xc:
     1752.3
 beta:
     5.23
 \end{lstlisting}
-Finally, some of the Gui commands require a file name. For example, you must provide a file name to load a diffraction file or save a caked image. Whenever the command has a required file, the next line in the macro file should be that file name. For example, if you wantd to save the cake image, your macro file would contain the line: 
+Finally, some of the Gui commands require a file name.
+For example, you must provide a file name to load a 
+diffraction file or save a caked image. Whenever the
+command has a required file, the next line in the macro 
+file should be that file name. For example, if you wanted 
+to save the cake image, your macro file would contain the 
+line: 
 \begin{lstlisting}[caption={'Save the Caked Image'}]
 Save Caked Image
     C:/data/cake_output.jpg
 \end{lstlisting}
 
-If you look at the first page, there are three inputs: \gui{Get From Header:}, \gui{dark current:}, and \gui{Q data:}. The macro command to load any of these is a little bit ambiguous. When using the acutal GUI, you would, at least in principle, type in the name of a file and then press load. But there is no reason to make the GUI so redundant. So to load in any of these using a macro command, all you have to do is give the name of the input and then the filename. It will automatically load the file without you explicitly giving the \macroline{load} line. So, for example, to load in the $Q$ data, you would include the following lines:
+If you look at the first page, there are three inputs:
+\gui{Get From Header:}, \gui{dark current:}, and 
+\gui{Q data:}. The macro command to load any of these
+is a little bit ambiguous. When using the acutal GUI, 
+you would, at least in principle, type in the name of
+a file and then press load. But there is no reason to
+make the GUI so redundant. So to load in any of these
+using a macro command, all you have to do is give the 
+name of the input and then the filename. It will 
+automatically load the file without you explicitly
+giving the \macroline{load} line. So, for example,
+to load in the $Q$ data, you would include the 
+following lines:
 \begin{lstlisting}[caption={'Load the $Q$ Data'}]
 Q Data:
     C:/data/q_data.dat
 \end{lstlisting}
 
-\subsection{Looping Over Diffraction Data}
-Suppose you want to do the same general analysis to many diffraction files at the same time. There is an easy way to do this. To analize one file at a time, you would simply issue the command
+\subsubsection{Looping Over Diffraction Data}
+
+To analyze a file, the command is just 
 \begin{lstlisting}[caption={'Load the Diffraction Data'}]
-Load Data:
+Data File:
     C:/data/first.mar3450
-Integrate Q Lower?
-    .25
-Integrate Q-I
+Get From Header
 # ...
 \end{lstlisting}
-To loop over multiple diffraction images at once, you could simply give more files after the first one. You can even give it whole directories. When you give it a directory to loop over, the program will (non-recursively) look for all the diffraction files in that directory and include them in the list. Just make sure to put all the files on the same line. The loop will end when one of the 3 things in the macro file happens. Either, a subsequent line in the macro file reads \macroline{END LOOP}, more diffraction data is loaded using the command \macroline{Load Data:}, or the macro file ends. For example, if we look at this macro file.
+But macros files also allow for an eaiser way
+to loop over many files and perform the same
+analysis on all of them.  
+To loop over multiple diffraction images at once,
+you could simply give more files after the first 
+one. The loop will end when 
+one of the 3 things in the macro 
+file happens: a subsequent line in the macro
+file reads \macroline{END LOOP}, more diffraction data
+is loaded using the command \macroline{Data File:}, or
+the macro file ends. For example, if we look at this 
+macro file.
 \begin{lstlisting}[caption={'Loop Over Diffraction Data'}]
-Load Data:
-    C:/data/first.mar3450 C:/data/second_file.mar3450 
+Data File:
+    C:/data/first.mar3450 C:/data/second.mar3450 
 Integrate Q Lower?
     .25
 Integrate Q-I
@@ -49,14 +101,15 @@ Draw Q Lines?
     Select
 # ...
 \end{lstlisting}
-We see that it would get evaluated exactly like the following macro file:
+We see that it would get evaluated just like this
+macro file:
 \begin{lstlisting}[caption={'An Equivalent Macro'}]
-Load Data:
+Data File:
     C:/data/first.mar3450 
 Integrate Q Lower?
     .25
 Integrate Q-I
-Load Data:
+Data File:
     C:/data/second.mar3450 
 Integrate Q Lower?
     .25
@@ -65,80 +118,201 @@ Draw Q Lines?
     Select
 # ...
 \end{lstlisting}
+You can even give it whole directories. When
+you give it a directory to loop over, the program 
+will (non-recursively) look for all the diffraction 
+files in that directory and include them in the list. 
+For example, if the folder \macroline{C:/data/} contains
+only the file \macroline{first.mar3450} and
+\macroline{second.mar3450}, an equivalent way of looping
+over these files would be to issue the commadn
+\begin{lstlisting}[caption={'Load the Diffraction Data'}]
+Data File:
+    C:/data/
+# ...
+\end{lstlisting}
+You can put as many folder and files after a 
+\macroline{Data File:} line as you wish.
+Just make sure to put them all on the same line 
+or the program will complain.
 
-Finally, there is a convenience markup which can help you make fancy macros. Whenever you have loaded data in, you can refer to the part name of the current diffraction file that is loaded using the string \macroline{PATHNAME} and you can refer to the file name itself using the string \macroline{FILENAME}. So, in our previous example, if we had loaded the file \macroline{C:/data/second\_file.mar3450}, \macroline{PATHNAME} would get chaned into \macroline{C:/data} and \macroline{PATHNAME} would get evaluated to \macroline{second\_file} without the extension. In effect, you can imagine building back the full name from \macroline{PATHNAME} and \macroline{FILENAME} using an equation line
+Finally, there is a convenience markup which can help
+you make fancy macros. Whenever you have loaded data 
+in, you can refer to the part name of the current
+diffraction file that is loaded using the string
+\macroline{PATHNAME} and you can refer to the file
+name itself using the string \macroline{FILENAME}. 
+So, in our previous example, if we had loaded the
+file \macroline{C:/data/second\_file.mar3450},
+\macroline{PATHNAME} would get chaned into 
+\macroline{C:/data} and \macroline{PATHNAME} would
+get evaluated to \macroline{second\_file} without
+the extension. In effect, you can imagine building 
+back the full name from \macroline{PATHNAME} and
+\macroline{FILENAME} using an equation line
 \begin{equation*}
-\text{\macrolinenoquotes{C:/data/second\_file.mar3450}=\macrolinenoquotes{FILENAME/PATHNAME.mar3450}}
+    \text{\macrolinenoquotes{C:/data/second\_file.mar3450}=
+    \macrolinenoquotes{FILENAME/PATHNAME.mar3450}}
 \end{equation*}
-These commands are useful because they allow you to loop over many files at once but still save things in useful places and with useful names. It would be easy, for example, to save the intensity data you calculate for each file being looped over using the macro command:
+These commands are useful because they allow you to
+loop over many files at once but still save things 
+in useful places and with useful names. It would be
+easy, for example, to save the intensity data you
+calculate for each file being looped over using the 
+macro command:
 \begin{lstlisting}[caption={'Using the FILENAME and PATHNAME Markup'}]
 Save Integration Data
-    FILENAME/PATHNAME\_intensity.dat
+    FILENAME/PATHNAME\_int.dat
 \end{lstlisting}
-This would save, for example, \macroline{C:/data/first.mar3450}'s intensity data to \macroline{C:/data/first\_intensity.dat}, \macroline{C:/data/second.mar3450}'s intensity data to \macroline{C:/data/second\_intensity.dat}, and the same for all the others. This feature lets you have the macro to save each of the files to the right place and give it a useful name.
+This would save, for example, 
+\macroline{C:/data/first.mar3450}'s intensity data to
+\macroline{C:/data/first\_int.dat},
+\macroline{C:/data/second.mar3450}'s intensity data 
+to \macroline{C:/data/second\_int.dat}, and the
+same for all the others. This feature lets you have
+the macro to save each of the files to the right place
+and give it a useful name.
 
-\subsection{A More Interesting Example}
+\subsubsection{Loops over Multiple Images}
 
-\begin{lstlisting}[caption={'A Non-Trivial Macro'}]
-# Macro file to calibrate from one file and 
-# then analyze many others
-Data File:
-    C:\data\calibration\cal.mar3450
-Get From Header
-# Fix the energy before doing the fit
-E Fixed
-    Select
-Number of chi?
-    150
-stddev?
-    8
-# This would be standard Q values for the sample
-Q Data:
-    S:\data\calibration\Q_data.dat
-Do Fit
-Save Calibration
-    C:\data\calibration\cal_values.dat
-Draw Q lines?
-    Select
-Draw Peaks?
-    Select
-AutoCake
-Cake Data Hi
-    0.03
-Save Caked Image
-    C:\data\calibration\cal_cake.jpg
-# Load in a directory of data to analyze
-Data File:
-    S:\data\to_analyze\
-Integrate Q Lower?
-    .25
-Integrate Q Upper?
-    4.5
-Integrate Number of Q?
-    500
-Integrate Q-I data
-Save Integration Data
-    PATHNAME\FILENAME_Q_I_integration.dat
+We know from chapter~\ref{viewing_data} that
+you can load in multiple diffraction images and add them
+together. But we have not yet talked about how this can
+be done inside of a macro. The syntax is pretty straight
+forward. We introduce a new macro command named
+\macroline{Multiple Data Files} which signifies that
+many files should be loaded. To load in multiple files
+and have their intensities added, this command must be 
+followed by a list of filenaems enclosed within
+[ and ] brackets. Keeping with the same exmaple above,
+we could load in \macroline{C:/data/first.mar3450} and
+\macroline{C:/data/second.mar3450} and have their
+intensities added using the command
+\begin{lstlisting}[caption={'Add the intensities'}]
+Multiple Data Files:
+    [C:/data/first.mar3450 C:/data/second.mar3450]
+# ...
 \end{lstlisting}
+Something to note is that this program enforces that
+all of the files are in the same folder. This is done
+so that that the \macroline{PATHNAME} variable remains 
+meaningful when looping over multiple images.
 
-The macro first moves the GUI to the calibration tab. It then loads in a calibration image, $Q$ data, and uses as the initial guess for the calibration values number in the header of the file. It then does the fit and saves the fit calibration values to a file.  It then cakes the data and saves a cake of this calibration with the $Q$ lines and Peaks so that later visual inspection can show how good the fit was. Afterwards, it loops over a directory of diffraction dat and, using the same calibration data, sets the $Q$ range of the intensity integration, does the intensity integration, and saves integrated data next to the corresponding diffraction files. It should now be apparent that macro are both fun and easy.
+You can then incorporate this into a loop in
+one of two ways. First, you can simply put several
+of these bracketed lists into the macro and each
+of the lists will be analyzed separately. For example,
+\begin{lstlisting}[caption={'Loop Over the Analysis'}]
+Multiple Data Files:
+    [C:/first.mar3450 C:/second.mar3450] [C:/third.mar3450 C:/fourth.mar3450]
+# ...
+\end{lstlisting}
+This will separately loop over \macroline{first.mar3450} 
+and \macroline{second.mar3450} added together and then 
+\macroline{third.mar3450} and \macroline{fourth.mar3450}
+added together. But this gets cumbersome. Alternately,
+you can simply take all of the files that you want to be 
+added together and analyzed and group them into subfolders. 
+Each of the subfolders will contain only files that should
+be added together and analyzed. If you then give the
+macro the name of the folder containing all these subfolders,
+it will loop over all the subfolders. 
 
+For example, suppose we created the folder \macroline{C:/data}.
+Inside of this folder is the subfolder \macroline{A}
+containing the files \macroline{first.mar3450} and 
+\macroline{second.mar3450}. Also inside of the data folder
+is the subfolder \macroline{B} containing the files
+\macroline{third.mar3450} and \macroline{fourth.mar3450}.
+We could do the exact same data analysis as above by 
+issuing the macro command with only the data folder name.
+\begin{lstlisting}[caption={'Use the Folder Syntax'}]
+Multiple Data Files:
+    C:/data
+# ...
+\end{lstlisting}
+You can also put as many folders and lists separated
+by [ and ] as you wish onto the line and it will loop
+over all of them.
+
+Since the macro function insists that all files 
+that are added together are in the same folder,
+the \macroline{PATHNAME} command will properly expand 
+to the path that all of the files that were added 
+together have. But since they all have different file 
+names, the \macroline{FILENAME} command will always be 
+replaced by the string \macroline{MULTIPLE\_FILES}
+
+\subsubsection{Picking Colors}
+
+There are several places in the program where you can
+pick the color of something using a color selector.
+It is a little trickier to do.  When you issue a macro 
+command that wants to know the color of something, you 
+have to tell it what that color is. By far the easiest
+way to figure out exactly what the macro line should
+loop like is to simply record a macro where select
+the color that you want and then copy the macro lines
+into your file.
+
+But if you are curious exactly what the format for
+colors looks like, you can see that picking a color
+will generally look like this:
+\begin{lstlisting}[caption={'Use the Folder Syntax'}]
+Polygon Mask Color?
+    red
+\end{lstlisting}
+But it is a bit tricky trying to figure out exactly what 
+colors will work. Technically, this program will accept 
+any color which tk will accept. The colors that tk
+will accept by name are all described here:
+\url{http://wiki.tcl.tk/16166}. But tk can also accept
+colors based upon their RGB value. To specify a color
+by its RGB value, the color must be preceded by a \#
+and followed by the RGB values in hexadecimal.
+Each of the RGB values range from 0 to 255 in
+decimal or (00 to ff in hexadecimal).
+For example, pure red would be specified by the color
+\#ff0000. So we could replace the macro command above
+with the identical
+\begin{lstlisting}[caption={'Use the Folder Syntax'}]
+Polygon Mask Color?
+    #ff0000
+\end{lstlisting}
      
-\subsection{Little Tidbits}\label{Little Tidbits}
+\subsubsection{Little Tidbits}\label{Little Tidbits}
 \begin{itemize}
-\item Any of the macro commands themselves are case insensitive. The command \macroline{GeT fRoM hEaDeR} is just as valid as the command \macroline{gET fROM hEADER} and \macroline{Get From Header}. You don't have to sweat it. 
-\item White spaces at the beginning and end of the line are ignored. In the preceding examples, the spaces separating macro commands from input values such as file names are there only to increase readability. You don't need them if you don't want.
-\item New lines are ignored
-\item comment lines of the form \macroline{\# This would be a comment} are ignored.
-\item You don't have to worry about explicitly moving from tab to tab in the computer program. The computer program will move to the right automatically before performs the action.
-\item When you issue the macro command \macroline{E:} or \macroline{E Fixed}, the computer program will automatically set the GUI to \macroline{Work in eV}. If you issue the command or \macroline{lambda:} or \macroline{lambda fixed:} then the comptuer program will set the GUI to \macroline{Work in Lambda}. You can also explicitly set the GUI to either mode using the commadn \macroline{Work in eV} or \macroline{Work in Lambda}.
-\item I need to figure out what colors are allowed.
+\item Any of the macro commands themselves are case
+insensitive. The command \macroline{GeT fRoM hEaDeR} 
+is just as valid as the command 
+\macroline{gET fROM hEADER} and 
+\macroline{Get From Header}. You don't have to sweat it. 
+\item White spaces at the beginning and end of the 
+line are ignored. In the preceding examples, the
+spaces separating macro commands from input values
+such as file names are there only to increase 
+readability. You don't need them if you don't 
+want.
+\item Any new lines in a macro file are ignored.
+\item comment lines of the form 
+\macroline{\# A comment} are ignored.
+\item You don't have to worry about explicitly moving 
+from tab to tab in the computer program. The computer 
+program will move to the right automatically before
+performs the action.
+\item When you issue the macro command \macroline{E:} 
+or \macroline{E Fixed}, the computer program will
+automatically set the GUI to \macroline{Work in eV}.
+If you issue the command or \macroline{lambda:} or
+\macroline{lambda fixed:} then the comptuer program
+will set the GUI to \macroline{Work in Lambda}. You
+can also explicitly set the GUI to either mode using
+the commadn \macroline{Work in eV} or
+\macroline{Work in Lambda}.
 \end{itemize}
 
-%Command&Followed By&Description\\
 
-\subsection{Macro Commands}
-
+\subsubsection{Macro Commands}
 
 \begin{center}
 
@@ -246,12 +420,18 @@ The macro first moves the GUI to the calibration tab. It then loads in a calibra
 \end{longtable}
 \end{center}
 
-\subsection{What You Can't Do With Macros}
+\subsubsection{What You Can't Do With Macros}
 
 Just to be clear:
 \begin{itemize}
-\item There is no way with a macro to zoom into the diffraction data, the cake data, or the intensity integrated data
-\item You can't draw individual polygon masks and you can't remove individual polygon masks. All you can do is load in polygon's from file and save all the current polygons to a file.
-\item Currently, you cannot load in and add together multiple images using the macro. I indent to code up this feature at some point. 
+\item There is no way with a macro to zoom into the diffraction
+data, the cake data, or the intensity integrated data
+\item You can't draw individual polygon masks and you can't remove
+individual polygon masks. All you can do is load in polygon's from
+file and save all the current polygons to a file.
+\item When you load in multiple images at once by giving a file 
+name, it will only load in images from the file with known 
+extensions (ie .mar2300, .mar3450, .mccd, .tiff). So give your 
+files proper extensions before running macros.
 \end{itemize}
 
