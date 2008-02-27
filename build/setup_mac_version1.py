@@ -31,6 +31,7 @@ setup(
     version = "1",
     data_files = [('.',['../source/version1/colormaps.txt']),
                   ('.',['../source/version1/tips_and_tricks.html']),
+                  ('.',['../source/version1/ChangeLog.txt']),
                   ('xbms',allXBMS),
                   ('StandardQ',allStandardQ)
                  ],
