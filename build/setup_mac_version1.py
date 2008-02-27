@@ -28,7 +28,7 @@ from setuptools import setup,Extension
 
 setup(
     name = "Area Diffraction Machine",
-    version = "1",
+    version = version,
     data_files = [('.',['../source/version1/colormaps.txt']),
                   ('.',['../source/version1/tips_and_tricks.html']),
                   ('.',['../source/version1/ChangeLog.txt']),
