@@ -1,0 +1,3 @@
+Changes - Hopefully this will keep me more organized
+
+Feb 26, 2008 - Adding code so that from within a macro the program can read in multiple files and add them together. This required substantial modifications to the MacroMode.py file and minor modifications to General.py and AreaDiffractionMachine.py

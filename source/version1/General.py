@@ -3,36 +3,42 @@
 
 import os
 import Numeric
+import string
 
 from Exceptions import UserInputException
 
-def getStringFromList(list):
-    """ Returns a string made up out of a list by removing 
-        traling and leading white space from each of the 
-        list items and putting a comma between them. 
-            
-            >>> getStringFromList( ('a', '   b ', 'c    ') )
-            'a, b, c'
-        """
-    string = ''
-    for index in range(len(list)-1):
-        string+=list[index].strip()+', '
-    string +=list[len(list)-1].strip()
-    return string
+
+def getextension(filename):
+    """ Returns the extension of a file. """
+    return os.path.splitext(filename)[1]
 
 
-def getListFromString(string):
-    """ Returns a list forma  string of items split by commas.
-        It will also remove anyt trailing and leading white
-        spcae from each of the list items. 
+def getallsubfolders(folder):
+    """ Returns all the subfolders in a folder
+        but none of files."""
+    items = os.listdir(folder)
+    ret = []
+    for item in items:
+        full = os.path.join(folder,item)
+        if os.path.isdir(full):
+            ret.append(full)
+    return ret
 
-            >>> getListFromString('a, b, c')
-            ['a', 'b', 'c']
-        """
-    list = string.split(',')
-    for index in range(len(list)):
-        list[index] = list[index].strip()
-    return list
+
+def getallfileswithextensions(folder,allExtensions):
+    """ Returns all the files in a folder
+        but none of the subfolders. It only
+        returns folders whos extensions is
+        in the list allExtensions which must
+        also be given to the function. """
+    items = os.listdir(folder)
+    ret = []
+    for item in items:
+        full = os.path.join(folder,item)
+        if os.path.isfile(full) and \
+                getextension(full) in allExtensions: 
+            ret.append(full)
+    return ret
 
 
 def maxListIndex(list):
@@ -208,6 +214,22 @@ def numeric_array_equals(first,second):
     return first.tolist() == second.tolist()
 
 
+def joinPaths(list):
+    """ Returns a string made up out of a list by removing 
+        traling and leading white space from each of the 
+        list items and putting a comma between them. 
+        Although this does the same thing as the string
+        join function, it is nice to call the same function
+        from one place incase I decide to change the 
+        implementation
+            
+            >>> joinPaths( ('a', '   b ', 'c    ') )
+            'a, b, c'
+
+        """
+    return string.join(list) 
+
+
 def splitPaths(string):
     """ Takes in a string of file names and folder names that are
         separated by spaces and returns a list of file names. This
@@ -253,7 +275,7 @@ def splitPaths(string):
         # If the current chunk is not a valid path name, append the next chunk 
         while not os.path.exists(filename):
             if len(list) < 1:
-                raise UserInputException("'%s' cannot be split into a bunch of file names becaues the name '%s' (or possibly some earlier chunks of it) does does not exist." % (filename,filename))
+                raise UserInputException("'%s' cannot be split into a bunch of file names becaues the name '%s' (or possibly some earlier chunks of it) does not exist." % (filename,filename))
             # add the next item, remembering that the split removed 
             # the space so we have to explicitly add it back in.
             filename = filename + ' ' + list.pop(0)
@@ -262,7 +284,6 @@ def splitPaths(string):
         filesOrDirectories.append(filename)
 
     return filesOrDirectories 
-
 
 def test():
     import doctest

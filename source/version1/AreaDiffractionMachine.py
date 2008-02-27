@@ -100,6 +100,9 @@ def setcheckbox(checkbox,value):
         checkbox.deselect()
 
 class FancyErrors:
+
+    VERBOSE = 0
+
     def __init__(self,status):
         # I think this is how linux/windows exceptions are formatted
         patternstring = r"""UserInputException: ['"](.*)['"]"""
@@ -134,6 +137,9 @@ class FancyErrors:
             # UserInputException. If so, then print out just the exception
             othermatch = self.otherpattern.search(string)
             if othermatch:
+
+                if self.VERBOSE: print string
+
                 message = othermatch.groups()[0]
                 box=tkMessageBox.showerror('Error',message)
             else:
@@ -144,7 +150,7 @@ class FancyErrors:
 
 
 def programabout(master):
-    Pmw.aboutversion('0.01')
+    Pmw.aboutversion('1')
     Pmw.aboutcopyright('Copyright Joshua Lande and Samuel Webb, 2007\nStanford Synchrotron Radiation Laboratory')
     Pmw.aboutcontact("""email: samwebb@slac.stanford.edu
 web: http://www.stanford.edu/~swebb""")
@@ -2802,7 +2808,7 @@ class Main:
         if filenames in ['',()]: return 
 
         # put the filename(s) into the input 
-        self.fileentry.setvalue(General.getStringFromList(filenames))
+        self.fileentry.setvalue(General.joinPaths(filenames))
 
         # load in the data
         self.loadDiffractionFile()
@@ -3116,18 +3122,20 @@ class Main:
                 func=self.resizeDiffractionImage) 
 
 
-    def loadDiffractionFile(self,filenames=()):
-        # Takes in a list of diffraction files to load in and add together
+    def loadDiffractionFile(self,filenames=None):
+        """ Optionally takes in a string with filenames 
+            seperated by spaces. """
 
         self.extension = None
 
-        if filenames in [(),[]]:
+        if filenames == None:
             # if no filename(s) given, read filename(s) form user input
-            filenames=(General.getListFromString(self.fileentry.getvalue()))
-
-        if type(filenames) not in [type([]), type(())]:
-            # if a single filename was passed, make it into a list
-            filenames = [filenames]
+            filenames=(General.splitPaths(self.fileentry.getvalue()))
+        else:
+            # if a single filename (or mulitple filenames 
+            # all in one long string) were passed, make 
+            #it into a list
+            filenames=General.splitPaths(filenames)
 
         if len(filenames) < 1:
             raise UserInputException("A filename must be given before that file can be loaded.")
@@ -3140,7 +3148,7 @@ class Main:
         # put possibly all the filenames into the user input
         # with each filename seperated by a comma
         # seperation
-        self.fileentry.setvalue(General.getStringFromList(filenames))
+        self.fileentry.setvalue(General.joinPaths(filenames))
 
         try:
             # if this dosen't work, we dont want to loose our old object
@@ -3176,15 +3184,11 @@ class Main:
             self.openedfilesmenu.add_command(label=file,command=DISABLED)
 
         # Make sure to explicitly record this macro thingy. 
-        # This does not work properly when mulitple files are being loaded 
-        # because there is no macro command to do so.
         if self.macroLines != None:
             if len(filenames) > 1:
-                print "Warning, macro files cannot currently be written to load and combined multiple diffraction files."
-                self.macroMode.explicitMacroRecordOneLine(
-                        "# Warning, macro files cannot currently be written to load and combined multiple diffraction files.")
-
-            self.macroMode.explicitMacroRecordTwoLines('Data File:','\t'+filenames[0])
+                self.macroMode.explicitMacroRecordTwoLines('Multiple Data Files:','\t[ '+General.joinPaths(filenames)+' ]')
+            else:
+                self.macroMode.explicitMacroRecordTwoLines('Data File:','\t'+filenames[0])
 
         setstatus(self.status,"Ready")
 

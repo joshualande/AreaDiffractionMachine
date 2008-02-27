@@ -3,13 +3,10 @@ import tkFileDialog
 from Exceptions import UserInputException
 import os
 import time
+import re
 
 import General
 from DiffractionData import allExtensions
-
-
-def getextension(filename):
-    return os.path.splitext(filename)[1]
 
 
 def removeTrailingCharacters(string,characterList):
@@ -106,18 +103,26 @@ class MacroMode:
         for widget in self.allCheckBoxes:
             widget['clean name'] = cleanstring(widget['name'])
 
-        self.multipleDataFiles = [
+        self.multipleDataFilesCommand = [
             {'name':'Multiple Data Files:','widget':self.GUI.fileentry,
-                    'move to page':moveToCalibration,'function':self.GUI.loadDiffractionFile},
+                    'move to page':moveToCalibration,
+                    'function':self.GUI.loadDiffractionFile},
         ]
-        for widget in self.multipleDataFiles :
+        for widget in self.multipleDataFilesCommand:
+            widget['clean name'] = cleanstring(widget['name'])
+
+        self.dataFileCommand = [
+            {'name':'Data File:','widget':self.GUI.fileentry,
+                    'move to page':moveToCalibration,
+                    'function':self.GUI.loadDiffractionFile},
+        ]
+        for widget in self.dataFileCommand:
             widget['clean name'] = cleanstring(widget['name'])
 
         self.allLoadEntryFieldsRequiringFilename = [
-            {'name':'Data File:','widget':self.GUI.fileentry,
-                    'move to page':moveToCalibration,'function':self.GUI.loadDiffractionFile},
             {'name':'Q Data:','widget':self.GUI.qfileentry,
-                    'move to page':moveToCalibration,'function':self.GUI.selectQDataFile},
+                    'move to page':moveToCalibration,
+                    'function':self.GUI.selectQDataFile},
         ]
         for widget in self.allLoadEntryFieldsRequiringFilename:
             widget['clean name'] = cleanstring(widget['name'])
@@ -324,27 +329,25 @@ class MacroMode:
 
             if VERBOSE: print ' - current: ',line 
 
-            for widget in self.multipleDataFiles:
+            for widget in self.multipleDataFilesCommand:
                 if cleanline == widget['clean name']:
                     widget['move to page']()
                     list = macro.next()
 
-                    # the macro line is of the form [ file_one.mar3450 file_two.mar3450 ]o
-                    # so lets split of the []
-                    patternstring = r"""[+*]"""
-                    self.pattern = re.compile(patternstring, re.DOTALL)
+                    # the macro line is of the form:
+                    # [ file_one.mar3450 file_two.mar3450 ]o
+                    # remove the brackets [] before giving
+                    # the string to the program
+                    if VERBOSE: print ' - current: ',list
 
-                    match = self.pattern.search(list)
-                    if match:
-                        filenames= match.groups()[0]
-                    else:
-                        raise Exception("Malformed macro synatx, this error SHOULD have been caught earlier.")
+                    pattern= r"""\[(.*?)\]"""
+                    regexp= re.compile(pattern, re.DOTALL)
+                    filenames = regexp.findall(list)[0]
 
-                    if VERBOSE: print ' - current: ',filename 
                     widget['function'](filenames.strip())
 
             # deal w/ each type of GUI item seperately
-            for widget in self.allLoadEntryFieldsRequiringFilename:
+            for widget in self.allLoadEntryFieldsRequiringFilename+self.dataFileCommand:
                 if cleanline == widget['clean name']:
                     widget['move to page']()
                     filename = macro.next()
@@ -451,7 +454,8 @@ class MacroMode:
                 if cleanline == widget['clean name']:
                     widget['function']()
 
-            # there is only one standard Q thing so technically, we could just do a straight compare,
+            # there is only one standard Q thing so technically, 
+            # we could just do a straight compare,
             # but I want to keep the notation the same
             for widget in self.standardQMenuItem:
                 if cleanline == widget['clean name']:
@@ -480,7 +484,8 @@ class MacroMode:
         """
             Record a single GUI command as a macro line.
 
-            This function does not deal with the macro lines since I can't figure out how to 
+            This function does not deal with the macro 
+            lines since I can't figure out how to 
             bind to pushing of the menubar:
                 * Work in eV
                 * Work in Lambda
@@ -489,7 +494,8 @@ class MacroMode:
                 * Standard Q
                 * Save Diffraction Image
 
-            Furthermore, I need to do explicit macro calling for all of the inputs dealing with filenames.
+            Furthermore, I need to do explicit macro 
+            calling for all of the inputs dealing with filenames.
             So this function does not deal with them.
 
                 * Data File:
@@ -509,12 +515,15 @@ class MacroMode:
         for checkbutton in self.allCheckBoxes:
             if widget == checkbutton['widget']:
 
-                if checkbutton['name'] == 'lambda Fixed:' and self.GUI.eVorLambda.get() == 'Work in eV':
+                if checkbutton['name'] == 'lambda Fixed:' and \
+                        self.GUI.eVorLambda.get() == 'Work in eV':
                     continue
-                if checkbutton['name'] == 'E Fixed:' and self.GUI.eVorLambda.get() == 'Work in Lambda':
+                if checkbutton['name'] == 'E Fixed:' and \
+                        self.GUI.eVorLambda.get() == 'Work in Lambda':
                     continue
 
-                if len(self.GUI.macroLines)>=2 and self.GUI.macroLines[-2]==checkbutton['name']:
+                if len(self.GUI.macroLines)>=2 and \
+                        self.GUI.macroLines[-2]==checkbutton['name']:
                     self.GUI.macroLines.pop()
                     self.GUI.macroLines.pop()
                 self.GUI.macroLines.append(checkbutton['name'])
@@ -525,27 +534,33 @@ class MacroMode:
                 return # no reason to look further
 
         # Do all the entry fields at once
-        for entryField in self.allLoadEntryFieldsRequiringFilename+self.allEntryFieldsRequiringFloat+ \
+        for entryField in self.allLoadEntryFieldsRequiringFilename + \
+                self.allEntryFieldsRequiringFloat + \
                 self.allEntryFieldsRequiringInt:
 
             if widget == entryField['widget'].component('entry'):
-                if len(self.GUI.macroLines)>1 and self.GUI.macroLines[-2]==entryField['name']:
+                if len(self.GUI.macroLines)>1 and \
+                        self.GUI.macroLines[-2]==entryField['name']:
                     self.GUI.macroLines.pop()
                     self.GUI.macroLines.pop()
 
                 if typeOfEvent=='key': #only do macro record if the user types something
 
-                    if entryField['name'] == 'lambda:' and self.GUI.eVorLambda.get() == 'Work in eV':
+                    if entryField['name'] == 'lambda:' and \
+                            self.GUI.eVorLambda.get() == 'Work in eV':
                         continue
-                    if entryField['name'] == 'E:' and self.GUI.eVorLambda.get() == 'Work in Lambda':
+                    if entryField['name'] == 'E:' and \
+                            self.GUI.eVorLambda.get() == 'Work in Lambda':
                         continue
 
-                    if entryField['name'] in ['Integrate Q Lower?','Integrate Q Upper?','Integrate Number of Q?'] and \
+                    if entryField['name'] in ['Integrate Q Lower?', \
+                            'Integrate Q Upper?','Integrate Number of Q?'] and \
                             self.GUI.Qor2Theta.get() == 'Work in 2theta':
                         continue
 
-                    if entryField['name'] in ['Integrate 2theta Lower?','Integrate 2theta Upper?','Integrate Number of 2theta?'] and \
-                            self.GUI.Qor2Theta.get() == 'Work in Q':
+                    if entryField['name'] in ['Integrate 2theta Lower?', \
+                            'Integrate 2theta Upper?','Integrate Number of 2theta?']\
+                            and self.GUI.Qor2Theta.get() == 'Work in Q':
                         continue
 
                     val = entryField['widget'].getvalue()
@@ -559,7 +574,8 @@ class MacroMode:
             # since a Pmw object is really made up out of several smaler Tkinter things.
             if widget == colorMap['widget'].component('listbox'):
 
-                if len(self.GUI.macroLines)>1 and self.GUI.macroLines[-2]==colorMap['name']:
+                if len(self.GUI.macroLines)>1 and \
+                        self.GUI.macroLines[-2]==colorMap['name']:
                     self.GUI.macroLines.pop()
                     self.GUI.macroLines.pop()
 
@@ -569,7 +585,8 @@ class MacroMode:
 
         for color in self.allColorInputs:
             if widget == color['widget']:
-                if len(self.GUI.macroLines)>1 and self.GUI.macroLines[-2]==color['name']:
+                if len(self.GUI.macroLines)>1 and \
+                        self.GUI.macroLines[-2]==color['name']:
                     self.GUI.macroLines.pop()
                     self.GUI.macroLines.pop()
 
@@ -578,7 +595,8 @@ class MacroMode:
 
         for scale in self.allScales:
             if widget == scale['widget']:
-                if len(self.GUI.macroLines)>1 and self.GUI.macroLines[-2]==scale['name']:
+                if len(self.GUI.macroLines)>1 and \
+                        self.GUI.macroLines[-2]==scale['name']:
                     self.GUI.macroLines.pop()
                     self.GUI.macroLines.pop()
 
@@ -604,7 +622,6 @@ class MacroMode:
         #   self.allLoadButtonsRequiringFilename 
         #   self.allSaveButtonsRequiringFilename 
         #   self.allSaveMenuItemsRequiringFilename 
-
         
 
     def explicitMacroRecordTwoLines(self,first,second):
@@ -615,8 +632,10 @@ class MacroMode:
         self.GUI.macroLines.append(first)
         self.GUI.macroLines.append(second)
 
+
     def explicitMacroRecordOneLine(self,line):
-        """ There are a couple of macro commands I can get the binding to catch. The commands are:
+        """ There are a couple of macro commands I can 
+            get the binding to catch. The commands are:
                 * Work in eV
                 * Work in Lambda
                 * Work in 2theta
@@ -629,8 +648,6 @@ class MacroMode:
 
 
     def testMacroValidity(self,filename):
-        specialMacroMarkups = ['end loop']
-
         # test the file
         file = open(filename,'r')
 
@@ -642,49 +659,66 @@ class MacroMode:
             if cleanline[0] == '#' or cleanline == '':
                 # comment lines are all right and so are blank lines
                 pass
-            elif valueInListOfDict(self.allEntryFieldsRequiringFloat,'clean name',cleanline):
+            elif valueInListOfDict(self.allEntryFieldsRequiringFloat,
+                    'clean name',cleanline):
                 nextline = file.readline().strip()
                 if not nextline:
                     file.close()
-                    raise UserInputException('%s is not a valid macro file because line %d ("%s") must be followed by a number' % (filename,linenumber,currentline) )
+                    raise UserInputException("""%s is not a valid \
+macro file because line %d ("%s") must be followed by a \
+number""" % (filename,linenumber,currentline) )
                 try:
                     float(nextline)
                 except:
                     file.close()
-                    raise UserInputException('%s is not a valid macro file because line %d ("%s") must be followed by a valid number' % (filename,linenumber,currentline) )
+                    raise UserInputException("""%s is not a valid \
+macro file because line %d ("%s") must be followed by a valid \
+number""" % (filename,linenumber,currentline) )
                 linenumber += 1
 
             elif valueInListOfDict(self.allEntryFieldsRequiringInt,'clean name',cleanline):
                 nextline = file.readline().strip()
                 if not nextline:
                     file.close()
-                    raise UserInputException('%s is not a valid macro file because line %d ("%s") must be followed by an integer' % (filename,linenumber,currentline) )
+                    raise UserInputException("""%s is not a valid \
+macro file because line %d ("%s") must be followed by an 
+integer""" % (filename,linenumber,currentline) )
                 try:
                     int(nextline)
                 except:
                     file.close()
-                    raise UserInputException('%s is not a valid macro file because line %d ("%s") must be followed by a valid integer' % (filename,linenumber,currentline) )
+                    raise UserInputException("""%s is not a valid \
+macro file because line %d ("%s") must be followed by a valid \
+integer""" % (filename,linenumber,currentline) )
                 linenumber += 1
             elif valueInListOfDict(self.allScales,'clean name',cleanline):
                 nextline = file.readline().strip()
                 if not nextline:
                     file.close()
-                    raise UserInputException('%s is not a valid macro file because line %d ("%s") must be followed by a number between 0 and 1' % (filename,linenumber,currentline) )
+                    raise UserInputException("""%s is not a valid \
+macro file because line %d ("%s") must be followed by a number \
+between 0 and 1""" % (filename,linenumber,currentline) )
                 try:
                     float(nextline)
                 except:
                     file.close()
-                    raise UserInputException('%s is not a valid macro file because line %d ("%s") must be followed by a valid number between 0 and 1' % (filename,linenumber,currentline) )
+                    raise UserInputException("""%s is not a valid \
+macro file because line %d ("%s") must be followed by a valid number \
+between 0 and 1""" % (filename,linenumber,currentline) )
                 if float(nextline)<0 or float(nextline)>1:
                     file.close()
-                    raise UserInputException('%s is not a valid macro file because line %d ("%s") must be followed by a valid number between 0 and 1' % (filename,linenumber,currentline) )
+                    raise UserInputException("""%s is not a valid \
+macro file because line %d ("%s") must be followed by a valid \
+number between 0 and 1""" % (filename,linenumber,currentline) )
                 linenumber += 1
 
             elif valueInListOfDict(self.allCheckBoxes,'clean name',cleanline):
                 nextline = cleanstring(file.readline().lower())
                 if not nextline or not nextline in ['select','deselect']:
                     file.close()
-                    raise UserInputException('%s is not a valid macro file because line %d ("%s") must be followed by the line "Select" or "Deselect".' % (filename,linenumber,currentline) )
+                    raise UserInputException("""%s is not a valid \
+macro file because line %d ("%s") must be followed by the line \
+"Select" or "Deselect".""" % (filename,linenumber,currentline) )
                 linenumber += 1
 
             elif valueInListOfDict(self.allCheckBoxMenuItems,'clean name',cleanline):
@@ -695,14 +729,52 @@ class MacroMode:
                 nextline = cleanstring(file.readline())
                 if not nextline or not nextline in self.GUI.colorMaps.getColorMapNames():
                     file.close()
-                    raise UserInputException('%s is not a valid macro file because line %d ("%s") must be followed by a line with a valid color map.' % (filename,linenumber,currentline) )
+                    raise UserInputException("""%s is not a valid \
+macro file because line %d ("%s") must be followed by a line with \
+a valid color map.""" % (filename,linenumber,currentline) )
                 linenumber += 1
 
             elif valueInListOfDict(self.standardQMenuItem,'clean name',cleanline):
                 nextline = file.readline().strip()
                 if not nextline: 
                     file.close()
-                    raise UserInputException('%s is not a valid macro file because line %d ("%s") must be followed by a standard Q file name' % (filename,linenumber,currentline) )
+                    raise UserInputException("""%s is not a valid \
+macro file because line %d ("%s") must be followed by a standard Q \
+file name""" % (filename,linenumber,currentline) )
+                linenumber += 1
+
+            elif valueInListOfDict(self.dataFileCommand,'clean name',cleanline):
+                # Test if it is a valid "Data File:" line
+                # This can be any number of file or folder names all seperated
+                # by some sort of whitespace.
+                nextline = file.readline().strip()
+                if not nextline: 
+                    file.close()
+                    raise UserInputException("""%s is not a valid \
+macro file because line %d ("%s") must be followed by filenames \
+and foldernames""" % (filename,linenumber,currentline) )
+
+                # this will raise an error if the line is not valid
+                # the error will be pretty for the user.
+                expandDataFile(nextline,filename,linenumber,currentline)
+                linenumber += 1
+
+            elif valueInListOfDict(self.multipleDataFilesCommand,'clean name',cleanline):
+                # Test if it is a valid "Multiple Data Files:".
+                # This can be a list of folder names and of lists enclosed by [ ] 
+                # Inside of the [ ] can be a list of file names all seperated
+                # by some sort of white space
+
+                nextline = file.readline().strip()
+                if not nextline: 
+                    file.close()
+                    raise UserInputException("""%s is not a valid \
+macro file because line %d ("%s") must be followed by a filenames \
+and foldernames""" % (filename,linenumber,currentline) )
+
+                # this will raise an error if the line is not valid
+                # the error will be pretty for the user.
+                expandMultipleDataFiles(nextline,filename,linenumber,currentline)
                 linenumber += 1
 
             elif valueInListOfDict(self.allLoadEntryFieldsRequiringFilename+ \
@@ -710,13 +782,18 @@ class MacroMode:
                 nextline = file.readline().strip()
                 if not nextline: 
                     file.close()
-                    raise UserInputException('%s is not a valid macro file because line %d ("%s") must be followed by a filename' % (filename,linenumber,currentline) )
+                    raise UserInputException("""%s is not a valid \
+macro file because line %d ("%s") must be followed by a \
+filename""" % (filename,linenumber,currentline) )
                 # if the filename does not contain "PATHNAME" and if it dose not contain
                 # "FILENAME" and if it dose not exist, then we must raise an error
-                if nextline.find('PATHNAME') == -1 and nextline.find('FILENAME') == -1 and \
-                        not os.path.exists(nextline):
+                if nextline.find('PATHNAME') == -1 and \
+                        nextline.find('FILENAME') == -1 and \
+                        not os.path.isfile(nextline):
                     file.close()
-                    raise UserInputException('%s is not a valid macro file because line %d ("%s") is followed by the filename "%s" which does not exist' % (filename,linenumber,currentline,nextline) )
+                    raise UserInputException("""%s is not a valid \
+macro file because line %d ("%s") is followed by the filename "%s" \
+which does not exist""" % (filename,linenumber,currentline,nextline) )
                 linenumber += 1
 
             elif valueInListOfDict(self.allOtherButtons,'clean name',cleanline):
@@ -728,21 +805,24 @@ class MacroMode:
                 nextline = file.readline().strip()
                 if not nextline:
                     file.close()
-                    raise UserInputException('%s is not a valid macro file because line %d ("%s") must be followed by a line with a Q data file.' % (filename,linenumber,currentline) )
+                    raise UserInputException("""%s is not a valid \
+macro file because line %d ("%s") must be followed by a line with \
+a Q data file.""" % (filename,linenumber,currentline) )
                 linenumber += 1
 
             elif valueInListOfDict(self.allColorInputs,'clean name',cleanline):
                 nextline = cleanstring(file.readline())
                 if not nextline:
                     file.close()
-                    raise UserInputException('%s is not a valid macro file because line %d ("%s") must be followed by a line with a valid color.' % (filename,linenumber,currentline) )
+                    raise UserInputException("""%s is not a valid \
+macro file because line %d ("%s") must be followed by a line with \
+a valid color.""" % (filename,linenumber,currentline) )
                 linenumber += 1
 
-            elif cleanline in specialMacroMarkups:
-                pass
-
             else:
-                raise UserInputException('%s is not a valid macro file because line %d ("%s") is not a recognized macro line.' % (filename,linenumber,currentline) )
+                raise UserInputException("""%s is not a valid macro \
+file because line %d ("%s") is not a recognized macro \
+line.""" % (filename,linenumber,currentline) )
 
             currentline = file.readline().strip()
             linenumber += 1
@@ -817,8 +897,6 @@ class MacroMode:
 
         # no more being in a macro
         self.GUI.macroLines = None
-
-
 
 
 class Macro:
@@ -993,10 +1071,12 @@ class Macro:
             # otherwise, go to the beginning of the loop with a new file from the list
             self.currentDiffractionFile = self.allDiffractionFiles.pop()
             self.nextMustBe = self.currentDiffractionFile
-            # This is a bit tricky, but the next thing to give is the line "Data File:"
-            # But after this, our code must go onto a line with just the filename of the
-            # next file to analize. To do this, we make sure our code goes into
-            # a new execution
+            # This is a bit tricky, but the next thing to give is the 
+            # line "Data File:"
+            # But after this, our code must go onto a line with just 
+            # the filename of the
+            # next file to analize. To do this, we make sure our 
+            # code goes into a new execution
             self.currentline = self.loopBeginLine-1
             return self.lines[self.currentline-1]['line']
 
@@ -1006,31 +1086,18 @@ class Macro:
             self.currentline+=1
             return temp
 
-        # if the last line was a data file line
-        if self.lines[self.currentline-1]['clean line'] == "data file":
-            # if we got here without coming back to it, find all files in it and start loop
+        # if the last line was a data file or multiple data file line
+        if self.lines[self.currentline-1]['clean line'] in ["data file",
+                "multiple data files"]:
+            # if we got here without coming back to it, find all files 
+            # in it and start loop
             if not self.inLoop:
-                # Call this funny function to allow spaces in file names.
-                # it also takes care of raising exceptions if some of the
-                # files do not exist
-                allDiffractionFilesOrDirectories = \
-                        General.splitPaths(self.lines[self.currentline]['line'])
-                self.allDiffractionFiles = []
-                for item in allDiffractionFilesOrDirectories:
-                    if os.path.isdir(item):
-                        dir = os.listdir(item)
-                        for another in dir:
-                            extension = getextension(another)
-                            if extension in allExtensions:
-                                self.allDiffractionFiles.append(
-                                        "\t"+os.path.join(item,another))
-                    else:
-                        extension = getextension(item)
-                        if extension in allExtensions:
-                            self.allDiffractionFiles.append("\t"+item)
-
-                if len(self.allDiffractionFiles) < 1:
-                    raise UserInputException("No valid diffraction files in the macro to analyze.")
+                if self.lines[self.currentline-1]['clean line']=="data file":
+                    self.allDiffractionFiles = expandDataFile(
+                            self.lines[self.currentline]['line'])
+                else:
+                    self.allDiffractionFiles = expandMultipleDataFiles(
+                            self.lines[self.currentline]['line'])
 
                 self.currentDiffractionFile = self.allDiffractionFiles.pop(0)
                 self.currentline+=1
@@ -1042,9 +1109,10 @@ class Macro:
         cleanline = self.lines[self.currentline]['clean line']
 
         # the end of the loop in the text can happen if the current line is
-        # "END LOOP", "data file:" or if we have stepped outside the image
-        if self.inLoop and cleanline in ['end loop','data file']:
-
+        # "END LOOP", "data file:", "multiple data file",  or if we have 
+        # stepped outside the image
+        if self.inLoop and cleanline in ['end loop','data file', \
+                'multiple data files']:
             # once we get to the end of the loop, we must make a decision.
             # if we have looked through all the files in the loop
             # we want to exit
@@ -1053,8 +1121,9 @@ class Macro:
                 self.inLoop = 0
                 self.nextMustBe = None
 
-                if cleanline == 'data file':
-                    # if the current line is data file, we want to continue 
+                if cleanline in ['data file','multiple data files']:
+                    # if the current line is data file or multiple data 
+                    # files, we want to continue 
                     # execution on this line as though we just came to it.
                     # So, no advance
                     return self.next()
@@ -1067,10 +1136,11 @@ class Macro:
             # otherwise, go to the beginning of the loop with a new file from the list
             self.currentDiffractionFile = self.allDiffractionFiles.pop()
             self.nextMustBe = self.currentDiffractionFile
-            # This is a bit tricky, but the next thing to give is the line "Data File:"
-            # But after this, our code must go onto a line with just the filename of the
-            # next file to analize. To do this, we make sure our code goes into
-            # a new execution
+            # This is a bit tricky, but the next thing to give is the line 
+            # "Data File:" or "Multiple Data Files:"
+            # But after this, our code must go onto a line with just the 
+            # filename of the next file to analize. To do this, we make 
+            # sure our code goes into a new execution
             self.currentline = self.loopBeginLine-1
             return self.lines[self.currentline-1]['line']
 
@@ -1078,7 +1148,7 @@ class Macro:
         # diffraction file and FILENAME with the corresponding file.
         # This would mean that our current diffraction file is PATHNAME/FILENAME.mar3450
         if self.currentDiffractionFile != None:
-            path,filename = os.path.split(self.currentDiffractionFile.strip())
+            path,filename = self.getPathAndFilename(self.currentDiffractionFile)
             path = removeTrailingCharacters(path,[os.sep])
             line = line.replace('PATHNAME',path)
             basename = os.path.splitext(filename)[0]
@@ -1088,11 +1158,338 @@ class Macro:
         return line
 
 
+    def getPathAndFilename(self,string):
+        string = string.strip()
+        # test if it is of the form "[ file_one file_two ]" or if 
+        # it is of the form "file_one"
+            
+        # this regexp will pull out anyting inside of the [ ... ]
+
+        bracketpattern= r"""\[(.*?)\]"""
+        bracketregexp = re.compile(bracketpattern, re.DOTALL)
+        brackets = bracketregexp.findall(string)
+        if len(brackets) == 0:
+            # then it is of the form "file_one"
+            # with NO brackets, then just look
+            # at the one file
+            path,filename = os.path.split(string)
+        else:
+            # otherwise, it is a list of files inside 
+            # the string, so break them up
+            files = General.splitPaths(brackets[0])
+
+            # since they all have the same path, just look at the first one
+            path = os.path.split(files[0])[0]
+            filename = "MULTIPLE_FILES"
+        
+        return path,filename
+
+
+def testProperBrackets(string):
+    """ This function takes in a string and determines
+        if the number and order fo bracketes is allowed for
+        a macro line which follows a "Multiple Data Files" line.
+        This string can contain lists bracketed off like [ ... ]
+        and it can contain any number of these. But every opening
+        bracket must be closed, there can be no nested bracketes,
+        and a closing bracket must always close an opening 
+        bracket."""
+        
+    leftfound = 0 # if we have found a left bracket yet
+
+    # go through the string
+    for index in range(len(string)): 
+
+        # if we find a left bracket
+        if string[index] == '[': 
+
+            # error if we've already found a left bracket
+            if leftfound == 1: 
+                return 0
+            
+            # otherwise say that we've already found this one
+            leftfound = 1
+
+        # if we find a right bracket
+        if string[index] == ']':
+            
+            # error if we haven't yet found an opening bracket
+            if leftfound == 0:
+                return 0
+
+            # otherwise, this closing bracket closes the last open bracket.
+            leftfound = 0
+    
+    # error if we are left with an open bracket
+    if leftfound != 0:
+        return 0
+
+    # otherwise, the string looks good
+    return 1
+        
+
+def expandMultipleDataFiles(string,filename='',linenumber=-1,currentline=0):
+    """ Takes in a string which is a list of file and folder 
+        names. This string can contain list of file names 
+        enclosed in [ and ] brackets. These lists msut be of 
+        the form 
+
+            "[ file1 file2 file3 ... ]"
+        
+        All of the filenames within brackets much be from the 
+        same folder, they must all be of the same extension, 
+        and they must all exist. There can be as many of these 
+        lists as desired
+        put next to eachother in the string. In addition, there
+        can be folders in this list. Any of the folders must
+        be real folders and there can be no stand alone folders.
+        So in total, the input will look something like
+            
+            "[ file1 file2 file3 ] folder1 [ file4 file 6] folder 2
+        
+        The output of this function is a list of strings each
+        of the form
+
+            "[ file1 file2 file3 ... ]"
+
+        The lists are taken from the input string and by looking
+        inside each of the folders. The program will take all of
+        the diffraction files from each of the subfolders and
+        the given folders and put them into their own lists. 
+        So it just makes a bunch of [ and ] bracket enclosed lists 
+        and returns them.
+
+        An exception is rasied if any of the files or folders 
+        do not exist. An exception is raised if folders are given
+        inside of brackets or files outside of them. An exception
+        is raised if any of the files inside of a particular bracket
+        have different paths, different extensions, or are of different
+        file formats. An exception is also raised if the program can't
+        find any files to put into bracketed lists to return to the
+        user (IE, if only a folder is given and nothing is in the folder).
+
+        filename, linenumber, and currentline are used to format nice 
+        exceptions but are optional. """
+
+    # get all the lists of file names bracketed off with[]
+    pattern = r"""\[.*?\]"""
+    regexp = re.compile(pattern, re.DOTALL)
+    brackets = regexp.findall(string)
+
+    allDiffractionFiles = []
+
+    if not testProperBrackets(string):
+        raise UserInputException("""%s is not a valid macro file \
+because line %d ("%s") is followed by the line ("%s") which does \
+not contain properly nested brackets \
+[ and ].""" % (filename,linenumber,currentline,string) )
+
+    # check if each of the files in the bracket is a real file
+    for loop in brackets:
+        
+        # get rid of the brackets
+        bracket = loop[1:-1]
+        try:
+            # get all files within brackets
+            split = General.splitPaths(bracket)
+        except:
+            raise UserInputException("""%s is not a valid macro \
+file because line %d ("%s") is followed by the line ("%s") which \
+contains the expression %s which cannot be parsed into unique \
+existing filenames.""" % (filename,linenumber,currentline,string,loop) )
+
+        for each in split:
+            # ensure all the files in each bracket exist
+            if not os.path.isfile(each):
+                raise UserInputException("""%s is not a valid macro \
+file because line %d ("%s") is followed by the line ("%s") which \
+contains the term %s which contains some things that are not \
+all files. Only files can come between [ and ] \
+brackets.""" % (filename,linenumber,currentline,string,loop) )
+
+            # ensure all the files in each bracket have the same 
+            # directory
+            if os.path.dirname(each) != os.path.dirname(split[0]):
+                raise UserInputException("""%s is not a valid macro \
+file because line %d ("%s") is followed by the line ("%s") which \
+contains the term %s which contains several files from diffrent \
+directories. All files loaded into the program with the [ and ] \
+notation must be from the same folder. This is to ensure that the \
+PATHNAME and FILENAME syntax remain \
+meaningful""" % (filename,linenumber,currentline,string,loop) )
+            
+            # ensure all the files in each bracket have the same
+            # extension
+            if General.getextension(each) != General.getextension(split[0]):
+                raise UserInputException("""%s is not a valid macro \
+file because line %d ("%s") is followed by the line ("%s") which \
+contains the term %s which contains several files with different \
+extensions. All diffraction files within a [ and ] bracket must \
+have the same extension. """ % (filename,linenumber,currentline,string,loop) )
+
+        # If no errors were raised and all the files in the bracket
+        # are good, all the bracket to the return list
+        allDiffractionFiles.append('\t'+loop)
+
+    # get all the folders inbetween ] ... [
+    pattern = r"""\]([^\[\]]*?)\["""
+    regexp= re.compile(pattern, re.DOTALL)
+    folderstrings = regexp.findall(string)
+
+    # get all folders before the first [
+    pattern = r"""^([^\[\]]*?)\["""
+    regexp= re.compile(pattern, re.DOTALL)
+    folderstrings += regexp.findall(string)
+
+    # get all folders after the last ]
+    pattern = r"""\]([^\[\]]*?)$"""
+    regexp= re.compile(pattern, re.DOTALL)
+    folderstrings += regexp.findall(string)
+
+    # get all folders when there are no [
+    # or ] in the entire string
+    pattern = r"""^([^\[\]]*?)$"""
+    regexp= re.compile(pattern, re.DOTALL)
+    folderstrings += regexp.findall(string)
+
+    folders = []
+    # loop over all the strings containing folders
+    for temp in folderstrings:
+        try:
+            # get all the acutal folders names from the string
+            split = General.splitPaths(temp)
+            folders += split
+        except UserInputException:
+            raise UserInputException("""%s is not a valid macro \
+file because line %d ("%s") is followed by the line ("%s") and \
+because it contains the expression %s which cannot be parsed into \
+unique existing folders.""" % (filename,linenumber,currentline,string,temp) )
+
+    # now, all the user input folders are in the folders array
+
+    for folder in folders:
+        # make sure all the folders are direcotires
+        if not os.path.isdir(folder.strip()):
+            raise UserInputException("""%s is not a valid macro file \
+because line %d ("%s") is followed by the line ("%s") and because it \
+contains the expression %s which is not an existing \
+folder.""" % (filename,linenumber,currentline,string,folder) )
+    
+    # loop over all given folders
+    for folder in folders:
+        # find all subfolders
+        subfolders = General.getallsubfolders(folder)
+        
+        # loop over the subfolders
+        for subfolder in subfolders:
+            # get all files in the subfolder
+            files = General.getallfileswithextensions(subfolder,allExtensions)
+            allFilesInSubfolder = []
+
+            # loop over all the files in the subfolder
+            for file in files:
+                extension = General.getextension(file)
+
+                # make sure all the files that are found have
+                # the same extension
+                if extension != General.getextension(files[0]):
+                    raise UserInputException("""%s is not a valid \
+macro file because line %d ("%s") is followed by the line ("%s") \
+and because it contains the folder %s which has the subfolder \
+%s which contains diffraction data of several different file \
+formats. A macro can only add togethers files from subfolders \
+if they are all of the same file \
+format.""" % (filename,linenumber,currentline,string,folder,subfolder) )
+
+                # add all the diffraction files to a list
+                allFilesInSubfolder.append(
+                        " "+os.path.join(folder,subfolder,file))
+
+            # if there are some files in the subfolder, add
+            # them to the return list bracketed off
+            if len(allFilesInSubfolder) > 0:
+                allDiffractionFiles.append('\t[ '+ \
+                        General.joinPaths(allFilesInSubfolder)+' ]')
+
+    # Raise an error if no return stuff was found
+    if len(allDiffractionFiles) < 1:
+        raise UserInputException("""%s is not a valid macro file \
+because line %d ("%s") is followed by the line ("%s") and because \
+no valid diffraction data was found in this \
+line.""" % (filename,linenumber,currentline,string) )
+            
+    return allDiffractionFiles
+
+
+def expandDataFile(string,filename='',linenumber=-1,currentline=''):
+    """ Takes in a string which is a list of files and folders.
+        It then expands this string into a list of files as follows.
+        Any of the files are put into the list. Any of the folders
+        
+        An exception is raised if some of the items that are given 
+        are not files or folders. An exception will be raised if
+        any of the files that are given do not have a standard
+        file extension. An exception will be raised if the final
+        list does not have any files in it.
+
+        filename, linenumber, and currentline are used to format 
+        nice exceptions but are all optional... """
+
+    # split the string into a list of file and folder names
+    try:
+        allDiffractionFilesOrDirectories = \
+                General.splitPaths(string)
+    except UserInputException:
+        raise UserInputException("""%s is not a valid macro \
+file because line %d ("%s") is followed by "%s" which can \
+not be parsed into a list of files and \
+folders.""" % (filename,linenumber,currentline,string) )
+        
+
+    allDiffractionFiles = []
+
+    # loop over all the files or folders
+    # an error would have been preivously 
+    # been raised unless everything in the
+    # list is a file or folder.
+    for file in allDiffractionFilesOrDirectories:
+
+        if os.path.isdir(file):
+            # get all the items in each folder
+            dir = General.getallfileswithextensions(file,allExtensions)
+            for another in dir:
+                allDiffractionFiles.append(
+                        "\t"+os.path.join(file,another))
+        else:
+            # put all the files given to the macro direclty
+            # into the list of files
+            extension = General.getextension(file)
+            if extension in allExtensions:
+                allDiffractionFiles.append("\t"+file)
+            else:
+                # if the given file is of a bad extension,
+                # raise an error
+                raise UserInputException("""%s is not a valid \
+macro file because line %d ("%s") is followed by "%s" which \
+contains the file %s which does not have a recognizable \
+extension.""" % (filename,linenumber,currentline,string,file) )
+
+    # if no files were found (either in one of the 
+    # folders or given explicilty to the program
+    # in the macro, then raise an error
+    if len(allDiffractionFiles) < 1:
+        raise UserInputException("""%s is not a valid macro file \
+because line %d ("%s") is followed by "%s" and no diffraction files \
+can be found in this string or in folders that are given in this \
+string""" % (filename,linenumber,currentline,string) )
+        
+    return allDiffractionFiles
+
+
 def test():
     import doctest
     import MacroMode
     doctest.testmod(MacroMode,verbose=0)
-        
+    
 if __name__ == "__main__":
     test()		
-

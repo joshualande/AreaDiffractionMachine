@@ -161,9 +161,8 @@ class DiffractionData:
 
             filename = ""
             # store all filenames in one string
-            for index in range(len(allData)-1):
-                filename += allData[index].filename.strip() + ", "
-            filename += allData[len(allData)-1].filename.strip()
+            for index in range(len(allData)):
+                filename += allData[index].filename.strip() + " "
 
             self.theDiffractionData = allData.pop() # store all iamges in one
 

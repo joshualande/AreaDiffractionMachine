@@ -170,7 +170,7 @@ class Cake:
 
         # I am not exactly sure why the last 2 numbers would ever not be 1
         # But I am trying to stick to convention.
-        file.write("# Cake of:%s \n" % diffractionDataName)
+        file.write("# Cake of: %s \n" % diffractionDataName)
         file.write("# Data Caked on "+time.asctime()+"\n")
         file.write("# Calibration data used to make the cake:\n")
         self.calibrationData.writeCommentString(file)
