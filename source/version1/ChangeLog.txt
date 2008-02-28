@@ -1,8 +1,12 @@
 Change Log.
 
-Changes for version 1.0.0 - (The SVN revision for version 1.0.0 is r100):
+Changes for version 1.0.1 - (The SVN revision for it is r104):
+    
+    -   Added support for the ESRF Data Format (.edf). 
 
-    - Adding code so that from within a macro the program can 
-      read in multiple files and add them together. This feature
-      can also be incorporated into a loop. See the manual
-      for documentation of this feature.
+Changes for version 1.0.0 - (The SVN revision for it is r100):
+
+    -   Adding code so that from within a macro the program can 
+        read in multiple files and add them together. This feature
+        can also be incorporated into a loop. See the manual
+        for documentation of this feature.

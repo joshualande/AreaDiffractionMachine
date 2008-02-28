@@ -2802,6 +2802,7 @@ class Main:
         filenames = tkFileDialog.askopenfilenames(
             filetypes=[ ('Mar PCK Format','*.mar2300 *.mar3450'), 
                 ('Mar CCD Format','*.mccd'), 
+                ('ESRF Data Format','*.edf'),
                 ('TIFF','*.tif *.tiff'), 
                 ("All files", "*"), ], title="Load Diffraction Image")
 
@@ -2823,6 +2824,8 @@ class Main:
             self.extension = "mar2300"
         if result == "Mar CCD Format":
             self.extension = "mccd"
+        if result == "ESRF Data Format":
+            self.extension = "edf"
         if result == "TIFF":
             self.extension = "tiff"
         if result == "Cancel":
@@ -3171,7 +3174,8 @@ class Main:
 
             # unless you get a good extension, give up and return
             if self.extension != "mar3450" and self.extension != 'mar2300' \
-                    and self.extension != "mccd" and self.extension != 'tiff': return 
+                    and self.extension != "mccd" and self.extension != 'tiff' \
+                    and self.extension != "edf": return 
 
             self.diffractionData = DiffractionData(filenames,extension=self.extension)
 

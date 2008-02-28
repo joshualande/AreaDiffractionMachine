@@ -23,6 +23,7 @@ from IntegrateIntensity import IntegrateIntensity
 import ColorMaps
 import MarXXXX
 import MarCCD
+import ESRF
 import Tiff
 import Transform
 import DiffractionAnalysisWrap 
@@ -30,7 +31,7 @@ from Exceptions import UnknownFiletypeException, UserInputException
 
 
 # This is here for other objects to refer to
-allExtensions = ['.mccd','.mar2300','.tiff','.tif','.mar3450']
+allExtensions = ['.mccd','.mar2300','.edf','.tiff','.tif','.mar3450']
 
 
 class DiffractionData:
@@ -150,6 +151,8 @@ class DiffractionData:
                     allData.append(MarXXXX.MarXXXX(file))
                 elif extension == "mccd":
                     allData.append(MarCCD.MarCCD(file))
+                elif extension == "edf":
+                    allData.append(ESRF.ESRF(file))
                 elif extension in ["tiff", "tif"]:
                     allData.append(Tiff.Tiff(file))
                 else:
@@ -189,6 +192,8 @@ class DiffractionData:
                 self.theDiffractionData = MarXXXX.MarXXXX(filename)
             elif extension == "mccd":
                 self.theDiffractionData = MarCCD.MarCCD(filename)
+            elif extension == "edf":
+                self.theDiffractionData = ESRF.ESRF(filename)
             elif extension in ["tiff", "tif"]:
                 self.theDiffractionData = Tiff.Tiff(filename)
             else:
