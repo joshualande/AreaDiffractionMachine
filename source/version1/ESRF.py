@@ -50,7 +50,9 @@ ends the header file.""" % filename)
         regexp= re.compile(pattern, re.DOTALL | re.IGNORECASE )
         datatype = regexp.findall(header)
         if len(datatype) != 1:
-            raise UserInputException("Not found...")
+            raise UserInputException("""Cannot read the ESRF Data \
+Format file %s because the program cannot find the header field \
+DataType in the header of the file.""" % filename)
         datatype = datatype[0]
         if datatype.lower() == "unsignedlong":
             depth = 4
@@ -59,43 +61,61 @@ ends the header file.""" % filename)
             depth = 2
             typecode = Numeric.UInt16
         else:
-            raise UserInputException("")
+            raise UserInputException("""Cannot read the ESRF Data \
+Format file %s because the program cannot convert the header field \
+DataType into an integer.""" % filename)
         
         # get out the Dim_1 header field
         pattern = r"""Dim_1\s*=\s*(\w+)\s*;"""
         regexp= re.compile(pattern, re.DOTALL | re.IGNORECASE )
         dim_1 = regexp.findall(header)
         if len(dim_1) != 1:
-            raise UserInputException("Not found...")
+            raise UserInputException("Cannot read the ESRF Data \
+Format file %s because the program cannot find the header field \
+Dim_1 in the header of the file.""" % filename)
         try:
             height = int(dim_1[0]) 
         except:
-            raise UserInputException("")
+            raise UserInputException("""Cannot read the ESRF Data \
+Format file %s because the program cannot convert the header field \
+Dim_1 into an integer.""" % filename)
 
         # get out the Dim_2 header field
         pattern = r"""Dim_2\s*=\s*(\w+)\s*;"""
         regexp= re.compile(pattern, re.DOTALL | re.IGNORECASE )
         dim_2 = regexp.findall(header)
         if len(dim_2) != 1:
-            raise UserInputException("")
+            raise UserInputException("Cannot read the ESRF Data \
+Format file %s because the program cannot find the header field \
+Dim_2 in the header of the file.""" % filename)
+
         try:
             width = int(dim_2[0]) 
         except:
-            raise UserInputException("Dim_1 not an integer...")
+            raise UserInputException("""Cannot read the ESRF Data \
+Format file %s because the program cannot convert the header field \
+Dim_2 into an integer.""" % filename)
 
         # get out the size header field
         pattern = r"""Size\s*=\s*(\w+)\s*;"""
         regexp= re.compile(pattern, re.DOTALL | re.IGNORECASE )
         size = regexp.findall(header)
         if len(size) != 1:
-            raise UserInputException("")
+            raise UserInputException("Cannot read the ESRF Data \
+Format file %s because the program cannot find the header field \
+size in the header of the file.""" % filename)
         try:
             size = int(size[0])
         except:
-            raise UserInputException("")
+            raise UserInputException("""Cannot read the ESRF Data \
+Format file %s because the program cannot convert the header field \
+size into an integer.""" % filename)
 
         if height*width*depth != size:
-            raise UserInputException("")
+            raise UserInputException("""Cannot read the ESRF Data \
+Format file %s because the program calculated dim_1 x dim_2 x \
+the number of bytes in each pixel and found this number to be \
+different from the "size" input given in the header.""" % filename)
             
         # get out the data    
         datastring=file.read(width*height*depth)
