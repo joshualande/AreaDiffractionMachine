@@ -62,8 +62,10 @@ DataType in the header of the file.""" % filename)
             typecode = Numeric.UInt16
         else:
             raise UserInputException("""Cannot read the ESRF Data \
-Format file %s because the program cannot convert the header field \
-DataType into an integer.""" % filename)
+Format file %s because the program can only open edf data if the \
+DataType field is set to "UnsignedLong" or "UnsignedShort". \
+This is to say that the program can only read ESRF Data that is
+stored as 2 or 4 byte integers.""" % filename)
         
         # get out the Dim_1 header field
         pattern = r"""Dim_1\s*=\s*(\w+)\s*;"""
