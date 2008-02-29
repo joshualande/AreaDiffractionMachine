@@ -2,7 +2,7 @@ Change Log for version 1 of the Area Diffraction Machine
 
 -------
 
-Changes for version 1.0.2 - (The SVN revision for it is r107)
+Changes for version 1.0.2 - (The SVN revision for it is r108)
 
     -   Fixed a bug in the way ESRF Data is read on 
         Windows. 

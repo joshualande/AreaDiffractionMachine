@@ -214,7 +214,10 @@ class DiffractionData:
         if getextension(filename) == ".edf":
             edf = EdfFile(filename)
             #You can write any relevant information in the dictionnary.
-            edf.WriteImage({},self.theDiffractionData.data) 
+            edf.WriteImage({'Title':"Edf file converted by the Area Diffraction Machine"},
+                    Numeric.transpose(self.theDiffractionData.data),
+                    DataType= "SignedInteger",
+                    Append=0)
             del edf # to force file close
             return
 
