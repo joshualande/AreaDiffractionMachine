@@ -20,10 +20,12 @@ import Fit
 # the object Cake has
 import Cake
 from IntegrateIntensity import IntegrateIntensity
+from General import getextension
 import ColorMaps
 import MarXXXX
 import MarCCD
 import ESRF
+from EdfFile import EdfFile
 import Tiff
 import Transform
 import DiffractionAnalysisWrap 
@@ -207,6 +209,16 @@ class DiffractionData:
             drawQLines=None,drawdQLines=None,QData=None,calibrationData=None,
             drawPeaks=None,peakList=None, qLinesColor = None, dQLinesColor = None,
             peakLinesColor = None):
+
+        # save EDF data specially
+        if getextension(filename) == ".edf":
+            edf = EdfFile(filename)
+            #You can write any relevant information in the dictionnary.
+            edf.WriteImage({},self.theDiffractionData.data) 
+            del edf # to force file close
+            return
+
+        # otherwise, try to save it using the PIL
 
         image = self.getDiffractionImage(colorMaps,colorMapName,
                 maskedPixelInfo,

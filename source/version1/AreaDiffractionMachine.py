@@ -2313,7 +2313,8 @@ class Main:
         if filename in ['',()]:
             defaultextension = ".jpg"
             filename = tkFileDialog.asksaveasfilename(
-                    filetypes=[('JPEG','*.jpg'),('GIF','*.gif'),
+                    filetypes=[('ESRF Data Format','*.edf'),
+                        ('JPEG','*.jpg'),('GIF','*.gif'),
                         ('EPS','*.eps'),('PDF','*.pdf'),('BMP','*.bmp'),('PNG','*.png'),
                         ('TIFF','*.tiff'), ('All Files','*')],
                     defaultextension = defaultextension,
