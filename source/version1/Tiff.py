@@ -27,9 +27,6 @@ class Tiff:
 
         self.size = max(img.size[0],img.size[1])
 
-        print 'file loaded, about the convert'
-        print 'mode = ',img.mode
-
         img = img.convert('I') #convert to int
         temp = Numeric.fromstring(img.tostring(), Numeric.Int32)
 

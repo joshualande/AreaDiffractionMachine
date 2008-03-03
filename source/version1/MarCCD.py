@@ -2,6 +2,7 @@ from Exceptions import UserInputException
 import MarCCDWrap
 import Numeric
 import Image
+from Tiff import Tiff
 
 class MarCCD:
     """ An object for dealing with MarCCD data. Read the header
@@ -32,22 +33,11 @@ class MarCCD:
                     MarCCDWrap.get_header(filename)
         except:
             raise UserInputException("Unable to open MarCCD data file %s." % filename)
-
-        if (width != height):
-            raise UserInputException("Cannot open %s because the header is not formated properly" % filename)
-
-        if self.headerDistance <= 0:
-            self.headerDistance = None
-        if self.headerWavelength <= 0:
-            self.headerWavelength = None
-
-        self.size = width
-
-        self.filename = filename
-
-        img = Image.open(filename)
-
-        img = img.convert('I') #convert to int
-        self.data = Numeric.fromstring(img.tostring(), Numeric.Int)
-        self.data.shape = self.size,self.size
-
+            
+        # since marCCD data is just tiff data, we can just open the
+        # file as though it is a tiff image and get the data and
+        # dimensions out of it.
+        temp = Tiff(filename)
+        self.data = temp.data
+        self.size = temp.size
+        
