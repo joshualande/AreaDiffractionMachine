@@ -785,10 +785,13 @@ and foldernames""" % (filename,linenumber,currentline) )
                     raise UserInputException("""%s is not a valid \
 macro file because line %d ("%s") must be followed by a \
 filename""" % (filename,linenumber,currentline) )
-                # if the filename does not contain "PATHNAME" and if it dose not contain
-                # "FILENAME" and if it dose not exist, then we must raise an error
+                # if the filename does not contain "PATHNAME", "FILENAME",
+                # "FOLDERPATH", and "FOLDERNAME", and
+                # if it dose not exist, then we must raise an error
                 if nextline.find('PATHNAME') == -1 and \
                         nextline.find('FILENAME') == -1 and \
+                        nextline.find('FOLDERPATH') == -1 and \
+                        nextline.fild('FOLDERNAME') == -1 and \
                         not os.path.isfile(nextline):
                     file.close()
                     raise UserInputException("""%s is not a valid \
@@ -936,6 +939,10 @@ class Macro:
         example, save the cake data with a corresponding name for
         each of the files that they are looping over.
 
+        It will also replace FOLDERNAME with the name of the folder
+        that the current diffraction file is in and it will replace
+        FOLDERPATH with the path leading up to the folder contaning
+        the folder with the file in it.
 
         Here are some doctests to explain how the object works
 
@@ -1144,15 +1151,26 @@ class Macro:
             self.currentline = self.loopBeginLine-1
             return self.lines[self.currentline-1]['line']
 
-        # try to parse the line to replace PATHNAME with the path of the current
-        # diffraction file and FILENAME with the corresponding file.
-        # This would mean that our current diffraction file is PATHNAME/FILENAME.mar3450
+        # try to parse the line to replace PATHNAME with the 
+        # path of the current
+        # diffraction file and FILENAME with the corresponding 
+        # file.
+        # This would mean that our current diffraction file 
+        # is PATHNAME/FILENAME.mar3450
+        # Replace FOLDERPATH with the path leading up to the
+        # folder and FOLDERNAME with the name of the folder.
         if self.currentDiffractionFile != None:
-            path,filename = self.getPathAndFilename(self.currentDiffractionFile)
-            path = removeTrailingCharacters(path,[os.sep])
-            line = line.replace('PATHNAME',path)
+            pathname,filename = self.getPathAndFilename(self.currentDiffractionFile)
+            pathname = removeTrailingCharacters(pathname,[os.sep])
+            line = line.replace('PATHNAME',pathname)
+
             basename = os.path.splitext(filename)[0]
             line = line.replace('FILENAME',basename)
+
+            # splitting the path gets out the folder 
+            folderpath,foldername = os.path.split(pathname)
+            line = line.replace('FOLDERPATH',folderpath)
+            line = line.replace('FOLDERNAME',foldername)
 
         self.currentline += 1
         return line
@@ -1320,7 +1338,7 @@ file because line %d ("%s") is followed by the line ("%s") which \
 contains the term %s which contains several files from diffrent \
 directories. All files loaded into the program with the [ and ] \
 notation must be from the same folder. This is to ensure that the \
-PATHNAME and FILENAME syntax remain \
+PATHNAME, FILENAME, FOLDERNAME, and FOLDERPATH syntax remain \
 meaningful""" % (filename,linenumber,currentline,string,loop) )
             
             # ensure all the files in each bracket have the same
