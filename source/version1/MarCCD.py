@@ -19,25 +19,27 @@ class MarCCD:
     
     def __init__(self,filename):
 
+        self.filename = filename
+
         try:
-            file = open(filename,'r')
+            file = open(self.filename,'r')
             file.close()
         except IOError:
-            raise UserInputException('%s does not exist' % filename)
+            raise UserInputException('%s does not exist' % self.filename)
 
         # first read header
 
         try:
             width,height,self.headerDistance,self.headerPixelLength, \
                     self.headerPixelHeight,self.headerWavelength = \
-                    MarCCDWrap.get_header(filename)
+                    MarCCDWrap.get_header(self.filename)
         except:
-            raise UserInputException("Unable to open MarCCD data file %s." % filename)
+            raise UserInputException("Unable to open MarCCD data file %s." % self.filename)
             
         # since marCCD data is just tiff data, we can just open the
         # file as though it is a tiff image and get the data and
         # dimensions out of it.
-        temp = Tiff(filename)
+        temp = Tiff(self.filename)
         self.data = temp.data
         self.size = temp.size
         
