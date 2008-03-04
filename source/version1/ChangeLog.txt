@@ -2,6 +2,12 @@ Change Log for version 1 of the Area Diffraction Machine
 
 -------
 
+Changes for version 1.0.3 - (The SVN revision for it is r111)
+
+    -   Improving support of marCCD data (.mccd).
+    -   Introducing the new macro commands
+        FOLDERPATH and FOLDERNAME.
+
 Changes for version 1.0.2 - (The SVN revision for it is r108)
 
     -   Fixed a bug in the way ESRF Data is read on 
