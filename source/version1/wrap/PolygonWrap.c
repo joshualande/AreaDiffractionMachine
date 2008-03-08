@@ -3,7 +3,6 @@
 #include "polygon.c"
 
 
-
 static PyObject * PolygonWrap_insideWhichPolygon(PyObject *self, PyObject *args) {
     PyArrayObject * polygonsX;
     PyArrayObject * polygonsY;
@@ -23,8 +22,30 @@ static PyObject * PolygonWrap_insideWhichPolygon(PyObject *self, PyObject *args)
 }
 
 
+
+static PyObject * PolygonWrap_isInPolygons(PyObject *self, PyObject *args) {
+    PyArrayObject * polygonsX;
+    PyArrayObject * polygonsY;
+    PyArrayObject * polygonBeginningsIndex;
+    PyArrayObject * polygonNumberOfItems;
+
+    double x,y;
+
+    PyArg_ParseTuple(args,"O!O!O!O!dd",
+            &PyArray_Type,&polygonsX,
+            &PyArray_Type,&polygonsY,
+            &PyArray_Type,&polygonBeginningsIndex,
+            &PyArray_Type,&polygonNumberOfItems,&x,&y);
+
+    return Py_BuildValue("i",isInPolygons(polygonsX,polygonsY,
+            polygonBeginningsIndex,polygonNumberOfItems,x,y));
+}
+
+
+
 static PyMethodDef PolygonWrap_methods[] = {
     {"insideWhichPolygon",PolygonWrap_insideWhichPolygon,METH_VARARGS,""},
+    {"isInPolygons",PolygonWrap_isInPolygons,METH_VARARGS,""},
     {NULL,NULL}
 };
 

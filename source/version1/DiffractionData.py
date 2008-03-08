@@ -255,7 +255,7 @@ class DiffractionData:
             if peakLinesColor == None:
                 raise Exception("Cannot  add peaks to the saved iamge until the peak color is set.")
 
-            MakeDiffractionImage.addPeaksDiffractionImage(image,peakList,peakLinesColor)
+            MakeDiffractionImage.addPeaksDiffractionImage(image,peakList,maskedPixelInfo,peakLinesColor)
 
         # by default, return entire image
         if pixel1X != None and pixel1Y != None and pixel2X != None and pixel2Y !=None:
@@ -409,7 +409,7 @@ class DiffractionData:
         return data
 
 
-    def fit(self,initialGuess,qData,numberOfChi=None,stddev=None,peakList=None):
+    def fit(self,initialGuess,qData,maskedPixelInfo,numberOfChi=None,stddev=None,peakList=None):
         if (numberOfChi==None and peakList==None):
             raise Exception("Cannot fit the calibration data unless either the number of chi values or a peak list are given.")
 
@@ -420,10 +420,10 @@ class DiffractionData:
 
         # do fitting
         return Fit.fit(self.theDiffractionData.data,
-                initialGuess,peakList)
+                initialGuess,peakList,maskedPixelInfo)
 
 
-    def savePeakListToFile(self,filename,initialGuess,qData,numberOfChi,stddev):
+    def savePeakListToFile(self,filename,initialGuess,qData,numberOfChi,maskedPixelInfo,stddev):
         peakList = Fit.getPeakList(self.theDiffractionData.data,qData,
                 initialGuess,numberOfChi,stddev)
 
@@ -433,8 +433,13 @@ class DiffractionData:
         file.write("# Calculated on "+time.asctime()+"\n")
         file.write("# Calibration data used to find peaks:\n")
         initialGuess.writeCommentString(file)
+
+        if maskedPixelInfo.doPolygonMask and maskedPixelInfo.numPolygons() > 0:
+            file.write("# All peaks inside of polygon mask(s) were ignored.\n")
+            file.write(maskedPixelInfo.writePolygonCommentString())
+
         file.write("#\tx\ty\tRealQ\tFitQ\tchi\twidth\tintensity\t2theta\n")
-        for peak in peakList:
+        for peak in peakList.getMaskedPeakList(maskedPixelInfo):
             x,y,realQ,fitQ,chi,width = peak
             
             intensity=self.getPixelValueBilinearInterpolation(x,y)

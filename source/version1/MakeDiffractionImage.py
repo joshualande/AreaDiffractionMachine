@@ -75,11 +75,11 @@ def getDiffractionImage(data,lowerBound,upperBound,logScale,
     return img
 
 
-def addPeaksDiffractionImage(image,peakList,color):
+def addPeaksDiffractionImage(image,peakList,maskedPixelInfo,color):
     draw = ImageDraw.Draw(image)
 
     halflength = 15
-    for x,y,qReal,qFit,chi,width in peakList:
+    for x,y,qReal,qFit,chi,width in peakList.getMaskedPeakList(maskedPixelInfo):
         draw.line((x-halflength,y-halflength) + (x+halflength,y+halflength),fill=color)
         draw.line((x+halflength,y-halflength) + (x-halflength,y+halflength),fill=color)
 

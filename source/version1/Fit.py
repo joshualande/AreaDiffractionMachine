@@ -13,32 +13,20 @@ import CalibrationData
 import Transform
 from General import frange
 import FitWrap
+import PeakList
 from Exceptions import UserInputException
 
 
-def getPeakList(data,qData,initialGuess,numberOfChi,stddev,verbose=1):
-    return findPeaks(data,qData,initialGuess,numberOfChi,stddev,verbose)
 
-
-def fit(data,initialGuess,peakList,verbose=1):
+def fit(data,initialGuess,peakList,maskedPixelInfo,verbose=1):
 
     print 
     print 'Performing the image calibration'
 
-    # create a nice Numeric data strucure to store all of the peak stuff in.
-    # This lets us read our data easily once we get into C
-    length = len(peakList)
-    xValues = Numeric.zeros( (length), Numeric.Float64 )
-    yValues = Numeric.zeros( (length), Numeric.Float64 )
-    qReal = Numeric.zeros( (length), Numeric.Float64 )
-    intensity = Numeric.zeros( (length), Numeric.Float64 )
-
-    for peakIndex in range(len(peakList)):
-        xPeak,yPeak,Qreal,Qfit,chi,width = peakList[peakIndex]
-        xValues[peakIndex] =  xPeak
-        yValues[peakIndex] = yPeak
-        qReal[peakIndex] = Qreal
-        intensity[peakIndex] = data[int(xPeak)][int(yPeak)]
+    # create nice Numeric data structures to store all of 
+    # the peak stuff in. This lets us read our data easily 
+    # once we get into C
+    xValues,yValues,qReal,chi,width,intensity = peakList.getMaskedPeakArrays(maskedPixelInfo,data)
 
     # make C do the hard work :)
     centerX,centerY,distance,energy,alpha,beta,rotation,covariance = FitWrap.fitCalibrationParameters(
@@ -88,7 +76,7 @@ def fit(data,initialGuess,peakList,verbose=1):
     return ret,peakList
 
 
-def findPeaks(data,qData,initialGuess,numberOfChi,stddev,verbose=1):
+def getPeakList(data,qData,initialGuess,numberOfChi,stddev,verbose=1):
 
     if numberOfChi <=1:
         raise Exception("This program must look for at least 2 chi slices.")
@@ -97,7 +85,8 @@ def findPeaks(data,qData,initialGuess,numberOfChi,stddev,verbose=1):
     # the -1 allows for us to include chiLower & chiUpper in our count
     chiStep = (chiUpper-chiLower)*1.0/(numberOfChi-1)
 
-    peakList = []
+    peakList = PeakList.PeakList()
+    print 'len = ',len(peakList.peakList)
 
     if verbose: print ' - %d total Q values. Calculating peaks for Q =' % (len(qData.getAllQPairs())),
     for Q,dQ in qData.getAllQPairs():
@@ -111,7 +100,7 @@ def findPeaks(data,qData,initialGuess,numberOfChi,stddev,verbose=1):
                         initialGuess.getBeta()['val'],initialGuess.getRotation()['val'],Q-dQ,Q+dQ,chi,
                         initialGuess.getPixelLength()['val'],initialGuess.getPixelHeight()['val'])
 
-                peakList.append([x,y,Q,qFit,chi,width])
+                peakList.addPeak(x,y,Q,qFit,chi,width)
 
             except ValueError: # this means no peak found
                 pass

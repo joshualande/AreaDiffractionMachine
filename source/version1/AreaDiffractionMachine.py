@@ -30,7 +30,8 @@ import EpsImagePlugin
 import PdfImagePlugin
 Image._initialized = 1
 
-#blatant fix...  Image.SAVE["JPEG"]=JpegImagePlugin._save
+#blatant fix...  
+Image.SAVE["JPEG"]=JpegImagePlugin._save
 Image.EXTENSION[".jpg"]="JPEG"
 Image.SAVE["PPM"]=PpmImagePlugin._save
 Image.EXTENSION[".ppm"]="PPM"
@@ -2043,7 +2044,7 @@ class Main:
                     (self.diffractionImageZoomPixels[-1][0]['x'] - \
                     self.diffractionImageZoomPixels[-1][1]['x'])
 
-        for x,y,qReal,qFit,chi,width in self.peakList:
+        for x,y,qReal,qFit,chi,width in self.peakList.getMaskedPeakList(self.maskedPixelInfo):
             canvasX,canvasY = self.getCanvasDiffractionImageCoordinates(x,y)
 
             # add in new lines if they would be visible
@@ -2403,10 +2404,13 @@ class Main:
         # stored from last time. Only use old peak list if these 
         # numbers agree. (IE, if they change the number of chi values to use, calculate a new 
         # peak list. Also, if you change the stddev input, also calculate a new peak list.
-        if self.useOldPeakList.get()==1 and self.peakList != None and numberOfChi == self.numberOfChiStore and stddev == self.stddevStore:
-            fit,self.peakList = self.diffractionData.fit(self.calibrationData[-1],self.QData,peakList=self.peakList)
+        if self.useOldPeakList.get()==1 and self.peakList != None and \
+                numberOfChi == self.numberOfChiStore and stddev == self.stddevStore:
+            fit,self.peakList = self.diffractionData.fit(self.calibrationData[-1],
+                    self.QData,self.maskedPixelInfo,peakList=self.peakList)
         else:
-            fit,self.peakList = self.diffractionData.fit(self.calibrationData[-1],self.QData,numberOfChi=numberOfChi,stddev=stddev)
+            fit,self.peakList = self.diffractionData.fit(self.calibrationData[-1],
+                    self.QData,self.maskedPixelInfo,numberOfChi=numberOfChi,stddev=stddev)
             self.numberOfChiStore = numberOfChi
             self.stddevStore = stddev
 
@@ -2414,8 +2418,7 @@ class Main:
         self.putCalibrationDataIntoInputs()
 
         setstatus(self.status,'Ready')
-
-        self.maindisp.updateimage()
+        self.updatebothNoComplain()
  
 
     def savePeakList(self,filename=''):
@@ -2463,7 +2466,8 @@ class Main:
             raise UserInputException("The standard deviation must be greater then 0.")
 
         # also, store the peakList for later
-        self.peakList = self.diffractionData.savePeakListToFile(filename,self.calibrationData[-1],self.QData,numberOfChi,stddev=stddev)
+        self.peakList = self.diffractionData.savePeakListToFile(filename,self.calibrationData[-1],
+                self.QData,numberOfChi,self.maskedPixelInfo,stddev=stddev)
 
 
         # Make sure to explicitly record this macro thingy
@@ -2471,6 +2475,7 @@ class Main:
             self.macroMode.explicitMacroRecordTwoLines('Make/Save Peak List','\t'+filename)
 
         setstatus(self.status,'Ready')
+        self.updatebothNoComplain()
 
     def getQChiCakeImageCoordinates(self,x,y):
         """ Returns the q,chi values corresponding to canvas x,y values. """
@@ -3326,7 +3331,7 @@ class Main:
         halflength = unZoomWidth*scalingFactor
         
         if self.drawPeaks.checkvar.get():
-            for x,y,qReal,qFit,chi,width in self.peakList:
+            for x,y,qReal,qFit,chi,width in self.peakList.getMaskedPeakList(self.maskedPixelInfo):
                 # for each peak, we want to take the true x,y value of
                 # where the peak is on the image and figure out where
                 # it belongs on the cake data.

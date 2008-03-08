@@ -1,7 +1,7 @@
 import time
 
 import Numeric
-from PolygonWrap import insideWhichPolygon
+from PolygonWrap import insideWhichPolygon, isInPolygons
 from General import numeric_array_equals
 from Exceptions import UserInputException
 
@@ -220,6 +220,16 @@ class MaskedPixelInfo:
     polygonBeginningsIndex = Numeric.array([ ],Numeric.Int)
     polygonNumberOfItems = Numeric.array([ ],Numeric.Int)
 
+    def isInPolygons(self,x,y):
+        """ Returns true if the x,y coordinate is 
+            is in some polygon and false otherwise.
+            This is just the same as """
+    
+        return isInPolygons(self.polygonsX,
+                self.polygonsY,self.polygonBeginningsIndex,
+                self.polygonNumberOfItems,x,y)
+    
+
     def getPolygon(self,x,y):
         """ Returns the polygon that fills the coordinate x, y. 
             What is returned is a list of the form 
@@ -232,7 +242,7 @@ class MaskedPixelInfo:
                 self.polygonsY,self.polygonBeginningsIndex,
                 self.polygonNumberOfItems,x,y)
 
-        # note inside any polygon
+        # not inside any polygon
         if whichPolygon == -1:
             return None
 
@@ -497,6 +507,7 @@ class MaskedPixelInfo:
 
             currentPolygon = [] # reset polygon
 
+
     def savePolygonsToFile(self,filename):
         if self.numPolygons() < 1: 
             raise UserInputException("Cannot save polygons to a file until there are polygons to save.")
@@ -510,6 +521,7 @@ class MaskedPixelInfo:
                 file.write(str(self.polygonsX[index+j])+
                         '\t'+str(self.polygonsY[index+j])+'\n')
             file.write('\n')
+
 
     def printPolygons(self):
         """ A convenience function for debugging. """

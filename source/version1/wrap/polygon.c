@@ -14,7 +14,8 @@
  */
 int insideWhichPolygon(PyArrayObject * polygonsX,
         PyArrayObject * polygonsY,
-        PyArrayObject * polygonBeginningsIndex, PyArrayObject * polygonNumberOfItems,
+        PyArrayObject * polygonBeginningsIndex, 
+        PyArrayObject * polygonNumberOfItems,
         double x, double y) {
 
     int i;
@@ -52,8 +53,6 @@ int insideWhichPolygon(PyArrayObject * polygonsX,
     // if not in any polygon, return 0
     return -1;
 }
-
-
 
 
 /*
