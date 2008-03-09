@@ -53,7 +53,8 @@ double bilinearInterpolation(PyArrayObject *data, double x, double y) {
     return intensity;
 }
 
-static PyObject * DiffractionAnalysisWrap_BilinearInterpolation(PyObject *self, PyObject *args) {
+static PyObject * DiffractionAnalysisWrap_BilinearInterpolation(
+        PyObject *self, PyObject *args) {
     double x, y;
     PyArrayObject *data;
 
@@ -62,7 +63,8 @@ static PyObject * DiffractionAnalysisWrap_BilinearInterpolation(PyObject *self, 
 }
 
 
-static PyObject * DiffractionAnalysisWrap_convertEnergyToWavelength(PyObject *self, PyObject *args) {
+static PyObject * DiffractionAnalysisWrap_convertEnergyToWavelength(
+        PyObject *self, PyObject *args) {
     double energy,wavelength;
     PyArg_ParseTuple(args,"d",&energy);
     wavelength = convertEnergyToWavelength(energy);
@@ -70,7 +72,8 @@ static PyObject * DiffractionAnalysisWrap_convertEnergyToWavelength(PyObject *se
 }
 
 
-static PyObject * DiffractionAnalysisWrap_convertWavelengthToEnergy(PyObject *self, PyObject *args) {
+static PyObject * DiffractionAnalysisWrap_convertWavelengthToEnergy(
+        PyObject *self, PyObject *args) {
     double energy,wavelength;
 
     PyArg_ParseTuple(args,"d",&wavelength);
@@ -79,7 +82,8 @@ static PyObject * DiffractionAnalysisWrap_convertWavelengthToEnergy(PyObject *se
     return Py_BuildValue("d",energy);
 }
 
-static PyObject * DiffractionAnalysisWrap_convertTwoThetaToQ(PyObject *self, PyObject *args) {
+static PyObject * DiffractionAnalysisWrap_convertTwoThetaToQ(
+        PyObject *self, PyObject *args) {
     double twoTheta, Q, wavelength;
 
     PyArg_ParseTuple(args,"dd",&twoTheta,&wavelength);
@@ -88,7 +92,8 @@ static PyObject * DiffractionAnalysisWrap_convertTwoThetaToQ(PyObject *self, PyO
     return Py_BuildValue("d",Q);
 }
 
-static PyObject * DiffractionAnalysisWrap_convertQToTwoTheta(PyObject *self, PyObject *args) {
+static PyObject * DiffractionAnalysisWrap_convertQToTwoTheta(
+        PyObject *self, PyObject *args) {
     double twoTheta, Q, wavelength;
 
     PyArg_ParseTuple(args,"dd",&Q,&wavelength); 
@@ -100,12 +105,15 @@ static PyObject * DiffractionAnalysisWrap_convertQToTwoTheta(PyObject *self, PyO
 /*
  * Wrap the getQChi function so that it can be called from python
  */
-static PyObject * DiffractionAnalysisWrap_getQChi(PyObject *self, PyObject *args) {
+static PyObject * DiffractionAnalysisWrap_getQChi(
+        PyObject *self, PyObject *args) {
 
     double centerX, centerY,distance,energy,alpha,beta,rotation;
     double xPixel,yPixel;
     double pixelLength,pixelHeight;
-    double cos_beta,sin_beta,cos_alpha,sin_alpha,cos_rotation,sin_rotation;
+    double cos_beta,sin_beta;
+    double cos_alpha,sin_alpha;
+    double cos_rotation,sin_rotation;
 
     double q,chi;
 
@@ -170,9 +178,10 @@ static PyObject * DiffractionAnalysisWrap_getXY(PyObject *self, PyObject *args) 
 
 
 /*
- * twotheta and chi are in degrees, so we must convert them to radiasn first
+ * twotheta and chi are in degrees, so we must 
+ * convert them to radiasn first
  */
-double polarizationCorrection(double intensity, double P,double twotheta,double chi) {
+double polarizationCorrection(double intensity,double P,double twotheta,double chi) {
     return intensity/(P*(1-pow(sin(twotheta*PI/180.0)*sin( (chi-90)*PI/180.0),2))+
             (1-P)*(1-pow(sin(twotheta*PI/180.0)*cos( (chi-90)*PI/180.0),2)));
 }
@@ -180,9 +189,6 @@ double polarizationCorrection(double intensity, double P,double twotheta,double 
 
 /*
  * This function does the caking.
- * Function must be passed a Numeric array which is the diffraction data.
- * Function arguments are: data, centerX,centerY,distance,wavelength,
- * alpha,beta,qLower,qUpper,numQ, chiLower,chiUpper,numChi,pixelLength,pixelHeight
  */
 static PyObject * DiffractionAnalysisWrap_cake(PyObject *self, PyObject *args) {
     PyArrayObject *diffractionData;
@@ -191,16 +197,17 @@ static PyObject * DiffractionAnalysisWrap_cake(PyObject *self, PyObject *args) {
     int dimensions[2];
 
     double centerX,centerY,distance,energy,alpha,beta,rotation;
-    double qLower,qUpper;
-    int numQ;
+    double qOrTwoThetaLower,qOrTwoThetaUpper;
+    int numQOrTwoTheta;
     double chiLower,chiUpper;
     int numChi;
     double pixelLength,pixelHeight;
     double cos_beta,sin_beta,cos_alpha,sin_alpha,cos_rotation,sin_rotation;
     double x,y;
     double q,chi; 
-    int qBin,chiBin;
-    double qStep,chiStep;
+    double qOrTwoTheta; 
+    int qOrTwoThetaBin,chiBin;
+    double qOrTwoThetaStep,chiStep;
     double intensity;
     int doPolarizationCorrection;
     double P,twoTheta;
@@ -215,11 +222,13 @@ static PyObject * DiffractionAnalysisWrap_cake(PyObject *self, PyObject *args) {
     PyArrayObject * polygonBeginningsIndex;
     PyArrayObject * polygonNumberOfItems;
 
+    char *type;
 
     // get all of the parameters out of the python call
-    PyArg_ParseTuple(args,"O!dddddddddiddiidididiO!O!O!O!dd",&PyArray_Type,&diffractionData,
-        &centerX,&centerY,&distance,&energy,&alpha,&beta,&rotation,&qLower,
-        &qUpper,&numQ,&chiLower,&chiUpper,&numChi,
+    PyArg_ParseTuple(args,"O!dddddddddiddiidididiO!O!O!O!dds",&PyArray_Type,&diffractionData,
+        &centerX,&centerY,&distance,&energy,&alpha,&beta,&rotation,
+        &qOrTwoThetaLower,&qOrTwoThetaUpper,&numQOrTwoTheta,
+        &chiLower,&chiUpper,&numChi,
         &doPolarizationCorrection,&P,
         &doGreaterThanMask,&greaterThanMask,&doLessThanMask,&lessThanMask,
         &doPolygonMask,
@@ -227,10 +236,20 @@ static PyObject * DiffractionAnalysisWrap_cake(PyObject *self, PyObject *args) {
         &PyArray_Type,&polygonsY,
         &PyArray_Type,&polygonBeginningsIndex,
         &PyArray_Type,&polygonNumberOfItems,
-        &pixelLength,&pixelHeight);
+        &pixelLength,&pixelHeight,&type);
+
+
+    // the types of integration
+    // Remeber, strcmp returns 0 when they equal 
+    if (strcmp(type,"Q") != 0 && strcmp(type,"2theta") != 0) {
+        PyErr_SetString( PyExc_Exception, 
+                "The type of integration must be Q, or 2theta");
+        return 0;
+    }
 
     // passed array has the diffraction data
-    if (diffractionData->nd != 2 || diffractionData->descr->type_num != PyArray_INT) {
+    if (diffractionData->nd != 2 || 
+            diffractionData->descr->type_num != PyArray_INT) {
         PyErr_SetString(PyExc_ValueError,
             "diffractionData must be two-dimensional and of type integer");
         return 0;
@@ -238,7 +257,7 @@ static PyObject * DiffractionAnalysisWrap_cake(PyObject *self, PyObject *args) {
 
     // create a new Numeric data structure to hold the cake
     dimensions[0]=numChi;
-    dimensions[1]=numQ;
+    dimensions[1]=numQOrTwoTheta;
     cake=(PyArrayObject *)PyArray_FromDims(2,dimensions,PyArray_DOUBLE);
 
     // calculate sin & cos for later use.
@@ -250,56 +269,76 @@ static PyObject * DiffractionAnalysisWrap_cake(PyObject *self, PyObject *args) {
     sin_rotation = sin(rotation*PI/180.0); 
 
     // calulate the step size between different bins
-    qStep = (qUpper-qLower)/(numQ-1);
+    qOrTwoThetaStep = (qOrTwoThetaUpper-qOrTwoThetaLower)/(numQOrTwoTheta-1);
     chiStep = (chiUpper-chiLower)/(numChi-1);
 
     // for each bin
-    for (qBin = 0; qBin < numQ; qBin += 1) {
+    for (qOrTwoThetaBin = 0; qOrTwoThetaBin < numQOrTwoTheta; qOrTwoThetaBin += 1) {
         for (chiBin = 0; chiBin < numChi; chiBin += 1) {
 
             // get into the middle of the cell
-            q = qLower + qBin*qStep + qStep/2.0;
+            qOrTwoTheta = qOrTwoThetaLower + qOrTwoThetaBin*qOrTwoThetaStep + 
+                    qOrTwoThetaStep/2.0;
             chi = chiLower + chiBin*chiStep + chiStep/2.0;
 
-            // in the middle of the cell
-            getXY(centerX,centerY,distance,energy,q,chi,pixelLength,pixelHeight,rotation,cos_beta,
-                    sin_beta,cos_alpha,sin_alpha,cos_rotation,sin_rotation,&x,&y);
+            if (strcmp(type,"Q")==0) {
+                q = qOrTwoTheta;
+            } else {
+                q = convertTwoThetaToQ(qOrTwoTheta,convertEnergyToWavelength(energy)); 
+            }
 
-            // if the q,chi value is acutally in the diffraction image, then find the intensity
-            // Note that there is only diffraction data up to (dimension-1)
+            getXY(centerX,centerY,distance,energy,q,chi,
+                    pixelLength,pixelHeight,rotation,
+                    cos_beta,sin_beta,cos_alpha,sin_alpha,
+                    cos_rotation,sin_rotation,&x,&y);
+
+            // if the qOrTwoTheta,chi value is in the diffraction 
+            // image, then find the intensity. Note that there is 
+            // only diffraction data up to (dimension-1)
             if (x >= 0 && x <= (diffractionData->dimensions[0]-1) &&
                     y >= 0 && y <= (diffractionData->dimensions[1]-1)) {
-
 
                 intensity = bilinearInterpolation(diffractionData, x, y);
 
                 // possibly do the polarization correction
                 if (doPolarizationCorrection) {
-                    twoTheta = convertQToTwoTheta(q,convertEnergyToWavelength(energy));
+
+                    twoTheta = convertQToTwoTheta(q,
+                            convertEnergyToWavelength(energy));
+
                     intensity = polarizationCorrection(intensity,P,twoTheta,chi);
                 }
                 
                     if (doPolygonMask && isInPolygons(polygonsX,polygonsY,
                             polygonBeginningsIndex,polygonNumberOfItems,x,y)) {
 
-                    // if we are doing a polygon mask and our pixel is in one of the polygons,
-                    // then we should assign its value to be -4 (by convention)
-                    *(double *)(cake->data + chiBin*cake->strides[0] + qBin*cake->strides[1]) = -4;
+                    // if we are doing a polygon mask and our pixel is 
+                    // in one of the polygons, then we should assign its 
+                    // value to be -4 (by convention)
+                    *(double *)(cake->data + chiBin*cake->strides[0] + 
+                            qOrTwoThetaBin*cake->strides[1]) = -4;
 
                 } else if (doGreaterThanMask && intensity > greaterThanMask) {
-                    // if we are doing the greater than mask, if the current pixel is greater then 
-                    // the threshold, then we should assign its value to be -2 (by convention).
-                    *(double *)(cake->data + chiBin*cake->strides[0] + qBin*cake->strides[1]) = -2;
+                    // if we are doing the greater than mask, if the 
+                    // current pixel is greater then the threshold, 
+                    // then we should assign its value to be -2 
+                    // (by convention).
+                    *(double *)(cake->data + chiBin*cake->strides[0] + 
+                            qOrTwoThetaBin*cake->strides[1]) = -2;
                 } else if (doLessThanMask && intensity < lessThanMask) {
-                    // if we are doing the lower than mask, if the current pixel is less then 
-                    // the threshold, then we should assign its value to be -3 (by convention)
-                    *(double *)(cake->data + chiBin*cake->strides[0] + qBin*cake->strides[1]) = -3;
+                    // if we are doing the lower than mask, if the 
+                    // current pixel is less then the threshold, then 
+                    // we should assign its value to be -3 (by convention)
+                    *(double *)(cake->data + chiBin*cake->strides[0] + 
+                            qOrTwoThetaBin*cake->strides[1]) = -3;
                 } else {
-                    *(double *)(cake->data + chiBin*cake->strides[0] + qBin*cake->strides[1]) = intensity;
+                    *(double *)(cake->data + chiBin*cake->strides[0] + 
+                            qOrTwoThetaBin*cake->strides[1]) = intensity;
                 }
 
             } else { // otherwise, define outside the image as -1 intensity.
-                *(double *)(cake->data + chiBin*cake->strides[0] + qBin*cake->strides[1]) = -1;
+                *(double *)(cake->data + chiBin*cake->strides[0] + 
+                        qOrTwoThetaBin*cake->strides[1]) = -1;
             }
         }
     }

@@ -143,8 +143,10 @@ class MacroMode:
                     'move to page':moveToMasking},
             {'name':"(Pixels Can't Be) Less Than Mask:", 'widget':self.GUI.lessThanMask,
                     'move to page':moveToMasking},
-            {'name':'Cake Q Lower?','widget':self.GUI.qLowerCake,'move to page':moveToCake},
-            {'name':'Cake Q Upper?','widget':self.GUI.qUpperCake,'move to page':moveToCake},
+            {'name':'Cake Q Lower?','widget':self.GUI.qOrTwoThetaLowerCake,'move to page':moveToCake},
+            {'name':'Cake 2theta Lower?','widget':self.GUI.qOrTwoThetaLowerCake,'move to page':moveToCake},
+            {'name':'Cake Q Upper?','widget':self.GUI.qOrTwoThetaUpperCake,'move to page':moveToCake},
+            {'name':'Cake 2theta Upper?','widget':self.GUI.qOrTwoThetaUpperCake,'move to page':moveToCake},
             {'name':'Cake Chi Lower?','widget':self.GUI.chiLowerCake,'move to page':moveToCake},
             {'name':'Cake Chi Upper?','widget':self.GUI.chiUpperCake,'move to page':moveToCake},
             {'name':'Cake P?','widget':self.GUI.PCake,'move to page':moveToCake},
@@ -162,7 +164,8 @@ class MacroMode:
 
         self.allEntryFieldsRequiringInt = [
             {'name':'Fit Number of Chi?','widget':self.GUI.numberOfChiInput,'move to page':moveToCalibration},
-            {'name':'Cake Number of Q?','widget':self.GUI.numQCake,'move to page':moveToCake},
+            {'name':'Cake Number of Q?','widget':self.GUI.numQOrTwoThetaCake,'move to page':moveToCake},
+            {'name':'Cake Number of 2theta?','widget':self.GUI.numQOrTwoThetaCake,'move to page':moveToCake},
             {'name':'Cake Number of Chi?','widget':self.GUI.numChiCake,'move to page':moveToCake},
             {'name':'Integrate Number of Q?','widget':self.GUI.numQOrTwoThetaIntegrate,'move to page':moveToIntegrate},
             {'name':'Integrate Number of 2theta?','widget':self.GUI.numQOrTwoThetaIntegrate,'move to page':moveToIntegrate},
@@ -408,6 +411,12 @@ class MacroMode:
                     if widget['name'] in ['Integrate 2theta Lower?','Integrate 2theta Upper?','Integrate Number of 2theta?']:
                         self.GUI.changeQor2Theta('Work in 2theta')
 
+                    if widget['name'] in ['Cake Q Lower?','Cake Q Upper?','Cake Number of Q?']:
+                        self.GUI.changeQor2Theta('Work in Q')
+                    if widget['name'] in ['Ckae 2theta Lower?','Cake 2theta Upper?','Cake Number of 2theta?']:
+                        self.GUI.changeQor2Theta('Work in 2theta')
+
+
                     value = macro.next()
                     if VERBOSE: print ' - current: ',value 
                     # Put the number in the entryfield
@@ -553,6 +562,8 @@ class MacroMode:
                             self.GUI.eVorLambda.get() == 'Work in Lambda':
                         continue
 
+                    # Dont' record if the GUI is in the other state
+
                     if entryField['name'] in ['Integrate Q Lower?', \
                             'Integrate Q Upper?','Integrate Number of Q?'] and \
                             self.GUI.Qor2Theta.get() == 'Work in 2theta':
@@ -560,6 +571,16 @@ class MacroMode:
 
                     if entryField['name'] in ['Integrate 2theta Lower?', \
                             'Integrate 2theta Upper?','Integrate Number of 2theta?']\
+                            and self.GUI.Qor2Theta.get() == 'Work in Q':
+                        continue
+
+                    if entryField['name'] in ['Cake Q Lower?', \
+                            'Cake Q Upper?','Cake Number of Q?'] and \
+                            self.GUI.Qor2Theta.get() == 'Work in 2theta':
+                        continue
+
+                    if entryField['name'] in ['Cake 2theta Lower?', \
+                            'Cake 2theta Upper?','Cake Number of 2theta?']\
                             and self.GUI.Qor2Theta.get() == 'Work in Q':
                         continue
 

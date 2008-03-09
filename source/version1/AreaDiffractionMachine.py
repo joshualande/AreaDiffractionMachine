@@ -83,7 +83,8 @@ filepath=os.getcwd()+os.sep
 
 
 def removeAllItemsFromMenu(menu):
-    """ Code taken from: http://osdir.com/ml/python.tkinter/2006-07/msg00018.html """
+    """ Code taken from: 
+        http://osdir.com/ml/python.tkinter/2006-07/msg00018.html """
     if menu.index("last") is not None:
         menu.delete(0,menu.index("last"))
 
@@ -110,7 +111,8 @@ class FancyErrors:
         self.pattern = re.compile(patternstring, re.DOTALL)
 
         # I think this is how Mac exceptions are formatted
-        otherpatternstring = r"""<class 'Exceptions.UserInputException'>: ['"](.*)['"]"""
+        otherpatternstring = \
+                r"""<class 'Exceptions.UserInputException'>: ['"](.*)['"]"""
         self.otherpattern = re.compile(otherpatternstring, re.DOTALL)
 
         self.status=status
@@ -128,14 +130,16 @@ class FancyErrors:
             pass
 
         match = self.pattern.search(string)
-        # see if the current exception is a windows/linux style
-        # UserInputException. If so, then print out just the exception
+        # see if the current exception is a windows/linux 
+        # style UserInputException. If so, then print out 
+        # just the exception
         if match:
             message = match.groups()[0]
             box=tkMessageBox.showerror('Error',message)
         else:
             # see if the current exception is a mac style
-            # UserInputException. If so, then print out just the exception
+            # UserInputException. If so, then print out 
+            # just the exception
             othermatch = self.otherpattern.search(string)
             if othermatch:
 
@@ -144,7 +148,8 @@ class FancyErrors:
                 message = othermatch.groups()[0]
                 box=tkMessageBox.showerror('Error',message)
             else:
-                # otherwise, dump out the whole exception in an ugly manner
+                # otherwise, dump out the whole exception 
+                # in an ugly manner
                 print string
                 box=tkMessageBox.showerror('UNKNOWN ERROR',string)
         setstatus(self.status,'Ready')
@@ -152,20 +157,29 @@ class FancyErrors:
 
 def programabout(master):
     Pmw.aboutversion('1')
-    Pmw.aboutcopyright('Copyright Joshua Lande and Samuel Webb, 2007\nStanford Synchrotron Radiation Laboratory')
-    Pmw.aboutcontact("""email: samwebb@slac.stanford.edu
-web: http://www.stanford.edu/~swebb""")
-#    imlogo=Image.open("smak_sm.jpg")
-#    imlogo.load()
-#    logo=ImageTk.PhotoImage(imlogo)
-#    logo.paste(imlogo)
-    about=Pmw.AboutDialog(master,applicationname='The Area Diffraction Program')#,icon_image=logo)
-#    about.component('icon').image=logo
+    Pmw.aboutcopyright(
+            'Copyright Joshua Lande and Samuel Webb, \
+2007\nStanford Synchrotron Radiation Laboratory')
+
+    Pmw.aboutcontact("""email: joshualande@gmail.com or \
+samwebb@slac.stanford.edu
+web: areadiffractionmachine.googlecode.com""")
+
+    # imlogo=Image.open("smak_sm.jpg")
+    # imlogo.load()
+    # logo=ImageTk.PhotoImage(imlogo)
+    # logo.paste(imlogo)
+    about=Pmw.AboutDialog(master,
+            applicationname='The Area Diffraction Program')#,icon_image=logo)
+    # about.component('icon').image=logo
 
 
 class Display:
     """ XRD Display Class. """
-    def __init__(self,master,imageWidth,imageHeight,axisSize,ufunc,colorMaps,title,invertVar,logScaleVar):
+    def __init__(self,master,imageWidth,imageHeight,
+            axisSize,ufunc,colorMaps,title,invertVar,
+            logScaleVar):
+
         self.imageWidth = imageWidth
         self.imageHeight = imageHeight
         self.axisSize=axisSize
@@ -183,7 +197,8 @@ class Display:
         self.graphframe = Frame(nf)
         self.graphframe.grid(row=0,column=0,sticky=N+W+E+S)
 
-        self.imframe=Canvas(self.graphframe,bg='black',borderwidth=0,highlightthickness=0,
+        self.imframe=Canvas(self.graphframe,bg='black',
+                borderwidth=0,highlightthickness=0,
                 height=imageHeight,
                 width=imageWidth, cursor='crosshair')
         self.imframe.grid(row=0,column=0,sticky=N+W)
@@ -207,7 +222,9 @@ class Display:
         lab.pack(side=TOP,fill='both')
         self.intenvarlo=DoubleVar()
         self.intenvarlo.set(0.00)
-        self.intensitylo=Scale(fr,variable=self.intenvarlo,width=10,from_=1.0, to=0.00,orient=VERTICAL,resolution=0.001,length=250,command=DISABLED)
+        self.intensitylo=Scale(fr,variable=self.intenvarlo,
+                width=10,from_=1.0, to=0.00,orient=VERTICAL,
+                resolution=0.001,length=250,command=DISABLED)
         self.intensitylo.pack(side=TOP,fill=Y)
 
         fr=Frame(nf)
@@ -216,21 +233,31 @@ class Display:
         lab.pack(side=TOP,fill='both')
         self.intenvarhi=DoubleVar()
         self.intenvarhi.set(.05)
-        self.intensityhi=Scale(fr,variable=self.intenvarhi,width=10,from_=1.0, to=0.001,orient=VERTICAL,resolution=0.001,length=250,command=DISABLED)
+        self.intensityhi=Scale(fr,variable=self.intenvarhi,
+                width=10,from_=1.0, to=0.001,orient=VERTICAL,
+                resolution=0.001,length=250,command=DISABLED)
         self.intensityhi.pack(side=TOP,fill=Y)
 
         # bind to letting go of the scale to redrawing the image
-        self.intensitylo.bind(sequence="<ButtonRelease>",func=self.updateimageNoComplain)
-        self.intensityhi.bind(sequence="<ButtonRelease>",func=self.updateimageNoComplain)
+        self.intensitylo.bind(sequence="<ButtonRelease>",
+                func=self.updateimageNoComplain)
+        self.intensityhi.bind(sequence="<ButtonRelease>",
+                func=self.updateimageNoComplain)
 
         #coordinates
         botfr=Frame(nf)        
-        self.xcoord=Label(botfr,text="X=      ",width=15,bd=2,relief=RIDGE,anchor=W,fg='red')
-        self.ycoord=Label(botfr,text="Y=      ",width=15,bd=2,relief=RIDGE,anchor=W,fg='red')
-        self.qcoord=Label(botfr,text="Q=      ",width=15,bd=2,relief=RIDGE,anchor=W,fg='blue')
-        self.dcoord=Label(botfr,text="D=      ",width=15,bd=2,relief=RIDGE,anchor=W,fg='blue')
-        self.ccoord=Label(botfr,text="chi=      ",width=15,bd=2,relief=RIDGE,anchor=W,fg='blue')
-        self.icoord=Label(botfr,text="I=      ",width=15,bd=2,relief=RIDGE,anchor=W,fg='darkgreen')
+        self.xcoord=Label(botfr,text="X=      ",
+                width=15,bd=2,relief=RIDGE,anchor=W,fg='red')
+        self.ycoord=Label(botfr,text="Y=      ",
+                width=15,bd=2,relief=RIDGE,anchor=W,fg='red')
+        self.qcoord=Label(botfr,text="Q=      ",
+                width=15,bd=2,relief=RIDGE,anchor=W,fg='blue')
+        self.dcoord=Label(botfr,text="D=      ",
+                width=15,bd=2,relief=RIDGE,anchor=W,fg='blue')
+        self.ccoord=Label(botfr,text="chi=      ",
+                width=15,bd=2,relief=RIDGE,anchor=W,fg='blue')
+        self.icoord=Label(botfr,text="I=      ",
+                width=15,bd=2,relief=RIDGE,anchor=W,fg='darkgreen')
         self.icoord.pack(side=RIGHT,fill=X)
         self.ccoord.pack(side=RIGHT,fill=X)
         self.dcoord.pack(side=RIGHT,fill=X)
@@ -244,18 +271,25 @@ class Display:
         another.grid(row=1,column=0,columnspan=3,sticky=S+W)
         self.colmap=Pmw.ScrolledListBox(another,
                         items=colorMaps.getColorMapNames(),
-                        labelpos='w',label_text='Colormaps',listbox_height=3,
+                        labelpos='w',label_text='Colormaps',
+                        listbox_height=3,
                         selectioncommand=self.updateimageNoComplain,
-                        listbox_background=another.cget("bg"), # this should be the default
+                        listbox_background=another.cget("bg"), 
+                        # this should be the default
                         listbox_exportselection=0)
         self.colmap.setvalue('bone')
         self.colmap.pack(side=LEFT,fill='both')
-        self.colinvert = Checkbutton(another,text="Invert? ", variable=invertVar,command=self.updateimageNoComplain)
+        self.colinvert = Checkbutton(another,text="Invert? ", 
+                variable=invertVar,
+                command=self.updateimageNoComplain)
         self.colinvert.pack(side=LEFT,fill='both')
-        self.collog = Checkbutton(another,text="Log Scale? ", variable=logScaleVar,command=self.updateimageNoComplain)
+        self.collog = Checkbutton(another,text="Log Scale? ", 
+                variable=logScaleVar,
+                command=self.updateimageNoComplain)
         self.collog.pack(side=LEFT,fill='both')
         #update button
-        b=Button(another,text='Update Image',width=15,bg='darkgreen',fg='snow',command=self.updateimage)
+        b=Button(another,text='Update Image',width=15,
+                bg='darkgreen',fg='snow',command=self.updateimage)
         b.pack(side=LEFT,padx=60,fill=X)
 
 
@@ -310,25 +344,35 @@ class GraphDisplay:
         self.main.userdeletefunc(func=self.main.withdraw)
         h=self.main.interior()
 
-        self.graph=LinePlot.LinePlot(h,plotbackground='white',height=350,width=550)
-        self.graph.bind(sequence="<ButtonPress>",   func=self.mouseDown)
-        self.graph.bind(sequence="<ButtonRelease>", func=self.mouseUp  )
-        self.graph.bind(sequence="<Motion>", func=self.coordreport)
-        self.graph.bind(sequence="<Leave>", func=self.nocoordreport)
+        self.graph=LinePlot.LinePlot(h,plotbackground='white',
+                height=350,width=550)
+        self.graph.bind(sequence="<ButtonPress>",   
+                func=self.mouseDown)
+        self.graph.bind(sequence="<ButtonRelease>", 
+                func=self.mouseUp  )
+        self.graph.bind(sequence="<Motion>", 
+                func=self.coordreport)
+        self.graph.bind(sequence="<Leave>", 
+                func=self.nocoordreport)
         self.graph.legend_configure(hide=1)
-        self.graph.pack(side=TOP,expand=1,fill='both',padx=10,pady=10)
+        self.graph.pack(side=TOP,expand=1,
+                fill='both',padx=10,pady=10)
 
         #zoom stack
         self.zoomstack=[]
 
         #coordinates
         botfr=Frame(h)        
-        self.xcoord=Label(botfr,text="%s=      " % self.xUpdateName,width=15,bd=2,relief=RIDGE,anchor=W,fg='red')
-        self.ycoord=Label(botfr,text="%s=      " % self.yUpdateName,width=15,bd=2,relief=RIDGE,anchor=W,fg='red')
+        self.xcoord=Label(botfr,text="%s=      " % self.xUpdateName,
+                width=15,bd=2,relief=RIDGE,anchor=W,fg='red')
+        self.ycoord=Label(botfr,text="%s=      " % self.yUpdateName,
+                width=15,bd=2,relief=RIDGE,anchor=W,fg='red')
         self.ycoord.pack(side=RIGHT,fill=X)
         self.xcoord.pack(side=RIGHT,fill=X)
 
-        self.collog = Checkbutton(botfr,text="Log Scale? ", variable=self.logScaleVar,command=self.changeLogScale)
+        self.collog = Checkbutton(botfr,text="Log Scale? ",
+                variable=self.logScaleVar,
+                command=self.changeLogScale)
         self.collog.pack(side=RIGHT,fill=X)
 
         botfr.pack(side=TOP,fill=X)
@@ -378,7 +422,7 @@ class GraphDisplay:
         (x1, y1) = self.graph.invtransform(event.x, event.y)             
         try:
             self.graph.marker_configure("marking rectangle", 
-                coords = (x0, y0, x1, y0, x1, y1, x0, y1, x0, y0))
+                coords = (x0,y0,x1,y0,x1,y1,x0,y1,x0,y0))
         except:
             # it dosen't matter if this dose not work
             pass
@@ -393,7 +437,8 @@ class GraphDisplay:
         global x0, y0, x1, y1        
         if dragging:
             self.graph.unbind(sequence="<Motion>")
-            self.graph.bind(sequence="<Motion>", func=self.coordreport)
+            self.graph.bind(sequence="<Motion>", 
+                    func=self.coordreport)
             if event.num==1:
                 self.graph.marker_delete("marking rectangle")           
                 # make sure the coordinates are sorted
@@ -417,8 +462,10 @@ class GraphDisplay:
             (x1, y1) = (x0, y0)
             # if right click = zoom in, draw the rectangle
             if event.num==1:
-                self.graph.marker_create("line", name="marking rectangle", dashes=(2, 2))
-            self.graph.bind(sequence="<Motion>",  func=self.mouseDrag)        
+                self.graph.marker_create("line", 
+                        name="marking rectangle", dashes=(2, 2))
+            self.graph.bind(sequence="<Motion>",  
+                    func=self.mouseDrag)        
 
     def rescaleplot(self):
         #get last off stack
@@ -431,9 +478,12 @@ class GraphDisplay:
         self.graph.xaxis_configure(min=limit[0],max=limit[1])
         self.graph.yaxis_configure(min=limit[2],max=limit[3])
 
-    def makegraph(self,xd,yd,xLabel,yLabel,xUpdateName,yUpdateName,cmd='NEW',pc=None,dontConnectDataPointsWithValue=None):
+    def makegraph(self,xd,yd,xLabel,yLabel,xUpdateName,
+            yUpdateName,cmd='NEW',pc=None,
+            dontConnectDataPointsWithValue=None):
         if len(xd) != len(yd):
-            raise Exception("Cannot make graph because the number of x and y data points must be equal")
+            raise Exception("Cannot make graph because the \
+number of x and y data points must be equal")
         if upper(cmd)=='NEW':
             #clear graphs
             glist=self.graph.element_names()
@@ -444,7 +494,9 @@ class GraphDisplay:
                 self.graph.xaxis_configure(min='',max='')
                 self.graph.yaxis_configure(min='',max='')
         #default color scheme order
-        colors=['red','blue','darkgreen','orange','black','green','purple4','cyan','steel blue','yellow4','peru']
+        colors=['red','blue','darkgreen','orange','black',\
+                'green','purple4','cyan','steel blue',\
+                'yellow4','peru']
         cnum=len(colors)
         #determine color if not given
         if pc==None:
@@ -454,16 +506,22 @@ class GraphDisplay:
         #plot
 
         if dontConnectDataPointsWithValue != None:
-            # create a new data series for each of the series of data points between the undesirable ones
+            # create a new data series for each of 
+            # the series of data points between the 
+            # undesirable ones
             currentxd = []
             currentyd = []
             for current in range(len(yd)):
                 if yd[current] == dontConnectDataPointsWithValue:
-                    # ignore the current data point b/c it is the bad one
-                    # if there is a series to put in the graph, do so
+                    # ignore the current data point b/c it 
+                    # is the bad one if there is a series 
+                    # to put in the graph, do so
                     if currentxd != [] and currentyd != []:
-                        self.graph.line_create('graph'+str(current),xdata=tuple(currentxd),
-                                ydata=tuple(currentyd),symbol='',color=pc)
+                        self.graph.line_create(
+                                'graph'+str(current),
+                                xdata=tuple(currentxd),
+                                ydata=tuple(currentyd),
+                                symbol='',color=pc)
                     currentxd = []
                     currentyd = []
                 else:
@@ -471,19 +529,21 @@ class GraphDisplay:
                     currentyd.append(yd[current])
 
             if currentxd != [] and currentyd != []:
-                self.graph.line_create('graph'+str(current),xdata=tuple(currentxd),
+                self.graph.line_create('graph'+str(current),
+                        xdata=tuple(currentxd),
                         ydata=tuple(currentyd),symbol='',color=pc)
 
         else:
-            self.graph.line_create('graph',xdata=tuple(xd),ydata=tuple(yd),
-                    symbol='',color=pc,pixels=7)
+            self.graph.line_create('graph',xdata=tuple(xd),
+                    ydata=tuple(yd),symbol='',color=pc,pixels=7)
 
         self.xMax = max(xd)
         self.xMin = min(xd)
         self.yMax = max(yd)
         self.yMin = min(yd)
 
-        # make sure as to not trip up log scaling by puting 0 as the y axis range.
+        # make sure as to not trip up log scaling by 
+        # puting 0 as the y axis range.
         if self.yMin < 0:
             self.yMin = .001 
 
@@ -510,16 +570,15 @@ class GraphDisplay:
         self.graph.xaxis_configure(min='',max='')
         self.graph.yaxis_configure(min='',max='')
   
-#############################
-##   Entryfield-Checkbutton Classes
-#############################
-
 class FieldBox:
+    """ Entryfield-Checkbutton Classes """
+
     def __init__(self,master,name='',validate=None,noCheckBox=0):
         w=10
         bf=Frame(master)
         bf.pack(side=TOP,padx=2,pady=0,anchor=W)
-        self.ef=Pmw.EntryField(bf,entry_width=10,labelpos='w',label_text=name+': ',validate=validate)
+        self.ef=Pmw.EntryField(bf,entry_width=10,labelpos='w',
+                label_text=name+': ',validate=validate)
         self.ef.pack(side=LEFT,padx=5,pady=1)
         if not noCheckBox:
             # put a checkbox unless explicily told not to
@@ -544,11 +603,10 @@ class BoxButton:
         self.button=Button(bf,text='Color',command=colorFunc)
         self.button.pack(side=RIGHT,padx=2,pady=1)
 
-#############################
-##   Main Class
-#############################
         
 class Main:
+    """ Main Class """
+
     fullPathName = os.path.abspath(os.path.dirname(sys.argv[0]))
     standardQFolder = fullPathName+os.sep+"StandardQ"
 
@@ -558,11 +616,13 @@ class Main:
     peakList = None
     calibrationData = []
 
-    # The color of the Q lins that get drawn on the diffraction data
+    # The color of the Q lins that get drawn on the 
+    # diffraction data
     qLinesColor = StringVar()
     qLinesColor.set("red")
 
-    # The color of the dQ lines that get drawn on the diffraction data
+    # The color of the dQ lines that get drawn on 
+    # the diffraction data
     dQLinesColor = StringVar()
     dQLinesColor.set("green")
 
@@ -601,9 +661,11 @@ class Main:
     diffractionImageID = None
     allQLineIDsDiffractionImage = []
     allPeakListIDsDiffractionImage = []
-    # This is a list of zoom levels for the diffraction image of the form:
+    # This is a list of zoom levels for the 
+    # diffraction image of the form:
     # ( {'x':val,'y':val}, {'x':val,'y':val} )
-    # This is a list of two pixels specifying the corners of the zoom.
+    # This is a list of two pixels specifying 
+    # the corners of the zoom.
     diffractionImageZoomPixels = []
 
 
@@ -619,7 +681,8 @@ class Main:
     allQLineIDsCakeImage = []
     allPeakListIDsCakeImage = []
     # This is a list of cake ranges of the form
-    # {'qLower':val,'qUpper':val,'chiLower',val,'chiUpper',val}
+    # {'qOrTwoThetaLower':val,'qOrTwoThetaUpper':val,
+    #  'chiLower',val,'chiUpper',val}
     cakeRange = []
 
     Qor2Theta = StringVar()
@@ -698,7 +761,9 @@ class Main:
                 logScaleVar=self.logVarCake)
         self.cakedisp.main.withdraw()
 
-        self.integratedisp=GraphDisplay(self.xrdwin,title='Integration Data',logScaleVar=self.logVarIntegration)
+        self.integratedisp=GraphDisplay(self.xrdwin,
+                title='Integration Data',
+                logScaleVar=self.logVarIntegration)
         self.integratedisp.main.withdraw()
 
 
@@ -710,29 +775,40 @@ class Main:
         # The file menu
         filemenu = Menu(menubar, tearoff=0)
         menubar.add_cascade(label="File", menu=filemenu)
-        filemenu.add_command(label='Data File',command=self.selectDiffractionFiles) 
+        filemenu.add_command(label='Data File',
+                command=self.selectDiffractionFiles) 
         filemenu.add_separator()
 
         # THE 'opened file(s)' menu should go here
         self.openedfilesmenu = Menu(filemenu, tearoff=0)
-        filemenu.add_cascade(label='Opened File(s)',menu=self.openedfilesmenu)
-        self.openedfilesmenu.add_command(label='None',command=DISABLED)
+        filemenu.add_cascade(label='Opened File(s)',
+                menu=self.openedfilesmenu)
+        self.openedfilesmenu.add_command(label='None',
+                command=DISABLED)
 
         filemenu.add_separator()
-        self.saveDiffractionImageMenuItem=filemenu.add_command(label='Save Image',command=self.saveDiffractionImage)
-        filemenu.add_command(label='Save Caked Image',command=self.saveCakeImage)
+        self.saveDiffractionImageMenuItem=filemenu.add_command(
+                label='Save Image',
+                command=self.saveDiffractionImage)
+        filemenu.add_command(label='Save Caked Image',
+                command=self.saveCakeImage)
         filemenu.add_separator()
-        filemenu.add_command(label='Save Caked Data',command=self.saveCakeData)
+        filemenu.add_command(label='Save Caked Data',
+                command=self.saveCakeData)
 
         calibrationmenu = Menu(menubar, tearoff=0)
-        menubar.add_cascade(label="Calibration",menu=calibrationmenu)
+        menubar.add_cascade(label="Calibration",
+                menu=calibrationmenu)
 
-        calibrationmenu.add_command(label='Load Calibration',command=self.calibrationDataLoad)
-        calibrationmenu.add_command(label='Paramaters from Header',command=self.calibrationDataFromHeader)
+        calibrationmenu.add_command(label='Load Calibration',
+                command=self.calibrationDataLoad)
+        calibrationmenu.add_command(label='Paramaters from Header',
+                command=self.calibrationDataFromHeader)
         calibrationmenu.add_separator()
 
         self.qmenu = Menu(calibrationmenu, tearoff=0)
-        calibrationmenu.add_cascade(label='Standard Q',menu=self.qmenu)
+        calibrationmenu.add_cascade(label='Standard Q',
+                menu=self.qmenu)
         self.addStandardQ(self.qmenu)
 
         calibrationmenu.add_separator()
@@ -748,33 +824,47 @@ class Main:
                 variable = self.eVorLambda)
 
         calibrationmenu.add_separator()
-        calibrationmenu.add_command(label='Save Calibration',command=self.calibrationDataSave)
-        calibrationmenu.add_command(label='Do Fit',command=self.doFit)        
-        calibrationmenu.add_command(label='Previous Values',command=self.calibrationDataUndo)
+        calibrationmenu.add_command(label='Save Calibration',
+                command=self.calibrationDataSave)
+        calibrationmenu.add_command(label='Do Fit',
+                command=self.doFit)        
+        calibrationmenu.add_command(label='Previous Values',
+                command=self.calibrationDataUndo)
 
         maskingmenu = Menu(menubar,tearoff=0)
         menubar.add_cascade(label="Masking",menu=maskingmenu)
-        maskingmenu.add_command(label='Clear Mask',command=self.removePolygons)
-        maskingmenu.add_command(label='Save Mask',command=self.savePolygonsToFile)
-        maskingmenu.add_command(label='Load Mask',command=self.loadPolygonsFromFile)
+        maskingmenu.add_command(label='Clear Mask',
+                command=self.removePolygons)
+        maskingmenu.add_command(label='Save Mask',
+                command=self.savePolygonsToFile)
+        maskingmenu.add_command(label='Load Mask',
+                command=self.loadPolygonsFromFile)
 
         cakemenu = Menu(menubar,tearoff=0)
         menubar.add_cascade(label="Cake",menu=cakemenu)
-        cakemenu.add_command(label='Do Cake',command=self.cakedisp.updateimage)
-        cakemenu.add_command(label='Auto Cake',command=self.autoCake)
+        cakemenu.add_command(label='Do Cake',
+                command=self.cakedisp.updateimage)
+        cakemenu.add_command(label='Auto Cake',
+                command=self.autoCake)
         cakemenu.add_separator()
-        cakemenu.add_command(label='Last Cake',command=self.undoZoomCakeImage)
+        cakemenu.add_command(label='Last Cake',
+                command=self.undoZoomCakeImage)
         cakemenu.add_separator()
-        cakemenu.add_command(label='Save Caked Image',command=self.saveCakeImage)   
-        cakemenu.add_command(label='Save Caked Data',command=self.saveCakeData)
+        cakemenu.add_command(label='Save Caked Image',
+                command=self.saveCakeImage)   
+        cakemenu.add_command(label='Save Caked Data',
+                command=self.saveCakeData)
 
         integratemenu = Menu(menubar,tearoff=0)
         menubar.add_cascade(label="Integrate",menu=integratemenu)
 
-        integratemenu.add_command(label='Integrate Q-I Data',command=self.integrateQOrTwoThetaI)
-        integratemenu.add_command(label='Integrate Chi-I Data',command=self.integrateChiI)
+        integratemenu.add_command(label='Integrate Q-I Data',
+                command=self.integrateQOrTwoThetaI)
+        integratemenu.add_command(label='Integrate Chi-I Data',
+                command=self.integrateChiI)
         integratemenu.add_separator()
-        integratemenu.add_command(label='Save Integration Data',command=self.saveIntegratedIntensity)
+        integratemenu.add_command(label='Save Integration Data',
+                command=self.saveIntegratedIntensity)
         integratemenu.add_separator()
 
         integratemenu.add_radiobutton(
@@ -790,14 +880,18 @@ class Main:
         self.macromenu = Menu(menubar,tearoff=0)
         menubar.add_cascade(label="Macro",menu=self.macromenu)
 
-        self.macromenu.add_command(label='Start Record Macro',command=self.startRecordMacro)
-        self.macromenu.add_command(label='Stop Record Macro',command=self.stopRecordMacro,state=DISABLED)
+        self.macromenu.add_command(label='Start Record Macro',
+                command=self.startRecordMacro)
+        self.macromenu.add_command(label='Stop Record Macro',
+                command=self.stopRecordMacro,state=DISABLED)
         self.macromenu.add_separator()
-        self.macromenu.add_command(label='Run Saved Macro',command=self.runMacro)
+        self.macromenu.add_command(label='Run Saved Macro',
+                command=self.runMacro)
 
-        # this name="help" syntax makes the help menu show up in the right 
-        # place on the mac, where there is already a default help part of 
-        # the menu bar. I leared about how to do this here:
+        # this name="help" syntax makes the help menu 
+        # show up in the right place on the mac, where 
+        # there is already a default help part of the menu 
+        # bar. I leared about how to do this here:
         # http://coding.derkeiler.com/Archive/Python/comp.lang.python/2006-10/msg02418.html
         helpmenu = Menu(menubar,tearoff=0,name="help")
         menubar.add_cascade(label="Help",menu=helpmenu)
@@ -816,58 +910,91 @@ class Main:
         ################ Calibrate Page
         #load file
         filebar = Frame(calpage, relief=SUNKEN,bd=2)
-        self.fileentry=Pmw.EntryField(filebar, label_text="Data File:",labelpos=W,validate=None,entry_width=68,command=DISABLED) #load data file and display
+
+        #load data file and display
+        self.fileentry=Pmw.EntryField(filebar, label_text="Data File:",
+                labelpos=W,validate=None,entry_width=68,command=DISABLED) 
         self.fileentry.pack(side=LEFT,padx=5,pady=2,fill=X)
 
-        # this is stolen from Sam's code (sixPack) and is used to get pretty file pictures on the buttons.
+        # this is stolen from Sam's code (sixPack) and is 
+        # used to get pretty file pictures on the buttons.
         filepath=os.getcwd()+os.sep
 
-        b=Button(filebar,bitmap="@"+filepath+"xbms"+os.sep+"openfolder.xbm",height=21,width=50,
-                command=self.selectDiffractionFiles,bg='lightyellow') #get file name from directory
+        #get file name from directory
+        b=Button(filebar,bitmap="@"+filepath+"xbms"+os.sep+"openfolder.xbm",
+                height=21,width=50,command=self.selectDiffractionFiles,
+                bg='lightyellow') 
         b.pack(side=LEFT,padx=2,pady=2)
-        b=Button(filebar,text="Load",bg='darkgreen',fg='snow',command=self.loadDiffractionFile) #load data file and display
+
+        #load data file and display
+        b=Button(filebar,text="Load",bg='darkgreen',fg='snow',
+                command=self.loadDiffractionFile) 
         b.pack(side=LEFT,padx=2,pady=2)
         filebar.pack(side=TOP,padx=2,pady=2,fill=X)       
 
         #background file (dark current)
         filebar=Frame(calpage, relief=SUNKEN,bd=2)
-        self.dcfileentry=Pmw.EntryField(filebar, label_text="Dark Current:",labelpos=W,validate=None,
-                entry_width=68,command=DISABLED,) #load dark current and subtract-display
+
+        #load dark current and subtract-display
+        self.dcfileentry=Pmw.EntryField(filebar, 
+                label_text="Dark Current:",labelpos=W,validate=None,
+                entry_width=68,command=DISABLED,) 
         self.dcfileentry.pack(side=LEFT,padx=5,pady=2,fill=X)
+
         self.dcfileentry.component('entry').config(state=DISABLED)
         self.dcfileentry.component('label').config(state=DISABLED)
-        b=Button(filebar, bitmap="@"+filepath+"xbms"+os.sep+"openfolder.xbm",height=21,width=50,
-                command=DISABLED,bg='lightyellow',state=DISABLED) #get file name from directory
+
+        #get file name from directory
+        b=Button(filebar, bitmap="@"+filepath+"xbms"+os.sep+"openfolder.xbm",
+                height=21,width=50,
+                command=DISABLED,bg='lightyellow',state=DISABLED) 
         b.pack(side=LEFT,padx=2,pady=2)
-        b=Button(filebar,text="Load",bg='darkgreen',fg='snow',command=DISABLED,state=DISABLED) #load dark current and subtract-display
+
+        #load dark current and subtract-display
+        b=Button(filebar,text="Load",bg='darkgreen',fg='snow',
+                command=DISABLED,state=DISABLED) 
         b.pack(side=LEFT,padx=2,pady=2)
+
         filebar.pack(side=TOP,padx=2,pady=2,fill=X)
         #Qdata
         filebar=Frame(calpage, relief=SUNKEN,bd=2)
-        self.qfileentry=Pmw.EntryField(filebar, label_text="Q Data:",labelpos=W,validate=None,
+        self.qfileentry=Pmw.EntryField(filebar, label_text="Q Data:",
+                labelpos=W,validate=None,
                 entry_width=68,command=DISABLED) #load q data
         self.qfileentry.pack(side=LEFT,padx=5,pady=2,fill=X)
-        b=Button(filebar, bitmap="@"+filepath+"xbms"+os.sep+"openfolder.xbm",height=21,width=50,
-                command=self.selectQDataFile,bg='lightyellow') #get file name from directory
+
+        #get file name from directory
+        b=Button(filebar, bitmap="@"+filepath+"xbms"+os.sep+"openfolder.xbm",
+                height=21,width=50,command=self.selectQDataFile,
+                bg='lightyellow') 
         b.pack(side=LEFT,padx=2,pady=2)
-        b=Button(filebar,text="Load",bg='darkgreen',fg='snow',command=self.loadQData) #load q data 
+
+        #load Q data 
+        b=Button(filebar,text="Load",bg='darkgreen',fg='snow',command=self.loadQData) 
         b.pack(side=LEFT,padx=2,pady=2)
+
         filebar.pack(side=TOP,padx=2,pady=2,fill=X)
         Pmw.alignlabels([self.fileentry,self.dcfileentry,self.qfileentry])
+
         #Load/Save/Previous/Header
         l=Label(calpage,text='Calibration Settings',relief=RAISED,bd=2)
         l.pack(side=TOP,padx=0,pady=2,fill=X)
         cv=Frame(calpage)
         cv.pack(side=TOP,padx=2,pady=2,fill='both')
         w=20
-        b=Pmw.ButtonBox(cv,label_text="Calibration Values",labelpos='n',orient='vertical')
-        b.add('Get From Header',command=self.calibrationDataFromHeader,bg='darkgreen',fg='white',width=w)
+        b=Pmw.ButtonBox(cv,label_text="Calibration Values",
+                labelpos='n',orient='vertical')
+        b.add('Get From Header',command=self.calibrationDataFromHeader,
+                bg='darkgreen',fg='white',width=w)
         self.getFromHeaderButton = b.component('Get From Header')
-        b.add('Load From File',command=self.calibrationDataLoad,bg='royalblue3',fg='white',width=w)
+        b.add('Load From File',command=self.calibrationDataLoad,
+                bg='royalblue3',fg='white',width=w)
         self.loadFromFileButton = b.component('Load From File')
-        b.add('Previous Values',command=self.calibrationDataUndo,bg='goldenrod4',fg='white',width=w)
+        b.add('Previous Values',command=self.calibrationDataUndo,
+                bg='goldenrod4',fg='white',width=w)
         self.previousValuesButton = b.component('Previous Values')
-        b.add('Save to File',command=self.calibrationDataSave,bg='firebrick4',fg='white',width=w)
+        b.add('Save to File',command=self.calibrationDataSave,
+                bg='firebrick4',fg='white',width=w)
         self.saveCalibrationButton = b.component('Save to File')
         b.pack(side=LEFT,padx=15,pady=2,fill=X)
         #Calibration Values/Fixed
@@ -881,23 +1008,37 @@ class Main:
         self.centerY=FieldBox(cvl,name='yc',validate={'validator':'real'})
         self.distance=FieldBox(cvl,name='d',validate={'validator':'real'})
         self.energyOrWavelength=FieldBox(cvl,validate={'validator':'real'})
-        self.alpha=FieldBox(cvl,name=u"\u03B1",validate={'validator':'real','min':-90,'max':90})
-        self.beta=FieldBox(cvl,name=u"\u03B2",validate={'validator':'real','min':-90,'max':90})
-        self.rotation=FieldBox(cvl,name=u"R",validate={'validator':'real','min':-360,'max':360})
+        self.alpha=FieldBox(cvl,name=u"\u03B1",
+                validate={'validator':'real','min':-90,'max':90})
+        self.beta=FieldBox(cvl,name=u"\u03B2",
+                validate={'validator':'real','min':-90,'max':90})
+        self.rotation=FieldBox(cvl,name=u"R",
+                validate={'validator':'real','min':-360,'max':360})
         # pixelLength & pixelHeight don't get checkboxes
-        self.pixelLength=FieldBox(cvl,name='pl',validate={'validator':'real','min':0},noCheckBox=1)
-        self.pixelHeight=FieldBox(cvl,name='ph',validate={'validator':'real','min':0},noCheckBox=1)
+        self.pixelLength=FieldBox(cvl,name='pl',
+                validate={'validator':'real','min':0},noCheckBox=1)
+        self.pixelHeight=FieldBox(cvl,name='ph',
+                validate={'validator':'real','min':0},noCheckBox=1)
 
-        Pmw.alignlabels([self.centerX.ef,self.centerY.ef,self.distance.ef,self.energyOrWavelength.ef,self.alpha.ef,self.beta.ef,self.rotation.ef,self.pixelLength.ef,self.pixelHeight.ef])
+        Pmw.alignlabels([self.centerX.ef,self.centerY.ef, \
+                self.distance.ef,self.energyOrWavelength.ef, \
+                self.alpha.ef,self.beta.ef,self.rotation.ef, \
+                self.pixelLength.ef,self.pixelHeight.ef])
+
         #Update and Draw Q,dQ,Peaks
         cvr=Frame(cv)
         cvr.pack(side=LEFT,padx=15,pady=2,fill=X)
 
-        self.drawQ=BoxButton(cvr,name='Draw Q Lines?',func=self.updatebothNoComplain,colorFunc=self.getQColor)
-        self.drawdQ=BoxButton(cvr,name='Draw dQ Lines?',func=self.updatebothNoComplain,colorFunc=self.getdQColor)
-        self.drawPeaks=BoxButton(cvr,name='Draw Peaks?',func=self.updatebothNoComplain,colorFunc=self.getPeaksColor)
+        self.drawQ=BoxButton(cvr,name='Draw Q Lines?', 
+                func=self.updatebothNoComplain,colorFunc=self.getQColor)
+        self.drawdQ=BoxButton(cvr,name='Draw dQ Lines?',
+                func=self.updatebothNoComplain,colorFunc=self.getdQColor)
+        self.drawPeaks=BoxButton(cvr,name='Draw Peaks?',
+                func=self.updatebothNoComplain,colorFunc=self.getPeaksColor)
 
-        self.updateDiffractionImageButton=Button(cvr,text='Update',fg='snow',bg='darkgreen',width=w,command=self.maindisp.updateimage)
+        self.updateDiffractionImageButton=Button(cvr,text='Update',
+                fg='snow',bg='darkgreen',width=w,
+                command=self.maindisp.updateimage)
         self.updateDiffractionImageButton.pack(side=TOP,padx=2,pady=20)
         #Do fit
         l=Label(calpage,text='Fit Settings',relief=RAISED,bd=2)
@@ -906,21 +1047,29 @@ class Main:
         ff.pack(side=TOP,padx=2,pady=2,fill='both')
         ffl=Frame(ff)
         ffl.pack(side=LEFT,padx=40,pady=2)
-        self.doFitButton=Button(ffl,text='Do Fit',width=w,fg='snow',bg='darkgreen',command=self.doFit)
+        self.doFitButton=Button(ffl,text='Do Fit',width=w,
+                fg='snow',bg='darkgreen',command=self.doFit)
         self.doFitButton.pack(side=TOP,padx=15,pady=10)
-        self.makeSavePeakListButton=Button(ffl,text='Make/Save Peak List',width=w,fg='snow',bg='goldenrod4',command=self.savePeakList)
+        self.makeSavePeakListButton=Button(ffl,text='Make/Save Peak List',
+                width=w,fg='snow',bg='goldenrod4',command=self.savePeakList)
         self.makeSavePeakListButton.pack(side=TOP,padx=15,pady=10)
         #Peak list opts
         ffm=Frame(ff)
         ffm.pack(side=LEFT,padx=40,pady=2)
 
-        self.useOldPeakListButton = Checkbutton(ffm, text="Use Old Peak List (if possible)?", variable=self.useOldPeakList)
+        self.useOldPeakListButton = Checkbutton(ffm, 
+                text="Use Old Peak List (if possible)?", 
+                variable=self.useOldPeakList)
         self.useOldPeakListButton.pack(side=TOP,padx=5,pady=2)
-        self.numberOfChiInput = Pmw.EntryField(ffm,labelpos = 'w', label_text = "Number of Chi?",
-                                value = '360', entry_width=4,validate={'validator':'numeric','min':0,'max':9999})
+        self.numberOfChiInput = Pmw.EntryField(ffm,labelpos = 'w',
+                label_text = "Number of Chi?",
+                value = '360', entry_width=4,
+                validate={'validator':'numeric','min':0,'max':9999})
         self.numberOfChiInput.pack(side=TOP,padx=5,pady=2)
-        self.stddev = Pmw.EntryField(ffm,entry_width=10, labelpos = 'w', value = '5',
-                                     label_text ="Stddev?" , validate={'validator':'real','min':0 } )
+        self.stddev = Pmw.EntryField(ffm,entry_width=10, 
+                labelpos = 'w', value = '5',
+                label_text ="Stddev?",
+                validate={'validator':'real','min':0 } )
         self.stddev.pack(side=TOP,padx=5,pady=2)
 
         ################ Mask Page
@@ -939,7 +1088,8 @@ class Main:
         temp.pack(side=TOP,anchor=CENTER)
 
         self.doGreaterThanMask=BoxButton(temp,name='Do Greater Than Mask?',
-                func=self.updatebothNoComplain,colorFunc=self.getGreaterThanMaskColor)
+                func=self.updatebothNoComplain,
+                colorFunc=self.getGreaterThanMaskColor)
 
         self.greaterThanMask=Pmw.EntryField(temp,
                 labelpos='w',label_text="(Pixels Can't Be) Greater Than Mask:",
@@ -947,11 +1097,13 @@ class Main:
         self.greaterThanMask.pack(side=TOP)
 
         self.doLessThanMask=BoxButton(temp,name='Do Less Than Mask?',
-                func=self.updatebothNoComplain,colorFunc=self.getLessThanMaskColor)
+                func=self.updatebothNoComplain,
+                colorFunc=self.getLessThanMaskColor)
 
         self.lessThanMask=Pmw.EntryField(temp,
                 labelpos='w',label_text="(Pixels Can't Be) Less Than Mask:",
-                value='',entry_width=w,validate={'validator':'real','min':0})
+                value='',entry_width=w,
+                validate={'validator':'real','min':0})
         self.lessThanMask.pack(side=TOP)
 
         Pmw.alignlabels([self.greaterThanMask,self.lessThanMask])
@@ -971,7 +1123,8 @@ class Main:
         right.pack(side=LEFT,anchor=CENTER,padx=80)
 
         self.doPolygonMask=BoxButton(left,name='Do Polygon Mask?',
-                func=self.updatebothNoComplain,colorFunc=self.getPolygonMaskColor)
+                func=self.updatebothNoComplain,
+                colorFunc=self.getPolygonMaskColor)
 
         self.addRemovePolygonRadioSelect =Pmw.RadioSelect(left,
                 buttontype = 'button', selectmode = 'multiple',orient='vertical',
@@ -980,9 +1133,11 @@ class Main:
         self.addRemovePolygonRadioSelect.pack(side=TOP,anchor=W,padx=10)
         self.addRemovePolygonRadioSelect.add('Add Polygon') # create the button
         self.addRemovePolygonRadioSelect.add('Remove Polygon')
-        self.addPolygonButton = self.addRemovePolygonRadioSelect.component('Add Polygon')
+        self.addPolygonButton = \
+                self.addRemovePolygonRadioSelect.component('Add Polygon')
         self.addPolygonButton.config(fg='snow',bg='darkgreen',width=w)
-        self.removePolygonButton = self.addRemovePolygonRadioSelect.component('Remove Polygon')
+        self.removePolygonButton = \
+                self.addRemovePolygonRadioSelect.component('Remove Polygon')
         self.removePolygonButton.config(fg='snow',bg='goldenrod4',width=w)
 
         self.clearMask=Button(right,text='Clear Mask',width=w,
@@ -1001,54 +1156,86 @@ class Main:
         cakepage=self.xrdnb.add('Cake')
         l=Label(cakepage,text='Caking Settings',relief=RAISED,bd=2)
         l.pack(side=TOP,padx=0,pady=2,fill=X)
+
         w=20
-        self.autoCakeButton=Button(cakepage,text='AutoCake',width=w,fg='snow',bg='darkgreen',command=self.autoCake)
+
+        self.autoCakeButton=Button(cakepage,text='AutoCake',width=w,
+                fg='snow',bg='darkgreen',command=self.autoCake)
         self.autoCakeButton.pack(side=TOP,padx=5,pady=10)
+
         g=Pmw.Group(cakepage,tag_text='Cake Parameters')
         g.pack(side=TOP,padx=5,pady=10,fill='both')
+
         width=10
-        self.qLowerCake=Pmw.EntryField(g.interior(),labelpos = 'w', label_text = "Q Lower?",
-            value = '', entry_width=width,validate={'validator':'real','min':0,'max':999}) 
-        self.qLowerCake.pack(side=TOP,padx=2,pady=1)
-        self.qUpperCake=Pmw.EntryField(g.interior(),labelpos = 'w', label_text = "Q Upper?",
-            value = '', entry_width=width,validate={'validator':'real','min':0,'max':999}) 
-        self.qUpperCake.pack(side=TOP,padx=2,pady=1)
-        self.numQCake=Pmw.EntryField(g.interior(),labelpos = 'w', label_text = "Number of Q?",
-            value = '', entry_width=width,validate={'validator':'numeric','min':0,'max':99999}) 
-        self.numQCake.pack(side=TOP,padx=2,pady=1)
-        self.chiLowerCake=Pmw.EntryField(g.interior(),labelpos = 'w', label_text = "Chi Lower?",
-            value = '', entry_width=width,validate={'validator':'real','min':-360,'max':360}) 
+
+        self.qOrTwoThetaLowerCake=Pmw.EntryField(g.interior(),
+                labelpos = 'w', label_text = "Q Lower?",
+                value = '', entry_width=width,
+                validate={'validator':'real','min':0,'max':999}) 
+        self.qOrTwoThetaLowerCake.pack(side=TOP,padx=2,pady=1)
+
+        self.qOrTwoThetaUpperCake=Pmw.EntryField(g.interior(),
+                labelpos = 'w', label_text = "Q Upper?",
+                value = '', entry_width=width,
+                validate={'validator':'real','min':0,'max':999}) 
+        self.qOrTwoThetaUpperCake.pack(side=TOP,padx=2,pady=1)
+
+        self.numQOrTwoThetaCake=Pmw.EntryField(g.interior(),
+                labelpos = 'w', label_text = "Number of Q?",
+                value = '', entry_width=width,
+                validate={'validator':'numeric','min':0,'max':99999}) 
+        self.numQOrTwoThetaCake.pack(side=TOP,padx=2,pady=1)
+
+        self.chiLowerCake=Pmw.EntryField(g.interior(),
+                labelpos = 'w', label_text = "Chi Lower?",
+                value = '', entry_width=width,
+                validate={'validator':'real','min':-360,'max':360}) 
         self.chiLowerCake.pack(side=TOP,padx=2,pady=1)
-        self.chiUpperCake=Pmw.EntryField(g.interior(),labelpos = 'w', label_text = "Chi Upper?",
-            value = '', entry_width=width,validate={'validator':'real','min':-360,'max':360}) 
+
+        self.chiUpperCake=Pmw.EntryField(g.interior(),
+                labelpos = 'w', label_text = "Chi Upper?",
+                value = '', entry_width=width,
+                validate={'validator':'real','min':-360,'max':360}) 
         self.chiUpperCake.pack(side=TOP,padx=2,pady=1)
-        self.numChiCake=Pmw.EntryField(g.interior(),labelpos = 'w', label_text = "Number of Chi?",
-            value = '', entry_width=width,validate={'validator':'numeric','min':0,'max':99999}) 
+
+        self.numChiCake=Pmw.EntryField(g.interior(),
+                labelpos = 'w', label_text = "Number of Chi?",
+                value = '', entry_width=width,
+                validate={'validator':'numeric','min':0,'max':99999}) 
         self.numChiCake.pack(side=TOP,padx=2,pady=1)
-        Pmw.alignlabels([self.qLowerCake,self.qUpperCake,self.numQCake,self.chiLowerCake,self.chiUpperCake,self.numChiCake])
+
+        Pmw.alignlabels([self.qOrTwoThetaLowerCake,self.qOrTwoThetaUpperCake, \
+                self.numQOrTwoThetaCake,self.chiLowerCake, \
+                self.chiUpperCake,self.numChiCake])
 
         ffm = Frame(cakepage)
         ffm.pack(side=TOP,anchor=CENTER,pady=10)
 
-        self.doPolarizationCorrectionCakeButton = Checkbutton(ffm, text="Do Polarization Correction?", 
+        self.doPolarizationCorrectionCakeButton = Checkbutton(ffm, 
+                text="Do Polarization Correction?", 
                 variable=self.doPolarizationCorrectionCake,
                 command=self.cakedisp.updateimageNoComplainWithdrawIfError)
         self.doPolarizationCorrectionCakeButton.pack(side=TOP,anchor=W)
 
         self.PCake = Pmw.EntryField(ffm,labelpos = 'w', label_text = "P?",
-                value = '', entry_width=width,validate={'validator':'real','min':0,'max':1})
+                value = '', entry_width=width,
+                validate={'validator':'real','min':0,'max':1})
         self.PCake.pack(side=TOP,anchor=W)
 
         w=15
         b=Pmw.ButtonBox(cakepage,orient='horizontal')
         b.pack(side=TOP,padx=10,pady=10)
-        b.add('Do Cake',fg='snow',bg='darkgreen',width=w,command=self.cakedisp.updateimage)
+        b.add('Do Cake',fg='snow',bg='darkgreen',width=w,
+                command=self.cakedisp.updateimage)
         self.doCakeButton=b.component('Do Cake')
-        b.add('Last Cake',fg='snow',bg='goldenrod4',width=w,command=self.undoZoomCakeImage)
+        b.add('Last Cake',fg='snow',bg='goldenrod4',width=w,
+                command=self.undoZoomCakeImage)
         self.lastCakeButton=b.component('Last Cake')
-        b.add('Save Image',fg='snow',bg='royalblue',width=w,command=self.saveCakeImage)
+        b.add('Save Image',fg='snow',bg='royalblue',width=w,
+                command=self.saveCakeImage)
         self.saveCakeImageButton=b.component('Save Image')
-        b.add('Save Data',fg='snow',bg='firebrick4',width=w,command=self.saveCakeData)
+        b.add('Save Data',fg='snow',bg='firebrick4',width=w,
+                command=self.saveCakeData)
         self.saveCakeDataButton=b.component('Save Data')
 
         ################ Integrate Page
@@ -1058,78 +1245,114 @@ class Main:
 
         f=Frame(intpage)
         f.pack(side=TOP,padx=2,pady=5)
-        qg=Pmw.Group(f,tag_text='') #apply the label automatically depending on if in Q or 2theta mode
+
+        #apply the label automatically depending on 
+        # if in Q or 2theta mode
+        qg=Pmw.Group(f,tag_text='') 
         self.QOrTwoThetaIntegrationLabel = qg
         qg.pack(side=LEFT,padx=5,pady=5,fill='both')
         cg=Pmw.Group(f,tag_text='Chi-I Integration')
         cg.pack(side=LEFT,padx=5,pady=5,fill='both')
         w=20
         #Q-I side
-        self.autoIntegrateQOrTwoThetaIButton=Button(qg.interior(),text='AutoIntegrate',width=w,fg='snow',
+        self.autoIntegrateQOrTwoThetaIButton=Button(qg.interior(),
+                text='AutoIntegrate',width=w,fg='snow',
                 bg='darkgreen',command=self.autoIntegrateQOrTwoThetaI)
         self.autoIntegrateQOrTwoThetaIButton.pack(side=TOP,padx=5,pady=5)
 
-        self.QOrTwoThetaLowerIntegrate=Pmw.EntryField(qg.interior(),labelpos = 'w', label_text = "Q Lower?",
-            value = '', entry_width=10,validate={'validator':'real','min':0,'max':999}) 
+        self.QOrTwoThetaLowerIntegrate=Pmw.EntryField(qg.interior(),
+                labelpos = 'w', label_text = "Q Lower?",
+                value = '', entry_width=10,
+                validate={'validator':'real','min':0,'max':999}) 
         self.QOrTwoThetaLowerIntegrate.pack(side=TOP,padx=2,pady=1)
-        self.QOrTwoThetaUpperIntegrate=Pmw.EntryField(qg.interior(),labelpos = 'w', label_text = "Q Upper?",
-            value = '', entry_width=10,validate={'validator':'real','min':0,'max':999}) 
-        self.QOrTwoThetaUpperIntegrate.pack(side=TOP,padx=2,pady=1)
-        self.numQOrTwoThetaIntegrate=Pmw.EntryField(qg.interior(),labelpos = 'w', label_text = "Number of Q?",
-            value = '', entry_width=10,validate={'validator':'numeric','min':0,'max':99999}) 
-        self.numQOrTwoThetaIntegrate.pack(side=TOP,padx=2,pady=1)
-        Pmw.alignlabels([self.QOrTwoThetaLowerIntegrate,self.QOrTwoThetaUpperIntegrate,self.numQOrTwoThetaIntegrate])
 
-        self.constrainWithRangeOnRightButton = Checkbutton(qg.interior(), text='Constrain With Range On Right?', 
+        self.QOrTwoThetaUpperIntegrate=Pmw.EntryField(qg.interior(),
+                labelpos = 'w', label_text = "Q Upper?",
+                value = '', entry_width=10,
+                validate={'validator':'real','min':0,'max':999}) 
+        self.QOrTwoThetaUpperIntegrate.pack(side=TOP,padx=2,pady=1)
+
+        self.numQOrTwoThetaIntegrate=Pmw.EntryField(qg.interior(),
+                labelpos = 'w', label_text = "Number of Q?",
+                value = '', entry_width=10,
+                validate={'validator':'numeric','min':0,'max':99999}) 
+        self.numQOrTwoThetaIntegrate.pack(side=TOP,padx=2,pady=1)
+
+        Pmw.alignlabels([self.QOrTwoThetaLowerIntegrate, \
+                self.QOrTwoThetaUpperIntegrate,self.numQOrTwoThetaIntegrate])
+
+        self.constrainWithRangeOnRightButton = Checkbutton(qg.interior(), 
+                text='Constrain With Range On Right?', 
                 wraplength=120,
                 justify=LEFT,
                 variable = self.constrainWithRangeOnRight,
                 command=self.resetIntegrationDisplay)
-        self.constrainWithRangeOnRightButton.pack(side=TOP,padx=20,pady=5,anchor=W)
+        self.constrainWithRangeOnRightButton.pack(side=TOP,
+                padx=20,pady=5,anchor=W)
 
-        self.integrateQOrTwoThetaIButton=Button(qg.interior(),text='Integrate',fg='snow',bg='darkgreen',width=w,command=self.integrateQOrTwoThetaI)        
+        self.integrateQOrTwoThetaIButton=Button(qg.interior(),
+                text='Integrate',fg='snow',bg='darkgreen',
+                width=w,command=self.integrateQOrTwoThetaI)        
         self.integrateQOrTwoThetaIButton.pack(side=TOP,padx=5,pady=5)
         
         #Chi-I side
-        self.autoIntegrateChiIButton=Button(cg.interior(),text='AutoIntegrate',width=w,fg='snow',
+        self.autoIntegrateChiIButton=Button(cg.interior(),
+                text='AutoIntegrate',width=w,fg='snow',
                 bg='darkgreen',command=self.autoIntegrateChiI)
         self.autoIntegrateChiIButton.pack(side=TOP,padx=5,pady=5)
 
-        self.chiLowerIntegrate=Pmw.EntryField(cg.interior(),labelpos = 'w', label_text = "Chi Lower?",
-            value = '', entry_width=10,validate={'validator':'real','min':-360,'max':360}) 
+        self.chiLowerIntegrate=Pmw.EntryField(cg.interior(),
+                labelpos = 'w', label_text = "Chi Lower?",
+                value = '', entry_width=10,
+                validate={'validator':'real','min':-360,'max':360}) 
         self.chiLowerIntegrate.pack(side=TOP,padx=2,pady=1)
-        self.chiUpperIntegrate=Pmw.EntryField(cg.interior(),labelpos = 'w', label_text = "Chi Upper?",
-            value = '', entry_width=10,validate={'validator':'real','min':-360,'max':360}) 
-        self.chiUpperIntegrate.pack(side=TOP,padx=2,pady=1)
-        self.numChiIntegrate=Pmw.EntryField(cg.interior(),labelpos = 'w', label_text = "Number of Chi?",
-            value = '', entry_width=10,validate={'validator':'numeric','min':0,'max':99999}) 
-        self.numChiIntegrate.pack(side=TOP,padx=2,pady=1)
-        Pmw.alignlabels([self.chiLowerIntegrate,self.chiUpperIntegrate,self.numChiIntegrate])        
 
-        self.constrainWithRangeOnLeftButton = Checkbutton(cg.interior(), text='Constrain With Range On Left?', 
+        self.chiUpperIntegrate=Pmw.EntryField(cg.interior(),
+                labelpos = 'w', label_text = "Chi Upper?",
+                value = '', entry_width=10,
+                validate={'validator':'real','min':-360,'max':360}) 
+        self.chiUpperIntegrate.pack(side=TOP,padx=2,pady=1)
+
+        self.numChiIntegrate=Pmw.EntryField(cg.interior(),
+                labelpos = 'w', label_text = "Number of Chi?",
+                value = '', entry_width=10,
+                validate={'validator':'numeric','min':0,'max':99999}) 
+        self.numChiIntegrate.pack(side=TOP,padx=2,pady=1)
+
+        Pmw.alignlabels([self.chiLowerIntegrate,self.chiUpperIntegrate, \
+                self.numChiIntegrate])        
+
+        self.constrainWithRangeOnLeftButton = Checkbutton(cg.interior(), 
+                text='Constrain With Range On Left?', 
                 wraplength=120,
                 justify=LEFT,
                 variable = self.constrainWithRangeOnLeft,
                 command=self.resetIntegrationDisplay)
-        self.constrainWithRangeOnLeftButton.pack(side=TOP,padx=20,pady=5,anchor=W)
+        self.constrainWithRangeOnLeftButton.pack(side=TOP,padx=20, \
+                pady=5,anchor=W)
 
-
-        self.integrateChiIButton=Button(cg.interior(),text='Integrate',fg='snow',bg='darkgreen',width=w,command=self.integrateChiI)
+        self.integrateChiIButton=Button(cg.interior(),
+                text='Integrate',fg='snow',bg='darkgreen',
+                width=w,command=self.integrateChiI)
         self.integrateChiIButton.pack(side=TOP,padx=5,pady=5)
-
         
         ffm = Frame(intpage)
         ffm.pack(side=TOP,anchor=CENTER,pady=10)
         
-        self.doPolarizationCorrectionIntegrateButton= Checkbutton(ffm, text="Do Polarization Correction?", 
+        self.doPolarizationCorrectionIntegrateButton = \
+                Checkbutton(ffm, text="Do Polarization Correction?", 
                 variable=self.doPolarizationCorrectionIntegrate,
                 command=self.resetIntegrationDisplay)
         self.doPolarizationCorrectionIntegrateButton.pack(side=TOP,anchor=W)
-        self.PIntegrate = Pmw.EntryField(ffm,labelpos = 'w', label_text = "P?",
-                value = '', entry_width=width,validate={'validator':'real','min':0,'max':1})
+
+        self.PIntegrate = Pmw.EntryField(ffm,labelpos = 'w',
+                label_text = "P?",value = '', entry_width=width,
+                validate={'validator':'real','min':0,'max':1})
         self.PIntegrate.pack(side=TOP,anchor=W)
 
-        self.saveIntegrationDataButton=Button(intpage,text='Save Data',fg='snow',bg='firebrick4',width=w,command=self.saveIntegratedIntensity)
+        self.saveIntegrationDataButton=Button(intpage,
+                text='Save Data',fg='snow',bg='firebrick4',
+                width=w,command=self.saveIntegratedIntensity)
         self.saveIntegrationDataButton.pack(side=TOP,padx=5,pady=10)
     
         #clean up notebook sizing
@@ -1137,23 +1360,30 @@ class Main:
         #status bar
         botfr=Frame(xrdwin)
         botfr.pack(side=TOP,fill=X)        
-        self.status=Label(botfr,text="",bd=2,relief=RAISED,anchor=W,fg='blue')
+        self.status=Label(botfr,text="",bd=2,
+                relief=RAISED,anchor=W,fg='blue')
         self.status.pack(side=LEFT,fill=X,expand=1)
         setstatus(self.status,"Ready")        
 
-        self.macrostatus=Label(botfr,text="",bd=2,relief=RAISED,anchor=E,fg='red')
+        self.macrostatus=Label(botfr,text="",bd=2,
+                relief=RAISED,anchor=E,fg='red')
 
-        # let the display functions know about status so that they can set things properly when
-        # they do the calculation
+        # let the display functions know about status so 
+        # that they can set things properly when they do 
+        # the calculation
         self.maindisp.status=self.status
         self.cakedisp.status=self.status
 
-        # this must be called before the calls to the change functions
-        self.macroMode = MacroMode(self,setstatus) # give it this object to work on
+        # this must be called before the calls to the 
+        # change functions. Give it this object to work on
+        self.macroMode = MacroMode(self,setstatus) 
 
-        # have the titles of self.energyOrWavelength set to the right thing
+        # have the titles of self.energyOrWavelength set 
+        # to the right thing
         self.changeEVorLambda(to='Work in eV') 
-        # have the title of self.energyOrWavelength set to the right thing
+
+        # have the title of self.energyOrWavelength set 
+        # to the right thing
         self.changeQor2Theta(to='Work in Q') 
 
         Pmw.reporterrorstofile(FancyErrors(self.status))
@@ -1165,10 +1395,12 @@ class Main:
             (basename,extension) = os.path.splitext(file)
             # only include standard Q files that end in .dat
             if extension == '.dat':
-                # I have to call this funny selectStandardQDataFile() function so that it will do the macro recording 
-                load = (lambda file=file,standardQFolder=self.standardQFolder,self=self,basename=basename: self.selectStandardQDataFile(basename,standardQFolder+os.sep+file))
+                # I have to call this funny selectStandardQDataFile() 
+                # function so that it will do the macro recording 
+                load = (lambda file=file,standardQFolder=self.standardQFolder, \
+                        self=self,basename=basename:self.selectStandardQDataFile(
+                        basename,standardQFolder+os.sep+file))
                 qmenu.add_command(label=basename,command=load)
-                
         
 
     def resetGui(self):
@@ -1256,19 +1488,23 @@ class Main:
         elif self.eVorLambda.get() == "Work in Lambda":
             self.energyOrWavelength.ef.configure(label_text=u"\u019B:")
         else:
-            raise UserInputException("The program must run in either units of either eV or wavelength.")
+            raise UserInputException("The program must run in \
+either units of either eV or wavelength.")
 
         # if switching from one to the other, convert the numbers
         if self.eVorLambda.get() != self.lasteVorLambda.get():
             if self.energyOrWavelength.ef.getvalue() != '':
                 if self.eVorLambda.get() == 'Work in eV':
                     wavelength = float(self.energyOrWavelength.ef.getvalue())
-                    self.energyOrWavelength.ef.setvalue(Transform.convertWavelengthToEnergy(wavelength))
+                    self.energyOrWavelength.ef.setvalue(
+                            Transform.convertWavelengthToEnergy(wavelength))
                 elif self.eVorLambda.get() == 'Work in Lambda':
                     energy = float(self.energyOrWavelength.ef.getvalue())
-                    self.energyOrWavelength.ef.setvalue(Transform.convertEnergyToWavelength(energy))
+                    self.energyOrWavelength.ef.setvalue(
+                            Transform.convertEnergyToWavelength(energy))
                 else:
-                    raise UserInputException("The program must run in either units of either eV or wavelength.")
+                    raise UserInputException("The program must \
+run in either units of either eV or wavelength.")
 
         self.lasteVorLambda.set(self.eVorLambda.get())
 
@@ -1291,19 +1527,44 @@ class Main:
             self.QOrTwoThetaLowerIntegrate.configure(label_text="Q Lower?")
             self.QOrTwoThetaUpperIntegrate.configure(label_text="Q Upper?")
             self.numQOrTwoThetaIntegrate.configure(label_text="Number of Q?")
+
+            self.qOrTwoThetaLowerCake.configure(label_text="Q Lower?")
+            self.qOrTwoThetaUpperCake.configure(label_text="Q Upper?")
+            self.numQOrTwoThetaCake.configure(label_text="Number of Q?")
+
+            # convert any previous cake zoom levels from
+            # two theta to Q
+            for zoom in self.cakeRange:
+                zoom['qOrTwoThetaLower'] = Transform.convertTwoThetaToQ(
+                        zoom['qOrTwoThetaLower'],self.calibrationData[-1])
+                zoom['qOrTwoThetaUpper'] = Transform.convertTwoThetaToQ(
+                        zoom['qOrTwoThetaUpper'],self.calibrationData[-1])
+
         elif self.Qor2Theta.get() == "Work in 2theta":
             self.QOrTwoThetaIntegrationLabel.configure(tag_text=u"2\u03D1-I Integration")
             self.QOrTwoThetaLowerIntegrate.configure(label_text=u"2\u03D1 Lower?")
             self.QOrTwoThetaUpperIntegrate.configure(label_text=u"2\u03D1 Upper?")
             self.numQOrTwoThetaIntegrate.configure(label_text=u"Number of 2\u03D1?")
+
+            self.qOrTwoThetaLowerCake.configure(label_text=u"2\u03D1 Lower?")
+            self.qOrTwoThetaUpperCake.configure(label_text=u"2\u03D1 Upper?")
+            self.numQOrTwoThetaCake.configure(label_text=u"Number of 2\u03D1?")
+
+            # convert any previous cake zoom levels from
+            # two theta to Q
+            for zoom in self.cakeRange:
+                zoom['qOrTwoThetaLower'] = Transform.convertQToTwoTheta(
+                        zoom['qOrTwoThetaLower'],self.calibrationData[-1])
+                zoom['qOrTwoThetaUpper'] = Transform.convertQToTwoTheta(
+                        zoom['qOrTwoThetaUpper'],self.calibrationData[-1])
+
         else:
-            raise UserInputException("The program must work in either Q or 2theta mode.")
+            raise UserInputException("The program must work in \
+either Q or 2theta mode.")
 
         # re-align the labels
-        Pmw.alignlabels([self.QOrTwoThetaLowerIntegrate,self.QOrTwoThetaUpperIntegrate,self.numQOrTwoThetaIntegrate])
-
-        # reset integration display
-        self.resetIntegrationDisplay()
+        Pmw.alignlabels([self.QOrTwoThetaLowerIntegrate, \
+                self.QOrTwoThetaUpperIntegrate,self.numQOrTwoThetaIntegrate])
 
         # if switching from one to the other, try to convert the numbers
         if self.Qor2Theta.get() != self.lastQor2Theta.get():
@@ -1312,28 +1573,68 @@ class Main:
                 self.addUserInputCalibrationDataToObject()
 
                 if self.Qor2Theta.get() == 'Work in Q':
+
+                    if self.qOrTwoThetaLowerCake.getvalue() != '':
+                        twoThetaLower = float(self.qOrTwoThetaLowerCake.getvalue())
+                        self.qOrTwoThetaLowerCake.setvalue(
+                                Transform.convertTwoThetaToQ(
+                                twoThetaLower,self.calibrationData[-1]))
+                    if self.qOrTwoThetaUpperCake.getvalue() != '':
+                        twoThetaUpper = float(self.qOrTwoThetaUpperCake.getvalue())
+                        self.qOrTwoThetaUpperCake.setvalue(
+                                Transform.convertTwoThetaToQ(
+                                twoThetaUpper,self.calibrationData[-1]))
+
                     if self.QOrTwoThetaLowerIntegrate.getvalue() != '':
-                        qLower = float(self.QOrTwoThetaLowerIntegrate.getvalue())
-                        self.QOrTwoThetaLowerIntegrate.setvalue(Transform.convertTwoThetaToQ(qLower,self.calibrationData[-1]))
+                        twoThetaLower = float(self.QOrTwoThetaLowerIntegrate.getvalue())
+                        self.QOrTwoThetaLowerIntegrate.setvalue(
+                                Transform.convertTwoThetaToQ(
+                                twoThetaLower,self.calibrationData[-1]))
                     if self.QOrTwoThetaUpperIntegrate.getvalue() != '':
-                        qUpper = float(self.QOrTwoThetaUpperIntegrate.getvalue())
-                        self.QOrTwoThetaUpperIntegrate.setvalue(Transform.convertTwoThetaToQ(qUpper,self.calibrationData[-1]))
+                        twoThetaUpper = float(self.QOrTwoThetaUpperIntegrate.getvalue())
+                        self.QOrTwoThetaUpperIntegrate.setvalue(
+                                Transform.convertTwoThetaToQ(
+                                twoThetaUpper,self.calibrationData[-1]))
 
                 elif self.Qor2Theta.get() == "Work in 2theta":
+
+                    if self.qOrTwoThetaLowerCake.getvalue() != '':
+                        qLower = float(self.qOrTwoThetaLowerCake.getvalue())
+                        self.qOrTwoThetaLowerCake.setvalue(
+                                Transform.convertQToTwoTheta(
+                                qLower,self.calibrationData[-1]))
+                    if self.qOrTwoThetaUpperCake.getvalue() != '':
+                        qUpper = float(self.qOrTwoThetaUpperCake.getvalue())
+                        self.qOrTwoThetaUpperCake.setvalue(
+                                Transform.convertQToTwoTheta(
+                                qUpper,self.calibrationData[-1]))
+
                     if self.QOrTwoThetaLowerIntegrate.getvalue() != '':
                         qLower = float(self.QOrTwoThetaLowerIntegrate.getvalue())
-                        self.QOrTwoThetaLowerIntegrate.setvalue(Transform.convertQToTwoTheta(qLower,self.calibrationData[-1]))
+                        self.QOrTwoThetaLowerIntegrate.setvalue(
+                                Transform.convertQToTwoTheta(
+                                qLower,self.calibrationData[-1]))
                     if self.QOrTwoThetaUpperIntegrate.getvalue() != '':
                         qUpper = float(self.QOrTwoThetaUpperIntegrate.getvalue())
-                        self.QOrTwoThetaUpperIntegrate.setvalue(Transform.convertQToTwoTheta(qUpper,self.calibrationData[-1]))
+                        self.QOrTwoThetaUpperIntegrate.setvalue(
+                                Transform.convertQToTwoTheta(
+                                qUpper,self.calibrationData[-1]))
                 else:
-                    raise UserInputException("The program must work in either Q or 2theta mode.")
-            except:
+                    raise UserInputException("The program must \
+work in either Q or 2theta mode.")
+            except Exception, e:
                 # if that didn't work, then just make the new vals blank
                 self.QOrTwoThetaLowerIntegrate.setvalue('')
                 self.QOrTwoThetaUpperIntegrate.setvalue('')
 
         self.lastQor2Theta.set(self.Qor2Theta.get())
+
+        # reset integration display
+        self.resetIntegrationDisplay()
+
+        # update the cake disp
+        self.updatebothNoComplain()
+        
 
         # Explicityly record macro. Only do so if in record macro mode
         if self.macroLines != None:
@@ -1405,9 +1706,14 @@ class Main:
 
 
     def getRealDiffractionImageCoordinates(self,x,y):
-        """ Returns the real pixel values corresponding to canvas x,y values. """
+        """ Returns the real pixel values corresponding 
+            to canvas x,y values. """
+
         if self.diffractionImageZoomPixels==[]:
-            minRealX,minRealY,maxRealX,maxRealY=0,0,self.diffractionData.getSize()-1,self.diffractionData.getSize()-1
+            minRealX = 0
+            minRealY = 0
+            maxRealX = self.diffractionData.getSize()-1
+            maxRealY = self.diffractionData.getSize()-1
         else:
             current = self.diffractionImageZoomPixels[-1]
             minRealX = min(current[0]['x'],current[1]['x'] )
@@ -1436,9 +1742,13 @@ class Main:
 
 
     def getCanvasDiffractionImageCoordinates(self,realX,realY):
-        """ Returns the canvas values x,y corresponding to real pixels. """
+        """ Returns the canvas values x,y corresponding 
+            to real pixels. """
         if self.diffractionImageZoomPixels==[]:
-            minRealX,minRealY,maxRealX,maxRealY=0,0,self.diffractionData.getSize()-1,self.diffractionData.getSize()-1
+            minRealX = 0
+            minRealY = 0
+            maxRealX = self.diffractionData.getSize()-1
+            maxRealY = self.diffractionData.getSize()-1
         else:
             current = self.diffractionImageZoomPixels[-1]
             minRealX = min(current[0]['x'],current[1]['x'] )
@@ -1503,13 +1813,15 @@ class Main:
 
 
     def mouseDragNoPressDiffractionImage(self,event):
-        """ Display x,y and (possibly) Q,chi cordinates, but do not redraw rectangle. """
+        """ Display x,y and (possibly) Q,chi cordinates, 
+            but do not redraw rectangle. """
         self.coordReportUpdateDiffractionImage(event.x,event.y)
  
     
     def resizeDiffractionImage(self,event):
-        """ When the frame holding the graphs gets resized because the 
-            image canvas gets streched by the user, redraw the cake iamge
+        """ When the frame holding the graphs gets 
+            resized because the image canvas gets 
+            streched by the user, redraw the cake image
             and the axis to fill the newly avalible space. """
         
         # resize canvas properly
@@ -1517,7 +1829,9 @@ class Main:
                 event.height <= self.axisSize:
             return
 
-        self.diffractionImageSize = min(event.width-self.axisSize, event.height-self.axisSize)
+        self.diffractionImageSize = \
+                min(event.width-self.axisSize,
+                event.height-self.axisSize)
 
         self.maindisp.imframe.config(height=self.diffractionImageSize,
                 width=self.diffractionImageSize)
@@ -1602,7 +1916,8 @@ class Main:
         global x0, y0, x1, y1        
 
         self.maindisp.imframe.unbind(sequence="<Motion>")
-        self.maindisp.imframe.bind(sequence="<Motion>", func=self.mouseDragNoPressDiffractionImage)
+        self.maindisp.imframe.bind(sequence="<Motion>", 
+                func=self.mouseDragNoPressDiffractionImage)
         self.maindisp.imframe.unbind(sequence="<ButtonRelease>")
 
         # If this was a left click, try to zoom in. Otherwise, zoom out
@@ -1616,12 +1931,15 @@ class Main:
 
             if druged and (abs(allowedX1-allowedX0)>1 and abs(allowedY1-allowedY0)>1):
 
-                realX0,realY0 = self.getRealDiffractionImageCoordinates(allowedX0,allowedY0)
-                realX1,realY1 = self.getRealDiffractionImageCoordinates(allowedX1,allowedY1)
+                realX0,realY0 = self.getRealDiffractionImageCoordinates(
+                        allowedX0,allowedY0)
+                realX1,realY1 = self.getRealDiffractionImageCoordinates(
+                        allowedX1,allowedY1)
 
                 # set the new zoom scale
-                self.doZoomDiffractionImage(({'x':min(realX0,realX1),'y':min(realY0,realY1)}, 
-                    {'x':max(realX0,realX1),'y':max(realY0,realY1)}))
+                self.doZoomDiffractionImage(
+                        ({'x':min(realX0,realX1),'y':min(realY0,realY1)}, 
+                        {'x':max(realX0,realX1),'y':max(realY0,realY1)}))
         else:
             self.undoZoomDiffractionImage()
 
@@ -1631,12 +1949,16 @@ class Main:
         druged = 0
         (x0, y0) = event.x, event.y
         (x1, y1) = event.x, event.y
-        self.maindisp.imframe.bind(sequence="<Motion>",  func=self.mouseDragZoomDiffractionImage)        
-        self.maindisp.imframe.bind(sequence="<ButtonRelease>", func=self.mouseUpZoomDiffractionImage)
+        self.maindisp.imframe.bind(sequence="<Motion>",  
+                func=self.mouseDragZoomDiffractionImage)        
+        self.maindisp.imframe.bind(sequence="<ButtonRelease>", 
+                func=self.mouseUpZoomDiffractionImage)
 
         # if right click = zoom in, draw the rectangle
         if event.num==1:
-            self.zoomRectangle = self.maindisp.imframe.create_rectangle( x0, y0, x0, y0, dash=(2,2), 
+            self.zoomRectangle = \
+                    self.maindisp.imframe.create_rectangle(
+                    x0,y0,x0,y0,dash=(2,2), 
                     outline="black" )
 
 
@@ -1654,21 +1976,31 @@ class Main:
         if abs(currentX-lastX) < 1 and abs(currentY-lastY) < 1:
             return 
 
-        pixel1X = min(self.diffractionImageZoomPixels[-1][0]['x'],self.diffractionImageZoomPixels[-1][1]['x'])
-        pixel2X = max(self.diffractionImageZoomPixels[-1][0]['x'],self.diffractionImageZoomPixels[-1][1]['x'])
-        pixel1Y = min(self.diffractionImageZoomPixels[-1][0]['y'],self.diffractionImageZoomPixels[-1][1]['y'])
-        pixel2Y = max(self.diffractionImageZoomPixels[-1][0]['y'],self.diffractionImageZoomPixels[-1][1]['y'])
+        pixel1X = min(self.diffractionImageZoomPixels[-1][0]['x'],
+                self.diffractionImageZoomPixels[-1][1]['x'])
+        pixel2X = max(self.diffractionImageZoomPixels[-1][0]['x'],
+                self.diffractionImageZoomPixels[-1][1]['x'])
+        pixel1Y = min(self.diffractionImageZoomPixels[-1][0]['y'],
+                self.diffractionImageZoomPixels[-1][1]['y'])
+        pixel2Y = max(self.diffractionImageZoomPixels[-1][0]['y'],
+                self.diffractionImageZoomPixels[-1][1]['y'])
 
-        # figure out how far, in real image cordinates, the person has moved the mouse
-        # since last time. To do this, we figure out the ratio of the image moved over
-        # and multiply that by the total real distance being displayed in the image
-        realDifferenceX = ((currentX-lastX)*1.0/self.diffractionImageSize)*abs(pixel1X-pixel2X)
-        realDifferenceY = ((currentY-lastY)*1.0/self.diffractionImageSize)*abs(pixel1Y-pixel2Y)
+        # figure out how far, in real image cordinates, the 
+        # person has moved the mouse since last time. To do 
+        # this, we figure out the ratio of the image moved 
+        # over and multiply that by the total real distance 
+        # being displayed in the image
+        realDifferenceX = ((currentX-lastX)*1.0/ \
+                self.diffractionImageSize)*abs(pixel1X-pixel2X)
+        realDifferenceY = ((currentY-lastY)*1.0/ \
+                self.diffractionImageSize)*abs(pixel1Y-pixel2Y)
 
-        # the image is drawn with different axis on the screen (negative to postive)
-        # then the cordinates which are given by our event.x and event.y 
-        # To account for this, our realDifferenceX & realDifferenceY are the negative
-        # of what they should be, so we subtract them instead
+        # the image is drawn with different axis on the 
+        # screen (negative to postive) then the cordinates 
+        # which are given by our event.x and event.y 
+        # To account for this, our realDifferenceX and
+        # realDifferenceY are the negative of what they 
+        # should be, so we subtract them instead
         new1X = pixel1X - realDifferenceX
         new1Y = pixel1Y - realDifferenceY
         new2X = pixel2X - realDifferenceX
@@ -1678,10 +2010,11 @@ class Main:
         # Do so by forcing it back onto the image
         size = self.diffractionData.getSize()
 
-        # if it overlaps off one edge, it can't overlap off the other edge. 
-        # So, we don't have to worry about one of these conditions undoing another
-        # And therefore, we don't have to worry about doing any elifs and can do 
-        # only lots of ifs.
+        # if it overlaps off one edge, it can't overlap 
+        # off the other edge. So, we don't have to 
+        # worry about one of these conditions undoing another
+        # And therefore, we don't have to worry about doing 
+        # any elifs and can do only lots of ifs.
         if new1X < 0: 
             diff = abs(new1X)
             new1X += diff
@@ -1729,7 +2062,8 @@ class Main:
     def mouseUpPanDiffractionImage(self,event):
         global druged
         self.maindisp.imframe.unbind(sequence="<Motion>")
-        self.maindisp.imframe.bind(sequence="<Motion>", func=self.mouseDragNoPressDiffractionImage)
+        self.maindisp.imframe.bind(sequence="<Motion>", 
+                func=self.mouseDragNoPressDiffractionImage)
         self.maindisp.imframe.unbind(sequence="<ButtonRelease>")
 
 
@@ -1737,8 +2071,10 @@ class Main:
         global druged, lastX, lastY
         druged = 0
         (lastX, lastY) = event.x, event.y
-        self.maindisp.imframe.bind(sequence="<Motion>", func=self.mouseDragPanDiffractionImage)
-        self.maindisp.imframe.bind(sequence="<ButtonRelease>", func=self.mouseUpPanDiffractionImage)
+        self.maindisp.imframe.bind(sequence="<Motion>", 
+                func=self.mouseDragPanDiffractionImage)
+        self.maindisp.imframe.bind(sequence="<ButtonRelease>", 
+                func=self.mouseUpPanDiffractionImage)
 
 
     def addUserInputCalibrationDataToObject(self):
@@ -1747,79 +2083,103 @@ class Main:
 
         val = self.centerX.ef.getvalue()
         fixed = self.centerX.fixedvar.get()
-        if val == "": raise UserInputException("The x center calibration parameter is not set.")
+        if val == "": raise UserInputException("The x center \
+calibration parameter is not set.")
         try:
             calibration.setCenterX(float(val),fixed=fixed )
         except UserInputException, e:
-            raise UserInputException("The x center calibration parameter has not been set.")
+            raise UserInputException("The x center calibration \
+parameter has not been set.")
 
         val = self.centerY.ef.getvalue()
         fixed = self.centerY.fixedvar.get()
-        if val == "": raise UserInputException("The y center calibration parameter is not set.")
+        if val == "": raise UserInputException("The y center \
+calibration parameter is not set.")
+
         try:
             calibration.setCenterY(float(val),fixed=fixed )
         except UserInputException, e:
-            raise UserInputException("The y center calibration parameter has not been set.")
+            raise UserInputException("The y center calibration \
+parameter has not been set.")
 
         val = self.distance.ef.getvalue()
         fixed = self.distance.fixedvar.get()
-        if val == "": raise UserInputException("The distance calibration parameter is not set.")
+        if val == "": raise UserInputException("The distance \
+calibration parameter is not set.")
+
         try:
             calibration.setDistance(float(val),fixed=fixed )
         except UserInputException, e:
-            raise UserInputException("The distance calibration parameter has not been set.")
+            raise UserInputException("The distance calibration \
+parameter has not been set.")
 
         val = self.energyOrWavelength.ef.getvalue()
         fixed = self.energyOrWavelength.fixedvar.get()
-        if val == "": raise UserInputException("The energy calibration parameter is not set.")
+        if val == "": raise UserInputException("The energy \
+calibration parameter is not set.")
+
         try:
             if self.eVorLambda.get() == 'Work in eV':
                 calibration.setEnergy(float(val),fixed=fixed )
             elif self.eVorLambda.get() == "Work in Lambda":
                 calibration.setWavelength(float(val),fixed=fixed )
             else:
-                raise UserInputException("The program must run in either units of either eV or wavelength.")
+                raise UserInputException("The program must run in \
+either units of either eV or wavelength.")
+
         except UserInputException, e:
-            raise UserInputException("The energy calibration parameter has not been set.")
+            raise UserInputException("The energy calibration \
+parameter has not been set.")
 
         val = self.alpha.ef.getvalue()
         fixed = self.alpha.fixedvar.get()
-        if val == "": raise UserInputException("The alpha calibration parameter is not set.")
+        if val == "": raise UserInputException("The alpha calibration \
+parameter is not set.")
+
         try:
             calibration.setAlpha(float(val),fixed=fixed )
         except UserInputException, e:
-            raise UserInputException("The alpha calibration parameter has not been set.")
+            raise UserInputException("The alpha calibration parameter \
+has not been set.")
 
         val = self.beta.ef.getvalue()
         fixed = self.beta.fixedvar.get()
-        if val == "": raise UserInputException("The beta calibration parameter is not set.")
+        if val == "": 
+            raise UserInputException("The beta calibration parameter \
+is not set.")
+
         try:
             calibration.setBeta(float(val),fixed=fixed )
         except UserInputException, e:
-            raise UserInputException("The beta calibration parameter has not been set.")
+            raise UserInputException("The beta calibration parameter \
+has not been set.")
 
         val = self.rotation.ef.getvalue()
         fixed = self.rotation.fixedvar.get()
-        if val == "": raise UserInputException("The rotation calibration parameter is not set.")
+        if val == "": raise UserInputException("The rotation calibration \
+parameter is not set.")
+
         try:
             calibration.setRotation(float(val),fixed=fixed )
         except UserInputException, e:
-            raise UserInputException("The rotation calibration parameter has not been set.")
+            raise UserInputException("The rotation calibration parameter \
+has not been set.")
 
         val = self.pixelLength.ef.getvalue()
         # no pixelLenght fixed values to deal with
         try:
             calibration.setPixelLength(float(val))
         except UserInputException, e:
-            raise UserInputException("The pixel length calibration parameter has not been set.")
+            raise UserInputException("The pixel length calibration parameter \
+has not been set.")
 
         val = self.pixelHeight.ef.getvalue()
         # no pixelHeight fixed values to deal with
         try:
             calibration.setPixelHeight(float(val))
         except UserInputException, e:
-            raise UserInputException("The pixel height calibration parameter has not been set.")
-
+            raise UserInputException("The pixel height calibration parameter \
+has not been set.")
 
         # now put our new calibration data into our list
         if self.calibrationData == []:
@@ -1829,18 +2189,23 @@ class Main:
             self.calibrationData[-1]=calibration
 
 
-    def putCalibrationDataIntoInputsNoComplainMissingFields(self,calibrationData,addFixedVals=1):
+    def putCalibrationDataIntoInputsNoComplainMissingFields(
+            self,calibrationData,addFixedVals=1):
         try:
-            self.centerX.ef.setentry(calibrationData.getCenterX()['val'])
+            self.centerX.ef.setentry(
+                    calibrationData.getCenterX()['val'])
             if addFixedVals:
-                self.centerX.fixedvar.set(calibrationData.getCenterX()['fixed'])
+                self.centerX.fixedvar.set(
+                        calibrationData.getCenterX()['fixed'])
         except:
             pass
 
         try:
-            self.centerY.ef.setentry(calibrationData.getCenterY()['val'])
+            self.centerY.ef.setentry(
+                    calibrationData.getCenterY()['val'])
             if addFixedVals:
-                self.centerY.fixedvar.set(calibrationData.getCenterY()['fixed'])
+                self.centerY.fixedvar.set(
+                        calibrationData.getCenterY()['fixed'])
         except:
             pass
 
@@ -1853,15 +2218,20 @@ class Main:
 
         try:
             if self.eVorLambda.get() == 'Work in eV':
-                self.energyOrWavelength.ef.setentry(calibrationData.getEnergy()['val'])
+                self.energyOrWavelength.ef.setentry(
+                        calibrationData.getEnergy()['val'])
                 if addFixedVals:
-                    self.energyOrWavelength.fixedvar.set(calibrationData.getEnergy()['fixed'])
+                    self.energyOrWavelength.fixedvar.set(
+                            calibrationData.getEnergy()['fixed'])
             elif self.eVorLambda.get() == "Work in Lambda":
-                self.energyOrWavelength.ef.setentry(calibrationData.getWavelength()['val'])
+                self.energyOrWavelength.ef.setentry(
+                        calibrationData.getWavelength()['val'])
                 if addFixedVals:
-                    self.energyOrWavelength.fixedvar.set(calibrationData.getWavelength()['fixed'])
+                    self.energyOrWavelength.fixedvar.set(
+                            calibrationData.getWavelength()['fixed'])
             else:
-                raise UserInputException("The program must run in either units of either eV or wavelength.")
+                raise UserInputException("The program must run in either \
+units of either eV or wavelength.")
         except:
             pass
 
@@ -1882,48 +2252,59 @@ class Main:
         try:
             self.rotation.ef.setentry(calibrationData.getRotation()['val'])
             if addFixedVals:
-                self.rotation.fixedvar.set(calibrationData.getRotation()['fixed'])
+                self.rotation.fixedvar.set(
+                        calibrationData.getRotation()['fixed'])
         except:
             pass
 
         # no pixelLenght/pixelHeight fixed values to deal with
         try:
-            self.pixelLength.ef.setentry(calibrationData.getPixelLength()['val'])
+            self.pixelLength.ef.setentry(
+                    calibrationData.getPixelLength()['val'])
         except:
             pass
 
         try:
-            self.pixelHeight.ef.setentry(calibrationData.getPixelHeight()['val'])
+            self.pixelHeight.ef.setentry(
+                    calibrationData.getPixelHeight()['val'])
         except:
             pass
 
 
     def putCalibrationDataIntoInputs(self):
-        if self.calibrationData == [] or not self.calibrationData[-1].allSet():
-            raise UserInputException("Error: Calibration Data is not yet set.")
+        if self.calibrationData == [] or \
+                not self.calibrationData[-1].allSet():
+            raise UserInputException("Error: Calibration Data \
+is not yet set.")
 
-        self.centerX.ef.setentry(self.calibrationData[-1].getCenterX()['val'])
+        self.centerX.ef.setentry(
+                self.calibrationData[-1].getCenterX()['val'])
         self.centerX.fixedvar.set(
             self.calibrationData[-1].getCenterX()['fixed'])
 
-        self.centerY.ef.setentry(self.calibrationData[-1].getCenterY()['val'])
+        self.centerY.ef.setentry(
+                self.calibrationData[-1].getCenterY()['val'])
         self.centerY.fixedvar.set(
             self.calibrationData[-1].getCenterY()['fixed'])
 
-        self.distance.ef.setentry(self.calibrationData[-1].getDistance()['val'])
+        self.distance.ef.setentry(
+                self.calibrationData[-1].getDistance()['val'])
         self.distance.fixedvar.set(
             self.calibrationData[-1].getDistance()['fixed'])
 
         if self.eVorLambda.get() == 'Work in eV':
-            self.energyOrWavelength.ef.setentry(self.calibrationData[-1].getEnergy()['val'])
+            self.energyOrWavelength.ef.setentry(
+                    self.calibrationData[-1].getEnergy()['val'])
             self.energyOrWavelength.fixedvar.set(
                 self.calibrationData[-1].getEnergy()['fixed'])
         elif self.eVorLambda.get() == "Work in Lambda":
-            self.energyOrWavelength.ef.setentry(self.calibrationData[-1].getWavelength()['val'])
+            self.energyOrWavelength.ef.setentry(
+                    self.calibrationData[-1].getWavelength()['val'])
             self.energyOrWavelength.fixedvar.set(
                 self.calibrationData[-1].getWavelength()['fixed'])
         else:
-            raise UserInputException("The program must run in either units of either eV or wavelength.")
+            raise UserInputException("The program must run in \
+either units of either eV or wavelength.")
 
         self.alpha.ef.setentry(self.calibrationData[-1].getAlpha()['val'])
         self.alpha.fixedvar.set(
@@ -1937,17 +2318,20 @@ class Main:
         self.rotation.fixedvar.set(
             self.calibrationData[-1].getRotation()['fixed'])
 
-        self.pixelLength.ef.setentry(self.calibrationData[-1].getPixelLength()['val'])
-        self.pixelHeight.ef.setentry(self.calibrationData[-1].getPixelHeight()['val'])
+        self.pixelLength.ef.setentry(
+                self.calibrationData[-1].getPixelLength()['val'])
+        self.pixelHeight.ef.setentry(
+                self.calibrationData[-1].getPixelHeight()['val'])
         # no pixelLenght/pixelHeight fixed values to deal with
 
 
     # functions to make the gui do the right thing
 
     def updatebothNoComplain(self):
-        """ Try to update both the main display and the cake display. 
-            This function does not 'show'
-            Only do the updating if the images are already on the screen. """
+        """ Try to update both the main display and the 
+            cake display. This function does not 'show'
+            Only do the updating if the images are already 
+            on the screen. """
         self.maindisp.updateimageNoComplainNoShow()
         self.cakedisp.updateimageNoComplainNoShow()
 
@@ -1966,25 +2350,31 @@ class Main:
 
             if filename in ['',()]: return 
 
-            # on the mac, it won't give a default extension if you don't write
-            # it out explicitly, so make sure to do so automatically otherwise
+            # on the mac, it won't give a default extension 
+            # if you don't write it out explicitly, so make 
+            # sure to do so automatically otherwise
             if os.path.splitext(filename)[1] == '':
                 filename += defaultextension
 
         if self.eVorLambda.get() == 'Work in eV':
-            self.calibrationData[-1].toFile(filename,energyOrWavelength='Energy')
+            self.calibrationData[-1].toFile(filename,
+                    energyOrWavelength='Energy')
         elif self.eVorLambda.get() == "Work in Lambda":
-            self.calibrationData[-1].toFile(filename,energyOrWavelength='Wavelength')
+            self.calibrationData[-1].toFile(filename,
+                    energyOrWavelength='Wavelength')
         else:
-            raise UserInputException("The program must run in either units of either eV or wavelength.")
+            raise UserInputException("The program must \
+run in either units of either eV or wavelength.")
 
         # Explicityly record macro. Only do so if in record macro mode
         if self.macroLines != None:
-            self.macroMode.explicitMacroRecordTwoLines('Save Calibration','\t'+filename)
+            self.macroMode.explicitMacroRecordTwoLines(
+                    'Save Calibration','\t %s' % filename)
 
     def calibrationDataUndo(self):
         if len(self.calibrationData) < 2:
-            raise UserInputException("No previous calibration data exists to undo to.")
+            raise UserInputException("No previous calibration \
+data exists to undo to.")
         # remove previous calibration data.
         self.calibrationData.pop()
         self.putCalibrationDataIntoInputs()
@@ -1992,7 +2382,9 @@ class Main:
 
 
     def calibrationDataLoad(self,filename=''):
-        """ The optional filename argument allows this function to be called in a macro mode. """
+        """ The optional filename argument allows this function \
+to be called in a macro mode. """
+
         if filename == '':
             filename = tkFileDialog.askopenfilename(
                     filetypes=[('Data File','*.dat'),('All Files','*')],
@@ -2011,9 +2403,11 @@ class Main:
 
     def calibrationDataFromHeader(self):
         if self.diffractionData == None:
-            raise UserInputException("Cannot get the calibration data from the image header until an image is loaded.")
+            raise UserInputException("Cannot get the calibration data 
+from the image header until an image is loaded.")
         calibrationData=self.diffractionData.calibrationDataFromHeader()
-        self.putCalibrationDataIntoInputsNoComplainMissingFields(calibrationData,addFixedVals=0)
+        self.putCalibrationDataIntoInputsNoComplainMissingFields(
+                calibrationData,addFixedVals=0)
         self.updatebothNoComplain()
 
     
@@ -2066,12 +2460,23 @@ class Main:
         self.addUserInputCalibrationDataToObject()
 
         if self.QData == None:
-            raise UserInputException("Cannot add constant Q lines to the image until a QData file is set.")
+            raise UserInputException("Cannot add constant Q lines to the image \
+until a QData file is set.")
         if self.calibrationData == [] or not self.calibrationData[-1].allSet():
-            raise UserInputException("Cannot add constant Q lines to the image until the calibration parameters are set.")
+            raise UserInputException("Cannot add constant Q lines to the image \
+until the calibration parameters are set.")
         if self.diffractionData == None:
-            raise UserInputException("Cannot add constant Q lines to the image until a diffraction image is set.")
+            raise UserInputException("Cannot add constant Q lines to the image \
+until a diffraction image is set.")
 
+        if self.Qor2Theta.get() == "Work in Q":
+            type = "Q"
+        elif self.Qor2Theta.get() == "Work in 2theta":
+            type = "2theta"
+        else:
+            raise UserInputException("The program must work in either Q or \
+2theta mode.")
+        
         # remove old Q lines
         for id in self.allQLineIDsDiffractionImage:
             self.maindisp.imframe.delete(id)
@@ -2090,7 +2495,8 @@ class Main:
                     list.append(xCanvas)
                     list.append(yCanvas)
                 # draw the current Q line
-                self.allQLineIDsDiffractionImage.append(self.maindisp.imframe.create_polygon(
+                self.allQLineIDsDiffractionImage.append(
+                        self.maindisp.imframe.create_polygon(
                         list,outline=self.qLinesColor.get(),fill="" ))
 
             if self.drawdQ.checkvar.get():
@@ -2104,7 +2510,9 @@ class Main:
                     list.append(xCanvas)
                     list.append(yCanvas)
                 # draw the current dQ line
-                self.allQLineIDsDiffractionImage.append( self.maindisp.imframe.create_polygon(list,outline=self.dQLinesColor.get(),fill="" ))
+                self.allQLineIDsDiffractionImage.append(
+                        self.maindisp.imframe.create_polygon(
+                        list,outline=self.dQLinesColor.get(),fill="" ))
 
                 list = []
                 for chi in General.frange(0,360,3):
@@ -2117,7 +2525,9 @@ class Main:
                     list.append(yCanvas)
 
                 # draw the current dQ line
-                self.allQLineIDsDiffractionImage.append( self.maindisp.imframe.create_polygon(list,outline=self.dQLinesColor.get(),fill="" ))
+                self.allQLineIDsDiffractionImage.append(
+                        self.maindisp.imframe.create_polygon(
+                        list,outline=self.dQLinesColor.get(),fill="" ))
 
 
     def doZoomDiffractionImage(self,zoomLevel):
@@ -2129,22 +2539,30 @@ class Main:
     def undoZoomDiffractionImage(self,event=None):
         """ Take the current zoom level off the stack, so that the 
             new current zoom level is the old one. Then it draws 
-            the image. Only do so if there is still something on the stack. """
+            the image. Only do so if there is still something on 
+            the stack. """
+
         # reset cordinates
         if self.diffractionImageZoomPixels != []:
             self.diffractionImageZoomPixels.pop()
         self.maindisp.updateimage()
 
     def addMaskedPixelInfoToObject(self,operationString):
-        self.maskedPixelInfo.doGreaterThanMask = self.doGreaterThanMask.checkvar.get()
-        self.maskedPixelInfo.greaterThanMaskColor = self.greaterThanMaskColor.get()
+        self.maskedPixelInfo.doGreaterThanMask = \
+                self.doGreaterThanMask.checkvar.get()
+        self.maskedPixelInfo.greaterThanMaskColor = \
+                self.greaterThanMaskColor.get()
+
         if self.maskedPixelInfo.doGreaterThanMask:
             try:
-                self.maskedPixelInfo.greaterThanMask = float(self.greaterThanMask.getvalue())
+                self.maskedPixelInfo.greaterThanMask = \
+                        float(self.greaterThanMask.getvalue())
             except:
-                raise UserInputException("Cannot "+operationString+" until the the greater than mask gets set.")
+                raise UserInputException("Cannot %s until the \
+the greater than mask gets set." % operationString)
         else:
-            self.maskedPixelInfo.greaterThanMask = -1 # Can be anything since it won't be used
+            # Can be anything since it won't be used
+            self.maskedPixelInfo.greaterThanMask = -1 
 
         self.maskedPixelInfo.doLessThanMask = self.doLessThanMask.checkvar.get()
         self.maskedPixelInfo.lessThanMaskColor = self.lessThanMaskColor.get()
@@ -2152,38 +2570,48 @@ class Main:
             try:
                 self.maskedPixelInfo.lessThanMask = float(self.lessThanMask.getvalue())
             except:
-                raise UserInputException("Cannot "+operationString+" until the less than mask gets set.")
+                raise UserInputException("Cannot %s until the \
+less than mask gets set." % operationString)
         else:
-            self.maskedPixelInfo.lessThanMask = -1 # Can be anything since it won't be used
+            # Can be anything since it won't be used
+            self.maskedPixelInfo.lessThanMask = -1 
 
         # get in the polygon info
         self.maskedPixelInfo.doPolygonMask = self.doPolygonMask.checkvar.get()
         self.maskedPixelInfo.polygonMaskColor = self.polygonMaskColor.get()
 
-        if self.maskedPixelInfo.doGreaterThanMask and self.maskedPixelInfo.greaterThanMask < 0:
-            raise UserInputException("Cannot "+operationString+" because the greater than mask must be at least 0.")
+        if self.maskedPixelInfo.doGreaterThanMask and \
+                self.maskedPixelInfo.greaterThanMask < 0:
+            raise UserInputException("Cannot %s because the greater \
+than mask must be at least 0." % operationString)
 
-        if self.maskedPixelInfo.doLessThanMask and self.maskedPixelInfo.lessThanMask < 0:
-            raise UserInputException("Cannot "+operationString+" because the less than mask must be at least 0.")
+        if self.maskedPixelInfo.doLessThanMask and \
+                self.maskedPixelInfo.lessThanMask < 0:
+            raise UserInputException("Cannot %s because the less \
+than mask must be at least 0." % operationString)
 
-        if self.maskedPixelInfo.doLessThanMask and self.maskedPixelInfo.doGreaterThanMask and \
+        if self.maskedPixelInfo.doLessThanMask and \
+                self.maskedPixelInfo.doGreaterThanMask and \
                 self.maskedPixelInfo.greaterThanMask < self.maskedPixelInfo.lessThanMask:
-            raise UserInputException("Cannot "+operationString+" because the greater than mask must be at least as large as the less than mask.")
-
-
+            raise UserInputException("Cannot %s because the greater \
+than mask must be at least as large as the less than \
+mask." % operationString)
 
     def drawDiffractionImage(self): 
         if self.diffractionData == None:
-            raise UserInputException("Cannot draw the image until a diffraction image is set.")
+            raise UserInputException("Cannot draw the image until a \
+diffraction image is set.")
 
         setstatus(self.status,"Drawing...")
         
         try:
-            # update calibrationData first. Note that if the calibration data 
-            # is not in the inpus, that is not necessarily a problem. So we should 
+            # update calibrationData first. Note that if 
+            # the calibration data is not in the inpus, 
+            # that is not necessarily a problem. So we should 
             # just try to addd it in and do nothing if it fails.
-            # The reason to do so here is because if the image gets updated, we 
-            # want any changes to the calibrationData to be apperent when you
+            # The reason to do so here is because if the image 
+            # gets updated, we want any changes to the 
+            # calibrationData to be apperent when you
             # move your curser around the image.
             self.addUserInputCalibrationDataToObject()
         except:
@@ -2193,23 +2621,29 @@ class Main:
             lower = float(self.maindisp.intenvarlo.get() )
             upper = float(self.maindisp.intenvarhi.get() )
         except: 
-            raise UserInputException("Image Scaling values are not valid numbers.")
+            raise UserInputException("Image Scaling values are not \
+valid numbers.")
 
         if upper <= lower:
-            raise UserInputException("Image Scaling values are not valid. The upper value must be greater then the lower value.")
+            raise UserInputException("Image Scaling values are not valid. \
+The upper value must be greater then the lower value.")
 
         if lower < 0 or lower > 1:
-            raise UserInputException("Image Scaling values are not valid. The lower bound must be between 0 and 1.")
+            raise UserInputException("Image Scaling values are not valid. \
+The lower bound must be between 0 and 1.")
 
         if upper < 0 or upper > 1:
-            raise UserInputException("Image Scaling values are not valid. The upper bound must be between 0 and 1.")
+            raise UserInputException("Image Scaling values are not valid. \
+The upper bound must be between 0 and 1.")
 
-        colorMapName = self.maindisp.colmap.getvalue()[0] #for some reason, this is a list
+        #for some reason, this is a list
+        colorMapName = self.maindisp.colmap.getvalue()[0] 
 
         logScale = self.logVarDiffraction.get()
         invert = self.invertVarDiffraction.get()
 
-        self.addMaskedPixelInfoToObject(operationString="draw the diffraction image")
+        self.addMaskedPixelInfoToObject(
+                operationString="draw the diffraction image")
 
         if self.diffractionImageZoomPixels==[]:
             self.maindisp.image = self.diffractionData.getDiffractionImage(
@@ -2232,13 +2666,15 @@ class Main:
                     colorMaps=self.colorMaps,colorMapName=colorMapName, 
                     maskedPixelInfo = self.maskedPixelInfo)
  
-
-        self.maindisp.imageTk = ImageTk.PhotoImage(self.maindisp.image) # keep a copy for reference (weird Tk bug)
+        # keep a copy for reference (weird Tk bug)
+        self.maindisp.imageTk = ImageTk.PhotoImage(self.maindisp.image) 
         
         if self.diffractionImageID != None:
             self.maindisp.imframe.delete(self.diffractionImageID)
 
-        self.diffractionImageID = self.maindisp.imframe.create_image(0,0,image=self.maindisp.imageTk,anchor=NW)
+        self.diffractionImageID = \
+                self.maindisp.imframe.create_image(
+                0,0,image=self.maindisp.imageTk,anchor=NW)
 
         if self.diffractionImageZoomPixels==[]:
             self.maindisp.bottomAxis.config(
@@ -2274,37 +2710,49 @@ class Main:
 
     def saveDiffractionImage(self,filename=''):
         if self.diffractionData == None:
-            raise UserInputException("Cannot save the diffraction image until a diffraction image is loaded.")
+            raise UserInputException("Cannot save the diffraction image \
+until a diffraction image is loaded.")
 
         try:
             lower = float(self.maindisp.intenvarlo.get() )
             upper = float(self.maindisp.intenvarhi.get() )
         except: 
-            raise UserInputException("Image Scaling values are not valid numbers.")
+            raise UserInputException("Image Scaling values are not \
+valid numbers.")
 
         if upper <= lower:
-            raise UserInputException("Image Scaling values are not valid. The upper value must be greater then the lower value.")
+            raise UserInputException("Image Scaling values are not \
+valid. The upper value must be greater then the lower value.")
 
         if lower < 0 or lower > 1:
-            raise UserInputException("Image Scaling values are not valid. The lower bound must be between 0 and 1.")
+            raise UserInputException("Image Scaling values are not \
+valid. The lower bound must be between 0 and 1.")
 
         if upper < 0 or upper > 1:
-            raise UserInputException("Image Scaling values are not valid. The upper bound must be between 0 and 1.")
+            raise UserInputException("Image Scaling values are not \
+valid. The upper bound must be between 0 and 1.")
 
         if self.drawQ.checkvar.get() or self.drawdQ.checkvar.get():
             if self.QData == None:
-                raise UserInputException("Cannot save image with constant Q lines until a q data file is set.")
+                raise UserInputException("Cannot save image with \
+constant Q lines until a q data file is set.")
 
             self.addUserInputCalibrationDataToObject()
 
-            if self.calibrationData == [] or not self.calibrationData[-1].allSet():
-                raise UserInputException("Cannot add constant Q lines to the image until the calibration parameters are set.")
+            if self.calibrationData == [] or \
+                    not self.calibrationData[-1].allSet():
+                raise UserInputException("Cannot add constant Q lines \
+to the image until the calibration parameters are set.")
 
         theCalibrationDataToGive = None
         if self.calibrationData != []: 
             theCalibrationDataToGive = self.calibrationData[-1]
 
-        thePixel1XToGive,thePixel1YToGive,thePixel2XToGive,thePixel2YToGive=None,None,None,None
+        thePixel1XToGive=None
+        thePixel1YToGive=None
+        thePixel2XToGive=None
+        thePixel2YToGive=None
+
         if self.diffractionImageZoomPixels != []:
                     thePixel1XToGive=self.diffractionImageZoomPixels[-1][0]['x']
                     thePixel1YToGive=self.diffractionImageZoomPixels[-1][0]['y']
@@ -2324,19 +2772,22 @@ class Main:
             if filename in ['',()]: 
                 return 
                 
-            # on the mac, it won't give a default extension if you don't write
-            # it out explicitly, so do so automatically otherwise
+            # on the mac, it won't give a default extension 
+            # if you don't write it out explicitly, so do so 
+            #automatically otherwise
             if os.path.splitext(filename)[1] == '':
                 filename += defaultextension
         
         setstatus(self.status,'Saving...')
 
-        colorMapName = self.maindisp.colmap.getvalue()[0] #for some reason, this is a list
+        #for some reason, this is a list
+        colorMapName = self.maindisp.colmap.getvalue()[0] 
 
         logScale = self.logVarDiffraction.get()
         invert = self.invertVarDiffraction.get()
 
-        self.addMaskedPixelInfoToObject(operationString="save the diffraction image")
+        self.addMaskedPixelInfoToObject(
+                operationString="save the diffraction image")
 
         self.diffractionData.saveDiffractionImage(
                 filename = filename,
@@ -2363,7 +2814,8 @@ class Main:
 
         # Explicityly record macro. Only do so if in record macro mode
         if self.macroLines != None:
-            self.macroMode.explicitMacroRecordTwoLines('Save Diffraction Image','\t'+filename)
+            self.macroMode.explicitMacroRecordTwoLines(
+                    'Save Diffraction Image','\t'+filename)
 
 
     def doFit(self):
@@ -2372,45 +2824,67 @@ class Main:
         self.addUserInputCalibrationDataToObject()
 
         if self.diffractionData == None:
-            raise UserInputException("Cannot do fitting until a diffraction image is entered.")
-        if self.calibrationData == [] or not self.calibrationData[-1].allSet():
-            raise UserInputException("Cannot do fitting until the calibration parameters are set.")
+            raise UserInputException("Cannot do fitting until a \
+diffraction image is entered.")
+
+        if self.calibrationData == [] or \
+                not self.calibrationData[-1].allSet():
+            raise UserInputException("Cannot do fitting until the \
+calibration parameters are set.")
+
         if self.QData == None:
-            raise UserInputException("Cannot do fitting until the Q data is set.")
+            raise UserInputException("Cannot do fitting until the \
+Q data is set.")
 
         # get the number of chi values from the screen input.
         try:
             numberOfChi = int(self.numberOfChiInput.getvalue())
         except:
-            raise UserInputException("The number of chi slices to use has not been set.")
+            raise UserInputException("The number of chi slices to \
+use has not been set.")
 
         if numberOfChi < 2:
-            raise UserInputException("The number of chi slices must be at least 2.")
+            raise UserInputException("The number of chi slices \
+must be at least 2.")
         
         fit = None
 
         try:
             stddev = float(self.stddev.getvalue())
         except:
-            raise UserInputException("The standard deviation has not been set.")
+            raise UserInputException("The standard deviation has \
+not been set.")
 
         if stddev < 0:
-            raise UserInputException("The standard deviation must be greater then 0.")
+            raise UserInputException("The standard deviation must \
+be greater then 0.")
 
         if self.calibrationData[-1].allParametersFixed():
-            raise UserInputException("Cannot do the fit because none of the parameters are allowed to vary.")
+            raise UserInputException("Cannot do the fit because none \
+of the parameters are allowed to vary.")
 
-        # numberOfChi is the new value, self.numberOfChiStore was 
-        # stored from last time. Only use old peak list if these 
-        # numbers agree. (IE, if they change the number of chi values to use, calculate a new 
-        # peak list. Also, if you change the stddev input, also calculate a new peak list.
-        if self.useOldPeakList.get()==1 and self.peakList != None and \
-                numberOfChi == self.numberOfChiStore and stddev == self.stddevStore:
-            fit,self.peakList = self.diffractionData.fit(self.calibrationData[-1],
-                    self.QData,self.maskedPixelInfo,peakList=self.peakList)
+        # numberOfChi is the new value, self.numberOfChiStore 
+        # was stored from last time. Only use old peak list if 
+        # these numbers agree. (IE, if they change the number of 
+        # chi values to use, calculate a new peak list. Also, if 
+        # you change the stddev input, also calculate a new peak list.
+        if self.useOldPeakList.get()==1 and \
+                self.peakList != None and \
+                numberOfChi == self.numberOfChiStore and \
+                stddev == self.stddevStore:
+            fit,self.peakList = self.diffractionData.fit(
+                    self.calibrationData[-1],
+                    self.QData,
+                    self.maskedPixelInfo,
+                    peakList=self.peakList)
         else:
-            fit,self.peakList = self.diffractionData.fit(self.calibrationData[-1],
-                    self.QData,self.maskedPixelInfo,numberOfChi=numberOfChi,stddev=stddev)
+            fit,self.peakList = self.diffractionData.fit(
+                    self.calibrationData[-1],
+                    self.QData,
+                    self.maskedPixelInfo,
+                    numberOfChi=numberOfChi,
+                    stddev=stddev)
+
             self.numberOfChiStore = numberOfChi
             self.stddevStore = stddev
 
@@ -2426,11 +2900,14 @@ class Main:
         self.addUserInputCalibrationDataToObject()
 
         if self.diffractionData == None:
-            raise UserInputException("Cannot save the peak list until a diffraction image is entered.")
+            raise UserInputException("Cannot save the peak list \
+until a diffraction image is entered.")
         if self.calibrationData == [] or not self.calibrationData[-1].allSet():
-            raise UserInputException("Cannot save the peak list until the calibration parameters are set.")
+            raise UserInputException("Cannot save the peak list \
+until the calibration parameters are set.")
         if self.QData == None:
-            raise UserInputException("Cannot save the peak list until the Q data is set.")
+            raise UserInputException("Cannot save the peak list \
+until the Q data is set.")
         
         if filename in ['',()]:
             defaultextension = ".dat"
@@ -2441,8 +2918,9 @@ class Main:
 
             if filename in ['',()]: return 
 
-            # on the mac, it won't give a default extension if you don't write
-            # it out explicitly, so do so automatically otherwise
+            # on the mac, it won't give a default extension if you 
+            # don't write it out explicitly, so do so automatically 
+            # otherwise
             if os.path.splitext(filename)[1] == '':
                 filename += defaultextension
 
@@ -2452,62 +2930,125 @@ class Main:
         try:
             numberOfChi = int(self.numberOfChiInput.getvalue())
         except:
-            raise UserInputException("The number of chi slices to use has not been set.")
+            raise UserInputException("The number of chi slices to \
+use has not been set.")
 
         if numberOfChi < 2:
-            raise UserInputException("The number of chi slices must be at least 2.")
+            raise UserInputException("The number of chi slices must \
+be at least 2.")
        
         try:
             stddev = float(self.stddev.getvalue())
         except:
-            raise UserInputException("The standard deviation has not been set.")
+            raise UserInputException("The standard deviation has \
+not been set.")
 
         if stddev < 0:
-            raise UserInputException("The standard deviation must be greater then 0.")
+            raise UserInputException("The standard deviation must \
+be greater then 0.")
 
         # also, store the peakList for later
-        self.peakList = self.diffractionData.savePeakListToFile(filename,self.calibrationData[-1],
-                self.QData,numberOfChi,self.maskedPixelInfo,stddev=stddev)
+        self.peakList = self.diffractionData.savePeakListToFile(
+                filename,self.calibrationData[-1],self.QData,
+                numberOfChi,self.maskedPixelInfo,stddev=stddev)
 
 
         # Make sure to explicitly record this macro thingy
         if self.macroLines != None:
-            self.macroMode.explicitMacroRecordTwoLines('Make/Save Peak List','\t'+filename)
+            self.macroMode.explicitMacroRecordTwoLines(
+                    'Make/Save Peak List','\t'+filename)
 
         setstatus(self.status,'Ready')
         self.updatebothNoComplain()
 
     def getQChiCakeImageCoordinates(self,x,y):
-        """ Returns the q,chi values corresponding to canvas x,y values. """
+        """ Returns the q,chi values corresponding to 
+            canvas x,y values. """
+
         if self.cakeRange == []:
-                raise UserInputException("Cannot convert canvas x,y values to image q,chi values until the image has been caked")
+                raise UserInputException("Cannot convert canvas \
+x,y values to image q,chi values until the image has been caked")
 
-        qLowerZoom = min(self.cakeRange[-1]['qLower'],self.cakeRange[-1]['qUpper'])
-        qUpperZoom = max(self.cakeRange[-1]['qLower'],self.cakeRange[-1]['qUpper'])
+        qOrTwoThetaLowerZoom = min(
+                self.cakeRange[-1]['qOrTwoThetaLower'],
+                self.cakeRange[-1]['qOrTwoThetaUpper'])
+        qOrTwoThetaUpperZoom = max(
+                self.cakeRange[-1]['qOrTwoThetaLower'],
+                self.cakeRange[-1]['qOrTwoThetaUpper'])
 
-        chiLowerZoom = min(self.cakeRange[-1]['chiLower'],self.cakeRange[-1]['chiUpper'])
-        chiUpperZoom = max(self.cakeRange[-1]['chiLower'],self.cakeRange[-1]['chiUpper'])
+        chiLowerZoom = min(
+                self.cakeRange[-1]['chiLower'],
+                self.cakeRange[-1]['chiUpper'])
+        chiUpperZoom = max(
+                self.cakeRange[-1]['chiLower'],
+                self.cakeRange[-1]['chiUpper'])
 
+        if self.Qor2Theta.get() == "Work in Q":
+            type = "Q"
+        elif self.Qor2Theta.get() == "Work in 2theta":
+            type = "2theta"
+        else:
+            raise UserInputException("The program must work in \
+either Q or 2theta mode.")
+        
         # calculate the real q image
-        q = qLowerZoom + (x*1.0/(self.cakeImageWidth-1))*(qUpperZoom-qLowerZoom)
+        qOrTwoTheta = qOrTwoThetaLowerZoom + \
+                (x*1.0/(self.cakeImageWidth-1))* \
+                (qOrTwoThetaUpperZoom-qOrTwoThetaLowerZoom)
+
+        if type == "Q":
+            q = qOrTwoTheta
+        elif type == "2theta":
+            q = Transform.convertTwoThetaToQ(qOrTwoTheta,self.calibrationData[-1])
+
         chi = chiLowerZoom + (y*1.0/(self.cakeImageHeight-1))*(chiUpperZoom-chiLowerZoom)
 
         return q,chi
 
 
     def getCanvasCakeImageCoordinates(self,q,chi):
-        """ Returns the canvas values x,y corresponding to q,chi values. """
+        """ Returns the canvas values x,y corresponding to 
+            q,chi values. """
+
         if self.cakeRange == []:
-            raise UserInputException("Cannot convert canvas x,y values to image q,chi values until the image has been caked")
+            raise UserInputException("Cannot convert canvas x,y values \
+to image q,chi values until the image has been caked")
 
-        qLowerZoom = min(self.cakeRange[-1]['qLower'],self.cakeRange[-1]['qUpper'])
-        qUpperZoom = max(self.cakeRange[-1]['qLower'],self.cakeRange[-1]['qUpper'])
+        qOrTwoThetaLowerZoom = min(
+                self.cakeRange[-1]['qOrTwoThetaLower'],
+                self.cakeRange[-1]['qOrTwoThetaUpper'])
+        qOrTwoThetaUpperZoom = max(
+                self.cakeRange[-1]['qOrTwoThetaLower'],
+                self.cakeRange[-1]['qOrTwoThetaUpper'])
 
-        chiLowerZoom = min(self.cakeRange[-1]['chiLower'],self.cakeRange[-1]['chiUpper'])
-        chiUpperZoom = max(self.cakeRange[-1]['chiLower'],self.cakeRange[-1]['chiUpper'])
+        chiLowerZoom = min(
+                self.cakeRange[-1]['chiLower'],
+                self.cakeRange[-1]['chiUpper'])
+        chiUpperZoom = max(
+                self.cakeRange[-1]['chiLower'],
+                self.cakeRange[-1]['chiUpper'])
 
-        x = (q-qLowerZoom)/(qUpperZoom-qLowerZoom)*(self.cakeImageWidth-1)
-        y = (chi-chiLowerZoom)/(chiUpperZoom-chiLowerZoom)*(self.cakeImageHeight-1)
+        if self.Qor2Theta.get() == "Work in Q":
+            type = "Q"
+        elif self.Qor2Theta.get() == "Work in 2theta":
+            type = "2theta"
+        else:
+            raise UserInputException("The program must work in \
+either Q or 2theta mode.")
+        
+        if type == "Q":
+            x = (q-qOrTwoThetaLowerZoom)/ \
+                    (qOrTwoThetaUpperZoom-qOrTwoThetaLowerZoom)* \
+                    (self.cakeImageWidth-1)
+        elif type == "2theta":
+            twoTheta = Transform.convertQToTwoTheta(
+                    q,self.calibrationData[-1])
+            x = (twoTheta-qOrTwoThetaLowerZoom)/ \
+                    (qOrTwoThetaUpperZoom-qOrTwoThetaLowerZoom)* \
+                    (self.cakeImageWidth-1)
+
+        y = (chi-chiLowerZoom)/(chiUpperZoom-chiLowerZoom)* \
+                (self.cakeImageHeight-1)
 
         return x,y
 
@@ -2519,84 +3060,131 @@ class Main:
         self.addUserInputCalibrationDataToObject()
 
         if self.diffractionData==None:
-            raise UserInputException("Cannot cake until an image is loaded.")
+            raise UserInputException("Cannot cake until an \
+image is loaded.")
         if self.calibrationData==[] or not self.calibrationData[-1].allSet():
-            raise UserInputException("Cannot cake until the calibration parameters are set.")
+            raise UserInputException("Cannot cake until the \
+calibration parameters are set.")
        
         try:
             lower = float(self.cakedisp.intenvarlo.get() )
             upper = float(self.cakedisp.intenvarhi.get() )
         except: 
-            raise UserInputException("Image Scaling values are not valid numbers.")
+            raise UserInputException("Image Scaling values are \
+not valid numbers.")
 
         try:
-            numQ = int(self.numQCake.getvalue())
+            numQOrTwoTheta = int(self.numQOrTwoThetaCake.getvalue())
         except:
-            raise UserInputException("The number of Q values to use when caking has not been set.")
+            raise UserInputException("The number of Q (or 2theta) \
+values to use when caking has not been set.")
+
         try:
-            qLower = float(self.qLowerCake.getvalue())
+            qOrTwoThetaLower = float(self.qOrTwoThetaLowerCake.getvalue())
         except:
-            raise UserInputException("The lower Q value to use when caking has not been set.")
+            raise UserInputException("The lower Q (or 2theta) value \
+to use when caking has not been set.")
+
         try:
-            qUpper = float(self.qUpperCake.getvalue())
+            qOrTwoThetaUpper = float(self.qOrTwoThetaUpperCake.getvalue())
         except:
-            raise UserInputException("The upper Q value to use when caking has not been set.")
+            raise UserInputException("The upper Q (or 2theta) \
+value to use when caking has not been set.")
+
         try:
             numChi = int(self.numChiCake.getvalue())
         except:
-            raise UserInputException("The number of chi values to use when caking has not been set.")
+            raise UserInputException("The number of chi values \
+to use when caking has not been set.")
+
         try:
             chiLower = float(self.chiLowerCake.getvalue())
         except:
-            raise UserInputException("The lower chi value to use when caking has not been set.")
+            raise UserInputException("The lower chi value to \
+use when caking has not been set.")
+
         try:
             chiUpper = float(self.chiUpperCake.getvalue())
         except:
-            raise UserInputException("The upper chi value to use when caking has not been set.")
+            raise UserInputException("The upper chi value \
+to use when caking has not been set.")
 
         doPolarizationCorrection = self.doPolarizationCorrectionCake.get()
         if doPolarizationCorrection:
             try:
                 P = float(self.PCake.getvalue())
             except:
-                raise UserInputException("The P cake value has not been set.")
+                raise UserInputException("The P cake value has not \
+been set.")
         else:
             P = 0 # P can be anything since it won't be used.
 
+        self.addMaskedPixelInfoToObject(
+                operationString="cake the diffraction data")
 
-        self.addMaskedPixelInfoToObject(operationString="cake the diffraction data")
-  
+        if self.Qor2Theta.get() == "Work in Q":
+            type = "Q"
+            title ="Q"
+        elif self.Qor2Theta.get() == "Work in 2theta":
+            type = "2theta"
+            title = u"2\u03D1"
+        else:
+            raise UserInputException("The program must work \
+in either Q or 2theta mode.")
 
         if chiLower >= chiUpper:
-            raise UserInputException("The lower chi value must be less then the upper chi value.")
+            raise UserInputException("The lower chi value \
+must be less then the upper chi value.")
 
         if (chiUpper - chiLower) > 360:
-            raise UserInputException("The chi values must have a range no larger then 360 degrees.")
+            raise UserInputException("The chi values must \
+have a range no larger then 360 degrees.")
 
-        if qLower >= qUpper:
-            raise UserInputException("The lower Q value must be less then the upper Q value.")
+        if type == "Q":
 
-        if qLower < 0: 
-            raise UserInputException("The lower Q value must be larger then 0.")
+            if qOrTwoThetaLower >= qOrTwoThetaUpper:
+                raise UserInputException("The lower Q value \
+must be less then the upper Q value.")
 
-        if qUpper > Transform.getMaxQ(self.calibrationData[-1]):
-            raise UserInputException("The upper Q value must be less then the largest possible Q value.")
+            if qOrTwoThetaLower < 0: 
+                raise UserInputException("The lower Q value \
+must be larger then 0.")
 
+            if qOrTwoThetaUpper > Transform.getMaxQ(self.calibrationData[-1]):
+                raise UserInputException("The upper Q value \
+must be less then the largest possible Q value.")
 
-        currentRange = {'qLower':qLower,'qUpper':qUpper,'chiLower':chiLower,'chiUpper':chiUpper}
+        elif type == "2theta":
+
+            if qOrTwoThetaLower >= qOrTwoThetaUpper:
+                raise UserInputException("The lower 2theta value \
+must be less then the upper 2theta value.")
+
+            if qOrTwoThetaLower < 0: 
+                raise UserInputException("The lower 2theta value \
+must be larger then 0.")
+
+            if qOrTwoThetaUpper > Transform.getMaxTwoTheta():
+                raise UserInputException("The upper 2theta value \
+must be less then the largest possible 2theta value.")
+
+        currentRange = {'qOrTwoThetaLower':qOrTwoThetaLower,
+                'qOrTwoThetaUpper':qOrTwoThetaUpper,
+                'chiLower':chiLower,'chiUpper':chiUpper}
 
         # store into zoom stack if the zoom range is new
         if self.cakeRange == [] or currentRange != self.cakeRange[-1]:
             self.cakeRange.append(currentRange)
 
-        colorMapName = self.cakedisp.colmap.getvalue()[0] #for some reason, this is a list
+        colorMapName = self.cakedisp.colmap.getvalue()[0]
         logScale = self.logVarCake.get()
         invert = self.invertVarCake.get()
 
-        self.imageCake = self.diffractionData.getCakeImage(self.calibrationData[-1],
-                qLower = self.cakeRange[-1]['qLower'],
-                qUpper = self.cakeRange[-1]['qUpper'], 
-                numQ = numQ,
+        self.imageCake = self.diffractionData.getCakeImage(
+                self.calibrationData[-1],
+                qOrTwoThetaLower = self.cakeRange[-1]['qOrTwoThetaLower'],
+                qOrTwoThetaUpper = self.cakeRange[-1]['qOrTwoThetaUpper'], 
+                numQOrTwoTheta = numQOrTwoTheta,
                 chiLower = self.cakeRange[-1]['chiLower'],
                 chiUpper = self.cakeRange[-1]['chiUpper'], 
                 numChi = numChi,
@@ -2605,40 +3193,52 @@ class Main:
                 width=self.cakeImageWidth,height=self.cakeImageHeight,
                 colorMaps=self.colorMaps,colorMapName=colorMapName,
                 lowerBound = lower, upperBound = upper,
-                logScale = logScale, invert = invert)
+                logScale = logScale, invert = invert,
+                type = type)
    
         # keep a copy for reference (weird Tk bug)
         self.imageCakeTk = ImageTk.PhotoImage(self.imageCake)
 
         if self.cakeImageID == None:
-            self.cakeImageID = self.cakedisp.imframe.create_image(1,1,image=self.imageCakeTk,anchor=NW)
+            self.cakeImageID = self.cakedisp.imframe.create_image(
+                    1,1,image=self.imageCakeTk,anchor=NW)
 
-            # only add bindings to the canvas if we are drawing the image for the first time.
-            self.cakedisp.imframe.bind(sequence="<ButtonPress>", func=self.mouseDownZoomCakeImage)
-            self.cakedisp.imframe.bind(sequence="<Motion>", func=self.mouseDragNoPressCakeImage)
-            self.cakedisp.imframe.bind(sequence="<Shift-ButtonPress>", func=self.mouseDownPanCakeImage)
+            # only add bindings to the canvas if we are 
+            # drawing the image for the first time.
+            self.cakedisp.imframe.bind(sequence="<ButtonPress>",
+                    func=self.mouseDownZoomCakeImage)
+            self.cakedisp.imframe.bind(sequence="<Motion>",
+                    func=self.mouseDragNoPressCakeImage)
+            self.cakedisp.imframe.bind(sequence="<Shift-ButtonPress>", 
+                    func=self.mouseDownPanCakeImage)
 
-            self.cakedisp.imframe.bind(sequence="<Leave>", func=self.mouseLeaveCakeImage)
-            self.cakedisp.graphframe.bind("<Configure>",func=self.resizeCakeImage) 
+            self.cakedisp.imframe.bind(sequence="<Leave>",
+                    func=self.mouseLeaveCakeImage)
+            self.cakedisp.graphframe.bind("<Configure>",
+                    func=self.resizeCakeImage) 
         else:
             self.cakedisp.imframe.delete(self.cakeImageID)
-            self.cakeImageID = self.cakedisp.imframe.create_image(1,1,image=self.imageCakeTk,anchor=NW)
+            self.cakeImageID = self.cakedisp.imframe.create_image(
+                    1,1,image=self.imageCakeTk,anchor=NW)
 
         # (possibly) add some peaks to the image.
         self.addPeaksCakeImage()
         self.addConstantQLinesCakeImage()
 
         self.cakedisp.bottomAxis.config(
-                lowestValue=self.cakeRange[-1]['qLower'],
-                highestValue=self.cakeRange[-1]['qUpper']
+                lowestValue=self.cakeRange[-1]['qOrTwoThetaLower'],
+                highestValue=self.cakeRange[-1]['qOrTwoThetaUpper'],
+                title=title
         )
 
         self.cakedisp.rightAxis.config(
                 lowestValue=self.cakeRange[-1]['chiLower'],
-                highestValue=self.cakeRange[-1]['chiUpper']
+                highestValue=self.cakeRange[-1]['chiUpper'],
+                title=u"\u03A7"
         )
 
         setstatus(self.status,'Ready...')
+
 
     def saveCakeData(self,filename=''):
 
@@ -2651,17 +3251,21 @@ class Main:
 
             if filename in ['',()]: return 
 
-            # on the mac, it won't give a default extension if you don't write
-            # it out explicitly, so do so automatically otherwise
+            # on the mac, it won't give a default extension 
+            # if you don't write it out explicitly, so do 
+            # so automatically otherwise
             if os.path.splitext(filename)[1] == '':
                 filename += defaultextension
 
-        self.doCake() #redraw the image and make sure the user input is good.
+        #redraw the image and make sure the user input is good.
+        self.doCake() 
 
-        numQ = int(self.numQCake.getvalue())
-        qLower = float(self.qLowerCake.getvalue())
-        qUpper = float(self.qUpperCake.getvalue())
+        numQOrTwoTheta = int(self.numQOrTwoThetaCake.getvalue())
+        qOrTwoThetaLower = float(self.qOrTwoThetaLowerCake.getvalue())
+        qOrTwoThetaUpper = float(self.qOrTwoThetaUpperCake.getvalue())
         numChi = int(self.numChiCake.getvalue())
+        chiLower = float(self.chiLowerCake.getvalue())
+        chiUpper = float(self.chiUpperCake.getvalue())
 
         doPolarizationCorrection = self.doPolarizationCorrectionCake.get()
         if doPolarizationCorrection:
@@ -2672,27 +3276,34 @@ class Main:
 
         self.addMaskedPixelInfoToObject(operationString="save cake data")
 
-        chiLower = float(self.chiLowerCake.getvalue())
-        chiUpper = float(self.chiUpperCake.getvalue())
-
+        if self.Qor2Theta.get() == "Work in Q":
+            type = "Q"
+        elif self.Qor2Theta.get() == "Work in 2theta":
+            type = "2theta"
+        else:
+            raise UserInputException("The program must work in either \
+Q or 2theta mode.")
+        
         setstatus(self.status,'Saving...')
 
         self.diffractionData.saveCakeData(
                 filename = filename,
                 calibrationData = self.calibrationData[-1],
-                qLower = self.cakeRange[-1]['qLower'],
-                qUpper = self.cakeRange[-1]['qUpper'], 
-                numQ = numQ,
+                qOrTwoThetaLower = self.cakeRange[-1]['qOrTwoThetaLower'],
+                qOrTwoThetaUpper = self.cakeRange[-1]['qOrTwoThetaUpper'], 
+                numQOrTwoTheta = numQOrTwoTheta,
                 chiLower = self.cakeRange[-1]['chiLower'],
                 chiUpper = self.cakeRange[-1]['chiUpper'], 
                 numChi = numChi,
                 doPolarizationCorrection = doPolarizationCorrection,
                 P = P,
-                maskedPixelInfo = self.maskedPixelInfo)
+                maskedPixelInfo = self.maskedPixelInfo,
+                type=type)
  
         # Make sure to explicitly record this macro thingy
         if self.macroLines != None:
-            self.macroMode.explicitMacroRecordTwoLines('Save Caked Data','\t'+filename)
+            self.macroMode.explicitMacroRecordTwoLines(
+                    'Save Caked Data','\t %s' % filename)
 
         setstatus(self.status,'Ready')
 
@@ -2702,26 +3313,29 @@ class Main:
             defaultextension = ".jpg"
             filename = tkFileDialog.asksaveasfilename(
                     filetypes=[('JPEG','*.jpg'),('GIF','*.gif'),
-                        ('EPS','*.eps'),('PDF','*.pdf'),('BMP','*.bmp'),
-                        ('PNG','*.png'),('TIFF','*.tiff'),('All Files','*')],
+                        ('EPS','*.eps'),('PDF','*.pdf'),
+                        ('BMP','*.bmp'),('PNG','*.png'),
+                        ('TIFF','*.tiff'),('All Files','*')],
                     defaultextension = defaultextension,
                     title="Save Caked Image")
 
             if filename in ['',()]: return 
 
-            # on the mac, it won't give a default extension if you don't write
-            # it out explicitly, so do so automatically otherwise
+            # on the mac, it won't give a default extension 
+            # if you don't write it out explicitly, so do 
+            # so automatically otherwise
             if os.path.splitext(filename)[1] == '':
                 filename += defaultextension
 
-        self.doCake() #redraw the image and make sure the user input is good.
+        #redraw the image and make sure the user input is good.
+        self.doCake() 
 
         lower = float(self.cakedisp.intenvarlo.get() )
         upper = float(self.cakedisp.intenvarhi.get() )
 
-        numQ = int(self.numQCake.getvalue())
-        qLower = float(self.qLowerCake.getvalue())
-        qUpper = float(self.qUpperCake.getvalue())
+        numQOrTwoTheta = int(self.numQOrTwoThetaCake.getvalue())
+        qOrTwoThetaLower = float(self.qOrTwoThetaLowerCake.getvalue())
+        qOrTwoThetaUpper = float(self.qOrTwoThetaUpperCake.getvalue())
         numChi = int(self.numChiCake.getvalue())
         chiLower = float(self.chiLowerCake.getvalue())
         chiUpper = float(self.chiUpperCake.getvalue())
@@ -2732,14 +3346,20 @@ class Main:
         else:
             # it dosen't matter what p is so assign it arbitrarily 
             P = 0
-
             
         self.addMaskedPixelInfoToObject(operationString="save cake image")
 
-
+        if self.Qor2Theta.get() == "Work in Q":
+            type = "Q"
+        elif self.Qor2Theta.get() == "Work in 2theta":
+            type = "2theta"
+        else:
+            raise UserInputException("The program must work in \
+either Q or 2theta mode.")
+        
         setstatus(self.status,'Saving')
 
-        colorMapName = self.cakedisp.colmap.getvalue()[0] #for some reason, this is a list
+        colorMapName = self.cakedisp.colmap.getvalue()[0]
 
         logScale = self.logVarCake.get()
         invert = self.invertVarCake.get()
@@ -2747,9 +3367,9 @@ class Main:
         self.diffractionData.saveCakeImage(
                 filename = filename,
                 calibrationData = self.calibrationData[-1],
-                qLower = self.cakeRange[-1]['qLower'],
-                qUpper = self.cakeRange[-1]['qUpper'], 
-                numQ = numQ,
+                qOrTwoThetaLower = self.cakeRange[-1]['qOrTwoThetaLower'],
+                qOrTwoThetaUpper = self.cakeRange[-1]['qOrTwoThetaUpper'], 
+                numQOrTwoTheta = numQOrTwoTheta,
                 doPolarizationCorrection = doPolarizationCorrection,
                 maskedPixelInfo = self.maskedPixelInfo,
                 P = P,
@@ -2762,25 +3382,28 @@ class Main:
                 upperBound = upper,
                 logScale = logScale,
                 invert = invert,
-                drawQLines = self.drawQ.checkvar.get(),
-                drawdQLines = self.drawdQ.checkvar.get(),
+                drawQOrTwoThetaLines = self.drawQ.checkvar.get(),
+                drawdQOrTwoThetaLines = self.drawdQ.checkvar.get(),
                 QData = self.QData,
                 drawPeaks = self.drawPeaks.checkvar.get(),
                 peakList = self.peakList,
-                qLinesColor = self.qLinesColor.get(),
-                dQLinesColor = self.dQLinesColor.get(),
-                peakLinesColor = self.peakLinesColor.get())
+                qOrTwoThetaLinesColor = self.qLinesColor.get(),
+                dQOrTwoThetaLinesColor = self.dQLinesColor.get(),
+                peakLinesColor = self.peakLinesColor.get(),
+                type=type)
 
         setstatus(self.status,'Ready')
 
         # Make sure to explicitly record this macro thingy
         if self.macroLines != None:
-            self.macroMode.explicitMacroRecordTwoLines('Save Caked Image','\t'+filename)
+            self.macroMode.explicitMacroRecordTwoLines(
+                    'Save Caked Image','\t'+filename)
 
 
     def resizeCakeImage(self,event):
-        """ When the frame holding the graphs gets resized because the 
-            image canvas gets streched by the user, redraw the cake iamge
+        """ When the frame holding the graphs gets 
+            resized because the image canvas gets 
+            streched by the user, redraw the cake image
             and the axis to fill the newly avalible space. """
         
         # resize canvas properly
@@ -2822,8 +3445,8 @@ class Main:
 
 
     def setExtension(self, result):
-        """ When the user specifys the extension of a particular image, this is where 
-            his choice gets recorded. """
+        """ When the user specifys the extension of a particular 
+            image, this is where his choice gets recorded. """
         if result == "mar 3450":
             self.extension = "mar3450"
         if result == "mar 2300":
@@ -2862,7 +3485,8 @@ class Main:
 
         # Make sure to explicitly record this macro thingy
         if self.macroLines != None:
-            self.macroMode.explicitMacroRecordTwoLines('Load Mask','\t'+filename)
+            self.macroMode.explicitMacroRecordTwoLines(
+                    'Load Mask','\t %s' % filename)
 
     
     def savePolygonsToFile(self,filename=''):
@@ -2875,8 +3499,9 @@ class Main:
 
             if filename in ['',()]: return
 
-            # on the mac, it won't give a default extension if you don't write
-            # it out explicitly, so make sure to do so automatically otherwise
+            # on the mac, it won't give a default extension if you 
+            # don't write it out explicitly, so make sure to do 
+            # so automatically otherwise
             if os.path.splitext(filename)[1] == '':
                 filename += defaultextension
 
@@ -2888,7 +3513,8 @@ class Main:
 
         # Make sure to explicitly record this macro thingy
         if self.macroLines != None:
-            self.macroMode.explicitMacroRecordTwoLines('Save Mask','\t'+filename)
+            self.macroMode.explicitMacroRecordTwoLines(
+                    'Save Mask','\t %s' % filename)
 
 
     def toggleAddRemovePolygonMaskBindings(self,whichButton,onOff):
@@ -2899,7 +3525,8 @@ class Main:
                     # if no diffraction image, unstick buttons and 
                     # raise an error
                     self.addRemovePolygonRadioSelect.setvalue( [''])
-                    raise UserInputException("Cannot add a polygon mask until a diffraction image is set.")
+                    raise UserInputException("Cannot add a polygon mask \
+until a diffraction image is set.")
 
                 # Begin adding polygons, 
                 # also, use this to deselect the Remove Polygon Option if
@@ -2919,7 +3546,8 @@ class Main:
                 self.maindisp.graphframe.bind("<Configure>",
                         func=self.resizeDiffractionImage) 
 
-                # redraw the images - note that the cake display need not be ready to display
+                # redraw the images - note that the cake display 
+                # need not be ready to display
                 self.maindisp.updateimage()
                 self.cakedisp.updateimageNoComplainNoShow()
 
@@ -2947,7 +3575,8 @@ class Main:
                     # if no diffraction image, unstick buttons and 
                     # raise an error
                     self.addRemovePolygonRadioSelect.setvalue( [''])
-                    raise UserInputException("Cannot remove a polygon mask until a diffraction image is set.")
+                    raise UserInputException("Cannot remove a polygon \
+mask until a diffraction image is set.")
 
                 if self.maskedPixelInfo.numPolygons() < 1:
                     # if there are no polygons, then make this
@@ -2973,12 +3602,14 @@ class Main:
                 self.maindisp.graphframe.bind("<Configure>",
                         func=self.resizeDiffractionImage) 
 
-                # redraw the images - note that the cake display need not be ready to display
+                # redraw the images - note that the cake display 
+                # need not be ready to display
                 self.maindisp.updateimage()
                 self.cakedisp.updateimageNoComplainNoShow()
 
             elif onOff == 0:
-                # Give up on removing a polygon before a polygon had been removed
+                # Give up on removing a polygon before a polygon 
+                # had been removed
 
                 self.currentPolygon = None
 
@@ -3014,11 +3645,13 @@ class Main:
         else:
             if self.currentPolygonID == None:
                 self.currentPolygonID = self.maindisp.imframe.create_polygon(
-                        self.convertPolygonFromImageToCanvasCoordinates(self.currentPolygon),
+                        self.convertPolygonFromImageToCanvasCoordinates(
+                        self.currentPolygon),
                         outline='red',fill='')
             else:
                 self.maindisp.imframe.coords(self.currentPolygonID,
-                        self.convertPolygonFromImageToCanvasCoordinates(self.currentPolygon))
+                        self.convertPolygonFromImageToCanvasCoordinates(
+                        self.currentPolygon))
 
 
     def mouseButtonPressRemovePolygonDiffractionImage(self,event):
@@ -3032,7 +3665,8 @@ class Main:
             self.currentPolygonID = None
 
         if self.maskedPixelInfo.removePolygon(x,y):
-            # if we successfully remove a polygon, then leave the removing state.
+            # if we successfully remove a polygon, 
+            # then leave the removing state.
 
             # change bindings back to to regular zoom
             self.addZoomAndPanBindingsDiffractionImage()
@@ -3046,12 +3680,15 @@ class Main:
 
 
     def convertPolygonFromImageToCanvasCoordinates(self,polygon):
-        """ Converts a polygon from diffraction image coordinates into canvas 
-            pixel coordinates. The polygon must be a list of the form
-            (x1, y1, x2, y2, x3, y3, ...) A converted polygon is returned """
+        """ Converts a polygon from diffraction image coordinates 
+            into canvas pixel coordinates. The polygon must be a 
+            list of the form (x1, y1, x2, y2, x3, y3, ...) A 
+            converted polygon is returned """
 
         if len(polygon) % 2 != 0:
-            raise Exception("Cannot convert the diffraction image coordinates because the number of x and y coordinates are not equal.")
+            raise Exception("Cannot convert the diffraction \
+image coordinates because the number of x and y coordinates \
+are not equal.")
 
         canvasPolygon = []
 
@@ -3075,7 +3712,8 @@ class Main:
                 self.currentPolygon = [x, y, x, y]
 
                 self.currentPolygonID = self.maindisp.imframe.create_polygon(
-                        self.convertPolygonFromImageToCanvasCoordinates(self.currentPolygon),
+                        self.convertPolygonFromImageToCanvasCoordinates(
+                        self.currentPolygon),
                         outline='red',fill='')
             else:
                 # add new coords to existing polygon
@@ -3083,7 +3721,8 @@ class Main:
                 self.currentPolygon += [x,y]
 
                 self.maindisp.imframe.coords(self.currentPolygonID,
-                        self.convertPolygonFromImageToCanvasCoordinates(self.currentPolygon))
+                        self.convertPolygonFromImageToCanvasCoordinates(
+                        self.currentPolygon))
 
         else: 
             # right click, so finish the making polygon 
@@ -3115,7 +3754,8 @@ class Main:
 
         # display this now on the scren
         self.maindisp.imframe.coords(self.currentPolygonID,
-                self.convertPolygonFromImageToCanvasCoordinates(self.currentPolygon))
+                self.convertPolygonFromImageToCanvasCoordinates(
+                self.currentPolygon))
 
 
     def addZoomAndPanBindingsDiffractionImage(self):
@@ -3147,7 +3787,8 @@ class Main:
             filenames=General.splitPaths(filenames)
 
         if len(filenames) < 1:
-            raise UserInputException("A filename must be given before that file can be loaded.")
+            raise UserInputException("A filename must be given \
+before that file can be loaded.")
 
         setstatus(self.status,"Loading...")
 
@@ -3171,7 +3812,8 @@ class Main:
             # ask explicitly for the filetype and tell it to object
 
             self.dialog = Pmw.Dialog(self.xrdwin,
-                buttons = ('mar 3450','mar 2300','Mar CCD Format','TIFF','Cancel'),
+                buttons = ('mar 3450','mar 2300','Mar CCD Format',
+                        'TIFF','Cancel'),
                 defaultbutton = 'Cancel',
                 title = 'What Format is this File?',
                 command = self.setExtension)
@@ -3183,7 +3825,8 @@ class Main:
                     and self.extension != "mccd" and self.extension != 'tiff' \
                     and self.extension != "edf": return 
 
-            self.diffractionData = DiffractionData(filenames,extension=self.extension)
+            self.diffractionData = DiffractionData(filenames,
+                    extension=self.extension)
 
         self.maindisp.updateimage()
         self.addZoomAndPanBindingsDiffractionImage()
@@ -3196,9 +3839,12 @@ class Main:
         # Make sure to explicitly record this macro thingy. 
         if self.macroLines != None:
             if len(filenames) > 1:
-                self.macroMode.explicitMacroRecordTwoLines('Multiple Data Files:','\t[ '+General.joinPaths(filenames)+' ]')
+                self.macroMode.explicitMacroRecordTwoLines(
+                        'Multiple Data Files:','\t[ %s ]' % 
+                        getMaskedPeakList(self.maskedPixelInfo))
             else:
-                self.macroMode.explicitMacroRecordTwoLines('Data File:','\t'+filenames[0])
+                self.macroMode.explicitMacroRecordTwoLines(
+                        'Data File:','\t'+filenames[0])
 
         setstatus(self.status,"Ready")
 
@@ -3208,14 +3854,17 @@ class Main:
         self.loadQData(doStandardQ=1)
         # Make sure to explicitly record this macro thingy
         if self.macroLines != None:
-            self.macroMode.explicitMacroRecordTwoLines('Standard Q','\t'+basename)
+            self.macroMode.explicitMacroRecordTwoLines(
+                    'Standard Q','\t %s' % basename)
 
 
     def selectQDataFile(self,filename=''):
         if filename=='':
             filename = tkFileDialog.askopenfilename(
-                    filetypes=[('Data File','*.dat'),('All Files','*')],
+                    filetypes=[('Data File','*.dat'),
+                    ('All Files','*')],
                     defaultextension = ".dat",title="Load Q Data")
+
         if filename in ['',()]: return 
         self.qfileentry.setvalue(filename)
         self.loadQData()
@@ -3224,7 +3873,8 @@ class Main:
     def loadQData(self,doStandardQ=0):
         filename = self.qfileentry.getvalue()
         if filename == "":
-            raise UserInputException("You must enter a Q data file name before it is loaded.")
+            raise UserInputException("You must enter a Q data \
+file name before it is loaded.")
 
         self.QData = QData.QData(filename)
 
@@ -3236,20 +3886,28 @@ class Main:
         # Make sure to explicitly record this macro thingy (unless
         # this is being called b/c standardQ was pushed by user
         if self.macroLines != None and not doStandardQ:
-            self.macroMode.explicitMacroRecordTwoLines('Q Data:','\t'+filename)
+            self.macroMode.explicitMacroRecordTwoLines(
+                    'Q Data:','\t %s' % filename)
 
 
     def addConstantQLinesCakeImage(self):
         # if there is nothing to do, the job is done
-        if not self.drawQ.checkvar.get() and not self.drawdQ.checkvar.get():
+        if not self.drawQ.checkvar.get() and \
+                not self.drawdQ.checkvar.get():
             return 
 
         if self.QData == None:
-            raise UserInputException("Cannot add constant Q lines to the image until a QData file is set.")
-        if self.calibrationData == [] or not self.calibrationData[-1].allSet():
-            raise UserInputException("Cannot add constant Q lines to the image until the calibration parameters are set.")
+            raise UserInputException("Cannot add constant Q \
+lines to the image until a QData file is set.")
+
+        if self.calibrationData == [] or \
+                not self.calibrationData[-1].allSet():
+            raise UserInputException("Cannot add constant Q \
+lines to the image until the calibration parameters are set.")
+
         if self.diffractionData == None:
-            raise UserInputException("Cannot add constant Q lines to the image until a diffraction image is set.")
+            raise UserInputException("Cannot add constant Q \
+lines to the image until a diffraction image is set.")
 
         self.addUserInputCalibrationDataToObject()
 
@@ -3268,8 +3926,10 @@ class Main:
                     x2,y2 = self.getCanvasCakeImageCoordinates(
                             Q,self.cakeRange[-1]['chiUpper'])
 
-                    self.allQLineIDsCakeImage.append(self.cakedisp.imframe.create_line(
-                            x1,y1,x2,y2,fill=self.qLinesColor.get(),width=1))
+                    self.allQLineIDsCakeImage.append(
+                            self.cakedisp.imframe.create_line(
+                            x1,y1,x2,y2,fill=self.qLinesColor.get(),
+                            width=1))
 
             if self.drawdQ.checkvar.get():
                     x1,y1 = self.getCanvasCakeImageCoordinates(
@@ -3277,16 +3937,20 @@ class Main:
                     x2,y2 = self.getCanvasCakeImageCoordinates(
                             Q-dQ,self.cakeRange[-1]['chiUpper'])
 
-                    self.allQLineIDsCakeImage.append(self.cakedisp.imframe.create_line(
-                            x1,y1,x2,y2,fill=self.dQLinesColor.get(),width=1))
+                    self.allQLineIDsCakeImage.append(
+                            self.cakedisp.imframe.create_line(
+                            x1,y1,x2,y2,fill=self.dQLinesColor.get(),
+                            width=1))
 
                     x1,y1 = self.getCanvasCakeImageCoordinates(
                             Q+dQ,self.cakeRange[-1]['chiLower'])
                     x2,y2 = self.getCanvasCakeImageCoordinates(
                             Q+dQ,self.cakeRange[-1]['chiUpper'])
 
-                    self.allQLineIDsCakeImage.append(self.cakedisp.imframe.create_line(
-                            x1,y1,x2,y2,fill=self.dQLinesColor.get(),width=1))
+                    self.allQLineIDsCakeImage.append(
+                            self.cakedisp.imframe.create_line(
+                            x1,y1,x2,y2,fill=self.dQLinesColor.get(),
+                            width=1))
 
    
     def addPeaksCakeImage(self):
@@ -3295,10 +3959,12 @@ class Main:
             return 
 
         if self.diffractionData == None:
-            raise UserInputException("Cannot add peaks to the image until a diffraction image is set.")
+            raise UserInputException("Cannot add peaks to the \
+image until a diffraction image is set.")
 
         if self.cakeRange == []: 
-            raise UserInputException("Cannot add peaks to the image until a diffraction image is set.")
+            raise UserInputException("Cannot add peaks to the \
+image until a diffraction image is set.")
 
         # no peak list = Don't do anything
         if self.peakList==None: return 
@@ -3311,50 +3977,79 @@ class Main:
         # update calibration data first
         self.addUserInputCalibrationDataToObject()
 
-        # the nice thing about using the getSmallestRange function to calculate how
-        # big the xs will be is that the size will be independed of the cake range 
+        if self.Qor2Theta.get() == "Work in Q":
+            type = "Q"
+        elif self.Qor2Theta.get() == "Work in 2theta":
+            type = "2theta"
+        else:
+            raise UserInputException("The program must work \
+in either Q or 2theta mode.")
+
+        # the nice thing about using the getSmallestRange 
+        # function to calculate how big the xs will be is 
+        # that the size will be independed of the cake range 
         # that the user selected.
-        entireCakeRange = self.diffractionData.getSmallestRange(self.calibrationData[-1])
+        entireCakeRange = self.diffractionData.getSmallestRange(
+                self.calibrationData[-1],type=type)
 
         unZoomWidth = 2.5
 
-        # scale the length of the xs. For example, zoomed in to 50% means will 
-        # cause the xs to be drawn with double the length.
-        numTimesZoomInQ = abs( (entireCakeRange['qUpper']-entireCakeRange['qLower'])/ \
-                (self.cakeRange[-1]['qUpper']-self.cakeRange[-1]['qLower']) )
+        # scale the length of the xs. For example, zoomed 
+        # in to 50% means will cause the xs to be drawn 
+        # with double the length.
+        numTimesZoomInQ = abs( (entireCakeRange['qOrTwoThetaUpper'] - \
+                entireCakeRange['qOrTwoThetaLower'])/ \
+                (self.cakeRange[-1]['qOrTwoThetaUpper'] - \
+                self.cakeRange[-1]['qOrTwoThetaLower']) )
 
-        numTimesZoomInChi = abs( (entireCakeRange['chiUpper']-entireCakeRange['chiLower'])/ \
-                (self.cakeRange[-1]['chiUpper']-self.cakeRange[-1]['chiLower']) )
+        numTimesZoomInChi = abs( (entireCakeRange['chiUpper'] - \
+                entireCakeRange['chiLower'])/ \
+                (self.cakeRange[-1]['chiUpper'] - \
+                self.cakeRange[-1]['chiLower']) )
 
         scalingFactor = min(numTimesZoomInQ,numTimesZoomInChi)
 
         halflength = unZoomWidth*scalingFactor
         
         if self.drawPeaks.checkvar.get():
-            for x,y,qReal,qFit,chi,width in self.peakList.getMaskedPeakList(self.maskedPixelInfo):
-                # for each peak, we want to take the true x,y value of
-                # where the peak is on the image and figure out where
-                # it belongs on the cake data.
-                qTemp,chiTemp = Transform.getQChi(self.calibrationData[-1],x,y)
+            for x,y,qReal,qFit,chi,width in \
+                    self.peakList.getMaskedPeakList(
+                            self.maskedPixelInfo):
+                # for each peak, we want to take the true 
+                # x,y value of where the peak is on the 
+                # image and figure out where it belongs 
+                # on the cake data.
+                qTemp,chiTemp = Transform.getQChi(
+                        self.calibrationData[-1],x,y)
 
-                # if our chi range begins in the negative, we might have to place 
-                # our chi values in their 360 degree rotated values. Note that
+                # if our chi range begins in the negative, 
+                # we might have to place our chi values in 
+                # their 360 degree rotated values. Note that
                 # getQChi always returns chi between 0 and 360
                 if (chiTemp-360) > self.cakeRange[-1]['chiLower'] and \
                         (chiTemp-360) < self.cakeRange[-1]['chiUpper']:
                         chiTemp -= 360
                     
-                canvasX,canvasY = self.getCanvasCakeImageCoordinates(qTemp,chiTemp)
+                canvasX,canvasY = self.getCanvasCakeImageCoordinates(
+                        qTemp,chiTemp)
 
                 # add in new lines if they would be visible
                 if (canvasX >= 0 and canvasX < self.cakeImageWidth \
                         and canvasY >= 0 and canvasY < self.cakeImageHeight):
-                    self.allPeakListIDsCakeImage.append( self.cakedisp.imframe.create_line(
-                            canvasX-halflength,canvasY-halflength,canvasX+halflength,
-                            canvasY+halflength,fill=self.peakLinesColor.get(),width="1"))
-                    self.allPeakListIDsCakeImage.append( self.cakedisp.imframe.create_line(
-                            canvasX+halflength,canvasY-halflength,canvasX-halflength,
-                            canvasY+halflength,fill=self.peakLinesColor.get(),width="1"))
+
+                    self.allPeakListIDsCakeImage.append(
+                            self.cakedisp.imframe.create_line(
+                            canvasX-halflength,canvasY-halflength,
+                            canvasX+halflength,canvasY+halflength,
+                            fill=self.peakLinesColor.get(),
+                            width="1"))
+
+                    self.allPeakListIDsCakeImage.append(
+                            self.cakedisp.imframe.create_line(
+                            canvasX+halflength,canvasY-halflength,
+                            canvasX-halflength,canvasY+halflength,
+                            fill=self.peakLinesColor.get(),
+                            width="1"))
 
  
     def mouseDownZoomCakeImage(self,event):
@@ -3362,12 +4057,16 @@ class Main:
         druged = 0
         (x0, y0) = event.x, event.y
         (x1, y1) = event.x, event.y
-        self.cakedisp.imframe.bind(sequence="<Motion>",  func=self.mouseDragZoomCakeImage)        
-        self.cakedisp.imframe.bind(sequence="<ButtonRelease>", func=self.mouseUpZoomCakeImage)
+        self.cakedisp.imframe.bind(sequence="<Motion>",
+                func=self.mouseDragZoomCakeImage)        
+        self.cakedisp.imframe.bind(sequence="<ButtonRelease>",
+                func=self.mouseUpZoomCakeImage)
         
         # if right click = zoom in, draw the rectangle
         if event.num==1:
-            self.zoomRectangle = self.cakedisp.imframe.create_rectangle( x0, y0, x0, y0, dash=(2,2), outline="black" )
+            self.zoomRectangle = \
+                    self.cakedisp.imframe.create_rectangle(
+                    x0,y0,x0,y0,dash=(2,2),outline="black" )
 
  
     def mouseLeaveCakeImage(self,event):
@@ -3386,25 +4085,45 @@ class Main:
 
         druged = 1
         
-        qLower = float(self.cakeRange[-1]['qLower'])
-        qUpper = float(self.cakeRange[-1]['qUpper'])
+        qOrTwoThetaLower = float(self.cakeRange[-1]['qOrTwoThetaLower'])
+        qOrTwoThetaUpper = float(self.cakeRange[-1]['qOrTwoThetaUpper'])
 
         chiLower = float(self.cakeRange[-1]['chiLower'])
         chiUpper = float(self.cakeRange[-1]['chiUpper'])
 
-        # figure out how far, in q-chi space, the person has moved the mouse
-        # since last time. Change the zoom range by that much.
-        qDiff = ((currentX-lastX)*1.0/self.cakeImageWidth)*(qUpper-qLower)
-        chiDiff = ((currentY-lastY)*1.0/self.cakeImageHeight)*(chiUpper-chiLower)
+        # figure out how far, in q-chi space, the 
+        # person has moved the mouse since last time. 
+        # Change the zoom range by that much.
+        qOrTwoThetaDiff = ((currentX-lastX)*1.0/self.cakeImageWidth)* \
+                (qOrTwoThetaUpper-qOrTwoThetaLower)
+        chiDiff = ((currentY-lastY)*1.0/self.cakeImageHeight)* \
+                (chiUpper-chiLower)
 
         # store where we are now
         lastX,lastY = currentX,currentY 
 
         # don't zoom outside of any bound
-        if qLower-qDiff < 0:
-            qDiff = qLower
-        if qUpper-qDiff > Transform.getMaxQ(self.calibrationData[-1]):
-            qDiff = qUpper - Transform.getMaxQ(self.calibrationData[-1])
+        if qOrTwoThetaLower-qOrTwoThetaDiff < 0:
+            qOrTwoThetaDiff = qOrTwoThetaLower
+
+        if self.Qor2Theta.get() == "Work in Q":
+            type = "Q"
+        elif self.Qor2Theta.get() == "Work in 2theta":
+            type = "2theta"
+        else:
+            raise UserInputException("The program must work in \
+                    either Q or 2theta mode.")
+
+        if type == "Q":
+            if qOrTwoThetaUpper-qOrTwoThetaDiff > \
+                    Transform.getMaxQ(self.calibrationData[-1]):
+                qOrTwoThetaDiff = qOrTwoThetaUpper - \
+                        Transform.getMaxQ(self.calibrationData[-1])
+        if type == "2theta": 
+            if qOrTwoThetaUpper-qOrTwoThetaDiff > \
+                    Transform.getMaxTwoTheta():
+                qOrTwoThetaDiff = qOrTwoThetaUpper - \
+                        Transform.getMaxTwoTheta()
 
         if chiLower-chiDiff < -360:
             chiDiff = chiLower + 360
@@ -3416,13 +4135,13 @@ class Main:
         # This way, when you undo, you only undo through
         # previous zooms and not through previous pans
 
-        val = float(str(qLower-qDiff)[:8])
-        self.cakeRange[-1]['qLower'] = val
-        self.qLowerCake.setvalue(val)
+        val = float(str(qOrTwoThetaLower-qOrTwoThetaDiff)[:8])
+        self.cakeRange[-1]['qOrTwoThetaLower'] = val
+        self.qOrTwoThetaLowerCake.setvalue(val)
         
-        val = float(str(qUpper-qDiff)[:8])
-        self.cakeRange[-1]['qUpper'] = val
-        self.qUpperCake.setvalue(val)
+        val = float(str(qOrTwoThetaUpper-qOrTwoThetaDiff)[:8])
+        self.cakeRange[-1]['qOrTwoThetaUpper'] = val
+        self.qOrTwoThetaOrTwoThetaUpperCake.setvalue(val)
 
         val = float(str(chiLower-chiDiff)[:8])
         self.cakeRange[-1]['chiLower'] = val
@@ -3440,7 +4159,8 @@ class Main:
     def mouseUpPanCakeImage(self,event):
         global druged
         self.cakedisp.imframe.unbind(sequence="<Motion>")
-        self.cakedisp.imframe.bind(sequence="<Motion>", func=self.mouseDragNoPressCakeImage)
+        self.cakedisp.imframe.bind(sequence="<Motion>", 
+                func=self.mouseDragNoPressCakeImage)
         self.cakedisp.imframe.unbind(sequence="<ButtonRelease>")
 
 
@@ -3448,8 +4168,10 @@ class Main:
         global druged, lastX, lastY
         druged = 0
         (lastX, lastY) = event.x, event.y
-        self.cakedisp.imframe.bind(sequence="<Motion>", func=self.mouseDragPanCakeImage)
-        self.cakedisp.imframe.bind(sequence="<ButtonRelease>", func=self.mouseUpPanCakeImage)
+        self.cakedisp.imframe.bind(sequence="<Motion>",
+                func=self.mouseDragPanCakeImage)
+        self.cakedisp.imframe.bind(sequence="<ButtonRelease>",
+                func=self.mouseUpPanCakeImage)
 
  
     def noCoordReportUpdateCakeImage(self):
@@ -3494,9 +4216,10 @@ class Main:
             self.cakedisp.ccoord.config(text="chi=      ")
 
 
-    def doZoomCakeImage(self,qLower,qUpper,chiLower,chiUpper):
-        self.qLowerCake.setvalue(qLower)
-        self.qUpperCake.setvalue(qUpper)
+    def doZoomCakeImage(self,qOrTwoThetaLower,qOrTwoThetaUpper,
+            chiLower,chiUpper):
+        self.qOrTwoThetaLowerCake.setvalue(qOrTwoThetaLower)
+        self.qOrTwoThetaUpperCake.setvalue(qOrTwoThetaUpper)
         self.chiLowerCake.setvalue(chiLower)
         self.chiUpperCake.setvalue(chiUpper)
 
@@ -3504,16 +4227,20 @@ class Main:
 
 
     def undoZoomCakeImage(self,event=None):
-        # if there is the current cake range and an old one,
-        # get rid of the current one, and put the previous one
-        # into the GUI.
+        # if there is the current cake range and 
+        # an old one, get rid of the current one, 
+        # and put the previous one into the GUI.
         if len(self.cakeRange) > 1:
             self.cakeRange.pop()
-            self.qLowerCake.setvalue(self.cakeRange[-1]['qLower'])
-            self.qUpperCake.setvalue(self.cakeRange[-1]['qUpper'])
+            self.qOrTwoThetaLowerCake.setvalue(
+                    self.cakeRange[-1]['qOrTwoThetaLower'])
+            self.qOrTwoThetaUpperCake.setvalue(
+                    self.cakeRange[-1]['qOrTwoThetaUpper'])
 
-            self.chiLowerCake.setvalue(self.cakeRange[-1]['chiLower'])
-            self.chiUpperCake.setvalue(self.cakeRange[-1]['chiUpper'])
+            self.chiLowerCake.setvalue(
+                    self.cakeRange[-1]['chiLower'])
+            self.chiUpperCake.setvalue(
+                    self.cakeRange[-1]['chiUpper'])
 
         self.cakedisp.updateimage()
 
@@ -3541,11 +4268,13 @@ class Main:
         global x0, y0, x1, y1        
 
         self.cakedisp.imframe.unbind(sequence="<Motion>")
-        self.cakedisp.imframe.bind(sequence="<Motion>", func=self.mouseDragNoPressCakeImage)
+        self.cakedisp.imframe.bind(sequence="<Motion>", 
+                func=self.mouseDragNoPressCakeImage)
 
         self.cakedisp.imframe.unbind(sequence="<ButtonRelease>")
 
-        # If this was a left click, try to zoom in. Otherwise, zoom out
+        # If this was a left click, try to zoom in. 
+        # Otherwise, zoom out
         if event.num == 1:
             self.cakedisp.imframe.delete(self.zoomRectangle)
             # ensure that the user would zoom into a real window
@@ -3553,48 +4282,88 @@ class Main:
                 qLower,chiLower = self.getQChiCakeImageCoordinates(x0,y0)
                 qUpper,chiUpper = self.getQChiCakeImageCoordinates(x1,y1)
 
-                qLower,qUpper = min(qLower,qUpper),max(qLower,qUpper)
-                chiLower,chiUpper = min(chiLower,chiUpper),max(chiLower,chiUpper)
+                qLower = min(qLower,qUpper)
+                qUpper = max(qLower,qUpper)
 
+                chiLower = min(chiLower,chiUpper)
+                chiUpper = max(chiLower,chiUpper)
+
+                if self.Qor2Theta.get() == "Work in Q":
+                    type = "Q"
+                elif self.Qor2Theta.get() == "Work in 2theta":
+                    type = "2theta"
+                else:
+                    raise UserInputException("The program must work in \
+either Q or 2theta mode.")
+
+                if type == "Q":
+                    qOrTwoThetaLower = qLower
+                    qOrTwoThetaUpper = qUpper
+
+                    if qOrTwoThetaUpper > Transform.getMaxQ(
+                            self.calibrationData[-1]):
+                        qOrTwoThetaUpper = Transform.getMaxQ(
+                                self.calibrationData[-1])
+
+                elif type == "2theta":
+                    qOrTwoThetaLower = Transform.convertQToTwoTheta(
+                            qLower,self.calibrationData[-1])
+                    qOrTwoThetaUpper = Transform.convertQToTwoTheta(
+                            qUpper,self.calibrationData[-1])
+
+                    if qOrTwoThetaUpper > Transform.getMaxTwoTheta():
+                        qOrTwoThetaUpper = Transform.getMaxTwoTheta()
+        
                 # make sure not to zoom of the map
 
-                if qLower < 0:
-                    qLower = 0
-                if qUpper > Transform.getMaxQ(self.calibrationData[-1]):
-                    qUpper = Transform.getMaxQ(self.calibrationData[-1])
+                if qOrTwoThetaLower < 0:
+                    qOrTwoThetaLower = 0
                 if chiLower < -360:
                     chiLower = -360
                 if chiUpper > 360:
                     chiUpper = 360
 
                 if chiUpper-chiLower > 360:
-                    # if the intent is to zoom into too big a chi range, make smaller which of chiLower or 
-                    # chiUpper is currently off the screen
+                    # if the intent is to zoom into too big 
+                    # a chi range, make smaller which of 
+                    # chiLower or chiUpper is currently off 
+                    # the screen
 
                     if chiUpper > float(self.cakeRange[-1]['chiUpper']):
                         chiUpper = chiLower+360
-                    else: # chiLower < float(self.cakeRange[-1]['chiLower'])
+                    else:
                         chiLower = chiUpper-360
-
 
                 # set the new zoom scale
 
-                qLower = float(str(qLower)[:8])
-                qUpper = float(str(qUpper)[:8])
+                qOrTwoThetaLower = float(str(qOrTwoThetaLower)[:8])
+                qOrTwoThetaUpper = float(str(qOrTwoThetaUpper)[:8])
                 chiLower = float(str(chiLower)[:8])
                 chiUpper = float(str(chiUpper)[:8])
 
-                self.doZoomCakeImage(qLower,qUpper,chiLower,chiUpper)
+                self.doZoomCakeImage(qOrTwoThetaLower,qOrTwoThetaUpper,
+                        chiLower,chiUpper)
         else:
             self.undoZoomCakeImage()
 
 
     def setAutoCakeRange(self):
-        range = self.diffractionData.getSmallestRange(self.calibrationData[-1])
 
-        self.qLowerCake.setvalue(range['qLower'])
-        self.qUpperCake.setvalue(range['qUpper'])
-        self.numQCake.setvalue(self.cakeImageWidth)
+        if self.Qor2Theta.get() == "Work in Q":
+            type = "Q"
+        elif self.Qor2Theta.get() == "Work in 2theta":
+            type = "2theta"
+        else:
+            raise UserInputException("The program must work in \
+either Q or 2theta mode.")
+        
+        range = self.diffractionData.getSmallestRange(
+                calibrationData = self.calibrationData[-1],
+                type = type)
+
+        self.qOrTwoThetaLowerCake.setvalue(range['qOrTwoThetaLower'])
+        self.qOrTwoThetaUpperCake.setvalue(range['qOrTwoThetaUpper'])
+        self.numQOrTwoThetaCake.setvalue(self.cakeImageWidth)
 
         self.chiLowerCake.setvalue(range['chiLower'])
         self.chiUpperCake.setvalue(range['chiUpper'])
@@ -3606,9 +4375,12 @@ class Main:
         self.addUserInputCalibrationDataToObject()
 
         if self.diffractionData==None:
-            raise UserInputException("Cannot cake until an image is loaded.")
-        if self.calibrationData==[] or not self.calibrationData[-1].allSet():
-            raise UserInputException("Cannot cake until the calibration parameters are set.")
+            raise UserInputException("Cannot cake until an \
+image is loaded.")
+        if self.calibrationData==[] or \
+                not self.calibrationData[-1].allSet():
+            raise UserInputException("Cannot cake until the \
+calibration parameters are set.")
 
         # when you auto cake, kill the old zoom range
         self.cakeRange = []
@@ -3619,7 +4391,8 @@ class Main:
 
     def saveIntegratedIntensity(self,filename=''):
         if self.integrate == None:
-            raise UserInputException("Cannot save the intensity integrated data until the integration has been performed")
+            raise UserInputException("Cannot save the intensity \
+integrated data until the integration has been performed")
         
         if filename in ['',()]: 
             defaultextension = ".dat"
@@ -3630,39 +4403,45 @@ class Main:
 
             if filename in ['',()]: return 
 
-            # on the mac, it won't give a default extension if you don't write
-            # it out explicitly, so make sure to do so automatically otherwise
+            # on the mac, it won't give a default extension 
+            # if you don't write it out explicitly, so make 
+            # sure to do so automatically otherwise
             if os.path.splitext(filename)[1] == '':
                 filename += defaultextension
 
 
-        self.integrate.toFile(filename,self.diffractionData.theDiffractionData.filename)
+        self.integrate.toFile(filename,
+                self.diffractionData.theDiffractionData.filename)
 
         # Make sure to explicitly record this macro thingy
         if self.macroLines != None:
-            self.macroMode.explicitMacroRecordTwoLines('Save Integration Data','\t'+filename)
+            self.macroMode.explicitMacroRecordTwoLines(
+                    'Save Integration Data','\t %s' % filename)
 
 
     def autoIntegrateQOrTwoThetaI(self):
         # update calibrationData first
         self.addUserInputCalibrationDataToObject()
 
+        if self.Qor2Theta.get() == "Work in Q":
+            type = "Q"
+        elif self.Qor2Theta.get() == "Work in 2theta":
+            type = "2theta"
+        else:
+            raise UserInputException("The program must work \
+in either Q or 2theta mode.")
+
         # must set numChi somehow
         self.numQOrTwoThetaIntegrate.setvalue(200)
 
         if self.diffractionData:
-            range = self.diffractionData.getSmallestRange(self.calibrationData[-1])
-
-            self.QOrTwoThetaLowerIntegrate.setvalue(range['qLower'])
-
-            if self.Qor2Theta.get() == "Work in Q":
-                self.QOrTwoThetaUpperIntegrate.setvalue(range['qUpper'])
-            elif self.Qor2Theta.get() == "Work in 2theta":
-                self.QOrTwoThetaUpperIntegrate.setvalue(
-                        Transform.convertQToTwoTheta(range['qUpper'],self.calibrationData[-1]))
-
+            range = self.diffractionData.getSmallestRange(
+                    self.calibrationData[-1],type=type)
+            self.QOrTwoThetaLowerIntegrate.setvalue(
+                    range['qOrTwoThetaLower'])
+            self.QOrTwoThetaUpperIntegrate.setvalue(
+                    range['qOrTwoThetaUpper'])
             self.constrainWithRangeOnRight.set(0)
-
             self.integrateQOrTwoThetaI()
 
         else:
@@ -3679,55 +4458,74 @@ class Main:
         self.addUserInputCalibrationDataToObject()
 
         if self.diffractionData==None:
-            raise UserInputException("Cannot integrate until an image is loaded.")
-        if self.calibrationData==[] or not self.calibrationData[-1].allSet():
-            raise UserInputException("Cannot integrate until the calibration parameters are set.")
+            raise UserInputException("Cannot integrate \
+until an image is loaded.")
+
+        if self.calibrationData==[] or \
+                not self.calibrationData[-1].allSet():
+            raise UserInputException("Cannot integrate \
+until the calibration parameters are set.")
 
         try:
             num = int(self.numQOrTwoThetaIntegrate.getvalue())
         except:
-            raise UserInputException("The number of Q values to use when integrating has not been set.")
+            raise UserInputException("The number of Q values \
+to use when integrating has not been set.")
 
         try:
             lower = float(self.QOrTwoThetaLowerIntegrate.getvalue())
         except:
-            raise UserInputException("The lower Q value to use when integrating has not been set.")
+            raise UserInputException("The lower Q value to \
+use when integrating has not been set.")
 
         try:
             upper = float(self.QOrTwoThetaUpperIntegrate.getvalue())
         except:
-            raise UserInputException("The upper Q value to use when integrating has not been set.")
+            raise UserInputException("The upper Q value to \
+use when integrating has not been set.")
 
         if self.Qor2Theta.get() == "Work in Q":
 
             if lower >= upper:
-                raise UserInputException("Unable to integrate the intensity. The lower Q value must be less then the upper Q value")
+                raise UserInputException("Unable to integrate \
+the intensity. The lower Q value must be less then the upper \
+Q value")
 
             if lower < 0:
-                raise UserInputException("Unable to integrate intensity. The lower Q value must be larger then 0.")
+                raise UserInputException("Unable to integrate \
+intensity. The lower Q value must be larger then 0.")
 
             if upper > Transform.getMaxQ(self.calibrationData[-1]):
-                raise UserInputException("Unable to integrate intensity. The upper Q value must be less then the largest possible Q value.")
+                raise UserInputException("Unable to integrate \
+intensity. The upper Q value must be less then the largest \
+possible Q value.")
 
             if num < 1:
-                raise UserInputException("Unable to integrate intensity. The number of Q must be at least 1.")
+                raise UserInputException("Unable to integrate \
+intensity. The number of Q must be at least 1.")
 
         elif self.Qor2Theta.get() == "Work in 2theta":
 
             if lower >= upper:
-                raise UserInputException("Unable to integrate the intensity. The lower 2theta value must be less then the upper 2theta value")
+                raise UserInputException("Unable to integrate \
+the intensity. The lower 2theta value must be less then the \
+upper 2theta value")
 
             if lower < 0:
-                raise UserInputException("Unable to integrate intensity. The lower 2theta value must be larger then 0.")
+                raise UserInputException("Unable to integrate \
+intensity. The lower 2theta value must be larger then 0.")
 
             if upper > 90:
-                raise UserInputException("Unable to integrate intensity. The upper 2theta value must be smaller then 90.")
+                raise UserInputException("Unable to integrate \
+intensity. The upper 2theta value must be smaller then 90.")
 
             if num < 1:
-                raise UserInputException("Unable to integrate intensity. The number of 2theta must be at least 1.")
+                raise UserInputException("Unable to integrate \
+intensity. The number of 2theta must be at least 1.")
 
         else:
-            raise UserInputException("The program must work in either Q or 2theta mode.")
+            raise UserInputException("The program must work in \
+either Q or 2theta mode.")
 
         constrainWithRangeOnRight = self.constrainWithRangeOnRight.get()
         doConstraint = constrainWithRangeOnRight
@@ -3736,41 +4534,54 @@ class Main:
             try:
                 constraintLower = float(self.chiLowerIntegrate.getvalue())
             except:
-                raise UserInputException("Cannot integrate intensity. Since the option 'Constrain With Range On Right' has been set, a valid chi lower must be given")
+                raise UserInputException("Cannot integrate \
+intensity. Since the option 'Constrain With Range On Right' \
+has been set, a valid chi lower must be given")
 
             try:
                 constraintUpper = float(self.chiUpperIntegrate.getvalue())
             except:
-                raise UserInputException("Cannot integrate intensity. Since the option 'Constrain With Range On Right' has been set, a valid chi upper must be given")
-
+                raise UserInputException("Cannot integrate \
+intensity. Since the option 'Constrain With Range On Right' \
+has been set, a valid chi upper must be given")
 
             if constraintLower >= constraintUpper:
-                raise UserInputException("Unable to integrate the intensity. The constraint lower chi value must be less then the upper chi value")
+                raise UserInputException("Unable to integrate \
+the intensity. The constraint lower chi value must be less \
+then the upper chi value")
 
             if constraintLower < -360:
-                raise UserInputException("Unable to integrate intensity. The constraint lower chi value must be larger then -360 degrees.")
+                raise UserInputException("Unable to integrate \
+intensity. The constraint lower chi value must be larger \
+then -360 degrees.")
 
             if constraintUpper > +360:
-                raise UserInputException("Unable to integrate intensity. The constraint upper chi value must be lower then 360 degrees.")
+                raise UserInputException("Unable to integrate \
+intensity. The constraint upper chi value must be lower \
+then 360 degrees.")
 
             if constraintUpper - constraintLower > 360:
-                raise UserInputException("Unable to integrate intensity. The constraint chi range can be at most 360 degrees.")
+                raise UserInputException("Unable to integrate \
+intensity. The constraint chi range can be at most 360 degrees.")
             
         else:
-            # the bound dosen't matter, so just give it something arbitrary
-            constraintLower = 0
-            constraintUpper = 0
+            # the bound dosen't matter, so just give it 
+            # something arbitrary
+            constraintLower,constraintUpper = 0,0
         
         doPolarizationCorrection = self.doPolarizationCorrectionIntegrate.get()
         if doPolarizationCorrection:
             try:
                 P = float(self.PIntegrate.getvalue())
             except:
-                raise UserInputException("The P cake value has not been set.")
+                raise UserInputException("The P cake value has \
+not been set.")
+
         else:
             P = 0 # P can be anything since it won't be used.
 
-        self.addMaskedPixelInfoToObject(operationString="integrate the diffraction data")
+        self.addMaskedPixelInfoToObject(
+                operationString="integrate the diffraction data")
             
         if self.Qor2Theta.get() == "Work in Q":
             self.integrate = self.diffractionData.integrateQI(
@@ -3806,13 +4617,15 @@ class Main:
                     typeOfConstraint = "chi",
                     maskedPixelInfo = self.maskedPixelInfo) 
 
-            self.integratedisp.makegraph(xd=self.integrate.getValues(),
+            self.integratedisp.makegraph(
+                    xd=self.integrate.getValues(),
                     yd=self.integrate.getIntensityData(),
                     yLabel='I',xLabel='2theta',
                     xUpdateName='2theta',yUpdateName='I',
                     dontConnectDataPointsWithValue=-1)
         else:
-            raise UserInputException("The program must work in either Q or 2theta mode.")
+            raise UserInputException("The program must work in \
+either Q or 2theta mode.")
 
         # show the new display
         self.integratedisp.main.show()
@@ -3824,11 +4637,21 @@ class Main:
         # update calibrationData first
         self.addUserInputCalibrationDataToObject()
 
+        if self.Qor2Theta.get() == "Work in Q":
+            type = "Q"
+        elif self.Qor2Theta.get() == "Work in 2theta":
+            type = "2theta"
+        else:
+            raise UserInputException("The program must work in \
+either Q or 2theta mode.")
+
         # must set numChi somehow
         self.numChiIntegrate.setvalue(200)
 
         if self.diffractionData:
-            range = self.diffractionData.getSmallestRange(self.calibrationData[-1])
+            range = self.diffractionData.getSmallestRange(
+self.calibrationData[-1],type=type)
+            
             self.chiLowerIntegrate.setvalue(range['chiLower'])
             self.chiUpperIntegrate.setvalue(range['chiUpper'])
 
@@ -3849,27 +4672,38 @@ class Main:
         self.addUserInputCalibrationDataToObject()
 
         if self.diffractionData==None:
-            raise UserInputException("Cannot integrate until an image is loaded.")
-        if self.calibrationData==[] or not self.calibrationData[-1].allSet():
-            raise UserInputException("Cannot integrate until the calibration parameters are set.")
+            raise UserInputException("Cannot integrate until \
+an image is loaded.")
+
+        if self.calibrationData==[] or \
+                not self.calibrationData[-1].allSet():
+            raise UserInputException("Cannot integrate until \
+the calibration parameters are set.")
 
         try:
             num = int(self.numChiIntegrate.getvalue())
         except:
-            raise UserInputException("Cannot integrate intensity. The number of chi values to use when integrating has not been set.")
+            raise UserInputException("Cannot integrate \
+intensity. The number of chi values to use when integrating \
+has not been set.")
 
         try:
             lower = float(self.chiLowerIntegrate.getvalue())
         except:
-            raise UserInputException("Cannot integrate intensity. The lower chi value to use when integrating has not been set.")
+            raise UserInputException("Cannot integrate \
+intensity. The lower chi value to use when integrating \
+has not been set.")
 
         try:
             upper = float(self.chiUpperIntegrate.getvalue())
         except:
-            raise UserInputException("Cannot integrate intensity. The upper chi value to use when integrating has not been set.")
+            raise UserInputException("Cannot integrate \
+intensity. The upper chi value to use when integrating \
+has not been set.")
 
         if upper-lower > 360:
-            raise UserInputException("Cannot integrate intensity. The chi range must be at most 360 degrees.")
+            raise UserInputException("Cannot integrate \
+intensity. The chi range must be at most 360 degrees.")
 
         constrainWithRangeOnLeft = self.constrainWithRangeOnLeft.get()
         doConstraint = constrainWithRangeOnLeft
@@ -3879,48 +4713,74 @@ class Main:
                 constraintLower = float(self.QOrTwoThetaLowerIntegrate.getvalue())
             except:
                 if self.Qor2Theta.get() == "Work in Q":
-                    raise UserInputException("Cannot integrate intensity. Since the option 'Constrain With Range On Right' has been set, a valid Q lower must be given")
+                    raise UserInputException("Cannot integrate \
+intensity. Since the option 'Constrain With Range On Right' has \
+been set, a valid Q lower must be given")
+
                 elif self.Qor2Theta.get() == "Work in 2theta":
-                    raise UserInputException("Cannot integrate intensity. Since the option 'Constrain With Range On Right' has been set, a valid 2theta lower must be given")
+                    raise UserInputException("Cannot integrate \
+intensity. Since the option 'Constrain With Range On Right' has \
+been set, a valid 2theta lower must be given")
                 else:
-                    raise UserInputException("The program must work in either Q or 2theta mode.")
+                    raise UserInputException("The program must \
+work in either Q or 2theta mode.")
 
             try:
                 constraintUpper = float(self.QOrTwoThetaUpperIntegrate.getvalue())
             except:
                 if self.Qor2Theta.get() == "Work in Q":
-                    raise UserInputException("Cannot integrate intensity. Since the option 'Constrain With Range on Right' has been set, a valid Q upper must be given")
+                    raise UserInputException("Cannot integrate \
+intensity. Since the option 'Constrain With Range on Right' has \
+been set, a valid Q upper must be given")
+
                 elif self.Qor2Theta.get() == "Work in 2theta":
-                    raise UserInputException("Cannot integrate intensity. Since the option 'Constrain With Range on Right' has been set, a valid 2theta upper must be given")
+                    raise UserInputException("Cannot integrate \
+intensity. Since the option 'Constrain With Range on Right' has \
+been set, a valid 2theta upper must be given")
+
                 else:
-                    raise UserInputException("The program must work in either Q or 2theta mode.")
+                    raise UserInputException("The program must \
+work in either Q or 2theta mode.")
 
             if self.Qor2Theta.get() == "Work in Q":
                 constraintType = "Q"
 
                 if constraintLower >= constraintUpper:
-                    raise UserInputException("Unable to integrate the intensity. The constraint lower Q value must be less then the upper Q value")
+                    raise UserInputException("Unable to \
+integrate the intensity. The constraint lower Q value must \
+be less then the upper Q value")
 
                 if constraintLower < 0:
-                    raise UserInputException("Unable to integrate intensity. The constraint lower Q value must be larger then 0.")
+                    raise UserInputException("Unable to \
+integrate intensity. The constraint lower Q value must be \
+larger then 0.")
 
                 if constraintUpper > Transform.getMaxQ(self.calibrationData[-1]):
-                    raise UserInputException("Unable to integrate intensity. The constraint upper Q value must be less then the largest possible Q value.")
+                    raise UserInputException("Unable to \
+integrate intensity. The constraint upper Q value must \
+be less then the largest possible Q value.")
 
             elif self.Qor2Theta.get() == "Work in 2theta":
                 constraintType = "2theta"
 
                 if constraintLower >= constraintUpper:
-                    raise UserInputException("Unable to integrate the intensity. The constraint lower 2theta value must be less then the upper 2theta value")
+                    raise UserInputException("Unable to \
+integrate the intensity. The constraint lower 2theta value \
+must be less then the upper 2theta value")
 
                 if constraintLower < 0:
-                    raise UserInputException("Unable to integrate intensity. The constraint lower 2theta value must be larger then 0.")
+                    raise UserInputException("Unable to \
+integrate intensity. The constraint lower 2theta value \
+must be larger then 0.")
 
                 if constraintUpper > 90:
-                    raise UserInputException("Unable to integrate intensity. The constraint upper 2theta value must be smaller then 90.")
+                    raise UserInputException("Unable to \
+integrate intensity. The constraint upper 2theta value must \
+be smaller then 90.")
 
             else:
-                raise UserInputException("The program must work in either Q or 2theta mode.")
+                raise UserInputException("The program must \
+work in either Q or 2theta mode.")
 
         else:
             # the bound dosen't matter, so just give it something arbitrary
@@ -3928,16 +4788,18 @@ class Main:
             constraintLower = 0
             constraintUpper = 0
         
-        doPolarizationCorrection = self.doPolarizationCorrectionIntegrate.get()
+        doPolarizationCorrection=self.doPolarizationCorrectionIntegrate.get()
         if doPolarizationCorrection:
             try:
                 P = float(self.PIntegrate.getvalue())
             except:
-                raise UserInputException("The P cake value has not been set.")
+                raise UserInputException("The P cake value \
+has not been set.")
         else:
             P = 0 # P can be anything since it won't be used.
 
-        self.addMaskedPixelInfoToObject(operationString="integrate the diffraction data")
+        self.addMaskedPixelInfoToObject(
+                operationString="integrate the diffraction data")
 
         self.integrate = self.diffractionData.integrateChiI(
                 calibrationData = self.calibrationData[-1],
@@ -3965,17 +4827,20 @@ class Main:
 
 
     def runMacro(self):
-        # make the macro object do all the hard work so that macro running can happen
+        # make the macro object do all the hard 
+        # work so that macro running can happen
         self.macroMode.runMacro()
     
 
     def startRecordMacro(self):
-        # make the macro object do all the hard work so that macro recording can happen
+        # make the macro object do all the hard 
+        # work so that macro recording can happen
         self.macroMode.startRecordMacro()
 
 
     def stopRecordMacro(self):
-        # make the macro object stop the macro from recording
+        # make the macro object stop the macro from 
+        # recording
         self.macroMode.stopRecordMacro()
 
 

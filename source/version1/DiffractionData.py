@@ -115,6 +115,7 @@ class DiffractionData:
 
     lastCalibrationDataGetSmallsetRange = None
     lastRangeGetSmallestRange = None
+    lastTypeGetSmallestRange = None
 
     lastMaskedPixelInfo = None
 
@@ -127,7 +128,8 @@ class DiffractionData:
             only has one file in it, then only that one will be loaeded. """
 
         if len(filenames) < 1:
-            raise Exception("Cannot initialize a DiffractionData object without being given at least one file to load in.")
+            raise Exception("Cannot initialize a DiffractionData \
+object without being given at least one file to load in.")
 
         if len(filenames) > 1:
             # Many files to load
@@ -143,7 +145,8 @@ class DiffractionData:
 
                 for extension in extensions:
                     if extension != extensions[0]:
-                        raise UnknownFiletypeException("Cannot read in multiple files because they do not have the same extension")
+                        raise UnknownFiletypeException("Cannot read in multiple \
+files because they do not have the same extension")
 
                 extension = extensions[0] # Only one extension to store
 
@@ -162,7 +165,8 @@ class DiffractionData:
 
             for data in allData:
                 if data.size != allData[0].size:
-                    raise UserInputException("Cannot add files because they are of different size.")
+                    raise UserInputException("Cannot add files because they are of \
+different size.")
 
             filename = ""
             # store all filenames in one string
@@ -231,31 +235,37 @@ class DiffractionData:
 
         if drawQLines or drawdQLines:
             if QData == None:
-                raise Exception("Cannot save the diffraction data until a q list is given.")
+                raise Exception("Cannot save the diffraction data until a q \
+list is given.")
             if calibrationData == None:
-                raise Exception("Cannot save the diffraction data until the calibration Data is given.")
+                raise Exception("Cannot save the diffraction data until the \
+calibration Data is given.")
 
             if drawQLines:
                 if qLinesColor == None:
-                    raise Exception('Cannot add q lines to the saved image until the q line color is set.')
+                    raise Exception('Cannot add q lines to the saved image until \
+the q line color is set.')
                 for Q,dQ in QData.getAllQPairs():
                     MakeDiffractionImage.addConstantQLineDiffractionImage(image,Q,
                             calibrationData,qLinesColor)
 
             if drawdQLines:
                 if dQLinesColor == None:
-                    raise Exception('Cannot add delta q lines to the saved image until the delta q line color is set.')
+                    raise Exception('Cannot add delta q lines to the saved image \
+until the delta q line color is set.')
                 for Q,dQ in QData.getAllQPairs():
-                    MakeDiffractionImage.addConstantQLineDiffractionImage(image,Q-dQ,
-                            calibrationData,dQLinesColor)
-                    MakeDiffractionImage.addConstantQLineDiffractionImage(image,Q+dQ,
-                            calibrationData,dQLinesColor)
+                    MakeDiffractionImage.addConstantQLineDiffractionImage(
+                            image,Q-dQ,calibrationData,dQLinesColor)
+                    MakeDiffractionImage.addConstantQLineDiffractionImage(
+                            image,Q+dQ,calibrationData,dQLinesColor)
 
         if drawPeaks and peakList != None:
             if peakLinesColor == None:
-                raise Exception("Cannot  add peaks to the saved iamge until the peak color is set.")
+                raise Exception("Cannot add peaks to the saved iamge until \
+the peak color is set.")
 
-            MakeDiffractionImage.addPeaksDiffractionImage(image,peakList,maskedPixelInfo,peakLinesColor)
+            MakeDiffractionImage.addPeaksDiffractionImage(image,peakList,
+                    maskedPixelInfo,peakLinesColor)
 
         # by default, return entire image
         if pixel1X != None and pixel1Y != None and pixel2X != None and pixel2Y !=None:
@@ -266,12 +276,14 @@ class DiffractionData:
         try:
             image.save(filename)
         except Exception,e:
-            raise UserInputException("Cannot save image: %s has an unknown file extension" % filename )
+            raise UserInputException("Cannot save image: %s has an unknown \
+file extension" % filename )
      
 
-    def getDiffractionImage(self,colorMaps,colorMapName,maskedPixelInfo,
-            pixel1X=None,pixel1Y=None,pixel2X=None, pixel2Y=None, width = None, height = None, 
-            lowerBound=0, upperBound=1, logScale = 0,invert=None):
+    def getDiffractionImage(self,colorMaps,colorMapName,
+            maskedPixelInfo,pixel1X=None,pixel1Y=None,
+            pixel2X=None,pixel2Y=None,width=None,height=None,
+            lowerBound=0,upperBound=1,logScale=0,invert=None):
 
         # only create new image if it hasn't been made yet or if any
         # of the intensity bounds or if the log scale has changed,
@@ -284,7 +296,8 @@ class DiffractionData:
                 invert != self.lastInvert or \
                 maskedPixelInfo != self.lastMaskedPixelInfo:
 
-            self.theImage = MakeDiffractionImage.getDiffractionImage(self.theDiffractionData.data,
+            self.theImage = MakeDiffractionImage.getDiffractionImage(
+                    self.theDiffractionData.data,
                     lowerBound=lowerBound,
                     upperBound=upperBound,
                     logScale = logScale,
@@ -299,7 +312,8 @@ class DiffractionData:
             self.lastColorMapNameDiffractionImage = colorMapName
             self.lastInvert = invert
     
-            # only do a shallow copy because the weird widget in the object can't be copied
+            # only do a shallow copy because the weird widget 
+            # in the object can't be copied
             self.lastMaskedPixelInfo = copy.copy(maskedPixelInfo)
 
         # by default, return entire image
@@ -451,19 +465,20 @@ class DiffractionData:
 
 
     def saveCakeImage(self, filename, calibrationData, 
-            qLower, qUpper, numQ, chiLower, chiUpper,numChi,
+            qOrTwoThetaLower, qOrTwoThetaUpper, numQOrTwoTheta, 
+            chiLower, chiUpper,numChi,
             doPolarizationCorrection,P,maskedPixelInfo,
-            colorMaps, colorMapName, lowerBound, upperBound, logScale = None,
-            invert = None, drawQLines = None, drawdQLines = None, 
+            colorMaps, colorMapName, lowerBound, upperBound,type,logScale = None,
+            invert = None, drawQOrTwoThetaLines = None, drawdQOrTwoThetaLines = None, 
             QData = None, drawPeaks = None, peakList = None,
-            qLinesColor = None, dQLinesColor = None, 
+            qOrTwoThetaLinesColor = None, dQOrTwoThetaLinesColor = None, 
             peakLinesColor = None):
 
         image = self.getCakeImage(
                 calibrationData = calibrationData,
-                qLower = qLower,
-                qUpper = qUpper,
-                numQ = numQ,
+                qOrTwoThetaLower = qOrTwoThetaLower,
+                qOrTwoThetaUpper = qOrTwoThetaUpper,
+                numQOrTwoTheta = numQOrTwoTheta,
                 chiLower = chiLower,
                 chiUpper = chiUpper,
                 numChi = numChi,
@@ -477,71 +492,101 @@ class DiffractionData:
                 lowerBound = lowerBound,
                 upperBound = upperBound,
                 logScale = logScale,
-                invert = invert)
+                invert = invert,
+                type = type)
 
-        if drawQLines or drawdQLines:
+        if drawQOrTwoThetaLines or drawdQOrTwoThetaLines:
             if QData == None:
-                raise Exception("Cannot save the cake data until a q list is given.")
+                raise Exception("Cannot save the cake data until \
+a Q list is given.")
 
-            if drawQLines:
-                if qLinesColor == None:
-                    raise Exception('Cannot add q lines to the saved image until the q line color is set.')
+            if drawQOrTwoThetaLines:
+                if qOrTwoThetaLinesColor == None:
+                    raise Exception('Cannot add Q lines to the \
+saved image until the Q line color is set.')
                 for Q,dQ in QData.getAllQPairs():
-                    Cake.addConstantQLineCakeImage(image,Q,qLower,qUpper,numQ,chiLower,chiUpper,numChi,qLinesColor)
+                    Cake.addConstantQLineCakeImage(image,Q,qOrTwoThetaLower,
+                            qOrTwoThetaUpper,numQOrTwoTheta,chiLower,chiUpper,numChi,
+                            qOrTwoThetaLinesColor,calibrationData,type)
 
-            if drawdQLines:
-                if dQLinesColor == None:
-                    raise Exception('Cannot add delta q lines to the saved image until the delta q line color is set.')
+            if drawdQOrTwoThetaLines:
+                if dQOrTwoThetaLinesColor == None:
+                    raise Exception('Cannot add delta QOrTwoTheta lines to the saved \
+image until the delta QOrTwoTheta line color is set.')
+
                 for Q,dQ in QData.getAllQPairs():
-                    Cake.addConstantQLineCakeImage(image,Q-dQ,qLower,qUpper,numQ,chiLower,chiUpper,numChi,dQLinesColor)
-                    Cake.addConstantQLineCakeImage(image,Q+dQ,qLower,qUpper,numQ,chiLower,chiUpper,numChi,dQLinesColor)
+                    Cake.addConstantQLineCakeImage(image,Q-dQ,qOrTwoThetaLower,
+                            qOrTwoThetaUpper,numQOrTwoTheta,chiLower,chiUpper,
+                            numChi,dQOrTwoThetaLinesColor,calibrationData,type)
+                    Cake.addConstantQLineCakeImage(image,Q+dQ,qOrTwoThetaLower,
+                            qOrTwoThetaUpper,numQOrTwoTheta,chiLower,chiUpper,
+                            numChi,dQOrTwoThetaLinesColor,calibrationData,type)
 
         if drawPeaks and peakList != None:
             if peakLinesColor == None:
-                raise Exception("Cannot  add peaks to the saved iamge until the peak color is set.")
+                raise Exception("Cannot add peaks to the saved image \
+until the peak color is set.")
 
-            smallest  = self.getSmallestRange(calibrationData)
+            smallest  = self.getSmallestRange(calibrationData,type)
 
-            Cake.addPeaksCakeImage(image,qLower,qUpper,numQ,chiLower,chiUpper,numChi,
+            Cake.addPeaksCakeImage(image,qOrTwoThetaLower,qOrTwoThetaUpper,
+                    numQOrTwoTheta,chiLower,chiUpper,numChi,
                     peakList,calibrationData,peakLinesColor,
-                    smallestRangeQLower = smallest['qLower'],
-                    smallestRangeQUpper = smallest['qUpper'],
-                    smallestRangeChiLower =  smallest['chiLower'],
-                    smallestRangeChiUpper =  smallest['chiUpper'])
+                    smallestRangeQOrTwoThetaLower = smallest['qOrTwoThetaLower'],
+                    smallestRangeQOrTwoThetaUpper = smallest['qOrTwoThetaUpper'],
+                    smallestRangeChiLower = smallest['chiLower'],
+                    smallestRangeChiUpper = smallest['chiUpper'],
+                    maskedPixelInfo = maskedPixelInfo,
+                    type = type)
         try:
             image.save(filename)
         except Exception,e:
-            raise UserInputException("Cannot save the cake: %s has an unknown file extension" % filename )
+            raise UserInputException("Cannot save the cake: %s has an \
+unknown file extension" % filename )
 
 
-    def saveCakeData(self,filename,calibrationData,qLower,
-            qUpper,numQ,chiLower,chiUpper,numChi,doPolarizationCorrection,P,maskedPixelInfo):
+    def saveCakeData(self,filename,calibrationData,qOrTwoThetaLower,
+            qOrTwoThetaUpper,numQOrTwoTheta,chiLower,chiUpper,numChi,
+            doPolarizationCorrection,P,maskedPixelInfo,type):
 
         data = Cake.Cake(diffractionData = self.theDiffractionData.data,
                 calibrationData = calibrationData,
-                qLower = qLower,
-                qUpper = qUpper,
-                numQ = numQ,
+                qOrTwoThetaLower = qOrTwoThetaLower,
+                qOrTwoThetaUpper = qOrTwoThetaUpper,
+                numQOrTwoTheta = numQOrTwoTheta,
                 chiLower = chiLower,
                 chiUpper = chiUpper,
                 numChi = numChi,
                 doPolarizationCorrection = doPolarizationCorrection,
                 P = P,
-                maskedPixelInfo = maskedPixelInfo)
+                maskedPixelInfo = maskedPixelInfo,
+                type = type)
 
         data.toFile(filename,self.theDiffractionData.filename)
 
 
-    def getCakeImage(self,calibrationData,qLower,qUpper,numQ,chiLower,
+    def getCakeImage(self,calibrationData,qOrTwoThetaLower,
+            qOrTwoThetaUpper,numQOrTwoTheta,chiLower,
             chiUpper,numChi,doPolarizationCorrection,P,maskedPixelInfo,
             width,height,colorMaps,colorMapName,
-            lowerBound,upperBound,logScale=None,invert=None):
+            lowerBound,upperBound,type,logScale=None,invert=None):
 
-        data = Cake.Cake(self.theDiffractionData.data,calibrationData,
-            qLower,qUpper,numQ,chiLower,chiUpper,numChi,doPolarizationCorrection,P,
-            maskedPixelInfo)
+        data = Cake.Cake(
+            diffractionData = self.theDiffractionData.data,
+            calibrationData = calibrationData,
+            qOrTwoThetaLower = qOrTwoThetaLower,
+            qOrTwoThetaUpper = qOrTwoThetaUpper,
+            numQOrTwoTheta = numQOrTwoTheta,
+            chiLower = chiLower,
+            chiUpper = chiUpper,
+            numChi = numChi,
+            doPolarizationCorrection = doPolarizationCorrection,
+            P = P,
+            maskedPixelInfo = maskedPixelInfo,
+            type = type)
 
-        image = data.getImage(lowerBound,upperBound,logScale,colorMaps,colorMapName,invert)
+        image = data.getImage(lowerBound,upperBound,logScale,
+                colorMaps,colorMapName,invert)
 
         # change width and height of image
         if width==None or height==None:
@@ -602,7 +647,7 @@ class DiffractionData:
                 maskedPixelInfo = maskedPixelInfo)
 
 
-    def getSmallestRange(self,calibrationData):
+    def getSmallestRange(self,calibrationData,type):
         """ Get Smallest Range picks the smallest 
             range in the image which contains
             the whole diffraction image. 
@@ -626,15 +671,14 @@ class DiffractionData:
 
         # check if it has already been calculated
 
-        if self.lastCalibrationDataGetSmallsetRange != None:
-            if calibrationData == self.lastCalibrationDataGetSmallsetRange:
-                return self.lastRangeGetSmallestRange
-            else:
-                self.lastCalibrationDataGetSmallsetRange = None
-                self.lastRangeGetSmallestRange = None
+        if self.lastCalibrationDataGetSmallsetRange != None and \
+                calibrationData == self.lastCalibrationDataGetSmallsetRange and \
+                self.lastTypeGetSmallestRange == type:
+            return self.lastRangeGetSmallestRange
 
         # store value in case it changes.
         self.lastCalibrationDataGetSmallsetRange = copy.deepcopy(calibrationData)
+        self.lastTypeGetSmallestRange = type
             
         if calibrationData.getCenterX()['val'] < 0 or \
             calibrationData.getCenterX()['val']  > self.theDiffractionData.size-1 or \
@@ -683,7 +727,21 @@ class DiffractionData:
             qUpper = max(q0,q1,q2,q3)
             qUpper = float(str(qUpper)[:8])
 
-            tempRange = {'qLower':0,'qUpper':qUpper,'chiLower':-180,'chiUpper':180}
+            if type == "Q":
+                lower = 0
+                upper = qUpper
+            elif type == "2theta":
+                lower = Transform.convertQToTwoTheta(0,calibrationData)
+                upper = Transform.convertQToTwoTheta(qUpper,calibrationData)
+
+            else:
+                raise Exception("Unable to find smallest range. \
+This function must be passed for the parameter type either \
+'Q', or '2theta'")
+
+            tempRange = {'qOrTwoThetaLower':lower,'qOrTwoThetaUpper':upper,
+                    'chiLower':-180,'chiUpper':180}
+
             self.lastRangeGetSmallestRange = tempRange
             return tempRange
 

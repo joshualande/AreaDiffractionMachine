@@ -210,7 +210,6 @@ def convertWavelengthToEnergy(wavelength):
 def convertTwoThetaToQ(twoTheta,calibrationData):
     """ Calculates Q when given twoTheta and the wavelength. """
     wav= calibrationData.getWavelength()['val']
-    print wav
     return DiffractionAnalysisWrap.convertTwoThetaToQ(twoTheta,wav)
 
 
@@ -219,6 +218,10 @@ def convertQToTwoTheta(Q,calibrationData):
     return DiffractionAnalysisWrap.convertQToTwoTheta(Q,
             calibrationData.getWavelength()['val'])
 
+def getMaxTwoTheta():
+    """ This is a stupid function, but it adds a nice 
+        symmetry to the GetMaxQ function. """
+    return 90
 
 def getMaxQ(calibrationData):
     """ Max Q happens when 2_theta = pi/2. This,
@@ -236,8 +239,8 @@ def getMaxWavelength(Q):
     return 4*math.pi*math.sin(math.pi/4.0)/Q
 
 
-def getQChi(calibrationData,xPixel,yPixel,
-         cos_beta=None, sin_beta=None, cos_alpha=None, sin_alpha=None, 
+def getQChi(calibrationData,xPixel,yPixel,cos_beta=None, 
+        sin_beta=None, cos_alpha=None, sin_alpha=None, 
          cos_rotation=None, sin_rotation=None):
     """ calibrationData is a CalibrationData object holding
         the x and y center of the image in pixels, the
@@ -248,31 +251,38 @@ def getQChi(calibrationData,xPixel,yPixel,
         units, and pixelheight, the physical length of one pixel in
         micron units (1 mm = 1000 microns).  
         x,y are the coordinates to transform into Q and Chi values.
-        Returns chi in
-        units of degrees. """
-    return getQChi_UGLY(calibrationData.getCenterX()['val'],
-        calibrationData.getCenterY()['val'],calibrationData.getDistance()['val'],
-        calibrationData.getEnergy()['val'],calibrationData.getAlpha()['val'],
-        calibrationData.getBeta()['val'],calibrationData.getRotation()['val'],xPixel,yPixel,
-        calibrationData.getPixelLength()['val'],calibrationData.getPixelHeight()['val'],
-        cos_beta,sin_beta,cos_alpha,sin_alpha,cos_rotation,sin_rotation) 
-
-
-def getQChi_UGLY(xCenter,yCenter,distance,energy,alpha,beta,rotation,
-        xPixel,yPixel,pixelLength, pixelHeight, cos_beta = None, 
-        sin_beta = None, cos_alpha = None, sin_alpha = None,
-        cos_rotation = None,sin_rotation = None): 
+        Returns chi in units of degrees. """
 
     # call wrapped c code.
     if cos_beta == None or sin_beta == None or \
             cos_alpha == None or sin_alpha == None or \
             cos_rotation == None or sin_rotation == None:
-        return DiffractionAnalysisWrap.getQChi(xCenter,yCenter,distance,
-            energy,alpha,beta,rotation,xPixel,yPixel,pixelLength,pixelHeight)
+        return DiffractionAnalysisWrap.getQChi(
+                calibrationData.getCenterX()['val'],
+                calibrationData.getCenterY()['val'],
+                calibrationData.getDistance()['val'],
+                calibrationData.getEnergy()['val'],
+                calibrationData.getAlpha()['val'],
+                calibrationData.getBeta()['val'],
+                calibrationData.getRotation()['val'],
+                xPixel,yPixel,
+                calibrationData.getPixelLength()['val'],
+                calibrationData.getPixelHeight()['val'])
 
-    return DiffractionAnalysisWrap.getQChi(xCenter,yCenter,distance,
-        energy,alpha,beta,rotation,xPixel,yPixel,pixelLength,pixelHeight,
-        cos_beta,sin_beta,cos_alpha,sin_alpha,cos_rotation,sin_rotation)
+    return DiffractionAnalysisWrap.getQChi(
+            calibrationData.getCenterX()['val'],
+            calibrationData.getCenterY()['val'],
+            calibrationData.getDistance()['val'],
+            calibrationData.getEnergy()['val'],
+            calibrationData.getAlpha()['val'],
+            calibrationData.getBeta()['val'],
+            calibrationData.getRotation()['val'],
+            xPixel,yPixel,
+            calibrationData.getPixelLength()['val'],
+            calibrationData.getPixelHeight()['val'],
+            cos_beta,sin_beta,
+            cos_alpha,sin_alpha,
+            cos_rotation,sin_rotation)
 
 
 def getXY(calibrationData,Q,chi,
@@ -288,29 +298,36 @@ def getXY(calibrationData,Q,chi,
         Q and chi are the coordinates to convert to x,y pixel values.
         chi is in units of degrees. """
 
-    return getXY_UGLY(calibrationData.getCenterX()['val'],
-            calibrationData.getCenterY()['val'],
-            calibrationData.getDistance()['val'],calibrationData.getEnergy()['val'],
-            calibrationData.getAlpha()['val'],calibrationData.getBeta()['val'],
-            calibrationData.getRotation()['val'],Q,chi,
-            calibrationData.getPixelLength()['val'],calibrationData.getPixelHeight()['val'],
-            cos_beta,sin_beta,cos_alpha,sin_alpha,cos_rotation,sin_rotation)
-
-
-def getXY_UGLY(xCenter,yCenter,distance,energy,alpha,beta,rotation,Q,
-        chi,pixelLength,pixelHeight,cos_beta=None, sin_beta=None, 
-        cos_alpha=None, sin_alpha=None, cos_rotation = None, sin_rotation = None):
-
-   # call wrapped c code.
+    # call wrapped c code.
     if cos_beta == None or sin_beta == None or \
             cos_alpha == None or sin_alpha == None or\
             cos_rotation == None or sin_rotation == None:
-        return DiffractionAnalysisWrap.getXY(xCenter,yCenter,distance,energy,
-                alpha,beta,rotation,Q,chi,pixelLength,pixelHeight)
+        return DiffractionAnalysisWrap.getXY(
+                calibrationData.getCenterX()['val'],
+                calibrationData.getCenterY()['val'],
+                calibrationData.getDistance()['val'],
+                calibrationData.getEnergy()['val'],
+                calibrationData.getAlpha()['val'],
+                calibrationData.getBeta()['val'],
+                calibrationData.getRotation()['val'],
+                Q,chi,
+                calibrationData.getPixelLength()['val'],
+                calibrationData.getPixelHeight()['val'])
 
-    return DiffractionAnalysisWrap.getXY(xCenter,yCenter,distance,energy,alpha,
-            beta,rotation,Q,chi,pixelLength,pixelHeight,cos_beta,sin_beta,
-            cos_alpha,sin_alpha,cos_rotation,sin_rotation)
+    return DiffractionAnalysisWrap.getXY(
+            calibrationData.getCenterX()['val'],
+            calibrationData.getCenterY()['val'],
+            calibrationData.getDistance()['val'],
+            calibrationData.getEnergy()['val'],
+            calibrationData.getAlpha()['val'],
+            calibrationData.getBeta()['val'],
+            calibrationData.getRotation()['val'],
+            Q,chi,
+            calibrationData.getPixelLength()['val'],
+            calibrationData.getPixelHeight()['val'],
+            cos_beta,sin_beta,
+            cos_alpha,sin_alpha,
+            cos_rotation,sin_rotation)
 
 
 def test():
