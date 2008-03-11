@@ -70,6 +70,7 @@ Q Data:
 \end{lstlisting}
 
 \subsubsection{Looping Over Diffraction Data}
+\label{LoopOverDiffractionData}
 
 To analyze a file, the command is just 
 \begin{lstlisting}[caption={'Load the Diffraction Data'}]
@@ -135,6 +136,8 @@ You can put as many folder and files after a
 \macroline{Data File:} line as you wish.
 Just make sure to put them all on the same line 
 or the program will complain.
+
+\subsubsection{The PATHNAME and FILENAME commands}
 
 Finally, there is a convenience markup which can help
 you make fancy macros. Whenever you have loaded data 
@@ -226,7 +229,7 @@ is the subfolder \macroline{B} containing the files
 \macroline{third.mar3450} and \macroline{fourth.mar3450}.
 We could do the exact same data analysis as above by 
 issuing the macro command with only the data folder name.
-\begin{lstlisting}[caption={'Use the Folder Syntax'}]
+\begin{lstlisting}[caption={'Using the Folder Syntax'}]
 Multiple Data Files:
     C:/data
 # ...
@@ -242,6 +245,8 @@ to the path that all of the files that were added
 together have. But since they all have different file 
 names, the \macroline{FILENAME} command will always be 
 replaced by the string \macroline{MULTIPLE\_FILES}
+
+\subsubsection{The FOLDERPATH and FOLDERNAME commands}
 
 \subsubsection{Picking Colors}
 
@@ -279,46 +284,51 @@ with the identical
 Polygon Mask Color?
     #ff0000
 \end{lstlisting}
+
+
+\subsubsection{Color Maps}
      
 \subsubsection{Little Tidbits}\label{Little Tidbits}
 \begin{itemize}
-\item Any of the macro commands themselves are case
-insensitive. The command \macroline{GeT fRoM hEaDeR} 
-is just as valid as the command 
-\macroline{gET fROM hEADER} and 
-\macroline{Get From Header}. You don't have to sweat it. 
-\item White spaces at the beginning and end of the 
-line are ignored. In the preceding examples, the
-spaces separating macro commands from input values
-such as file names are there only to increase 
-readability. You don't need them if you don't 
-want.
-\item Any new lines in a macro file are ignored.
-\item comment lines of the form 
-\macroline{\# A comment} are ignored.
-\item You don't have to worry about explicitly moving 
-from tab to tab in the computer program. The computer 
-program will move to the right automatically before
-performs the action.
-\item When you issue the macro command \macroline{E:} 
-or \macroline{E Fixed}, the computer program will
-automatically set the GUI to \macroline{Work in eV}.
-If you issue the command or \macroline{lambda:} or
-\macroline{lambda fixed:} then the comptuer program
-will set the GUI to \macroline{Work in Lambda}. You
-can also explicitly set the GUI to either mode using
-the commadn \macroline{Work in eV} or
-\macroline{Work in Lambda}.
+    \item Any of the macro commands themselves are case
+    insensitive. The command \macroline{GeT fRoM hEaDeR} 
+    is just as valid as the command 
+    \macroline{gET fROM hEADER} and 
+    \macroline{Get From Header}. You don't have to sweat it. 
+    \item White spaces at the beginning and end of the 
+    line are ignored. In the preceding examples, the
+    spaces separating macro commands from input values
+    such as file names are there only to increase 
+    readability. You don't need them if you don't 
+    want.
+    \item Any new lines in a macro file are ignored.
+    \item comment lines of the form 
+    \macroline{\# A comment} are ignored.
+    \item You don't have to worry about explicitly moving 
+    from tab to tab in the computer program. The computer 
+    program will move to the right automatically before
+    performs the action.
+    \item When you issue the macro command \macroline{E:} 
+    or \macroline{E Fixed}, the computer program will
+    automatically set the GUI to \macroline{Work in eV}.
+    If you issue the command or \macroline{lambda:} or
+    \macroline{lambda fixed:} then the comptuer program
+    will set the GUI to \macroline{Work in Lambda}. You
+    can also explicitly set the GUI to either mode using
+    the command \macroline{Work in eV} or
+    \macroline{Work in Lambda}.
 \end{itemize}
 
 
 \subsubsection{Macro Commands}
 
+Below is a table describing all of the macro command 
+and exactly what they do.
+
 \begin{center}
 
 \setlongtables % keeps the width uniform across both pages
-\begin{longtable}{|p{3cm}|p{4cm}|p{7cm}|}
-%\begin{longtable}{|l|l|l|}
+\begin{longtable}{|p{4cm}|p{4cm}|p{7cm}|}
 \caption{Macro Commands} \label{grid_mlmmh} \\
 
 \hline \multicolumn{1}{|c|}{Command} & \multicolumn{1}{c|}{Followed By} & \multicolumn{1}{c|}{Effect} \\ \hline 
@@ -330,93 +340,331 @@ the commadn \macroline{Work in eV} or
 \hline \multicolumn{1}{|c|}{Command} & \multicolumn{1}{c|}{Followed By} & \multicolumn{1}{c|}{Effect} \\ \hline 
 \endhead
 
-\hline \multicolumn{3}{|r|}{{Continued on next page}} \\ \hline
+\hline \multicolumn{3}{|r|}{{Continued on next page$\ldots$}} \\ \hline
 \endfoot
 
 \hline 
 \endlastfoot
-\multicolumn{3}{|l|}{Calibration Values} \\
-\hline
-\macrolinenoquotes{Data File:}&Filename(s) and/or Directory(s)&Loops over loading in each file\\
-\macrolinenoquotes{Dark Current:}&Filename&Loads in the Dark Current \\
-\macrolinenoquotes{Q Data:}&Filename&Load in the $Q$ data\\
-\macrolinenoquotes{Get From Header:}&None&Sets the calibration data to the value stored in the image header.\\
-\macrolinenoquotes{Load From File:}&Filename&Loads a calibration data file.\\
-\macrolinenoquotes{Previous Values}&None&Loads the previously stored calibration values.\\
-\macrolinenoquotes{Save To File}&Filename&Saves the calibration data to a file.\\
-\macrolinenoquotes{xc:}&Number&Sets the $x$ center.\\
-\macrolinenoquotes{xc Fixed:} & \selectordeselect & Sets whether or not to fix the $x$ center while doing the fit.\\
-\macrolinenoquotes{yc:}&Number&Set the $y$ center.\\
-\macrolinenoquotes{yc Fixed:}& \selectordeselect &Sets whether or not to fix the $y$ center while doing the fit.\\
-\macrolinenoquotes{d:}&Number&Set the distance.\\
-\macrolinenoquotes{d Fixed:}& \selectordeselect &Sets whether or not to fix the distance while doing the fit.\\
-\macrolinenoquotes{E:}&Number&Sets the energy.\\
-\macrolinenoquotes{E Fixed:}& \selectordeselect &Sets whether or not to fix the energy while doing the fit.\\
-\macrolinenoquotes{lambda:}&Number&Sets the wavelength.\\
-\macrolinenoquotes{lambda Fixed:}& \selectordeselect &Sets whether or not to fix the wavelength while doing the fit.\\
-\macrolinenoquotes{alpha:}&Number&Sets the $\alpha$ angle.\\
-\macrolinenoquotes{alpha Fixed:}& \selectordeselect &Sets whether or not to fix the $\alpha$ angle while doing the fit.\\
-\macrolinenoquotes{beta:}&Number&Sets the $\beta$ angle.\\
-\macrolinenoquotes{beta Fixed:}& \selectordeselect &Sets whether or not to fix the $\beta$ angle while doing the fit.\\
-\macrolinenoquotes{R:}&Number&Sets the rotation angle.\\
-\macrolinenoquotes{R Fixed:}& \selectordeselect &Sets whether or not to fix the rotation angle while doing the fit.\\
-\macrolinenoquotes{Draw Q Lines?}&\selectordeselect&Sets wether or not to draw constant $Q$ lines on the screen.\\
-\macrolinenoquotes{Draw Q Lines Color?}&A color&Sets the color of the constant $Q$ lines\\
-\macrolinenoquotes{Draw dQ Lines?}&\selectordeselect&Draw the delta $Q$ lines on the diffraction image\\
-\macrolinenoquotes{Draw dQ Lines Color?}&A color&Change the color of the delta $Q$ lines\\
-\macrolinenoquotes{Draw Peaks?}&\selectordeselect&Draw the fit peaks on the diffraction and cake image\\
-\macrolinenoquotes{Draw Peaks Color?}&A color&Change the color of the peaks\\
-\macrolinenoquotes{Update}&None&Update the diffraction image\\
-\macrolinenoquotes{Do Fit}&None&Fit the calibration values to a loaded diffraction image\\
-\macrolinenoquotes{Make/Save Peak List}&Filename&Creates a peak list just as happens when doing the fit, but instead of acutally doing the fit it saves the peaks as an ASCII file for later use.\\
-\macrolinenoquotes{Use Old Peak List (if possible)?}&\selectordeselect&Uses the previously found peak list again when doing the fit.\\
-\macrolinenoquotes{Number of Chi?}&Value&The number of $\chi$ slices around the diffraction image to pick and use when doing the calibration\\
-\macrolinenoquotes{Stddev}&Value&The $\sigma$ threshold for allowing a peak.\\
-\hline    
-\multicolumn{3}{|l|}{Diffraction Display Options} \\
-\hline
-\macrolinenoquotes{Diffraction Data Colormaps}&A colormap name&Select the color map to use for the diffraction image.\\
-\macrolinenoquotes{Diffraction Data Invert?}&\selectordeselect&Invert the color map that is being used\\
-\macrolinenoquotes{Diffraction Data Log Scale?}&\selectordeselect&Take the log of all the data points before displaying them.\\
-\macrolinenoquotes{Diffraction Data Low?}&Value from 0 to 1&The normalized intensity value which will be scaled to \%0 of the image brightness when displaying the diffraction image.\\
-\macrolinenoquotes{Diffraction Data Hi?}&Value from 0 to 1&The normalized intensity value which will be scaled to \%100 of the image brightness when displaying the diffraction image.\\
-\macrolinenoquotes{Save Diffraction Image}&Filename&Save the diffraction image to a file (possibly including $Q$ lines and peaks.\\
-\macrolinenoquotes{Work in eV}&\selectordeselect&Change the GUI to deal with energy in units of eV\\
-\macrolinenoquotes{Work in Lambda}&\selectordeselect&Change the GUI to deal with energy in units of $\lambda$ using the conversion $E=hc/\lambda$.\\
-\hline    
-\multicolumn{3}{|l|}{Cake Macro Commands}\\
-\hline
-\macrolinenoquotes{AutoCake}&None&Make the computer pick a nice $Q$ and $\chi$ range and Cake the data.\\
-\macrolinenoquotes{Cake Q Lower?}&Value&The lower $Q$ value of the caked data.\\
-\macrolinenoquotes{Cake Q Upper?}&Value&The upper $Q$ value of the caked data.\\
-\macrolinenoquotes{Cake Number of Q?}&Value&The number of $Q$ bins to use while caking the data.\\
-\macrolinenoquotes{Cake Chi Lower?}&Value&The lower $\chi$ value of the caked data.\\
-\macrolinenoquotes{Cake Chi Upper?}&Value&The upper $\chi$ value of the caked data.\\
-\macrolinenoquotes{Cake Number of Chi?}&Value&The number of $\chi$ bins to use while caking the data.\\
-\macrolinenoquotes{Do Cake}&None&Cake the data.\\
-\macrolinenoquotes{Last Cake}&None&Go back to the previous cake values.\\
-\macrolinenoquotes{Save Caked Image}&Filename&\\
-\macrolinenoquotes{Save Caked Data}&Filename&\\
-\hline    
-\multicolumn{3}{|l|}{Cake Display Options} \\
-\hline
-\macrolinenoquotes{Cake Data Colormaps:}&Colormap&\\
-\macrolinenoquotes{Cake Data Invert?}&\selectordeselect&\\
-\macrolinenoquotes{Cake Data Log Scale?}&\selectordeselect&\\
-\macrolinenoquotes{Cake Data Low}&&\\
-\macrolinenoquotes{Cake Data Hi}&&\\
-\hline    
-\multicolumn{3}{|l|}{Intensity Integration Macro Commands}\\
-\hline
-\macrolinenoquotes{Integrate Q Lower?}&&\\
-\macrolinenoquotes{Integrate Q Upper?}&&\\
-\macrolinenoquotes{Integrate Number of Q?}&&\\
-\macrolinenoquotes{Integrate Chi Lower?}&&\\
-\macrolinenoquotes{Integrate Chi Upper?}&&\\
-\macrolinenoquotes{Integrate Number of Chi?}&&\\
-\macrolinenoquotes{Integrate Q-I Data}&&\\
-\macrolinenoquotes{Integrate Chi-I Data}&&\\
-\macrolinenoquotes{Save Integration Data}&&\\
+\multicolumn{3}{|c|}{Program State Macro Commands} \\
+\hline 
+    \macrolinenoquotes{Work In eV}&None&Change the state of 
+        the program so that the energy calibration parameter 
+        is inputted in units of electronvolts. This is called
+        the $eV$ mode of the program. \\
+    \macrolinenoquotes{Work in Lambda}&None&Change the state of 
+        the program so that the energy calibration parameter
+        is inputted instead as a wavelength in units of 
+        angstroms. The conversion is done using the formula
+        $E=hc/\lambda$. This is called the $\lambda$ mode
+        of the program.\\
+    \macrolinenoquotes{Work in 2theta}&None&Change the state of
+        the program so that caking and intensity integration
+        are done of the variable $2\theta$. \\
+    \macrolinenoquotes{Work in Q}&None&Change the state of
+        the program so that caking and intensity integration
+        are done of the variable $Q$. \\
+    \hline
+    \multicolumn{3}{|c|}{Calibration Values} \\
+    \hline
+    \macrolinenoquotes{Data File:}&Files \& Directories&Loops 
+        over loading in each file.\\
+    \macrolinenoquotes{Multiple Data Files"}&
+        Files \& Directories&Loops over
+        loading several diffraction files and adding
+        them together.\\
+    \macrolinenoquotes{Dark Current:}&Filename&Loads in the 
+        Dark Current.\\
+    \macrolinenoquotes{Q Data:}&Filename&Load in the $Q$ data.\\
+    \macrolinenoquotes{Standard Q}&q data&Loads in one of the
+    standard $Q$ files. This command should be followed by the
+    name of the standard Q file as it is displayed by the program
+    in the menu bar.\\
+    \macrolinenoquotes{Get From Header:}&None&Sets the calibration 
+        data to the value stored in the image header.\\
+    \macrolinenoquotes{Load From File:}&Filename&Loads a calibration 
+        data file.\\
+    \macrolinenoquotes{Previous Values}&None&Loads the previously 
+        stored calibration values.\\
+    \macrolinenoquotes{Save To File}&Filename&Saves the calibration 
+        data to a file.\\
+    \macrolinenoquotes{xc:}&Number&Sets the $x$ center.\\
+    \macrolinenoquotes{xc Fixed:} & \selectordeselect & Sets whether 
+        or not to fix the $x$ center while doing the fit.\\
+    \macrolinenoquotes{yc:}&Number&Set the $y$ center.\\
+    \macrolinenoquotes{yc Fixed:}& \selectordeselect &Sets whether 
+        or not to fix the $y$ center while doing the fit.\\
+    \macrolinenoquotes{d:}&Number&Set the distance from the 
+    sample to the detector.\\
+    \macrolinenoquotes{d Fixed:}& \selectordeselect &Sets whether 
+        or not to fix the distance while doing the fit.\\
+    \macrolinenoquotes{E:}&Number&Sets the energy. If this
+        command is run while the program is in $\lambda$ mode,
+        the program will switch to $eV$ mode.\\
+    \macrolinenoquotes{E Fixed:}& \selectordeselect &Sets whether 
+        or not to fix the energy while doing the fit. If this
+        command is run while the program is in $\lambda$ mode,
+        the program will switch to $eV$ mode.\\
+    \macrolinenoquotes{lambda:}&Number&Sets the wavelength. If
+        this command is run while the program is in $eV$ mode,
+        the program will switch to $\lambda$ mode.\\
+    \macrolinenoquotes{lambda Fixed:}& \selectordeselect &Sets 
+        whether or not to fix the wavelength while doing the 
+        fit. If this command is run while the program is in
+        $eV$ mode, the program will switch to $\lambda$ mode.\\
+    \macrolinenoquotes{alpha:}&Number&Sets the $\alpha$ angle.\\
+    \macrolinenoquotes{alpha Fixed:}& \selectordeselect &Sets whether 
+        or not to fix the $\alpha$ angle while doing the fit.\\
+    \macrolinenoquotes{beta:}&Number&Sets the $\beta$ angle.\\
+    \macrolinenoquotes{beta Fixed:}& \selectordeselect &Sets whether 
+        or not to fix the $\beta$ angle while doing the fit.\\
+    \macrolinenoquotes{R:}&Number&Sets the rotation angle.\\
+    \macrolinenoquotes{R Fixed:}& \selectordeselect &Sets whether 
+        or not to fix the rotation angle while doing the fit.\\
+    \macrolinenoquotes{pl}&Number&The pixel length of the image.
+        This is the width of one pixel (in microns).\\
+    \macrolinenoquotes{ph}&Number&The pixel height of the image.
+        This is the height of one pixel (in microns).\\
+    \macrolinenoquotes{Draw Q Lines?}&\selectordeselect&Sets wether 
+        or not to draw constant $Q$ lines on the screen.\\
+    \macrolinenoquotes{Draw Q Lines Color?}&color&Sets the color 
+        of the constant $Q$ lines that are displayed on 
+        top of the diffraction data and the caked data.\\
+    \macrolinenoquotes{Draw dQ Lines?}&\selectordeselect&Draw the 
+        delta $Q$ lines on the diffraction image.\\
+    \macrolinenoquotes{Draw dQ Lines Color?}&color&Change the 
+        color of the delta $Q$ lines that are displayed on
+        top of the diffraction data and the caked data.\\
+    \macrolinenoquotes{Draw Peaks?}&\selectordeselect&
+        Display the fit peaks on the diffraction and 
+        cake image.\\
+    \macrolinenoquotes{Draw Peaks Color?}&color&Change the color of 
+        the peaks that are displayed on top of the diffraction
+        data and the caked data.\\
+    \macrolinenoquotes{Update}&None&Update the diffraction image.\\
+    \macrolinenoquotes{Save Calibration}&Filename&Saves the
+        current calibration values in the GUI as plaintext
+        ASCII to a file.\\
+    \macrolinenoquotes{Do Fit}&None&Fit the calibration values to 
+        a loaded diffraction image.\\
+    \macrolinenoquotes{Make/Save Peak List}&Filename&Creates a peak 
+        list just as happens when doing the fit, but instead of 
+        acutally doing the fit it saves the peaks as an ASCII file 
+        for later use.\\
+    \macrolinenoquotes{Use Old Peak List (if possible)?}&
+        \selectordeselect&Uses the previously found peak list again 
+        when doing the fit.\\
+    \macrolinenoquotes{Fit Number of Chi?}&Number&The number of 
+        $\chi$ slices around the diffraction image to pick and use 
+        when doing the calibration.\\
+    \macrolinenoquotes{Stddev}&Number&The $\sigma$ threshold for 
+        allowing a peak.\\
+    \hline    
+    \multicolumn{3}{|c|}{Diffraction Display Options} \\
+    \hline
+    \macrolinenoquotes{Diffraction Data Colormaps}&A color map name&
+        Select the color map to use for the diffraction image.\\
+    \macrolinenoquotes{Diffraction Data Invert?}&\selectordeselect&
+        Invert the color map that is being used to display
+        the diffraction data.\\
+    \macrolinenoquotes{Diffraction Data Log Scale?}&\selectordeselect&
+        Take the log of all the data points before displaying them.\\
+    \macrolinenoquotes{Diffraction Data Low?}&Number from 0 to 1&The 
+        normalized intensity value which will be scaled to \%0 of 
+        the image brightness when displaying the diffraction image.\\
+    \macrolinenoquotes{Diffraction Data Hi?}&Number from 0 to 1&The 
+    normalized intensity value which will be scaled to \%100 of the
+    image brightness when displaying the diffraction image.\\
+    \macrolinenoquotes{Save Diffraction Image}&Filename&Save the 
+    diffraction image to a file (possibly including $Q$ lines and 
+    peaks.\\
+    \hline    
+    \multicolumn{3}{|c|}{Masking Macro Commands}\\
+    \hline
+    \macrolinenoquotes{Do Less Than Mask?}&\selectordeselect&
+        Sets whether or not to apply a less than mask to the
+        diffraction data.\\
+    \macrolinenoquotes{(Pixels Can't Be) Less Than Mask:}&Number&
+        Sets the less than mask.\\
+    \macrolinenoquotes{Less Than Mask Color?}&color&Sets the
+        color that all the less than masked pixels are
+        displayed as on the diffraction image and caked image.\\
+    \macrolinenoquotes{Do Greater Than Mask?}&\selectordeselect&
+        Sets whether or not to apply a greater than mask to the
+        diffraction data.\\
+    \macrolinenoquotes{(Pixels Can't Be) Greater Than Mask:}&
+        Number&Sets the greater than mask.\\
+    \macrolinenoquotes{Greater Than Mask Color?}&color&Sets
+        the color that all the greater than masked pixels
+        are displayed as on the diffraction image and 
+        caked image.\\
+    \macrolinenoquotes{Do Polygon Mask?}&\selectordeselect&
+        Sets whether or not to apply polygon masks to the
+        diffraction data.\\
+    \macrolinenoquotes{Polygon Mask Color?}&color&Sets
+        the color that all polygon masked pixels should be
+        displayed as on the diffraction image and the cake
+        image.\\
+    \macrolinenoquotes{Save Mask}&Filename&Saves all 
+        currently loaded or drawn polygons as plain text
+        ASCII to a file.\\
+    \macrolinenoquotes{Load Mask}&Filename&Loads into
+        the program from some file one or more polygons.\\
+    \macrolinenoquotes{Clear Mask}&None&Removes any
+        polygon masks that are in the program.\\
+    \hline
+    \multicolumn{3}{|c|}{Cake Macro Commands}\\
+    \hline
+    \macrolinenoquotes{AutoCake}&None&Make the computer pick a 
+        nice $Q$ and $\chi$ range and Cake the data.\\
+    \macrolinenoquotes{Cake Q Lower?}&Number&The lower $Q$ value 
+        in the range of $Q$ and $\chi$ to use when caking. If
+        this command is run while the program is in $2\theta$
+        mode, the program will switch to $Q$ mode.\\
+    \macrolinenoquotes{Cake Q Upper?}&Number&The upper $Q$ value 
+        in the range of $Q$ and $\chi$ to use when caking.
+        of the caked data. If this command is run while
+        the program is in $2\theta$ mode, the program will 
+        switch to $Q$ mode.\\
+    \macrolinenoquotes{Cake Number of Q?}&Number&The number of 
+        $Q$ bins to use while caking the data. If this command
+        is run while the program is in $2\theta$ mode, the
+        program will switch to $Q$ mode.\\
+    \macrolinenoquotes{Cake 2theta Lower?}&Number&The lower 
+        $2\theta$ value in the range of $2\theta$ and $\chi$
+        to use when caking. If this command is run while
+        the program is in $Q$ mode, the program will 
+        switch to $2\theta$ mode.\\
+    \macrolinenoquotes{Cake 2theta Upper?}&Number&The upper
+        $2\theta$ value in the range of $2\theta$ and $\chi$
+        to use when caking. If this command is run while
+        the program is in $Q$ mode, the program will 
+        switch to $2\theta$ mode.\\
+    \macrolinenoquotes{Cake Number of 2theta?}&Number&The
+        number of $2\theta$ bins to use while caking the
+        data. If this command is run while the program is
+        in $Q$ mode, the program will switch to $2\theta$
+        mode.\\
+    \macrolinenoquotes{Cake Chi Lower?}&Number&The lower $\chi$ 
+        value of the caked data.\\
+    \macrolinenoquotes{Cake Chi Upper?}&Number&The upper $\chi$ 
+        value of the caked data.\\
+    \macrolinenoquotes{Cake Number of Chi?}&Number&The number of 
+        $\chi$ bins to use while caking the data.\\
+    \macrolinenoquotes{Do Cake}&None&Performs a cake of the
+        data and displays that caked data in the cake window.\\
+    \macrolinenoquotes{Last Cake}&None&Go back to the previous 
+        cake values.\\
+    \macrolinenoquotes{Save Caked Image}&Filename&Saves the
+        cake as a popular image format. The image
+        will be saved as the input filename and the extension
+        of the filename should tell the program what format
+        to save the image as.\\
+    \macrolinenoquotes{Save Caked Data}&Filename&Saves
+        the cake as ASCII data with a verbose header.\\
+    \macrolinenoquotes{Cake Do Polarization Correction?}&
+        \selectordeselect&Sets whether or not to use
+        a polarization correction when caking the data.\\
+    \macrolinenoquotes{Cake P?}&Number from 0 to 1&Sets the 
+        value of the polarization correction to use when
+        caking the data.\\
+    \hline    
+    \multicolumn{3}{|c|}{Cake Display Options} \\
+    \hline
+    \macrolinenoquotes{Cake Data Colormaps:}&Color map&
+        Sets the color map to use when displaying the
+        caked data.\\
+    \macrolinenoquotes{Cake Data Invert?}&\selectordeselect&
+        Sets whether or not to invert the color map when
+        displaying the caked data.\\
+    \macrolinenoquotes{Cake Data Log Scale?}&\selectordeselect&
+        Sets whether or not to use a log scale when
+        applying the color map to the caked data.\\
+   \macrolinenoquotes{Cake Data Low?}&Number from 0 to 1&The 
+        normalized intensity value which will be scaled to \%0 of 
+        the image brightness when displaying the caked data.\\
+    \macrolinenoquotes{Cake Data Hi?}&Number from 0 to 1&The 
+    normalized intensity value which will be scaled to \%100 of the
+    image brightness when displaying the caked data.\\
+    \hline    
+    \multicolumn{3}{|c|}{Intensity Integration Macro Commands}\\
+    \hline
+    \macrolinenoquotes{Integrate Q Lower?}&Number&The lower
+    $Q$ value to use when performing an intensity integration.
+    If the command is run when program is in $2\theta$ mode,
+    the program will switch to $Q$ mode.\\
+    \macrolinenoquotes{Integrate Q Upper?}&Number&The upper
+    $Q$ value to use when performing an intensity integration.
+    If the command is run when program is in $2\theta$ mode,
+    the program will switch to $Q$ mode.\\
+    \macrolinenoquotes{Integrate Number of Q?}&Number&The number of
+    $Q$ bins to use when performing an intensity integration.
+    If the command is run when program is in $2\theta$ mode,
+    the program will switch to $Q$ mode.\\
+    \macrolinenoquotes{Integrate 2theta Lower?}&Number&The lower
+    $2\theta$ value to use when performing an intensity integration.
+    If the command is run when program is in $Q$ mode,
+    the program will switch to $2\theta$ mode.\\
+    \macrolinenoquotes{Integrate 2theta Upper?}&Number&The upper
+    $2\theta$ value to use when performing an intensity integration.
+    If the command is run when program is in $Q$ mode,
+    the program will switch to $2\theta$ mode.\\
+    \macrolinenoquotes{Integrate Number of 2theta?}&Number&The number of
+    $2\theta$ bins to use when performing an intensity integration.
+    If the command is run when program is in $Q$ mode,
+    the program will switch to $2\theta$ mode.\\
+    \macrolinenoquotes{Integrate Chi Lower?}&Number&
+    The lower $\chi$ value to use when performing an 
+    intensity integration.\\
+    \macrolinenoquotes{Integrate Chi Upper?}&Number&
+    The upper $\chi$ value to use when performing an 
+    intensity integration.\\
+    \macrolinenoquotes{Integrate Number of Chi?}&Number&
+    The number of $\chi$ bins to use when performing an 
+    intensity integration.\\
+    \macrolinenoquotes{Integrate Q-I}&None&Performs a 
+    $Q-I$ integration of the diffraction data. If the
+    command is run when the program is in $2\theta$
+    mode, the program will switch to $Q$ mode.\\
+    \macrolinenoquotes{AutoIntegrate Q-I}&None&Picks
+    a good range of $Q$ values and then does the same
+    thing as the \macrolinenoquotes{Integrate Q-I} 
+    command.\\
+    \macrolinenoquotes{Integrate 2theta-I}&None&Performs
+    a $2\theta-I$ integration of the diffraction data. If
+    the command is run when the program is in $Q$ mode,
+    the program will switch to $2\theta$ mode.\\
+    \macrolinenoquotes{AutoIntegrate 2theta-I}&None&
+    Picks a good range of $2\theta$ values and then does
+    the same thing as the \macrolinenoquotes{Integrate 2theta-I}
+    command.\\
+    \macrolinenoquotes{Integrate chi-I}&None&Performs
+    a $\chi-I$ integration of the diffraction data.\\
+    \macrolinenoquotes{AutoIntegrate chi-I}&None&Picks
+    a good range of $\chi$ values and then does
+    the same thing as the \macrolinenoquotes{Integrate chi-I}
+    command.\\
+    \macrolinenoquotes{Save Integration Data}&Filename&
+    Saves out the intensity integrated data as two column
+    plain text ASCII with the given filename.\\
+    \macrolinenoquotes{Constrain With Range On Right?}&
+    \selectordeselect&Sets whether or not to apply
+    a constraint to the $Q$ or $2\theta$ vs. $I$ integration 
+    so that the integration is only done of pixels who's 
+    $\chi$ value is within the $\chi$ integration range.\\
+    \macrolinenoquotes{Constrain With Range On Left?}&
+    \selectordeselect&Sets whether or not to apply a constraint
+    to the $\chi$ vs $I$ integration so that the integration
+    is only done of pixels who's $Q$ (or $2\theta$) value
+    is within the $Q$ (or $2\theta$) integration range.\\
+    \macrolinenoquotes{Integrate Do Polarization Correction?}&
+    \selectordeselect&Sets whether or not to use a polarization
+    correction when performing an intensity integration.\\
+    \macrolinenoquotes{Integrate P?}&Number form 0 to 1&sets
+    the value of the polarization correction to use when 
+    performing an intensity integration.\\
+    \macrolinenoquotes{Integration Data Log Scale?}&
+    \selectordeselect&Sets whether or not to use a log 
+    scale when displaying the diffraction data.\\
 \end{longtable}
 \end{center}
 
@@ -424,14 +672,14 @@ the commadn \macroline{Work in eV} or
 
 Just to be clear:
 \begin{itemize}
-\item There is no way with a macro to zoom into the diffraction
-data, the cake data, or the intensity integrated data
-\item You can't draw individual polygon masks and you can't remove
-individual polygon masks. All you can do is load in polygon's from
-file and save all the current polygons to a file.
-\item When you load in multiple images at once by giving a file 
-name, it will only load in images from the file with known 
-extensions (ie .mar2300, .mar3450, .mccd, .tiff). So give your 
-files proper extensions before running macros.
+    \item There is no way with a macro to zoom into the diffraction
+    data, the cake data, or the intensity integrated data
+    \item You can't draw individual polygon masks and you can't remove
+    individual polygon masks. All you can do is load in polygon's from
+    file and save all the current polygons to a file.
+    \item When you load in multiple images at once by giving a file 
+    name, it will only load in images from the file with known 
+    extensions (ie .mar2300, .mar3450, .mccd, .tiff). So give your 
+    files proper extensions before running macros.
 \end{itemize}
 
