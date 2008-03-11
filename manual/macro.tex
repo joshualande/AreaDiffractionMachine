@@ -245,8 +245,39 @@ to the path that all of the files that were added
 together have. But since they all have different file 
 names, the \macroline{FILENAME} command will always be 
 replaced by the string \macroline{MULTIPLE\_FILES}
+to avoid ambiguity.
 
 \subsubsection{The FOLDERPATH and FOLDERNAME commands}
+
+To facilitate writing macros that load in and 
+add together several diffraction images, the progarm
+introduces two new macro commands. The first command is
+\macroline{FOLDERNAME} and will always be replaced
+by the name of the folder contaning the current
+diffraction file (or files). Since the macro insists 
+that all files are loaded form the same Folder, this
+command is unambiguous. Finally, you can use the 
+command \macroline{FOLDERPATH}. It will always be 
+replaced by the path leading up to the folder 
+containing the file. Therefore, we can now specify 
+where the current file is by using the macro command
+\begin{equation*}
+    \text{\macrolinenoquotes{FILENAME/PATHNAME.mar3450}}
+\end{equation*}
+or the command
+\begin{equation*}
+    \text{\macrolinenoquotes{FOLDERPATH/FOLDERNAME/FILENAME.mar3450}}
+\end{equation*}
+Basically, this is useful because if you are adding
+together multiple files, you can put them all in a
+folder with an interesting name and then name 
+the output files something like 
+\macroline{FOLDERNAME\_int.dat} so that they are all
+given useful names. This is nice because it can, without
+loss of generality, be incoprerated into a loop. Finally,
+the \macroline{FOLDERPATH} command is useful because you
+can use it to output files one directory up from where all
+the diffraction data is stored.
 
 \subsubsection{Picking Colors}
 
@@ -285,9 +316,6 @@ Polygon Mask Color?
     #ff0000
 \end{lstlisting}
 
-
-\subsubsection{Color Maps}
-     
 \subsubsection{Little Tidbits}\label{Little Tidbits}
 \begin{itemize}
     \item Any of the macro commands themselves are case
