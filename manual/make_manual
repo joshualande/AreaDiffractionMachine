@@ -8,8 +8,8 @@
 # be used.
 foreach file (figures/*.tex)
     echo $file
-    perl -pi~ -e "s/White/white/g" $file 
-    perl -pi~ -e "s/\d+.\d+E-\d+/0/g" $file 
+    #perl -pi~ -e "s/White/white/g" $file 
+    #perl -pi~ -e "s/\d+.\d+E-\d+/0/g" $file 
 end
 
 latex AreaDiffractionMachineManual
@@ -18,7 +18,9 @@ makeindex AreaDiffractionMachineManual
 latex AreaDiffractionMachineManual
 latex AreaDiffractionMachineManual
 dvips -t letter -o AreaDiffractionMachineManual.ps AreaDiffractionMachineManual.dvi
-ps2pdf AreaDiffractionMachineManual.ps AreaDiffractionMachineManual.pdf
+# This prepress option will make the program
+# create images that look less compressed
+ps2pdf -dPDFSETTINGS=/prepress AreaDiffractionMachineManual.ps 
 rm AreaDiffractionMachineManual.log
 rm AreaDiffractionMachineManual.aux
 rm AreaDiffractionMachineManual.dvi
