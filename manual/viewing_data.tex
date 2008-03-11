@@ -9,7 +9,9 @@
     \label{calibration_page}
 \end{SCfigure}
 
-When you first open the Area Diffraction Machine up, you
+
+
+When you first open up the Area Diffraction Machine, you
 will be presented with the window shown in 
 figure~\ref{calibration_page}. The first thing that you
 will probably want to do is load some diffraction data into
@@ -49,10 +51,31 @@ the window you can
     \item {\em Resize the window} - This will make the diffraction
     image either larger or smaller. To do so, click on the bottom 
     right corner and drag.
-    \item {\em Read coordinates for a selected point}
-    \item {\em Change the Color Map}
-    \item {\em Invert the Color Map}
-    \item {\em Log Scale the Color Map}
+    \item {\em Read coordinates for a selected point} - When you
+    mouse over the image, the $x$, $y$, $Q$, $\chi$, and $I$
+    values for that pixel will be displayed at the bottom of the
+    window.
+    \item {\em Change the Color Map} - You can use the 
+    \gui{Colormaps} selector to change the particular color map that 
+    is used to display the data.
+    \item {\em Invert the Color Map} - You can use the 
+    \gui{Invert?} checkbox to invert the colors of the color map.
+    \item {Low \& Hi Pixels} You can use the sliders to the
+    right of the image to change the intensity scaling of the
+    image. The low value corresponds to the intenisty 
+    value\footnote{Technically, what you actually select is what
+    percentage of the most intense pixel should be mapped to
+    the lowest or highest value in value in the color map.}
+    that will be maped to the lowest part of
+    the color map and the hi value corresonds to the intensity
+    value that will be mapped to the highest part of the color
+    map. This feature is useful for making visible only certain
+    intensity ranges in teh image.
+    \item {\em Log Scaling the Color Map} - By defualt, intensity
+    values are linearly mapped to colors using the given color
+    map, but you can use the \gui{Log Scale?} checkbox to instead
+    apply a log scale mapping of the intensity values to the color
+    map.
 \end{itemize}
 
 
@@ -64,14 +87,27 @@ It can load in standard \macroline{.tiff} data.
 It can load in the ESRF Data Format 
 \macroline{.edf}.
 
+The program can only display square data, so whenever non-square
+data is loaded in, the program will simply pad out the image until
+it is a square with pixels who's intensity is 0. 
+
 
 \subsection{Loading Multiple Images}
 
+Using the same file input, you can load multiple files into 
+the program at the same time. To do this, you can either put multiple
+files names into the \gui{Data File:} text input. Each file needs to
+be space separated. The input is far to small for this to be very useful,
+so it is much easier instead to use the file selector by pushing the
+button with the folder on it. When you open the selector up, you can 
+simply select multiple files and then load them in.
 
-\begin{itemize}
-\item Color Map, 
-\item Invert
-\item Lower than value 
-\item Upper than value
-\item resize
-\end{itemize}
+When several files are loaded at the same time, the program will add
+the images together pixel by pixel and work with the combined image.
+This can be useful for analyzing one several images all taken of the
+same sample. Obviously, the program can only add together files of
+the same format.
+
+\subsection{Saving the Diffraction Image}
+
+
