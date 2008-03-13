@@ -8,8 +8,8 @@
 # be used.
 foreach file (figures/*.tex)
     echo $file
-    #perl -pi~ -e "s/White/white/g" $file 
-    #perl -pi~ -e "s/\d+.\d+E-\d+/0/g" $file 
+    perl -pi~ -e "s/White/white/g" $file 
+    perl -pi~ -e "s/\d+.\d+E-\d+/0/g" $file 
 end
 
 latex AreaDiffractionMachineManual
