@@ -47,7 +47,7 @@ Image.EXTENSION[".gif"]="GIF"
 Image.SAVE["BMP"]=BmpImagePlugin._save
 Image.EXTENSION[".bmp"]="BMP"
 Image.SAVE["EPS"]=EpsImagePlugin._save
-Image.EXTENSION[".pdf"]="PDF"
+Image.EXTENSION[".eps"]="EPS"
 Image.SAVE["PDF"]=PdfImagePlugin._save
 Image.EXTENSION[".pdf"]="PDF"
 
@@ -2403,7 +2403,7 @@ to be called in a macro mode. """
 
     def calibrationDataFromHeader(self):
         if self.diffractionData == None:
-            raise UserInputException("Cannot get the calibration data 
+            raise UserInputException("Cannot get the calibration data \
 from the image header until an image is loaded.")
         calibrationData=self.diffractionData.calibrationDataFromHeader()
         self.putCalibrationDataIntoInputsNoComplainMissingFields(

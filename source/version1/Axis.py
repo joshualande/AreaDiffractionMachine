@@ -5,17 +5,28 @@ from math import pow,log10,fmod,ceil,exp
 from General import frange
 
 def roundUp(a,b):
-    """ Rounds a up to the smallest possible multiple of b larger then a. 
-        A discussion of this formula can be found at ;
-            http://www.issociate.de/board/post/245622/round_up_to_nearest....html
+    """ Rounds a up to the smallest possible 
+        multiple of b larger then a. 
+        A discussion of this formula 
+        can be found at :
+        http://www.issociate.de/board/post/245622/round_up_to_nearest....html
     """
     return a+(-1*a) % b
 
 def roundDown(a,b):
-    """ Round a down to largest possible multiple of b smaller then a. """
+    """ Round a down to largest possible 
+        multiple of b smaller then a. """
     return a-a%b
 
 class Axis:
+    """ This object creates a Tk object which is a plot axis. 
+        It acts just like other tk objects. You have to give it
+        a widget that you want to put it in. You can have to
+        pack() or grid() it in place.
+
+    def __init__(self,widget,lowestValue,highestValue,width,height,side,flip=0,logscale = 0):
+    
+    """
 
     title = None
 
@@ -53,52 +64,70 @@ class Axis:
         if self.lowestValue == None or self.highestValue == None:
             return
 
-        lowestValueToDisplay,highestValueToDisplay,stepSizeToDisplay=self.getNiceRange(self.lowestValue,self.highestValue)
+        lowestValueToDisplay,highestValueToDisplay,stepSizeToDisplay=\
+                self.getNiceRange(self.lowestValue,self.highestValue)
 
         if self.side == "left":
-            self.allIDs.append( self.axis.create_line(self.width-1,0,self.width-1,self.height) )
+            self.allIDs.append(self.axis.create_line(
+                    self.width-1,0,self.width-1,self.height) )
         else:
-            self.allIDs.append( self.axis.create_line(0,0,0,self.height) )
-        for currentValueToDisplay in frange(lowestValueToDisplay,highestValueToDisplay+stepSizeToDisplay/100,stepSizeToDisplay):
+            self.allIDs.append(self.axis.create_line(0,0,0,self.height) )
+        for currentValueToDisplay in frange(lowestValueToDisplay,
+                highestValueToDisplay+stepSizeToDisplay/100,stepSizeToDisplay):
 
             if self.logscale:
-                # if log scale, then currentValueToDisplay is given as the log of it,
-                canvasValue = (currentValueToDisplay-log10(self.lowestValue))/(log10(self.highestValue)-
+                # if log scale, then currentValueToDisplay is given 
+                # as the log of it,
+                canvasValue=(currentValueToDisplay-log10(self.lowestValue))/\
+                        (log10(self.highestValue)-\
                         log10(self.lowestValue))*(self.height-1)
                 currentValueToDisplay = pow(10,currentValueToDisplay)
             else:
                 # otherwise, calculate the canvasValue regularly
-                canvasValue = (currentValueToDisplay-self.lowestValue)/(self.highestValue-self.lowestValue)*(self.height-1)
+                canvasValue = (currentValueToDisplay-self.lowestValue)/\
+                        (self.highestValue-self.lowestValue)*(self.height-1)
 
             if self.flip:
                 # possibly flip the numbers
                 canvasValue = self.height-1 - canvasValue
 
             # don't display numbers too close to the edge
-            if canvasValue < 10 or canvasValue > (self.height-1) - 10: continue
+            if canvasValue < 10 or \
+                    canvasValue > (self.height-1) - 10: 
+                continue
 
             #if canvasValue < 2: canvasValue = 2 # tk bug 
 
             if self.side == "left": 
-                self.allIDs.append( self.axis.create_line(self.width*5.0/6.0,canvasValue,self.width,canvasValue) )
+                self.allIDs.append(self.axis.create_line(
+                        self.width*5.0/6.0,
+                        canvasValue,self.width,canvasValue) )
             else: 
-                self.allIDs.append( self.axis.create_line(0,canvasValue,self.width/6.0,canvasValue) )
+                self.allIDs.append(self.axis.create_line(
+                        0,canvasValue,self.width/6.0,canvasValue) )
 
             if self.side == "left":
                 anchor = 'e'
-                self.allIDs.append( self.axis.create_text(self.width*(3.0/4),
-                        canvasValue,fill="black",anchor=anchor,text="%g" % currentValueToDisplay) )
+                self.allIDs.append(
+                        self.axis.create_text(self.width*(3.0/4),
+                        canvasValue,fill="black",
+                        anchor=anchor,text="%g" % currentValueToDisplay) )
             else:
                 anchor = 'w'
-                self.allIDs.append( self.axis.create_text(self.width*(1.0/4),
-                        canvasValue,fill="black",anchor=anchor,text="%g" % currentValueToDisplay) )
+                self.allIDs.append(
+                        self.axis.create_text(self.width*(1.0/4),
+                        canvasValue,fill="black",
+                        anchor=anchor,text="%g" % currentValueToDisplay) )
             
             if self.title != None:
                 if self.side == "left":
-                    self.allIDs.append(self.axis.create_text(0,self.height/2.0,fill="black",anchor="w",text=self.title))
+                    self.allIDs.append(self.axis.create_text(
+                            0,self.height/2.0,fill="black",
+                            anchor="w",text=self.title))
                 else:
-                    self.allIDs.append(self.axis.create_text(self.width,self.height/2.0,fill="black",anchor="e",text=self.title))
-
+                    self.allIDs.append(self.axis.create_text(
+                            self.width,self.height/2.0,
+                            fill="black",anchor="e",text=self.title))
 
 
     def makeHorizontalAxis(self):
@@ -108,54 +137,76 @@ class Axis:
         if self.lowestValue == None or self.highestValue == None:
             return
 
-        lowestValueToDisplay,highestValueToDisplay,stepSizeToDisplay=self.getNiceRange(self.lowestValue,self.highestValue)
+        lowestValueToDisplay,highestValueToDisplay,stepSizeToDisplay=\
+                self.getNiceRange(self.lowestValue,self.highestValue)
 
         if self.side == "bottom":
-            self.allIDs.append( self.axis.create_line(0,1,self.width,1) )
+            self.allIDs.append(self.axis.create_line(0,1,self.width,1) )
         else:
-            self.allIDs.append( self.axis.create_line(0,self.height,self.width,self.height) )
+            self.allIDs.append(self.axis.create_line(
+                    0,self.height,self.width,self.height) )
 
-        for currentValueToDisplay in frange(lowestValueToDisplay,highestValueToDisplay+stepSizeToDisplay/100,stepSizeToDisplay):
+        for currentValueToDisplay in frange(lowestValueToDisplay,
+                highestValueToDisplay+stepSizeToDisplay/100,
+                stepSizeToDisplay):
 
-            canvasValue = (currentValueToDisplay-self.lowestValue)/(self.highestValue-self.lowestValue)*(self.width-1)
+            canvasValue = (currentValueToDisplay-self.lowestValue)/\
+                    (self.highestValue-self.lowestValue)*(self.width-1)
             if self.flip:
                 # possibly flip the numbers
-                canvasValue = self.width-1 - canvasValue
+                canvasValue = self.width-1-canvasValue
 
             # don't display numbers too close to the edge
-            if canvasValue < 10 or canvasValue > (self.width-1) - 10: continue
+            if canvasValue<10 or canvasValue>(self.width-1)-10: 
+                continue
 
             #if canvasValue < 2: canvasValue = 2 # tk bug 
 
             if self.side == "bottom": 
-                self.allIDs.append( self.axis.create_line(canvasValue,0,canvasValue,self.height/6.0) )
+                self.allIDs.append( self.axis.create_line(
+                        canvasValue,0,canvasValue,self.height/6.0) )
             else: 
-                self.allIDs.append( self.axis.create_line(canvasValue,self.height,canvasValue,self.height*5.0/6.0) )
+                self.allIDs.append( self.axis.create_line(
+                        canvasValue,self.height,
+                        canvasValue,self.height*5.0/6.0) )
 
             anchor = 'c'
 
             if self.side == "bottom":
-                self.allIDs.append(self.axis.create_text(canvasValue,self.height*1.0/3,fill="black",anchor=anchor,text="%g" % currentValueToDisplay))
+                self.allIDs.append(self.axis.create_text(
+                        canvasValue,self.height*1.0/3,
+                        fill="black",anchor=anchor,
+                        text="%g" % currentValueToDisplay))
             else:
-                self.allIDs.append(self.axis.create_text(canvasValue,self.height*2.0/3,fill="black",anchor=anchor,text="%g" % currentValueToDisplay))
+                self.allIDs.append(self.axis.create_text(
+                        canvasValue,self.height*2.0/3,fill="black",
+                        anchor=anchor,text="%g" % currentValueToDisplay))
             
         if self.title != None:
             if self.side == "bottom":
-                self.allIDs.append(self.axis.create_text((self.width-1.0)/2.0,self.height*2.0/3.0,fill="black",anchor="c",text=self.title))
+                self.allIDs.append(self.axis.create_text(
+                        (self.width-1.0)/2.0,self.height*2.0/3.0,
+                        fill="black",anchor="c",text=self.title))
             else:
-                self.allIDs.append(self.axis.create_text((self.width-1.0)/2.0,self.height*1.0/3.0,fill="black",anchor="c",text=self.title))
+                self.allIDs.append(self.axis.create_text(
+                        (self.width-1.0)/2.0,self.height*1.0/3.0,
+                        fill="black",anchor="c",text=self.title))
 
 
-    def __init__(self,widget,lowestValue,highestValue,width,height,side,flip=0,logscale = 0):
-        """ To Draw nothing on the canvas yet, set highestValue = lowestValue = None.
-            The variable flip (if ture) will cause the numbers to be drawn in the 
-            reverse order"""
+    def __init__(self,widget,lowestValue,highestValue,width,
+            height,side,flip=0,logscale = 0):
+        """ To Draw nothing on the canvas yet, 
+            set highestValue = lowestValue = None.
+            The variable flip (if ture) will cause the numbers 
+            to be drawn in the reverse order"""
 
         if not side in ("left","right","top","bottom"):
-            raise Exception("Argument side must have the value 'left', right', 'top', or 'bottom'.")
+            raise Exception("Argument side must have the value \
+'left', right', 'top', or 'bottom'.")
 
         if logscale and side in ("top","bottom"):
-            raise Exception("Can only apply the log scale to the verticle axis.")
+            raise Exception("Can only apply the log scale to the \
+verticle axis.")
 
         self.allIDs = []
         self.lowestValue = lowestValue
@@ -166,10 +217,12 @@ class Axis:
         self.flip = flip 
         self.logscale = logscale
 
-        # setting the highlightthickeness to 0 is crutial to getting the axis to display right
+        # setting the highlightthickeness to 0 is crucial to getting 
+        # the axis to display right
         self.axis=Canvas(widget,width=self.width,height=self.height,
                 cursor='crosshair',
-                background = widget.cget("bg"), # set to bg color (this should be the default behavior)
+                background = widget.cget("bg"), 
+                # set to bg color (this should be the default behavior)
                 borderwidth=0,
                 highlightthickness=0)
 
@@ -215,6 +268,9 @@ class Axis:
 
 
 if __name__ == "__main__":
+    """ Below is some simple testing code. It just
+        makes one big TK window and draws a
+        bunch of axis on top of it."""
 
     root = Tk()
     Pmw.initialise(root)
@@ -225,16 +281,26 @@ if __name__ == "__main__":
             self.lowestValue =self.lowestValue*3
             self.highestValue = self.highestValue*7
 
-            self.axis1.config(lowestValue=self.lowestValue,highestValue=self.highestValue)
-            self.axis2.config(lowestValue=self.lowestValue,highestValue=self.highestValue)
-            self.axis3.config(lowestValue=self.lowestValue,highestValue=self.highestValue)
-            self.axis4.config(lowestValue=self.lowestValue,highestValue=self.highestValue)
+            self.axis1.config(
+                    lowestValue=self.lowestValue,
+                    highestValue=self.highestValue)
+            self.axis2.config(
+                    lowestValue=self.lowestValue,
+                    highestValue=self.highestValue)
+            self.axis3.config(
+                    lowestValue=self.lowestValue,
+                    highestValue=self.highestValue)
+            self.axis4.config(
+                    lowestValue=self.lowestValue,
+                    highestValue=self.highestValue)
 
-            self.button.config(text = "%f,%f" % (self.lowestValue,self.highestValue) )
+            self.button.config(text = "%f,%f" % \
+                    (self.lowestValue,self.highestValue) )
 
 
         def __init__(self,root):
-            self.button = Button(root,text="change Scale",command=self.changeScale)
+            self.button = Button(root,text="change Scale",
+                    command=self.changeScale)
             self.button.grid(row=0,column=0)
 
             self.lowestValue = 10

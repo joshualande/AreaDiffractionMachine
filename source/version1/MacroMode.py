@@ -58,47 +58,78 @@ class MacroMode:
             {'name':'d Fixed:','widget':self.GUI.distance.cb,
                     'move to page':moveToCalibration,'var':self.GUI.distance.fixedvar},
             {'name':'E Fixed:','widget':self.GUI.energyOrWavelength.cb,
-                    'move to page':moveToCalibration,'var':self.GUI.energyOrWavelength.fixedvar},
+                    'move to page':moveToCalibration,
+                    'var':self.GUI.energyOrWavelength.fixedvar},
             {'name':'lambda Fixed:','widget':self.GUI.energyOrWavelength.cb,
-                    'move to page':moveToCalibration,'var':self.GUI.energyOrWavelength.fixedvar},
+                    'move to page':moveToCalibration,
+                    'var':self.GUI.energyOrWavelength.fixedvar},
             {'name':'alpha Fixed:','widget':self.GUI.alpha.cb,
-                    'move to page':moveToCalibration,'var':self.GUI.alpha.fixedvar},
+                    'move to page':moveToCalibration,
+                    'var':self.GUI.alpha.fixedvar},
             {'name':'beta Fixed:','widget':self.GUI.beta.cb,
-                    'move to page':moveToCalibration,'var':self.GUI.beta.fixedvar},
+                    'move to page':moveToCalibration,
+                    'var':self.GUI.beta.fixedvar},
             {'name':'R Fixed:','widget':self.GUI.rotation.cb,
-                    'move to page':moveToCalibration,'var':self.GUI.rotation.fixedvar},
+                    'move to page':moveToCalibration,
+                    'var':self.GUI.rotation.fixedvar},
             {'name':'Draw Q Lines?','widget':self.GUI.drawQ.cb,
-                    'move to page':moveToCalibration,'var':self.GUI.drawQ.checkvar},
+                    'move to page':moveToCalibration,
+                    'var':self.GUI.drawQ.checkvar},
             {'name':'Draw dQ Lines?','widget':self.GUI.drawdQ.cb,
-                    'move to page':moveToCalibration,'var':self.GUI.drawdQ.checkvar},
+                    'move to page':moveToCalibration,
+                    'var':self.GUI.drawdQ.checkvar},
             {'name':'Draw Peaks?','widget':self.GUI.drawPeaks.cb,
-                    'move to page':moveToCalibration,'var':self.GUI.drawPeaks.checkvar},
-            {'name':'Use Old Peak List (if Possible)?','widget':self.GUI.useOldPeakListButton,
-                    'move to page':moveToCalibration,'var':self.GUI.useOldPeakList},
+                    'move to page':moveToCalibration,
+                    'var':self.GUI.drawPeaks.checkvar},
+            {'name':'Use Old Peak List (if Possible)?',
+                    'widget':self.GUI.useOldPeakListButton,
+                    'move to page':moveToCalibration,
+                    'var':self.GUI.useOldPeakList},
             {'name':'Do Greater Than Mask?','widget':self.GUI.doGreaterThanMask.cb,
-                    'move to page':moveToMasking,'var':self.GUI.doGreaterThanMask.checkvar},
+                    'move to page':moveToMasking,
+                    'var':self.GUI.doGreaterThanMask.checkvar},
             {'name':'Do Less Than Mask?', 'widget':self.GUI.doLessThanMask.cb,
-                    'move to page':moveToMasking,'var':self.GUI.doLessThanMask.checkvar},
+                    'move to page':moveToMasking,
+                    'var':self.GUI.doLessThanMask.checkvar},
             {'name':'Do Polygon Mask?', 'widget': self.GUI.doPolygonMask.cb,
-                    'move to page':moveToMasking,'var':self.GUI.doPolygonMask.checkvar},
-            {'name':'Cake Do Polarization Correction?','widget':self.GUI.doPolarizationCorrectionCakeButton,
-                    'move to page':moveToCake,'var':self.GUI.doPolarizationCorrectionCake},
-            {'name':'Constrain With Range On Right?','widget':self.GUI.constrainWithRangeOnRightButton,
-                    'move to page':moveToIntegrate,'var':self.GUI.constrainWithRangeOnRight},
-            {'name':'Constrain With Range On Left?','widget':self.GUI.constrainWithRangeOnLeftButton,
-                    'move to page':moveToIntegrate,'var':self.GUI.constrainWithRangeOnLeft},
-            {'name':'Integrate Do Polarization Correction?','widget':self.GUI.doPolarizationCorrectionIntegrateButton,
-                    'move to page':moveToCake,'var':self.GUI.doPolarizationCorrectionIntegrate},
-		    {'name':'Diffraction Data Invert?','widget':self.GUI.maindisp.colinvert,
-                    'move to page':moveToMaindisp,'var':self.GUI.invertVarDiffraction},
-		    {'name':'Diffraction Data Log Scale?','widget':self.GUI.maindisp.collog,
-                    'move to page':moveToMaindisp,'var':self.GUI.logVarDiffraction},
-		    {'name':'Cake Data Invert?','widget':self.GUI.cakedisp.colinvert,
-                    'move to page':moveToCakedisp,'var':self.GUI.invertVarCake},
-		    {'name':'Cake Data Log Scale?','widget':self.GUI.cakedisp.collog,
-                    'move to page':moveToCakedisp,'var':self.GUI.logVarCake}, 
-            {'name':'Integration Data Log Scale?','widget':self.GUI.integratedisp.collog,
-                    'move to page':moveToIntegratedisp,'var':self.GUI.logVarIntegration}
+                    'move to page':moveToMasking,
+                    'var':self.GUI.doPolygonMask.checkvar},
+            {'name':'Cake Do Polarization Correction?',
+                    'widget':self.GUI.doPolarizationCorrectionCakeButton,
+                    'move to page':moveToCake,
+                    'var':self.GUI.doPolarizationCorrectionCake},
+            {'name':'Constrain With Range On Right?',
+                    'widget':self.GUI.constrainWithRangeOnRightButton,
+                    'move to page':moveToIntegrate,
+                    'var':self.GUI.constrainWithRangeOnRight},
+            {'name':'Constrain With Range On Left?',
+                    'widget':self.GUI.constrainWithRangeOnLeftButton,
+                    'move to page':moveToIntegrate,
+                    'var':self.GUI.constrainWithRangeOnLeft},
+            {'name':'Integrate Do Polarization Correction?',
+                    'widget':self.GUI.doPolarizationCorrectionIntegrateButton,
+                    'move to page':moveToCake,
+                    'var':self.GUI.doPolarizationCorrectionIntegrate},
+		    {'name':'Diffraction Data Invert?',
+                    'widget':self.GUI.maindisp.colinvert,
+                    'move to page':moveToMaindisp,
+                    'var':self.GUI.invertVarDiffraction},
+		    {'name':'Diffraction Data Log Scale?',
+                    'widget':self.GUI.maindisp.collog,
+                    'move to page':moveToMaindisp,
+                    'var':self.GUI.logVarDiffraction},
+		    {'name':'Cake Data Invert?',
+                    'widget':self.GUI.cakedisp.colinvert,
+                    'move to page':moveToCakedisp,
+                    'var':self.GUI.invertVarCake},
+		    {'name':'Cake Data Log Scale?',
+                    'widget':self.GUI.cakedisp.collog,
+                    'move to page':moveToCakedisp,
+                    'var':self.GUI.logVarCake}, 
+            {'name':'Integration Data Log Scale?',
+                    'widget':self.GUI.integratedisp.collog,
+                    'move to page':moveToIntegratedisp,
+                    'var':self.GUI.logVarIntegration}
         ]
         for widget in self.allCheckBoxes:
             widget['clean name'] = cleanstring(widget['name'])
@@ -128,56 +159,113 @@ class MacroMode:
             widget['clean name'] = cleanstring(widget['name'])
 
         self.allEntryFieldsRequiringFloat = [
-            {'name':'xc:','widget':self.GUI.centerX.ef,'move to page':moveToCalibration},
-            {'name':'yc:','widget':self.GUI.centerY.ef,'move to page':moveToCalibration},
-            {'name':'d:','widget':self.GUI.distance.ef,'move to page':moveToCalibration},
-            {'name':'E:','widget':self.GUI.energyOrWavelength.ef,'move to page':moveToCalibration},
-            {'name':'lambda:','widget':self.GUI.energyOrWavelength.ef,'move to page':moveToCalibration},
-            {'name':'alpha:','widget':self.GUI.alpha.ef,'move to page':moveToCalibration},
-            {'name':'beta:','widget':self.GUI.beta.ef,'move to page':moveToCalibration},
-            {'name':'R:','widget':self.GUI.rotation.ef,'move to page':moveToCalibration},
-            {'name':'pl:','widget':self.GUI.pixelLength.ef,'move to page':moveToCalibration},
-            {'name':'ph:','widget':self.GUI.pixelHeight.ef,'move to page':moveToCalibration},
-            {'name':'Stddev?','widget':self.GUI.stddev,'move to page':moveToCalibration},
-            {'name':"(Pixels Can't Be) Greater Than Mask:", 'widget':self.GUI.greaterThanMask,
+            {'name':'xc:','widget':self.GUI.centerX.ef,
+                    'move to page':moveToCalibration},
+            {'name':'yc:','widget':self.GUI.centerY.ef,
+                    'move to page':moveToCalibration},
+            {'name':'d:','widget':self.GUI.distance.ef,
+                    'move to page':moveToCalibration},
+            {'name':'E:','widget':self.GUI.energyOrWavelength.ef,
+                    'move to page':moveToCalibration},
+            {'name':'lambda:','widget':self.GUI.energyOrWavelength.ef,
+                    'move to page':moveToCalibration},
+            {'name':'alpha:','widget':self.GUI.alpha.ef,
+                    'move to page':moveToCalibration},
+            {'name':'beta:','widget':self.GUI.beta.ef,
+                    'move to page':moveToCalibration},
+            {'name':'R:','widget':self.GUI.rotation.ef,
+                    'move to page':moveToCalibration},
+            {'name':'pl:','widget':self.GUI.pixelLength.ef,
+                    'move to page':moveToCalibration},
+            {'name':'ph:','widget':self.GUI.pixelHeight.ef,
+                    'move to page':moveToCalibration},
+            {'name':'Stddev?','widget':self.GUI.stddev,
+                    'move to page':moveToCalibration},
+            {'name':"(Pixels Can't Be) Greater Than Mask:", 
+                    'widget':self.GUI.greaterThanMask,
                     'move to page':moveToMasking},
-            {'name':"(Pixels Can't Be) Less Than Mask:", 'widget':self.GUI.lessThanMask,
+            {'name':"(Pixels Can't Be) Less Than Mask:", 
+                    'widget':self.GUI.lessThanMask,
                     'move to page':moveToMasking},
-            {'name':'Cake Q Lower?','widget':self.GUI.qOrTwoThetaLowerCake,'move to page':moveToCake},
-            {'name':'Cake 2theta Lower?','widget':self.GUI.qOrTwoThetaLowerCake,'move to page':moveToCake},
-            {'name':'Cake Q Upper?','widget':self.GUI.qOrTwoThetaUpperCake,'move to page':moveToCake},
-            {'name':'Cake 2theta Upper?','widget':self.GUI.qOrTwoThetaUpperCake,'move to page':moveToCake},
-            {'name':'Cake Chi Lower?','widget':self.GUI.chiLowerCake,'move to page':moveToCake},
-            {'name':'Cake Chi Upper?','widget':self.GUI.chiUpperCake,'move to page':moveToCake},
-            {'name':'Cake P?','widget':self.GUI.PCake,'move to page':moveToCake},
-            {'name':'Integrate Q Lower?','widget':self.GUI.QOrTwoThetaLowerIntegrate,'move to page':moveToIntegrate},
-            {'name':'Integrate 2theta Lower?','widget':self.GUI.QOrTwoThetaLowerIntegrate,'move to page':moveToIntegrate},
-            {'name':'Integrate Q Upper?','widget':self.GUI.QOrTwoThetaUpperIntegrate,'move to page':moveToIntegrate},
-            {'name':'Integrate 2theta Upper?','widget':self.GUI.QOrTwoThetaUpperIntegrate,'move to page':moveToIntegrate},
-            {'name':'Integrate Chi Lower?','widget':self.GUI.chiLowerIntegrate,'move to page':moveToIntegrate},
-            {'name':'Integrate Chi Upper?','widget':self.GUI.chiUpperIntegrate,'move to page':moveToIntegrate},
-            {'name':'Integrate P?','widget':self.GUI.PIntegrate,'move to page':moveToIntegrate},
+            {'name':'Cake Q Lower?',
+                    'widget':self.GUI.qOrTwoThetaLowerCake,
+                    'move to page':moveToCake},
+            {'name':'Cake 2theta Lower?',
+                    'widget':self.GUI.qOrTwoThetaLowerCake,
+                    'move to page':moveToCake},
+            {'name':'Cake Q Upper?',
+                    'widget':self.GUI.qOrTwoThetaUpperCake,
+                    'move to page':moveToCake},
+            {'name':'Cake 2theta Upper?',
+                    'widget':self.GUI.qOrTwoThetaUpperCake,
+                    'move to page':moveToCake},
+            {'name':'Cake Chi Lower?',
+                    'widget':self.GUI.chiLowerCake,
+                    'move to page':moveToCake},
+            {'name':'Cake Chi Upper?',
+                    'widget':self.GUI.chiUpperCake,
+                    'move to page':moveToCake},
+            {'name':'Cake P?',
+                    'widget':self.GUI.PCake,
+                    'move to page':moveToCake},
+            {'name':'Integrate Q Lower?',
+                    'widget':self.GUI.QOrTwoThetaLowerIntegrate,
+                    'move to page':moveToIntegrate},
+            {'name':'Integrate 2theta Lower?',
+                    'widget':self.GUI.QOrTwoThetaLowerIntegrate,
+                    'move to page':moveToIntegrate},
+            {'name':'Integrate Q Upper?',
+                    'widget':self.GUI.QOrTwoThetaUpperIntegrate,
+                    'move to page':moveToIntegrate},
+            {'name':'Integrate 2theta Upper?',
+                    'widget':self.GUI.QOrTwoThetaUpperIntegrate,
+                    'move to page':moveToIntegrate},
+            {'name':'Integrate Chi Lower?',
+                    'widget':self.GUI.chiLowerIntegrate,
+                    'move to page':moveToIntegrate},
+            {'name':'Integrate Chi Upper?',
+                    'widget':self.GUI.chiUpperIntegrate,
+                    'move to page':moveToIntegrate},
+            {'name':'Integrate P?',
+                    'widget':self.GUI.PIntegrate,
+                    'move to page':moveToIntegrate},
         ]
         for widget in self.allEntryFieldsRequiringFloat:
             widget['clean name'] = cleanstring(widget['name'])
 				
 
         self.allEntryFieldsRequiringInt = [
-            {'name':'Fit Number of Chi?','widget':self.GUI.numberOfChiInput,'move to page':moveToCalibration},
-            {'name':'Cake Number of Q?','widget':self.GUI.numQOrTwoThetaCake,'move to page':moveToCake},
-            {'name':'Cake Number of 2theta?','widget':self.GUI.numQOrTwoThetaCake,'move to page':moveToCake},
-            {'name':'Cake Number of Chi?','widget':self.GUI.numChiCake,'move to page':moveToCake},
-            {'name':'Integrate Number of Q?','widget':self.GUI.numQOrTwoThetaIntegrate,'move to page':moveToIntegrate},
-            {'name':'Integrate Number of 2theta?','widget':self.GUI.numQOrTwoThetaIntegrate,'move to page':moveToIntegrate},
-            {'name':'Integrate Number of Chi?','widget':self.GUI.numChiIntegrate,'move to page':moveToIntegrate},        ]
+            {'name':'Fit Number of Chi?',
+                    'widget':self.GUI.numberOfChiInput,
+                    'move to page':moveToCalibration},
+            {'name':'Cake Number of Q?',
+                    'widget':self.GUI.numQOrTwoThetaCake,
+                    'move to page':moveToCake},
+            {'name':'Cake Number of 2theta?',
+                    'widget':self.GUI.numQOrTwoThetaCake,
+                    'move to page':moveToCake},
+            {'name':'Cake Number of Chi?',
+                    'widget':self.GUI.numChiCake,
+                    'move to page':moveToCake},
+            {'name':'Integrate Number of Q?',
+                    'widget':self.GUI.numQOrTwoThetaIntegrate,
+                    'move to page':moveToIntegrate},
+            {'name':'Integrate Number of 2theta?',
+                    'widget':self.GUI.numQOrTwoThetaIntegrate,
+                    'move to page':moveToIntegrate},
+            {'name':'Integrate Number of Chi?',
+                    'widget':self.GUI.numChiIntegrate,
+                    'move to page':moveToIntegrate},        ]
         for widget in self.allEntryFieldsRequiringInt:
             widget['clean name'] = cleanstring(widget['name'])
 
 
         self.allColorMaps = [
-            {'name':'Diffraction Data Colormaps:','widget':self.GUI.maindisp.colmap,
+            {'name':'Diffraction Data Colormaps:',
+                    'widget':self.GUI.maindisp.colmap,
                     'move to page':moveToMaindisp},
-            {'name':'Cake Data Colormaps:','widget':self.GUI.cakedisp.colmap,
+            {'name':'Cake Data Colormaps:',
+                    'widget':self.GUI.cakedisp.colmap,
                     'move to page':moveToCakedisp},
         ]
         for widget in self.allColorMaps:
@@ -185,98 +273,162 @@ class MacroMode:
 
 
         self.allSaveButtonsRequiringFilename = [
-            {'name':'Save Calibration','widget':self.GUI.saveCalibrationButton,
-                    'function':self.GUI.calibrationDataSave,'move to page':moveToCalibration},
-            {'name':'Make/Save Peak List','widget':self.GUI.makeSavePeakListButton,
-                    'function':self.GUI.savePeakList,'move to page':moveToCalibration},
+            {'name':'Save Calibration',
+                    'widget':self.GUI.saveCalibrationButton,
+                    'function':self.GUI.calibrationDataSave,
+                    'move to page':moveToCalibration},
+            {'name':'Make/Save Peak List',
+                    'widget':self.GUI.makeSavePeakListButton,
+                    'function':self.GUI.savePeakList,
+                    'move to page':moveToCalibration},
             {'name':'Save Mask','widget':self.GUI.saveMask,
-                    'function':self.GUI.savePolygonsToFile,'move to page':moveToMasking},
-            {'name':'Save Caked Image','widget':self.GUI.saveCakeImageButton,
-                    'function':self.GUI.saveCakeImage,'move to page':moveToCake},
-            {'name':'Save Caked Data','widget':self.GUI.saveCakeDataButton,
-                    'function':self.GUI.saveCakeData,'move to page':moveToCake},
-            {'name':'Save Integration Data','widget':self.GUI.saveIntegrationDataButton,
-                    'function':self.GUI.saveIntegratedIntensity,'move to page':moveToIntegrate},
+                    'function':self.GUI.savePolygonsToFile,
+                    'move to page':moveToMasking},
+            {'name':'Save Caked Image',
+                    'widget':self.GUI.saveCakeImageButton,
+                    'function':self.GUI.saveCakeImage,
+                    'move to page':moveToCake},
+            {'name':'Save Caked Data',
+                    'widget':self.GUI.saveCakeDataButton,
+                    'function':self.GUI.saveCakeData,
+                    'move to page':moveToCake},
+            {'name':'Save Integration Data',
+                    'widget':self.GUI.saveIntegrationDataButton,
+                    'function':self.GUI.saveIntegratedIntensity,
+                    'move to page':moveToIntegrate},
         ]
         for widget in self.allSaveButtonsRequiringFilename:
             widget['clean name'] = cleanstring(widget['name'])
 		
         self.allLoadButtonsRequiringFilename = [
             {'name':'Load From File','widget':self.GUI.loadFromFileButton,
-                    'function':self.GUI.calibrationDataLoad,'move to page':moveToCalibration},
+                    'function':self.GUI.calibrationDataLoad,
+                    'move to page':moveToCalibration},
             {'name':'Load Mask','widget':self.GUI.loadMask,
-                    'function':self.GUI.loadPolygonsFromFile,'move to page':moveToMasking},
+                    'function':self.GUI.loadPolygonsFromFile,
+                    'move to page':moveToMasking},
         ]
         for widget in self.allLoadButtonsRequiringFilename:
             widget['clean name'] = cleanstring(widget['name'])
 		
         self.allColorInputs = [
-            {'name':'Draw Q Lines Color?','widget':self.GUI.drawQ.button,'var':self.GUI.qLinesColor,
-                    'function':self.GUI.getQColor,'move to page':moveToCalibration},
-            {'name':'Draw dQ Lines Color','widget':self.GUI.drawdQ.button,'var':self.GUI.dQLinesColor,
-                    'function':self.GUI.getdQColor,'move to page':moveToCalibration},
-            {'name':'Draw Peaks Color?','widget':self.GUI.drawPeaks.button,'var':self.GUI.peakLinesColor,
-                    'function':self.GUI.getPeaksColor,'move to page':moveToCalibration},
-            {'name':'Greater Than Mask Color?','widget':self.GUI.doGreaterThanMask.button,'var':self.GUI.greaterThanMaskColor,
-                    'function':self.GUI.getGreaterThanMaskColor,'move to page':moveToMasking},
-            {'name':'Less Than Mask Color?','widget':self.GUI.doLessThanMask.button,'var':self.GUI.lessThanMaskColor,
-                    'function':self.GUI.getLessThanMaskColor,'move to page':moveToMasking},
-            {'name':'Polygon Mask Color?','widget':self.GUI.doPolygonMask.button,'var':self.GUI.polygonMaskColor,
-                    'function':self.GUI.getPolygonMaskColor,'move to page':moveToMasking}
+            {'name':'Draw Q Lines Color?',
+                    'widget':self.GUI.drawQ.button,
+                    'var':self.GUI.qLinesColor,
+                    'function':self.GUI.getQColor,
+                    'move to page':moveToCalibration},
+            {'name':'Draw dQ Lines Color',
+                    'widget':self.GUI.drawdQ.button,
+                    'var':self.GUI.dQLinesColor,
+                    'function':self.GUI.getdQColor,
+                    'move to page':moveToCalibration},
+            {'name':'Draw Peaks Color?',
+                    'widget':self.GUI.drawPeaks.button,
+                    'var':self.GUI.peakLinesColor,
+                    'function':self.GUI.getPeaksColor,
+                    'move to page':moveToCalibration},
+            {'name':'Greater Than Mask Color?',
+                    'widget':self.GUI.doGreaterThanMask.button,
+                    'var':self.GUI.greaterThanMaskColor,
+                    'function':self.GUI.getGreaterThanMaskColor,
+                    'move to page':moveToMasking},
+            {'name':'Less Than Mask Color?',
+                    'widget':self.GUI.doLessThanMask.button,
+                    'var':self.GUI.lessThanMaskColor,
+                    'function':self.GUI.getLessThanMaskColor,
+                    'move to page':moveToMasking},
+            {'name':'Polygon Mask Color?',
+                    'widget':self.GUI.doPolygonMask.button,
+                    'var':self.GUI.polygonMaskColor,
+                    'function':self.GUI.getPolygonMaskColor,
+                    'move to page':moveToMasking}
         ]
         for widget in self.allColorInputs:
             widget['clean name'] = cleanstring(widget['name'])
 		
         self.allOtherButtons = [
-            {'name':'Get From Header', 'widget':self.GUI.getFromHeaderButton,
-                    'function':self.GUI.calibrationDataFromHeader,'move to page':moveToCalibration},
-            {'name':'Previous Values','widget':self.GUI.previousValuesButton,
-                    'function':self.GUI.calibrationDataUndo,'move to page':moveToCalibration},
-            {'name':'Update','widget':self.GUI.updateDiffractionImageButton,
-                    'function':self.GUI.maindisp.updateimage,'move to page':moveToCalibration},
-            {'name':'Do Fit','widget':self.GUI.doFitButton,
-                    'function':self.GUI.doFit,'move to page':moveToCalibration},
-            {'name':'Clear Mask','widget':self.GUI.clearMask,
-                    'function':self.GUI.removePolygons,'move to page':moveToMasking},
-            {'name':'AutoCake','widget':self.GUI.autoCakeButton,
-                    'function':self.GUI.autoCake,'move to page':moveToCake},
-            {'name':'Do Cake','widget':self.GUI.doCakeButton,
-                    'function':self.GUI.cakedisp.updateimage,'move to page':moveToCake},
-            {'name':'Last Cake','widget':self.GUI.lastCakeButton,
-                    'function':self.GUI.undoZoomCakeImage,'move to page':moveToCake},
-            {'name':'AutoIntegrate Q-I','widget':self.GUI.autoIntegrateQOrTwoThetaIButton,
-                    'function':self.GUI.autoIntegrateQOrTwoThetaI,'move to page':moveToIntegrate},
-            {'name':'AutoIntegrate 2theta-I','widget':self.GUI.autoIntegrateQOrTwoThetaIButton,
-                    'function':self.GUI.autoIntegrateQOrTwoThetaI,'move to page':moveToIntegrate},
-            {'name':'AutoIntegrate chi-I','widget':self.GUI.autoIntegrateChiIButton,
-                    'function':self.GUI.autoIntegrateChiI,'move to page':moveToIntegrate},
-            {'name':'Integrate Q-I','widget':self.GUI.integrateQOrTwoThetaIButton,
-                    'function':self.GUI.integrateQOrTwoThetaI,'move to page':moveToIntegrate},
-            {'name':'Integrate 2theta-I','widget':self.GUI.integrateQOrTwoThetaIButton,
-                    'function':self.GUI.integrateQOrTwoThetaI,'move to page':moveToIntegrate},
-            {'name':'Integrate chi-I','widget':self.GUI.integrateChiIButton,
-                    'function':self.GUI.integrateChiI,'move to page':moveToIntegrate},
+            {'name':'Get From Header',
+                    'widget':self.GUI.getFromHeaderButton,
+                    'function':self.GUI.calibrationDataFromHeader,
+                    'move to page':moveToCalibration},
+            {'name':'Previous Values',
+                    'widget':self.GUI.previousValuesButton,
+                    'function':self.GUI.calibrationDataUndo,
+                    'move to page':moveToCalibration},
+            {'name':'Update',
+                    'widget':self.GUI.updateDiffractionImageButton,
+                    'function':self.GUI.maindisp.updateimage,
+                    'move to page':moveToCalibration},
+            {'name':'Do Fit',
+                    'widget':self.GUI.doFitButton,
+                    'function':self.GUI.doFit,
+                    'move to page':moveToCalibration},
+            {'name':'Clear Mask',
+                    'widget':self.GUI.clearMask,
+                    'function':self.GUI.removePolygons,
+                    'move to page':moveToMasking},
+            {'name':'AutoCake',
+                    'widget':self.GUI.autoCakeButton,
+                    'function':self.GUI.autoCake,
+                    'move to page':moveToCake},
+            {'name':'Do Cake',
+                    'widget':self.GUI.doCakeButton,
+                    'function':self.GUI.cakedisp.updateimage,
+                    'move to page':moveToCake},
+            {'name':'Last Cake',
+                    'widget':self.GUI.lastCakeButton,
+                    'function':self.GUI.undoZoomCakeImage,
+                    'move to page':moveToCake},
+            {'name':'AutoIntegrate Q-I',
+                    'widget':self.GUI.autoIntegrateQOrTwoThetaIButton,
+                    'function':self.GUI.autoIntegrateQOrTwoThetaI,
+                    'move to page':moveToIntegrate},
+            {'name':'AutoIntegrate 2theta-I',
+                    'widget':self.GUI.autoIntegrateQOrTwoThetaIButton,
+                    'function':self.GUI.autoIntegrateQOrTwoThetaI,
+                    'move to page':moveToIntegrate},
+            {'name':'AutoIntegrate chi-I',
+                    'widget':self.GUI.autoIntegrateChiIButton,
+                    'function':self.GUI.autoIntegrateChiI,
+                    'move to page':moveToIntegrate},
+            {'name':'Integrate Q-I',
+                    'widget':self.GUI.integrateQOrTwoThetaIButton,
+                    'function':self.GUI.integrateQOrTwoThetaI,
+                    'move to page':moveToIntegrate},
+            {'name':'Integrate 2theta-I',
+                    'widget':self.GUI.integrateQOrTwoThetaIButton,
+                    'function':self.GUI.integrateQOrTwoThetaI,
+                    'move to page':moveToIntegrate},
+            {'name':'Integrate chi-I',
+                    'widget':self.GUI.integrateChiIButton,
+                    'function':self.GUI.integrateChiI,
+                    'move to page':moveToIntegrate},
     	]
         for widget in self.allOtherButtons:
             widget['clean name'] = cleanstring(widget['name'])
 
 		
         self.allScales = [
-            {'name':'Diffraction Data low','widget':self.GUI.maindisp.intensitylo,
+            {'name':'Diffraction Data low',
+                    'widget':self.GUI.maindisp.intensitylo,
                     'move to page':moveToMaindisp},
-            {'name':'Diffraction Data hi','widget':self.GUI.maindisp.intensityhi,
+            {'name':'Diffraction Data hi',
+                    'widget':self.GUI.maindisp.intensityhi,
                     'move to page':moveToMaindisp},
-            {'name':'Cake Data low','widget':self.GUI.cakedisp.intensitylo,
+            {'name':'Cake Data low',
+                    'widget':self.GUI.cakedisp.intensitylo,
                     'move to page':moveToCakedisp},
-            {'name':'Cake Data hi','widget':self.GUI.cakedisp.intensityhi,
+            {'name':'Cake Data hi',
+                    'widget':self.GUI.cakedisp.intensityhi,
                     'move to page':moveToCakedisp},
         ]
         for widget in self.allScales:
             widget['clean name'] = cleanstring(widget['name'])
 
         self.allSaveMenuItemsRequiringFilename = [
-            {'name':'Save Diffraction Image','widget':self.GUI.saveDiffractionImageMenuItem,
-             'function':self.GUI.saveDiffractionImage,},
+            {'name':'Save Diffraction Image',
+                    'widget':self.GUI.saveDiffractionImageMenuItem,
+                    'function':self.GUI.saveDiffractionImage,},
         ]
         for widget in self.allSaveMenuItemsRequiringFilename:
             widget['clean name'] = cleanstring(widget['name'])
@@ -350,7 +502,8 @@ class MacroMode:
                     widget['function'](filenames.strip())
 
             # deal w/ each type of GUI item seperately
-            for widget in self.allLoadEntryFieldsRequiringFilename+self.dataFileCommand:
+            for widget in self.allLoadEntryFieldsRequiringFilename+\
+                    self.dataFileCommand:
                 if cleanline == widget['clean name']:
                     widget['move to page']()
                     filename = macro.next()
@@ -358,7 +511,8 @@ class MacroMode:
                     # Set the filename
                     widget['function'](filename.strip())
 
-            for widget in self.allLoadButtonsRequiringFilename+self.allSaveButtonsRequiringFilename:
+            for widget in self.allLoadButtonsRequiringFilename+\
+                    self.allSaveButtonsRequiringFilename:
                 if cleanline == widget['clean name']:
                     widget['move to page']()
                     # get the filename
@@ -397,7 +551,8 @@ class MacroMode:
                     elif clean=='deselect':
                         widget['widget'].deselect()
 
-            for widget in self.allEntryFieldsRequiringFloat+self.allEntryFieldsRequiringInt:
+            for widget in self.allEntryFieldsRequiringFloat+\
+                    self.allEntryFieldsRequiringInt:
                 if cleanline == widget['clean name']:
                     widget['move to page']()
 
@@ -406,14 +561,19 @@ class MacroMode:
                     if widget['name']=='lambda:':
                         self.GUI.changeEVorLambda('Work in Lambda')
 
-                    if widget['name'] in ['Integrate Q Lower?','Integrate Q Upper?','Integrate Number of Q?']:
+                    if widget['name'] in ['Integrate Q Lower?',
+                            'Integrate Q Upper?','Integrate Number of Q?']:
                         self.GUI.changeQor2Theta('Work in Q')
-                    if widget['name'] in ['Integrate 2theta Lower?','Integrate 2theta Upper?','Integrate Number of 2theta?']:
+                    if widget['name'] in ['Integrate 2theta Lower?',
+                            'Integrate 2theta Upper?',
+                            'Integrate Number of 2theta?']:
                         self.GUI.changeQor2Theta('Work in 2theta')
 
-                    if widget['name'] in ['Cake Q Lower?','Cake Q Upper?','Cake Number of Q?']:
+                    if widget['name'] in ['Cake Q Lower?','Cake Q Upper?',
+                            'Cake Number of Q?']:
                         self.GUI.changeQor2Theta('Work in Q')
-                    if widget['name'] in ['Ckae 2theta Lower?','Cake 2theta Upper?','Cake Number of 2theta?']:
+                    if widget['name'] in ['Ckae 2theta Lower?',
+                            'Cake 2theta Upper?','Cake Number of 2theta?']:
                         self.GUI.changeQor2Theta('Work in 2theta')
 
 
@@ -553,7 +713,8 @@ class MacroMode:
                     self.GUI.macroLines.pop()
                     self.GUI.macroLines.pop()
 
-                if typeOfEvent=='key': #only do macro record if the user types something
+                if typeOfEvent=='key': 
+                    #only do macro record if the user types something
 
                     if entryField['name'] == 'lambda:' and \
                             self.GUI.eVorLambda.get() == 'Work in eV':
@@ -591,8 +752,9 @@ class MacroMode:
 
 
         for colorMap in self.allColorMaps:
-            # you need to compare to the part of the Pmw object that is acutally pushed
-            # since a Pmw object is really made up out of several smaler Tkinter things.
+            # you need to compare to the part of the Pmw object 
+            # that is acutally pushed since a Pmw object is really 
+            # made up out of several smaler Tkinter things.
             if widget == colorMap['widget'].component('listbox'):
 
                 if len(self.GUI.macroLines)>1 and \
@@ -639,7 +801,8 @@ class MacroMode:
 
                 self.GUI.macroLines.append(button['name'])
 
-        # these two can't be done by this function, so they will be called explicitly
+        # these two can't be done by this function, 
+        # so they will be called explicitly
         #   self.allLoadButtonsRequiringFilename 
         #   self.allSaveButtonsRequiringFilename 
         #   self.allSaveMenuItemsRequiringFilename 
@@ -661,7 +824,8 @@ class MacroMode:
                 * Work in Lambda
                 * Work in 2theta
                 * Work in Q
-            So I have my program explicitly call this function to set the macro
+            So I have my program explicitly call this 
+            function to set the macro
         """
         if len(self.GUI.macroLines)>0 and self.GUI.macroLines[-1]==line:
             self.GUI.macroLines.pop()
