@@ -1,8 +1,8 @@
-\subsection{Record Macros}
+\section{Record Macros}
 
-\subsection{Run Macros}
+\section{Run Macros}
 
-\subsection{The Macro File Format}
+\section{The Macro File Format}
 
 A macro file contains many commands which tell the program
 how to run. Each command in the GUI gets its own line. 
@@ -69,7 +69,7 @@ Q Data:
     C:/data/q_data.dat
 \end{lstlisting}
 
-\subsubsection{Looping Over Diffraction Data}
+\subsection{Looping Over Diffraction Data}
 \label{LoopOverDiffractionData}
 
 To analyze a file, the command is just 
@@ -137,7 +137,7 @@ You can put as many folder and files after a
 Just make sure to put them all on the same line 
 or the program will complain.
 
-\subsubsection{The PATHNAME and FILENAME commands}
+\subsection{The PATHNAME and FILENAME commands}
 
 Finally, there is a convenience markup which can help
 you make fancy macros. Whenever you have loaded data 
@@ -176,7 +176,7 @@ same for all the others. This feature lets you have
 the macro to save each of the files to the right place
 and give it a useful name.
 
-\subsubsection{Loops over Multiple Images}
+\subsection{Loops over Multiple Images}
 
 We know from chapter~\ref{viewing_data} that
 you can load in multiple diffraction images and add them
@@ -247,7 +247,7 @@ names, the \macroline{FILENAME} command will always be
 replaced by the string \macroline{MULTIPLE\_FILES}
 to avoid ambiguity.
 
-\subsubsection{The FOLDERPATH and FOLDERNAME commands}
+\subsection{The FOLDERPATH and FOLDERNAME commands}
 
 To facilitate writing macros that load in and 
 add together several diffraction images, the progarm
@@ -279,7 +279,7 @@ the \macroline{FOLDERPATH} command is useful because you
 can use it to output files one directory up from where all
 the diffraction data is stored.
 
-\subsubsection{Picking Colors}
+\subsection{Picking Colors}
 
 There are several places in the program where you can
 pick the color of something using a color selector.
@@ -316,7 +316,7 @@ Polygon Mask Color?
     #ff0000
 \end{lstlisting}
 
-\subsubsection{Little Tidbits}\label{Little Tidbits}
+\subsection{Little Tidbits}\label{Little Tidbits}
 \begin{itemize}
     \item Any of the macro commands themselves are case
     insensitive. The command \macroline{GeT fRoM hEaDeR} 
@@ -348,7 +348,7 @@ Polygon Mask Color?
 \end{itemize}
 
 
-\subsubsection{Macro Commands}
+\subsection{Macro Commands}
 
 Below is a table describing all of the macro command 
 and exactly what they do.
@@ -696,7 +696,7 @@ and exactly what they do.
 \end{longtable}
 \end{center}
 
-\subsubsection{What You Can't Do With Macros}
+\subsection{What You Can't Do With Macros}
 
 Just to be clear:
 \begin{itemize}

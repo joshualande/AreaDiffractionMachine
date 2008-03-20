@@ -1,4 +1,4 @@
-\subsection{The Caking Algorithm}
+\section{The Caking Algorithm}
 
 The purpose of a caked plot is to make a radial 
 ($r$ vs $\theta$) plot of the data as it would have 
@@ -74,7 +74,32 @@ this alternateive algorithm was not implemented in the code,
 it would in principle be easy to code up and it might
 be more desirable in some situations.
 
-\subsection{Caking with the Program}
+
+Finally, the program can allows for masking of the cake.
+Whenever the program finds an intensity value
+that should be masked (either because it is too 
+large, too small, or in a polygon mask), it fills
+in that part of the caked array with a particular 
+negative value that describes exactly why the
+program was ignored.
+
+Finally, the program can perform a polarization 
+correction to the cake. The polarization 
+correction formula is
+\begin{align}
+    I&=Im/PF \\ 
+    PF&=P(1 - (\sin(2\theta)\sin(\chi-90))^2) + 
+    (1 - P)(1 - (\sin(2\theta)\cos(\chi-90))^2)
+\end{align}
+with $Im$ the measured intensity. What happens
+then is that all pixels have their intensity
+value corrected by this formula before they
+are put into the caked array. Note that the 
+$2\theta$ and $\chi$
+values correspond to the particular value
+that is being corrected.
+
+\section{Caking with the Program}
 
 
 \begin{SCfigure}[1][htb]
@@ -119,7 +144,7 @@ you zoom into the caked data, the program will take the user
 selected zoom range and put it into the range inputs on
 the cake page.
 
-\subsubsection{AutoCake}
+\subsection{AutoCake}
 
 The program also has the convenience button \gui{AutoCake}.
 
@@ -137,9 +162,9 @@ After the display is resized, the number of bins will
 change correspondingly so that the next time you push
 AutoCake it will make the cake window look sharp again.
 
-\subsubsection{Masking}
+\subsection{Masking}
 
-\subsubsection{Displaying Q lines and Peaks}
+\subsection{Displaying Q lines and Peaks}
 If a $Q$ list has been loaded into the program, 
 $Q$ and $\Delta Q$ lines can be displayed on top
 of the cake data. Remember that $Q$ lines on the
@@ -173,15 +198,15 @@ data. This can actually be very useful for checking if
 a calibration was done properly.
 figure~\ref{calibration_cake}. 
 
-\subsubsection{Polarization Correction}
+\subsection{Polarization Correction}
 The program can apply a polarization correction to the
 cake. To apply a polarization correction, you have
 to check the \gui{Do Polarization Correction?} checkbox
 and then input the value into the \gui{P?} input.
-Polarization corrections are discussed more 
-throughly in Chapter~\ref{polarization_correction}
 
-\subsubsection{Working in 2theta}
+PUT MORE DISCUSSION HERE
+
+\subsection{Working in 2theta}
 
 You can do everything related to caking in the variable
 $2\theta$ instead of $Q$. To do so, you can go into
@@ -192,7 +217,7 @@ $2\theta$ Lower, $2\theta$ Upper, Number of $2\theta$.
 The program will then display the cake image with
 $2\theta$ as its axis.
 
-\subsubsection{Saving Cake Images}
+\subsection{Saving Cake Images}
 
 you can use the \gui{Last Cake} button to go back to the
 previous cake values. You can also get at these values by 
@@ -205,8 +230,7 @@ polygon masks, $Q$ lines, $\Delta Q$ lines, and peaks that
 were displayed over the caked data as it is displayed by
 the program.
 
-
-\subsubsection{Saving Cake Data}
+\subsection{Saving Cake Data}
 
 You can also save out the caked data in plain text. To do so,
 you just have to push the \gui{Save Data} button and

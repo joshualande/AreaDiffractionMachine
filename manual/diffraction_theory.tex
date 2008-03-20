@@ -35,6 +35,7 @@ scattering angle is
 \begin{equation}
     \tan2\theta = \frac{r}{d}
 \end{equation}
+Here, the radius $r=\sqrt{x^2+y^2}$.
 Unfortunnatley, life is not always as simple as this. In 
 particular, the assumption that the detector is exactly 
 perpendicular to the incoming beam is unphysical. It 
@@ -127,7 +128,7 @@ in the same direction.
     \label{PhysicalSetup}
 \end{SCfigure}
 
-\subsection{The Three Tilt Angels}
+\section{The Three Tilt Angels}
 \index{$\alpha$} \index{$\beta$} \index{Rotation} \index{Tilt}
 In order to relate these points, we need to find a way to 
 describe some arbitrary tilt. To do so, we will 
@@ -159,7 +160,7 @@ with each rotation separately.
     \label{ThreeTilts}
 \end{figure}
 
-\subsection{The $\beta$ Tilt}
+\section{The $\beta$ Tilt}
 
 \begin{figure}
     \centering
@@ -206,7 +207,7 @@ the proper geometrical equations for relating a point on the
 untilted plane $(x,y)$ to the corresponding point 
 $(x',y')$ on the first plane.
 
-\subsection{The $\alpha$ Roll}
+\section{The $\alpha$ Roll}
 We can now take this point $(x',y')$ on the tilted 
 plane and project it onto another plane which has been
 tilted by $\beta$ about $\hat y$ and a rolled by
@@ -267,7 +268,7 @@ Figure~\ref{PitchY_C} shows that
 $g=y''\sin\alpha\sin\beta$ and that 
 $x''\cos\alpha=l+g$. Using similar triangles again, 
 we see that 
-\begin{equation}\label{xtermsxdoubleprime}
+\begin{equation}
     \frac{x}{d} = \frac{l}{d+x''\sin\beta+
     y''\sin\alpha\cos\beta}
 \end{equation}
@@ -277,7 +278,7 @@ Plugging in and simplifying, we get
     d+x''\sin\beta+y''\sin\alpha\cos\beta}.}
 \end{equation}
 
-\subsection{The $R$ Rotation}
+\section{The $R$ Rotation}
 
 \begin{SCfigure}[1][tb]
     \centering
@@ -307,7 +308,7 @@ Applying equation \ref{rotation} onto equation
 \ref{xtermsxdoubleprime} and \ref{ytermsydoubleprime}
 give us the relationship that we wanted all along.
 
-\subsection{Relationship to Pixel Coordinates}
+\section{Relationship to Pixel Coordinates}
 
 $(x''',y''')$ is suppose to represent what we actually
 measure on a real detector. Unfortunately, things are
@@ -337,7 +338,7 @@ This means that, in terms of $(x_c,y_c)$ and $ps$,
 we can relate $(x,y)$ and $(x_d,y_d)$ which are
 directly measurable experimental quantities.
 
-\subsection{Inverting the Equations}
+\section{Inverting the Equations}
 
 We can invert these formula to learn what
 $x''$ and $y''$ are in terms of $x$ and $y$.
@@ -353,7 +354,7 @@ and
     \cos\beta(x\cos\beta+d)/(\tfrac{x}{y}\cot\alpha+1)}
 \end{equation}
 
-\subsection{$Q$, $2\theta$, and $\chi$}
+\section{$Q$, $2\theta$, and $\chi$}
 
 \begin{SCfigure}[1][tb]
     \centering
@@ -386,10 +387,10 @@ are shown in figure~\ref{TwoTheta}. We can see that
 the relationship between $(x,y)$ and $2\theta$ and 
 $\chi$ is
 \begin{equation}\label{2thetatermsr}
-    \tan2\theta = \frac{r}{d} = \frac{x^2+y^2}{d}
+    \tan2\theta = \frac{r}{d} = \frac{\sqrt{x^2+y^2}}{d}
 \end{equation}
 and
-\begin{equation}
+\begin{equation}\label{chitermsyx}
     \tan\chi = \frac{y}{x}
 \end{equation}
 The quantity $Q$ is often used instead of $2\theta$. 
@@ -426,7 +427,7 @@ this transformation can in practice be done
 will be given in section~\ref{calibration}
 
 
-\subsection{Implementation In Code}
+\section{Implementation In Code}
 
 For reference, this section present the C source 
 code used in the computer program to perform the 
