@@ -4574,7 +4574,7 @@ intensity. The constraint chi range can be at most 360 degrees.")
             try:
                 P = float(self.PIntegrate.getvalue())
             except:
-                raise UserInputException("The P cake value has \
+                raise UserInputException("The P integration value has \
 not been set.")
 
         else:
@@ -4793,7 +4793,7 @@ work in either Q or 2theta mode.")
             try:
                 P = float(self.PIntegrate.getvalue())
             except:
-                raise UserInputException("The P cake value \
+                raise UserInputException("The P integration value \
 has not been set.")
         else:
             P = 0 # P can be anything since it won't be used.
