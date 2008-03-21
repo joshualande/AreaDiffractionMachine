@@ -144,12 +144,12 @@ you zoom into the caked data, the program will take the user
 selected zoom range and put it into the range inputs on
 the cake page.
 
-\subsection{AutoCake}
+\section{AutoCake}
 
 The program also has the convenience button \gui{AutoCake}.
 
 To undo to whatever range was previously used when caking, 
-AutoCake will ``guess'' a good range of $Q$ and $\chi$ 
+\gui{AutoCake} will ``guess'' a good range of $Q$ and $\chi$ 
 values, put them into the input, and then push the 
 \gui{Do Cake} button for you. This lets you get out a 
 cake without much work. What hte program thinks is a
@@ -160,11 +160,11 @@ cake data will correspond to its own bin. This will ensure
 that the cake looks as sharp as the computer can draw it.
 After the display is resized, the number of bins will
 change correspondingly so that the next time you push
-AutoCake it will make the cake window look sharp again.
+\gui{AutoCake} it will make the cake window look sharp again.
 
-\subsection{Masking}
+\section{Masking}
 
-\subsection{Displaying Q lines and Peaks}
+\section{Displaying Q lines and Peaks}
 If a $Q$ list has been loaded into the program, 
 $Q$ and $\Delta Q$ lines can be displayed on top
 of the cake data. Remember that $Q$ lines on the
@@ -198,7 +198,7 @@ data. This can actually be very useful for checking if
 a calibration was done properly.
 figure~\ref{calibration_cake}. 
 
-\subsection{Polarization Correction}
+\section{Polarization Correction}
 The program can apply a polarization correction to the
 cake. To apply a polarization correction, you have
 to check the \gui{Do Polarization Correction?} checkbox
@@ -206,7 +206,7 @@ and then input the value into the \gui{P?} input.
 
 PUT MORE DISCUSSION HERE
 
-\subsection{Working in $2\theta$}
+\section{\texorpdfstring{Working in $2\theta$}{Working in 2theta}}
 
 You can do everything related to caking in the variable
 $2\theta$ instead of $Q$. To do so, you can go into
@@ -217,7 +217,7 @@ $2\theta$ Lower, $2\theta$ Upper, Number of $2\theta$.
 The program will then display the cake image with
 $2\theta$ as its axis.
 
-\subsection{Saving Cake Images}
+\section{Saving Cake Images}
 
 you can use the \gui{Last Cake} button to go back to the
 previous cake values. You can also get at these values by 
@@ -230,14 +230,14 @@ polygon masks, $Q$ lines, $\Delta Q$ lines, and peaks that
 were displayed over the caked data as it is displayed by
 the program.
 
-\subsection{Saving Cake Data}
+\section{Saving Cake Data}
 
 You can also save out the caked data in plain text. To do so,
 you just have to push the \gui{Save Data} button and
 select where to save it. The format of the file is a really
 long comment string followed by the data 
 
-\begin{lstlisting}[caption={'Draw the $Q$ Lines on the Display'}]
+\begin{lstlisting}[caption={'The Cake Data Header'}]
 # Cake of: N:/data/LaB6_14_02_56.mar3450 
 # Data Caked on Wed Mar 12 21:30:55 2008
 # Calibration data used to make the cake:
@@ -265,7 +265,6 @@ long comment string followed by the data
 #   1573.33631485	1215.47942755
 #   1820.13416816	2893.70483005
 #   2906.04472272	1573.33631485
-#
 # Cake range:
 #   Q Lower = 0.000000
 #   Q Upper = 6.726544
@@ -302,7 +301,7 @@ that were inside of a pixel maks are saved as -4. This is all
 displayed in the comment string. The program tries to be smart about
 the comment string. If no polygon masks were used, the comment string
 instead contains lines like
-\begin{lstlisting}[caption={'Alternate comment string'}]
+\begin{lstlisting}[caption={'Alternate Header'}]
 # No polarization correction was applied
 # No greater than mask was applied
 # No less than mask was applied
@@ -310,7 +309,7 @@ instead contains lines like
 \end{lstlisting}
 If the program is working in $2\theta$ mode, the inputs will instead 
 say \gui{2theta Lower}, etc. The comment string will instead have
-\begin{lstlisting}[caption={'Alternate comment string'}]
+\begin{lstlisting}[caption={'Another Alternate Header'}]
 #   2theta Lower = 0.000000
 #   2theta Upper = 62.814525
 #   number of 2theta = 560.000000

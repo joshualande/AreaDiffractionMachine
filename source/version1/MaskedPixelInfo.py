@@ -292,8 +292,10 @@ class MaskedPixelInfo:
         oldNumberOfPolygons = self.polygonNumberOfItems.shape[0]
         newNumberOfPolygons = oldNumberOfPolygons-1
 
-        newPolygonBeginningsIndex = Numeric.zeros( (newNumberOfPolygons,) ,Numeric.Int)
-        newPolygonNumberOfItems = Numeric.zeros( (newNumberOfPolygons,) ,Numeric.Int)
+        newPolygonBeginningsIndex = Numeric.zeros(
+                (newNumberOfPolygons,) ,Numeric.Int)
+        newPolygonNumberOfItems = Numeric.zeros(
+                (newNumberOfPolygons,) ,Numeric.Int)
 
         newPolygonBeginningsIndex[0:whichPolygon]  = \
                 self.polygonBeginningsIndex[0:whichPolygon]
@@ -334,7 +336,8 @@ class MaskedPixelInfo:
         """ Adds a polygon to the objects. The polygon should be 
             a list of the form (x1,y1,x2,y2, ...) """
         if len(polygon) % 2 != 0:
-            raise Exception("Cannot add polygon because the number of x cordinates and y cordinates are not equal.")
+            raise Exception("Cannot add polygon because \
+the number of x cordinates and y cordinates are not equal.")
 
         # No reason to add a polygon with no area
         if len(polygon) <= 4:
@@ -358,11 +361,13 @@ class MaskedPixelInfo:
         for i in range(polygonLength):
             self.polygonsY[oldsize+i]=polygon[2*i + 1]
 
-        self.polygonBeginningsIndex=Numeric.resize(self.polygonBeginningsIndex, 
+        self.polygonBeginningsIndex=Numeric.resize(
+                self.polygonBeginningsIndex, 
                 (self.polygonBeginningsIndex.shape[0] + 1,) )
         self.polygonBeginningsIndex[-1] = oldsize
 
-        self.polygonNumberOfItems=Numeric.resize(self.polygonNumberOfItems, 
+        self.polygonNumberOfItems=Numeric.resize(
+                self.polygonNumberOfItems, 
                 (self.polygonNumberOfItems.shape[0] + 1,) )
         self.polygonNumberOfItems[-1] = polygonLength
 
@@ -409,8 +414,10 @@ class MaskedPixelInfo:
         # otherwise, we have to check if all the other 
         if  not numeric_array_equals(self.polygonsX,other.polygonsX) or \
             not numeric_array_equals(self.polygonsY,other.polygonsY) or \
-            not numeric_array_equals(self.polygonBeginningsIndex,other.polygonBeginningsIndex) or \
-            not numeric_array_equals(self.polygonNumberOfItems,other.polygonNumberOfItems) or \
+            not numeric_array_equals(self.polygonBeginningsIndex,
+            other.polygonBeginningsIndex) or \
+            not numeric_array_equals(self.polygonNumberOfItems,
+            other.polygonNumberOfItems) or \
             self.polygonMaskColor != other.polygonMaskColor or \
             self.doPolygonMask != other.doPolygonMask:
             return 0
@@ -422,7 +429,8 @@ class MaskedPixelInfo:
             mask color as a tuple. Each of r,g,b is
             an integer from 0 to 255. """
         if self.lessThanMaskColor == None:
-            raise Exception("Cannot calculate the RGB value of the less than mask because no less than mask color has been set.")
+            raise Exception("Cannot calculate the RGB value of \
+the less than mask because no less than mask color has been set.")
         return self.widget.winfo_rgb(self.lessThanMaskColor)
 
 
@@ -431,7 +439,9 @@ class MaskedPixelInfo:
             mask color as a tuple. Each of r,g,b is
             an integer from 0 to 255. """
         if self.greaterThanMaskColor == None:
-            raise Exception("Cannot calculate the RGB value of the greater than mask because no greater than mask color has been set.")
+            raise Exception("Cannot calculate the RGB \
+value of the greater than mask because no greater than \
+mask color has been set.")
         (r,g,b) = self.widget.winfo_rgb(self.greaterThanMaskColor)
         return (r/256,g/256,b/256)
 
@@ -440,7 +450,9 @@ class MaskedPixelInfo:
             mask color as a tuple. Each of r,g,b is
             an integer from 0 to 255. """
         if self.polygonMaskColor == None:
-            raise Exception("Cannot calculate the RGB value of the polygon mask because no polygon mask color has been set.")
+            raise Exception("Cannot calculate the RGB \
+value of the polygon mask because no polygon mask color \
+has been set.")
         (r,g,b) = self.widget.winfo_rgb(self.polygonMaskColor)
         return (r/256,g/256,b/256)
 
@@ -465,16 +477,21 @@ class MaskedPixelInfo:
 
             # Any blank or comment lines signify a new polygon
             if line == '':
-                # add in the previous polygon (if possible) and start a new one.
+                # add in the previous polygon (if possible) 
+                # and start a new one.
 
                 if currentPolygon != []:
                     # if a polygon was stored from before 
                     # then add the polygon to the file
 
                     if len(currentPolygon) <= 4:
-                        # if we found less then 3 polygon coordinates before a break,
-                        # raise an error because all polygons need 3 coordinates
-                        raise UserInputExcpetion('"%s" is not a valid polygon file because one of the polygon has fewer then 3 coordinates.' % (filename))
+                        # if we found less then 3 polygon 
+                        # coordinates before a break,
+                        # raise an error because all polygons 
+                        # need 3 coordinates
+                        raise UserInputExcpetion('"%s" is not \
+a valid polygon file because one of the polygon has fewer then \
+3 coordinates.' % (filename))
 
                     self.addPolygon(currentPolygon)
 
@@ -484,12 +501,17 @@ class MaskedPixelInfo:
                 # otherwise, read the next pair of coordinates in
                 pair = line.split()
                 if len(pair) != 2:
-                    raise UserInputException('"%s" is not a valid line in the polygon file %s. Polygon lines should only have the x coordinate followed by the y coordinate with only spaces between them.' % (line,filename))
+                    raise UserInputException('"%s" is not a \
+valid line in the polygon file %s. Polygon lines should only \
+have the x coordinate followed by the y coordinate with only \
+spaces between them.' % (line,filename))
 
                 try:
                     currentPolygon += (float(pair[0]), float(pair[1]))
                 except:
-                    raise UserInputException('"%s" is not a valid line in the polygon file %s. Polygon lines need to have valid numbers for the x and y coordinate.' % (line,filename))
+                    raise UserInputException('"%s" is not a \
+valid line in the polygon file %s. Polygon lines need to have \
+valid numbers for the x and y coordinate.' % (line,filename))
 
             line = file.readline()
 
@@ -499,9 +521,12 @@ class MaskedPixelInfo:
         if currentPolygon != []:
 
             if len(currentPolygon) <= 4:
-                # if we found less then 3 polygon coordinates before a break,
-                # raise an error because all polygons need 3 coordinates
-                raise UserInputExcpetion('"%s" is not a valid polygon file because one of the polygon has fewer then 3 coordinates.' % (filename))
+                # if we found less then 3 polygon coordinates 
+                # before a break, raise an error because all 
+                # polygons need 3 coordinates
+                raise UserInputExcpetion('"%s" is not a valid \
+polygon file because one of the polygon has fewer then 3 \
+coordinates.' % (filename))
 
             self.addPolygon(currentPolygon)
 
@@ -510,7 +535,8 @@ class MaskedPixelInfo:
 
     def savePolygonsToFile(self,filename):
         if self.numPolygons() < 1: 
-            raise UserInputException("Cannot save polygons to a file until there are polygons to save.")
+            raise UserInputException("Cannot save polygons to a \
+file until there are polygons to save.")
         file = open(filename,'w')
         file.write("# Polygon(s) drawn on "+time.asctime()+"\n")
         for i in range(self.polygonBeginningsIndex.shape[0]):
@@ -531,6 +557,7 @@ class MaskedPixelInfo:
         print 'beginning index = ',self.polygonBeginningsIndex 
         print 'number of items = ',self.polygonNumberOfItems 
     
+
     def writePolygonCommentString(self):
         string = "# Polygon(s) used in the analysis:\n"
 
@@ -540,9 +567,10 @@ class MaskedPixelInfo:
             for j in range(size):
                 string = string + "#   "+str(self.polygonsX[index+j]) + \
                         '\t'+str(self.polygonsY[index+j])+'\n'
-            string += '#\n'
+            # don't put in the final newline
+            if i < self.polygonBeginningsIndex.shape[0]-1:
+                string += '#\n'
         return string                
-
 
 
 def test():
