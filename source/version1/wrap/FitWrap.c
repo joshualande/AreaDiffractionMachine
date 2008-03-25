@@ -293,7 +293,8 @@ int fitPeak(double xCenter,double yCenter,double distance,double energy,
 
     // calculate variation of background outsize 2 sigma of fit
     for (i=0;i<numValues;i++) {
-        if (sliceQ[i] > *qFit+2* (*deviationFit) || sliceQ[i] < *qFit-2* (*deviationFit) ) {
+        if (sliceQ[i] > *qFit+2* (*deviationFit) || sliceQ[i] < 
+                *qFit-2* (*deviationFit) ) {
             sum+=(sliceVal[i]-bgFit)*(sliceVal[i]-bgFit);
             num+=1;
         }
@@ -497,7 +498,8 @@ static PyObject * FitWrap_fitCalibrationParameters(PyObject *self, PyObject *arg
 
     covarianceMatrixDimensions[0]=7;
     covarianceMatrixDimensions[1]=7;
-    covarianceMatrix = (PyArrayObject *)PyArray_FromDims(2,covarianceMatrixDimensions,PyArray_DOUBLE);
+    covarianceMatrix = (PyArrayObject *)PyArray_FromDims(2,
+            covarianceMatrixDimensions,PyArray_DOUBLE);
 
     length = xValues->dimensions[0];
     useful = malloc( sizeof(struct everything) );
@@ -582,7 +584,7 @@ static PyObject * FitWrap_fitCalibrationParameters(PyObject *self, PyObject *arg
     status=dlevmar_bc_dif(residual, p, (double *)qReal->data, 7, length, lb, ub,  
             10000,NULL, info, NULL,(double *)covarianceMatrix->data,(void *)useful);
 
-    printf(" - Before fitting, the calculated residual is %e\n",
+    printf(" - After fitting, the calculated residual is %e\n",
         getTotalResidual(p,(double *)qReal->data, 7, length, (void *)useful));
 
     // the fit gets stored in p, so we can get rid of useful

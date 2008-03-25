@@ -50,7 +50,7 @@ def fit(data,initialGuess,peakList,maskedPixelInfo,verbose=1):
 
     print 'Covariance Matrix'
     print Numeric.array2string(covariance,precision=2)
-    print 'Root of the diagonal of the covariance matrix (I think these are uncertanties)'
+    print 'Root of the diagonal of the covariance matrix (I think these are uncertainties)'
     print 'xc: ',sqrt(covariance[0][0])
     print 'yc: ',sqrt(covariance[1][1])
     print 'd: ',sqrt(covariance[2][2])

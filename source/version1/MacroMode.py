@@ -235,25 +235,25 @@ class MacroMode:
 				
 
         self.allEntryFieldsRequiringInt = [
-            {'name':'Fit Number of Chi?',
+            {'name':'Fit Number Of Chi?',
                     'widget':self.GUI.numberOfChiInput,
                     'move to page':moveToCalibration},
-            {'name':'Cake Number of Q?',
+            {'name':'Cake Number Of Q?',
                     'widget':self.GUI.numQOrTwoThetaCake,
                     'move to page':moveToCake},
-            {'name':'Cake Number of 2theta?',
+            {'name':'Cake Number Of 2theta?',
                     'widget':self.GUI.numQOrTwoThetaCake,
                     'move to page':moveToCake},
-            {'name':'Cake Number of Chi?',
+            {'name':'Cake Number Of Chi?',
                     'widget':self.GUI.numChiCake,
                     'move to page':moveToCake},
-            {'name':'Integrate Number of Q?',
+            {'name':'Integrate Number Of Q?',
                     'widget':self.GUI.numQOrTwoThetaIntegrate,
                     'move to page':moveToIntegrate},
-            {'name':'Integrate Number of 2theta?',
+            {'name':'Integrate Number Of 2theta?',
                     'widget':self.GUI.numQOrTwoThetaIntegrate,
                     'move to page':moveToIntegrate},
-            {'name':'Integrate Number of Chi?',
+            {'name':'Integrate Number Of Chi?',
                     'widget':self.GUI.numChiIntegrate,
                     'move to page':moveToIntegrate},        ]
         for widget in self.allEntryFieldsRequiringInt:
@@ -562,18 +562,18 @@ class MacroMode:
                         self.GUI.changeEVorLambda('Work in Lambda')
 
                     if widget['name'] in ['Integrate Q Lower?',
-                            'Integrate Q Upper?','Integrate Number of Q?']:
+                            'Integrate Q Upper?','Integrate Number Of Q?']:
                         self.GUI.changeQor2Theta('Work in Q')
                     if widget['name'] in ['Integrate 2theta Lower?',
                             'Integrate 2theta Upper?',
-                            'Integrate Number of 2theta?']:
+                            'Integrate Number Of 2theta?']:
                         self.GUI.changeQor2Theta('Work in 2theta')
 
                     if widget['name'] in ['Cake Q Lower?','Cake Q Upper?',
-                            'Cake Number of Q?']:
+                            'Cake Number Of Q?']:
                         self.GUI.changeQor2Theta('Work in Q')
                     if widget['name'] in ['Ckae 2theta Lower?',
-                            'Cake 2theta Upper?','Cake Number of 2theta?']:
+                            'Cake 2theta Upper?','Cake Number Of 2theta?']:
                         self.GUI.changeQor2Theta('Work in 2theta')
 
 
@@ -726,22 +726,22 @@ class MacroMode:
                     # Dont' record if the GUI is in the other state
 
                     if entryField['name'] in ['Integrate Q Lower?', \
-                            'Integrate Q Upper?','Integrate Number of Q?'] and \
+                            'Integrate Q Upper?','Integrate Number Of Q?'] and \
                             self.GUI.Qor2Theta.get() == 'Work in 2theta':
                         continue
 
                     if entryField['name'] in ['Integrate 2theta Lower?', \
-                            'Integrate 2theta Upper?','Integrate Number of 2theta?']\
+                            'Integrate 2theta Upper?','Integrate Number Of 2theta?']\
                             and self.GUI.Qor2Theta.get() == 'Work in Q':
                         continue
 
                     if entryField['name'] in ['Cake Q Lower?', \
-                            'Cake Q Upper?','Cake Number of Q?'] and \
+                            'Cake Q Upper?','Cake Number Of Q?'] and \
                             self.GUI.Qor2Theta.get() == 'Work in 2theta':
                         continue
 
                     if entryField['name'] in ['Cake 2theta Lower?', \
-                            'Cake 2theta Upper?','Cake Number of 2theta?']\
+                            'Cake 2theta Upper?','Cake Number Of 2theta?']\
                             and self.GUI.Qor2Theta.get() == 'Work in Q':
                         continue
 
@@ -1390,11 +1390,11 @@ class Macro:
 
 def testProperBrackets(string):
     """ This function takes in a string and determines
-        if the number and order fo bracketes is allowed for
+        if the number and order of brackets is allowed for
         a macro line which follows a "Multiple Data Files" line.
         This string can contain lists bracketed off like [ ... ]
         and it can contain any number of these. But every opening
-        bracket must be closed, there can be no nested bracketes,
+        bracket must be closed, there can be no nested brackets,
         and a closing bracket must always close an opening 
         bracket."""
         

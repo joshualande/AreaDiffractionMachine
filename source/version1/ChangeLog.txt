@@ -2,6 +2,18 @@ Change Log for version 1 of the Area Diffraction Machine
 
 -------
 
+Changes in progress
+    
+    - Fix a bug where when displaying the residual function,
+      the program would, even after fitting say something
+      like "Before fitting, the calculated residual is 
+      6.532131e-06". Now it says "After fitting" as it should.
+    - Allow for caking in 2theta.
+    - Ignores any peaks found inside of polygon masks. Also,
+      these peaks are no longer displayed on top of the
+      diffraction and cake displays when they are on 
+      top of a polygon mask.
+
 Changes for version 1.0.3 - (The SVN revision for it is r114)
 
     -   Improving support of marCCD data (.mccd).

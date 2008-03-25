@@ -284,7 +284,7 @@ class IntegrateIntensity:
             file.write("#   2theta Upper = %f\n" % self.upper)
             file.write("#   Number of 2theta = %f\n" % self.num)
             file.write("#   2theta Step = %f\n" % step )
-            file.write("# Note: Average intensity values of -1 means that no data was put into the particular bin.")
+            file.write("# Note: Average intensity values of -1 means that no data was put into the particular bin.\n")
             file.write('# 2theta\tAvg Intensity\n')
 
         for loop in range(self.num):

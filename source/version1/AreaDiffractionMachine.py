@@ -993,9 +993,9 @@ class Main:
         b.add('Previous Values',command=self.calibrationDataUndo,
                 bg='goldenrod4',fg='white',width=w)
         self.previousValuesButton = b.component('Previous Values')
-        b.add('Save to File',command=self.calibrationDataSave,
+        b.add('Save To File',command=self.calibrationDataSave,
                 bg='firebrick4',fg='white',width=w)
-        self.saveCalibrationButton = b.component('Save to File')
+        self.saveCalibrationButton = b.component('Save To File')
         b.pack(side=LEFT,padx=15,pady=2,fill=X)
         #Calibration Values/Fixed
         cvl=Frame(cv)
@@ -1062,7 +1062,7 @@ class Main:
                 variable=self.useOldPeakList)
         self.useOldPeakListButton.pack(side=TOP,padx=5,pady=2)
         self.numberOfChiInput = Pmw.EntryField(ffm,labelpos = 'w',
-                label_text = "Number of Chi?",
+                label_text = "Number Of Chi?",
                 value = '360', entry_width=4,
                 validate={'validator':'numeric','min':0,'max':9999})
         self.numberOfChiInput.pack(side=TOP,padx=5,pady=2)
@@ -1181,7 +1181,7 @@ class Main:
         self.qOrTwoThetaUpperCake.pack(side=TOP,padx=2,pady=1)
 
         self.numQOrTwoThetaCake=Pmw.EntryField(g.interior(),
-                labelpos = 'w', label_text = "Number of Q?",
+                labelpos = 'w', label_text = "Number Of Q?",
                 value = '', entry_width=width,
                 validate={'validator':'numeric','min':0,'max':99999}) 
         self.numQOrTwoThetaCake.pack(side=TOP,padx=2,pady=1)
@@ -1199,7 +1199,7 @@ class Main:
         self.chiUpperCake.pack(side=TOP,padx=2,pady=1)
 
         self.numChiCake=Pmw.EntryField(g.interior(),
-                labelpos = 'w', label_text = "Number of Chi?",
+                labelpos = 'w', label_text = "Number Of Chi?",
                 value = '', entry_width=width,
                 validate={'validator':'numeric','min':0,'max':99999}) 
         self.numChiCake.pack(side=TOP,padx=2,pady=1)
@@ -1273,7 +1273,7 @@ class Main:
         self.QOrTwoThetaUpperIntegrate.pack(side=TOP,padx=2,pady=1)
 
         self.numQOrTwoThetaIntegrate=Pmw.EntryField(qg.interior(),
-                labelpos = 'w', label_text = "Number of Q?",
+                labelpos = 'w', label_text = "Number Of Q?",
                 value = '', entry_width=10,
                 validate={'validator':'numeric','min':0,'max':99999}) 
         self.numQOrTwoThetaIntegrate.pack(side=TOP,padx=2,pady=1)
@@ -1314,7 +1314,7 @@ class Main:
         self.chiUpperIntegrate.pack(side=TOP,padx=2,pady=1)
 
         self.numChiIntegrate=Pmw.EntryField(cg.interior(),
-                labelpos = 'w', label_text = "Number of Chi?",
+                labelpos = 'w', label_text = "Number Of Chi?",
                 value = '', entry_width=10,
                 validate={'validator':'numeric','min':0,'max':99999}) 
         self.numChiIntegrate.pack(side=TOP,padx=2,pady=1)
@@ -1526,11 +1526,11 @@ run in either units of either eV or wavelength.")
             self.QOrTwoThetaIntegrationLabel.configure(tag_text='Q-I Integration')
             self.QOrTwoThetaLowerIntegrate.configure(label_text="Q Lower?")
             self.QOrTwoThetaUpperIntegrate.configure(label_text="Q Upper?")
-            self.numQOrTwoThetaIntegrate.configure(label_text="Number of Q?")
+            self.numQOrTwoThetaIntegrate.configure(label_text="Number Of Q?")
 
             self.qOrTwoThetaLowerCake.configure(label_text="Q Lower?")
             self.qOrTwoThetaUpperCake.configure(label_text="Q Upper?")
-            self.numQOrTwoThetaCake.configure(label_text="Number of Q?")
+            self.numQOrTwoThetaCake.configure(label_text="Number Of Q?")
 
             # convert any previous cake zoom levels from
             # two theta to Q
@@ -1544,11 +1544,11 @@ run in either units of either eV or wavelength.")
             self.QOrTwoThetaIntegrationLabel.configure(tag_text=u"2\u03D1-I Integration")
             self.QOrTwoThetaLowerIntegrate.configure(label_text=u"2\u03D1 Lower?")
             self.QOrTwoThetaUpperIntegrate.configure(label_text=u"2\u03D1 Upper?")
-            self.numQOrTwoThetaIntegrate.configure(label_text=u"Number of 2\u03D1?")
+            self.numQOrTwoThetaIntegrate.configure(label_text=u"Number Of 2\u03D1?")
 
             self.qOrTwoThetaLowerCake.configure(label_text=u"2\u03D1 Lower?")
             self.qOrTwoThetaUpperCake.configure(label_text=u"2\u03D1 Upper?")
-            self.numQOrTwoThetaCake.configure(label_text=u"Number of 2\u03D1?")
+            self.numQOrTwoThetaCake.configure(label_text=u"Number Of 2\u03D1?")
 
             # convert any previous cake zoom levels from
             # two theta to Q
