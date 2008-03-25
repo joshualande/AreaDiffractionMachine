@@ -20,7 +20,7 @@ as a uniform property of the detector being used.} Calibration
 then is the process used to find what we will now call the
 calibration values.
 
-\section{The Calibration Algorithm}\index{calibration}
+\section{The Calibration Algorithm}\label{cal_algorithm}\index{calibration}
 
 Although in principle all the calibration values could be
 experimentally measured, in practice they can not be
@@ -51,13 +51,14 @@ able to fill in the rings as they would show up on
 the detector.
 
 In fact, my program can do just this. If you load in 
-a set of $Q$ values (more about this in section 
+a set of $Q$ values (see section 
 \ref{TheQValues})\index{$Q$ Values}
 and then put into the program some calibration values,
 and then push the \gui{Draw Q Values?} check box, 
 you can then see what the particular diffraction
 image would have shown up on the detector. 
-(NEED TO SHOW EXAMPLE HERE)
+This is described thoroughly in 
+section~\ref{displayconstQlines}
 
 Being able to do this still leaves us with a hard 
 problem to solve. For particular calibration values,
@@ -74,6 +75,7 @@ diffraction patter with known $Q$ values.
 
 \section{The Fitting} 
 \index{Fitting}
+\label{fitting_sec}
 In order for the fitting algorithm to work, the program 
 must already have an initial guess of the real calibration 
 parameters. This initial guess does not have to be perfect, 
@@ -157,7 +159,7 @@ know what the input $Q$ list says the experimental $Q$
 value for this peak should be (which we will call 
 $Q_{\text{exp}}$). We can therefore define
 the residual function as
-\begin{equation}
+\begin{equation}\label{residual}
     \text{Residual}(x_c,y_c,d,\lambda,\alpha,\beta,R) =  
     \sum_{\text{$x,y$ pairs}} (Q_{\text{peak}} - Q_{\text{exp}})^2
 \end{equation}
@@ -180,21 +182,284 @@ Levenberg-Marquardt\index{Least Squares Minimization}
 nonlinear least squares algorithm
 and the particular implementation that is used
 to to perform the calibration is Manolis Lourakis's
-levmar library\cite{lourakis04LM}. Ideallly, 
+levmar library\cite{lourakis04LM}. Ideally, 
 once the minimization is done, a good guess at the
 calibration values is found.
 
 \section{Calibrating With the Program}
 
-\subsection{Displaying Peaks}
+Diffraction image calibration is done with the
+calibration page of the program. A screen shot
+of this page is shown in figure
+\ref{calibration_page} on 
+\pageref{calibration_page}.
 
-\subsection{Masking Peaks}
+As described above, to calibrate an image
+you must have already loaded into the program
+a diffraction data file, a $Q$ data 
+file for the particular sample that was
+taken, and an initial guess at the calibration 
+data.
 
-\section{Save the Peak List}
+Once you have done these three things, you can
+simply push the \gui{Do Fit} button to
+calibrate the diffraction data. The program will
+then perform the calibration algorithm as described
+in section~\ref{cal_algorithm}. Once the program
+finds a best guess for the new calibration
+values, it will put those values into the inputs. 
 
-\section{\texorpdfstring{The $Q$ File Format}{The Q File Format}}
+While fitting the program will print to the
+console some useful things. Most interesting,
+the program will calculate the residual function
+divided by the number of \ref{residual} and display
+print the value to the terminal before and after
+the calibration is done\footnote{Actually, the program
+calculates the residual function divided by the number
+of peaks. So it really displays the residual per peak, 
+which is a more useful quantity because it would not
+change if more peaks were used in the fit}
+The output will look like
+\begin{lstlisting}[caption={Displaying the Residual}]
+ - Before fitting, the calculated residual is 5.336138e-04
+ - Doing the fitting
+ - After fitting, the calculated residual is 6.532131e-06
+\end{lstlisting}
+The program will then display the reason why the fitting
+algorithm decided to quit doing the fitting and decided
+that it found its best guess. For example, the program
+might print out
+\begin{lstlisting}[caption={Reason For Quitting}]
+ - Reason for quitting the fit: 2-stopped by small gradient J^T e
+\end{lstlisting}
+The different reasons are told to me by the levmar fitting algorithm.
+I am taking them directly from the levmar website
+\url{http://www.ics.forth.gr/~lourakis/levmar/}
+That website says that the different reasons why the
+fitting can stop are:
+\begin{itemize}
+    \item ``stopped by small gradient J\^T e''
+    \item ``stopped by small Dp''
+    \item ``stopped by itmax''
+    \item ``start from current p with increased \\mu''
+    \item ``no further error reduction is possible. Restart with increased mu''
+    \item ``stopped by small ||e||\_2''\cite{lourakis04LM}
+\end{itemize}
+I think that the first reason to quit {\em stopped by small
+gradient} means that the program found its way
+to the bottom of the hill and is convinced that it did its best
+job minimizing the function. I think that {\em stopped by itmax}
+means that the program was forced to quit by a hard coded limit
+to the number of loops through the fitting. So if you come across this
+message, you should probably do the fit again with the current values.
+I honestly don't know enough about the levmar fitting algorithm to
+know what the other messages really mean. If you need to know, you 
+should go into the fitting algorithm's documentation and see what you 
+can find out.
+
+The fitting algorithm also provides a covariance matrix that it finds
+while fitting. I do now know how it calculates this matrix or what
+it exactly what it means physically. Nevertheless, I print it out after the
+fitting is done. 
+\begin{lstlisting}[caption={Display of A Covariance Matrix}]
+Covariance Matrix
+[[  9.43e-04  -1.53e-04   5.36e-05   3.27e-03  -1.77e-03   3.64e-03   2.10e+00]
+ [ -1.53e-04   1.17e-03  -1.40e-04  -8.58e-03   3.91e-05  -2.02e-04  -1.25e-01]
+ [  5.36e-05  -1.40e-04   2.07e-04   1.38e-02  -1.45e-04   3.12e-04   1.78e-01]
+ [  3.27e-03  -8.58e-03   1.38e-02   9.49e-01  -6.44e-03   1.40e-02   8.02e+00]
+ [ -1.77e-03   3.91e-05  -1.45e-04  -6.44e-03   4.01e-01  -8.42e-01  -4.76e+02]
+ [  3.64e-03  -2.02e-04   3.12e-04   1.40e-02  -8.42e-01   1.77e+00   9.99e+02]
+ [  2.10e+00  -1.25e-01   1.78e-01   8.02e+00  -4.76e+02   9.99e+02   5.65e+05]]
+\end{lstlisting}
+The rows (from top to bottom) correspond to \gui{xc}, \gui{yc}, \gui{d}
+\gui{E}, \gui{alpha}, \gui{beta}, and \gui{rotation}. The columns
+(from left to right) also correspond to \gui{xc}, \gui{yc}, \gui{d}
+\gui{E}, \gui{alpha}, \gui{beta}, and \gui{rotation}. I think that the
+square root of the diagonal elements of the covariance matrix are supposed to 
+correspond to uncertainties, but I do not know enough about the minimization
+algorithm to be really comfortable saying that these are the true uncertainties in
+the fit parameters. Your mileage my vary. Anyway, I print out the root of the 
+diagonals. The printout by the program  
+\begin{lstlisting}[caption={Display of the root of the diagonals}]
+Root of the diagonal of the covariance matrix (I think these are uncertainties)
+xc:  0.0307145820046
+yc:  0.0341970790239
+d:  0.0143735880013
+E:  0.97393322373
+alpha:  0.633295666676
+beta:  1.32940880588
+rotation:  751.595873785
+\end{lstlisting}
+    
+If you do not like the guess for the calibration 
+parameters, you can always unto to the previous
+calibration values before the fit using the
+\gui{Previous Values} input.
+
+\section{\texorpdfstring{The \gui{Number of Chi?} 
+        and \gui{Stddev?} Input}{The Number of 
+        Chi and Stddev Inputs}}
+
+The calibration algorithm requires starting
+at the center and moving across the image in constant
+$\chi$ slices (see section~\ref{cal_algorithm} or 
+figure~\ref{fitting} for a graphical representation).
+The number of these slices around the image that
+should be done is user selectable using the 
+\gui{Number Of Chi?} input. The default value is 360.
+The more $\chi$ slices that are used, the slower
+the fit will be.
+
+Section \ref{fitting_sec} describes how the program
+uses a parameter to determine how picky it should
+be in allowing peaks that it finds. Roughly, this
+parameter corresponds to how many times larger
+the peak has to be then the background noise outside
+of the peak. This parameter can be set using the 
+\gui{Stddev?} input. The default value is 5. The higher 
+the value, the less likely the program will be to find
+and use bad peaks but the more likely it will be to
+ignore valid good peaks.
+
+\section{Working With Wavelength}
+\label{workWavelength}
+
+Often times, one wishes to deal with the wavelength 
+of the incoming beam of light instead of the energy
+of the beam. Of course, the energy and wavelength
+are intemately related by the formula
+\begin{equation}
+    E=\frac{hc}{\lambda}
+\end{equation}
+If you wish to work with wavelength in units of
+nanometers instead of energy in units of electron 
+volts, you can change the state of the program so 
+that the program works with wavelength instead
+of energy. To do so, you have to go into the menu bar
+and change the radio select from \gui{Work in eV}
+to \gui{Work in Lambda}. Once you do that, the 
+calibration parameter input will be labeled
+$\lamba$. Any number in that input will then be converted.
+After the parameter is modified during a fit,
+the program will put the wavelength value into
+the input. Finally, when the calibration
+parameters are saved to a file, the wavelength will
+saved to the file instead of the energy.
+
+
+\section{Fixing Calibration Parameters}
+\label{fix_parameters}
+
+When fitting calibration parameters, it is not
+always desirable to allow the program to vary
+all of the calibration parameters. For example,
+the energy of the beam used during the diffraction
+experiment might be already very well known already
+so there would be no reason to calibrate the energy.
+If you wish to fix any of the calibration paramters
+values so that it does not vary during a calibration
+fit, you can use the check boxes under the \gui{Fixed?}
+label to fix the parameter. When the corresponding
+check box is checked, the parameter will not vary
+during the fit. When it is not checked, the
+parameter will vary during the fit. Note that you
+can not fix or not fix the pixel length and 
+pixel height. This is because these are never
+the short of thing that one would want to vary.
+They are just some property that is already know
+about the detector. 
+
+\section{\texorpdfstring{Displaying Constant $Q$ 
+        lines}{Displaying Constant Q lines}}
+
+\section{Displaying Peaks}
+
+\section{Masking Peaks}
+
+\section{Saving the Peak List}
+
+
+\section{Handling Calibration Data}
+
+There are inputs in the calibration page of the
+program for input of the calibration parameters.
+\gui{xc} is for the $x$ center, \gui{yc} is
+for the y center, \gui{d} is for the distance,
+\gui{E} (or \gui{$\lambda$:}) is for the energy
+or wavelength. The $\alpha$, $\beta$, and
+$R$ inputs are for the three angles. 
+\gui{pl} stands for the pixel length
+and \gui{ph} stands for the pixel height.
+
+You can directly input calibration data using 
+the inputs and once the data is in the inputs
+it can be used by the program to do the calibration
+(or the caking or anything else).
+
+But there are a couple of other ways to deal
+with calibration data.
+You can load and save calibration program
+from the program using the \gui{Load From File}
+and \gui{Save To File} buttons. This is nice
+because it can be used, for example, to save 
+the data that was found by calibration data
+for future reference. As you will see, the 
+calibration data files can handle information
+about whether the parameters should be fixed
+(see section \ref{fix_parameters}).
+
+The format for a calibration data file is 
+pretty simple. Below is  an example
+\begin{lstlisting}[caption={Calibration Parameters}]
+# Calibration File
+xc	1725.000000	0
+yc	1725.000000	0
+D	125.296000	0
+E	12735.395772	0
+alpha	0.000000	0
+beta	0.000000	0
+rotation	0.000000	0
+pixelLength	100.000000
+pixelHeight	100.000000
+\end{lstlisting}
+Comment lines beginning with
+a \# and are ignored. Each of the parameters
+gets its own line. Each parameter name is 
+followed by some spaces or tabs and then the
+value. The value can be followed by an optional
+second number which is either zero or one.
+The second number corresponds to whether or
+not the parameter should be fixed while
+fitting. One means fix the parameter. Zero means
+let it very. If no number is given, the default
+is to not fix the parameter.
+
+Instead of energy, the wavelength of the incoming
+beam of light can be stored in a calibration file.
+The wavelength line would look like 
+\begin{lstlisting}[caption={Wavelength Parameter}]
+wavelength	0.973540
+\end{lstlisting}
+When the program is in wavelength mode, the program
+will save out calibration parameters with this line
+instead of the one above. The program will load in a 
+file containing either no matter what mode the program 
+is in. It will do the conversion if it has to do put 
+the right value into the input. See 
+section~\ref{workWavelength}.
+
+
+\section{\texorpdfstring{Handling $Q$ Data}{Handling Q Data}}
 \label{TheQValues}\index{Q Data}
-Below is a valid Q Data File:
+
+$Q$ data is always loaded into the program from files. 
+$Q$ data can be loaded into the program with the \gui{Q Data:}
+input on the calibration page. 
+You can either type in the filename of the $Q$ file by hand 
+and push the load button or click on the folder icon to the 
+side and use the file selector to pick the file that you want.
+
+The $Q$ data file format is pretty simple. Below is an example 
 \begin{lstlisting}[caption={Lanthanum Hexaboride.dat},label=LaB6]
 # This is Q Data for Lanthanum Hexaboride
 Q   dQ
@@ -204,14 +469,9 @@ Q   dQ
 3.023087619 .05
 3.379873753 .05
 3.702525225 .05
-4.275148198 .05
-4.534631428 .05
-4.77990514  .05
-5.013313099 .05
-5.23603139  .05
-5.44989618  .05
+...
 \end{lstlisting}
-Comment lines beginning with a \# are always ignored. The
+Comment lines beginning with a \# and are always ignored. The
 first line in the file should be of the form "Q  dQ" or "Q  delta Q" 
 to specify that this is a list of $Q$ values. The rest of the
 file should have $Q$ values followed a $\Delta Q$ range.
@@ -221,4 +481,5 @@ $D$ values if the first line is instead "D dD" or "D delta D"
 The values should be given instead in $D$ space and the values
 will be converted using~\ref{DtermsQ}.
 
+\section{\texorpdfstring{The \gui{Get From Header} Input}{The Get From Header Input}}
 

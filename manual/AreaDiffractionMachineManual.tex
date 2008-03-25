@@ -28,18 +28,18 @@
 \usepackage[colorlinks]{hyperref}
 \usepackage{breakurl}
 
-\newcommand{\gui}[1]{``{\ttfamily #1}''}
-\newcommand{\code}[1]{``{\ttfamily #1}''}
-\newcommand{\macroline}[1]{``{\ttfamily #1}''}
-\newcommand{\macrolinenoquotes}[1]{{\ttfamily #1}}
+\newcommand{\gui}[1]{``{\tt #1}''}
+\newcommand{\code}[1]{``{\tt #1}''}
+\newcommand{\macroline}[1]{``{\tt #1}''}
+\newcommand{\macrolinenoquotes}[1]{{\tt #1}}
 \newcommand{\selectordeselect}[0]{\macrolinenoquotes{Select} or \macrolinenoquotes{Deselect} }
 
 
 % This is formatting for the source code and 
 % other files in my paper
 \lstset{numbers=left,columns=fixed}
-\lstset{basicstyle=\ttfamily}
-%\lstset{basicstyle=\ttfamily\small}
+%\lstset{basicstyle=\ttfamily}
+\lstset{basicstyle=\ttfamily\small}
 \lstset{language=csh}
 \lstset{xleftmargin=3em,xrightmargin=3em}
 \lstset{frame=tb}
@@ -51,7 +51,13 @@
 \title{X-ray Diffraction GUI Manual\footnote{The red text in this paper are links to other parts of the document or other webpages.}}
 \date{\today}
 \author{Joshua~Lande (\href{mailto:joshualande@gmail.com}{joshualande@gmail.com})}
+
+\setcounter{page}{1}
+
 \maketitle
+
+\label{this}
+this page is \pageref{this}
 
 \tableofcontents
 

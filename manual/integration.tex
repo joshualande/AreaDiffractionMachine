@@ -233,9 +233,9 @@ and performed a $Q$, $2\theta$, or $\chi$ integration,
 you can save out the intensity integrated data
 using the \gui{Save Data} button. The format of 
 an intensity integration data file is as follows:
-\begin{lstlisting}[caption={'The Cake Data Header'}]
+\begin{lstlisting}[caption={'A Cake Data File'}]
 # Q vs I Intensity Integration
-# Intensity integration of: /Users/jolande/Desktop/LaB6_14_02_56.mar3450
+# Intensity integration of: C:/data/LaB6_14_02_56.mar3450 
 # Data Integrated on Fri Mar 21 17:59:16 2008
 # Calibration data used:
 #   x center:    1725.0000000 pixels
@@ -278,5 +278,27 @@ an intensity integration data file is as follows:
 0.118306	0.000000
 0.152108	0.000000
 0.185910	0.000000
+...
 \end{lstlisting}
-The header is a bunch of lines that begin with #.
+The header is a bunch of lines that begin with \#.
+Each line says something useful about the state
+of the program when the integratinon was
+done. 
+If you perform an intensity integration in $\chi$
+space instead, the header file will say
+\macroline{\# Chi vs I Intensity Integration}
+If two files were added together
+and then integrated, the header file will say
+\begin{lstlisting}[caption={'Alternate Header'}]
+# Intensity integration of: C:/first.mar3450 C:/first.mar3450
+\end{lstlisting}
+Follwing the header string is the line
+\macroline{\# Q Avg Intensity} (or \macroline{\# Chi Avg Intensity}
+or \macroline{\# 2theta	Avg Intensity}). Following it is
+the data. Each line contains one of the bins. The data
+is tab seperated. The first number is the middle $Q$ (or
+$\chi$ or $2\theta$ value) in the bin and the second number
+is the average intensity.
+
+
+
