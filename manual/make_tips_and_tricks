@@ -14,3 +14,4 @@ rm tips_and_tricks/index.html
 # move the new manual into the program folder so that 
 # it can be distributed with the program
 cp tips_and_tricks/tips_and_tricks.html ../source/version1
+cp tips_and_tricks/tips_and_tricks.html ../source/version2

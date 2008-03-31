@@ -28,15 +28,15 @@ original version by:  Nikos Drakos, CBLU, University of Leeds
 <H1 ALIGN=CENTER>Tips and Tricks</H1>
 <P ALIGN=CENTER><STRONG>Joshua&nbsp;Lande (joshualande@gmail.com)</STRONG>
 </P>
-<BR><P ALIGN=CENTER><B>Date:</B> February 9, 2008</P>
+<BR><P ALIGN=CENTER><B>Date:</B> March 30, 2008</P>
 
 <HR>
 
 <P>
 
-<H2><A NAME="SECTION00001000000000000000">
+<H1><A NAME="SECTION00010000000000000000">
 Calibration</A>
-</H2>
+</H1>
 
 <P>
 The Calibration tab lets you load into the program 
@@ -46,6 +46,7 @@ that characterize the diffraction experiment. You
 can load in diffraction data using the 
 <TT>"Data File:"</TT> input. The program 
 recognizes <TT>"mar2300"</TT>, <TT>"mar3450"</TT>, 
+<A NAME="59"></A><A NAME="60"></A><A NAME="61"></A><A NAME="62"></A>
 <TT>"mccd"</TT>, and <TT>"tiff"</TT> data. To load 
 multiple files at once, and work the with sum image, 
 you need to go into the file part of the menu and 
@@ -56,6 +57,10 @@ Image Calibration is used to infer the experimental
 setup by analyzing standard diffraction data. This 
 program characterizes a diffraction experiment 
 with several parameters:
+<A NAME="66"></A>
+<A NAME="67"></A><A NAME="68"></A>
+<A NAME="69"></A><A NAME="70"></A>
+<A NAME="71"></A><A NAME="72"></A><A NAME="73"></A>
 
 <UL>
 <LI><TT>"xc:"</TT>, <TT>"yc:"</TT> - The <SPAN CLASS="MATH"><I>x</I></SPAN> 
@@ -85,6 +90,7 @@ no sample in the way (in pixels).
 <P>
 Before calibrating an image, three things must be done. 
 First, you must load data taken of a standard calibration 
+<A NAME="85"></A>
 sample. Then, you must load a <SPAN CLASS="MATH"><I>Q</I></SPAN> data file with <SPAN CLASS="MATH"><I>Q</I></SPAN> values 
 of peaks corresponding to the sample. Finally, the program 
 needs an initial guess at the calibration values. This can 
@@ -98,6 +104,7 @@ parameters and get the best guess at the real experimental
 parameters.
 
 <P>
+<A NAME="89"></A>
 <SPAN CLASS="MATH">2<I>&#952;</I></SPAN> is the angle of scatter of a particular beam of light 
 which left the crystal and arrived at the detector at a certain 
 point. <SPAN CLASS="MATH">2<I>&#952;</I></SPAN> is a property of all points on the detector 
@@ -186,11 +193,11 @@ drawn on top of it.
 
 <P>
 
-<H2><A NAME="SECTION00002000000000000000">
-Masking</A>
-</H2>
-
-<P>
+<H1><A NAME="SECTION00020000000000000000"></A>
+<A NAME="108"></A>
+<BR>
+Masking
+</H1>
 You can make the program ignore certain pixels when doing
 diffraction analysis. This is all done on the <TT>"Masking"</TT>
 tab. To have the program ignore pixels above or below a 
@@ -228,11 +235,10 @@ the <TT>"Load Mask"</TT> button.
 
 <P>
 
-<H2><A NAME="SECTION00003000000000000000">
+<H1><A NAME="SECTION00030000000000000000">
 Cake</A>
-</H2>
-
-<P>
+</H1>
+<A NAME="121"></A><A NAME="122"></A><A NAME="123"></A>
 A caked image is a plot of diffraction data in <SPAN CLASS="MATH"><I>Q</I></SPAN>, 
 <SPAN CLASS="MATH"><I>&#967;</I></SPAN> space. <SPAN CLASS="MATH"><I>&#967;</I></SPAN> is a measure of the angle around 
 what would be the incoming x-ray beam if the beam was 
@@ -291,11 +297,11 @@ displayed on the screen corresponds to a single bin.
 
 <P>
 
-<H2><A NAME="SECTION00004000000000000000">
-Integrate</A>
-</H2>
-
-<P>
+<H1><A NAME="SECTION00040000000000000000"></A>
+<A NAME="136"></A>
+<BR>
+Integrate
+</H1>
 Intensity integration lets you calculate average intensity
 as a function of <SPAN CLASS="MATH"><I>Q</I></SPAN>, <SPAN CLASS="MATH"><I>&#967;</I></SPAN>, or <SPAN CLASS="MATH">2<I>&#952;</I></SPAN>. By default, the
 option is to integrate in <SPAN CLASS="MATH"><I>Q</I></SPAN> or <SPAN CLASS="MATH"><I>&#967;</I></SPAN>. If you want to 
@@ -323,11 +329,10 @@ of two column plain text data.
 
 <P>
 
-<H2><A NAME="SECTION00005000000000000000">
-Macro</A>
-</H2>
-
-<P>
+<H1><A NAME="SECTION00050000000000000000"></A><A NAME="145"></A>
+<BR>
+Macro
+</H1>
 If you want to perform a complicated task many times, the
 easiest thing to do is to record a macro of all the commands
 and then run the macro instead of doing everything by hand.
@@ -370,9 +375,9 @@ original file name with <TT>"PATHNAME/FILENAME.mar3450"</TT>.
 This markup can be used to save things with useful names. For
 example, the macro line <TT>"Save Integration Data"</TT>
 followed by the line
-<TT>"PATHNAME/FILENAME_q_i_integration.dat"</TT> would, for
+<TT>"PATHNAME/FILENAME_int.dat"</TT> would, for
 our previously loaded file, save the integrated intensity data
-as <TT>"C:/somefolder/thefile_q_i_integration.dat"</TT>. For
+as <TT>"C:/somefolder/thefile_int.dat"</TT>. For
 all other diffraction data being looped over, the diffraction data
 would get saved next to the corresponding data file.
 
@@ -380,7 +385,7 @@ would get saved next to the corresponding data file.
 <BR><HR>
 <ADDRESS>
 Joshua Lande
-2008-02-09
+2008-03-30
 </ADDRESS>
 </BODY>
 </HTML>

@@ -791,7 +791,7 @@ filename""" % (filename,linenumber,currentline) )
                 if nextline.find('PATHNAME') == -1 and \
                         nextline.find('FILENAME') == -1 and \
                         nextline.find('FOLDERPATH') == -1 and \
-                        nextline.fild('FOLDERNAME') == -1 and \
+                        nextline.find('FOLDERNAME') == -1 and \
                         not os.path.isfile(nextline):
                     file.close()
                     raise UserInputException("""%s is not a valid \

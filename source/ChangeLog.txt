@@ -2,7 +2,7 @@ Change Log for the Area Diffraction Machine
 
 -------
 
-Change log for Version 2:
+Change log for Version 2 (version 2 has all the version 1 changes in it):
 
 Changes in progress
     
@@ -18,7 +18,8 @@ Changes in progress
 
 -------
 
-Change log for Version 1:
+Changes for version 1.0.4 - (The SVN revision for it is r138)
+    -   Minor bug fix in the macro feature
 
 Changes for version 1.0.3 - (The SVN revision for it is r114)
 
