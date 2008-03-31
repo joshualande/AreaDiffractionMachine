@@ -1,0 +1,26 @@
+Change Log for version 1 of the Area Diffraction Machine
+
+-------
+
+Changes for version 1.0.3 - (The SVN revision for it is r114)
+
+    -   Improving support of marCCD data (.mccd).
+    -   Introducing the new macro commands
+        FOLDERPATH and FOLDERNAME.
+
+Changes for version 1.0.2 - (The SVN revision for it is r108)
+
+    -   Fixed a bug in the way ESRF Data is read on 
+        Windows. 
+    -   Added code for saving loaded image as ESRF Data.
+
+Changes for version 1.0.1 - (The SVN revision for it is r106)
+    
+    -   Added support for the ESRF Data Format (.edf). 
+
+Changes for version 1.0.0 - (The SVN revision for it is r100)
+
+    -   Adding code so that from within a macro the program can 
+        read in multiple files and add them together. This feature
+        can also be incorporated into a loop. See the manual
+        for documentation of this feature.
