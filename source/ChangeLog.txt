@@ -6,10 +6,6 @@ Change log for Version 2 (version 2 has all the version 1 changes in it):
 
 Changes in progress
     
-    - Fix a bug where when displaying the residual function,
-      the program would, even after fitting say something
-      like "Before fitting, the calculated residual is 
-      6.532131e-06". Now it says "After fitting" as it should.
     - Allow for caking in 2theta.
     - Ignores any peaks found inside of polygon masks. Also,
       these peaks are no longer displayed on top of the
@@ -18,8 +14,12 @@ Changes in progress
 
 -------
 
-Changes for version 1.0.4 - (The SVN revision for it is r138)
+Changes for version 1.0.4 - (The SVN revision for it is r139)
     -   Minor bug fix in the macro feature
+    - Fix a bug where when displaying the residual function,
+      the program would, even after fitting say something
+      like "Before fitting, the calculated residual is 
+      6.532131e-06". Now it says "After fitting" as it should.
 
 Changes for version 1.0.3 - (The SVN revision for it is r114)
 

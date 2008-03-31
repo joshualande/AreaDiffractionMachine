@@ -582,7 +582,7 @@ static PyObject * FitWrap_fitCalibrationParameters(PyObject *self, PyObject *arg
     status=dlevmar_bc_dif(residual, p, (double *)qReal->data, 7, length, lb, ub,  
             10000,NULL, info, NULL,(double *)covarianceMatrix->data,(void *)useful);
 
-    printf(" - Before fitting, the calculated residual is %e\n",
+    printf(" - After fitting, the calculated residual is %e\n",
         getTotalResidual(p,(double *)qReal->data, 7, length, (void *)useful));
 
     // the fit gets stored in p, so we can get rid of useful
