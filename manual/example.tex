@@ -260,7 +260,7 @@ button on the \gui{Integration} page. This data is
 saved out as two column ASCII.
 After doing this for all the different files that
 we have, we can load all the data into another program,
-such as Excel, and compare the peaks.
+such as Microsoft Excel, and compare the peaks.
 
 But if there are a lot of files to analyze, this whole
 process can be very time consuming. Instead of doing 
@@ -295,13 +295,29 @@ integrated data to a file. The PATHNAME keyword gets
 repalced with teh path leading up to the particular 
 file and the FILENAME keyword gets replaced with 
 the particular file's name. For example, the file
-\macroline{FeL2\_d070\_y3\_01\_05.mar3450} in
+\macroline{FeL2\_d070.mar3450} in
 the folder \macroline{C:/Data/} would
 be replaced with
-\macroline{C:/Data/FeL2\_d070\_y3\_01\_05\_int.dat}
+\macroline{C:/Data/FeL2\_d070\_int.dat}
 This command will let us save out of our intesnity
 integrated data next to the corresponding diffraction
 file with a useful filename.
 
+After we run this macro, all of our data will 
+be saved out into text files. We can, for
+example, open the files in Excel and plot
+the different diffraction patterns on the same
+graph. If we did this, we would obtain a plot
+that looked something like the graph shown
+in figure~\ref{excel_peak_shift}.
+
+\begin{SCfigure}
+    \centering
+    \includegraphics[scale=.75]{figures/excel_peak_shift.eps}
+    \caption{An exmaple of waht the shift in peaks might
+    look like when two diffraction patterns were plotten
+    in Excel on top of one another.}
+    \label{excel_peak_shift}
+\end{SCfigure}
 
 

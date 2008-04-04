@@ -166,14 +166,52 @@ change correspondingly so that the next time you push
 
 \section{Masking}
 
-\section{\texorpdfstring{Displaying $Q$ Lines and Peaks}{
-    Displaying Q Lines and Peaks}}
+\section{\texorpdfstring{Displaying $Q$ Lines and Peaks}
+    {Displaying Q Lines and Peaks}}
     \label{cakeQlinesandpeaks}
 
 If a $Q$ list has been loaded into the program, 
 $Q$ and $\Delta Q$ lines can be displayed on top
 of the cake data. Remember that $Q$ lines on the
 caked plot are just straight lines. 
+
+ADD MORE HERE ABOUT THE FIGURES~\ref{constant_q_lines_on_cake_image}
+AND~\ref{constant_dq_lines_on_cake_image}
+
+\begin{SCfigure}
+    \centering
+    \includegraphics[scale=.75]{figures/constant_q_lines_on_cake_image.eps}
+    \caption{}
+    \label{constant_q_lines_on_cake_image}
+\end{SCfigure}
+
+\begin{SCfigure}
+    \centering
+    \includegraphics[scale=.75]{figures/constant_dq_lines_on_cake_image.eps}
+    \caption{}
+    \label{constant_dq_lines_on_cake_image}
+\end{SCfigure}
+
+
+
+\section{Displaying Peaks}
+
+Any peaks that the program finds when performing
+a calibration can be displayed on top of the caked
+data. 
+
+ADD IN MORE HERE ABOUT FIGURE~\ref{peaks_on_cake_image}.
+
+\begin{SCfigure}
+    \centering
+    \includegraphics[scale=.75]{figures/peaks_on_cake_image.eps}
+    \caption{}
+    \label{peaks_on_cake_image}
+\end{SCfigure}
+
+This can actually be very useful for checking if
+a calibration was done properly.
+figure~\ref{calibration_cake}. 
 
 \begin{figure}
     \centering
@@ -182,6 +220,7 @@ caked plot are just straight lines.
     \includegraphics[scale=.75]{figures/bad_calibration_cake_zoom_peaks.eps}}
     \subfloat[A good calibration]{
     \label{good_calibration_cake_zoom_peaks}
+    \includegraphics[scale=.75]{figures/good_calibration_cake_zoom_peaks.eps}}		
     \caption{A use of displaying peaks on top of the caked 
     data. Displaying the peaks found while calibrating can 
     be used to help tell if a proper calibration of caked 
@@ -194,13 +233,6 @@ caked plot are just straight lines.
     \label{calibration_cake}
 \end{figure}
 
-\section{Displaying Peaks}
-
-Any peaks that the program finds when performing
-a calibration can be displayed on top of the caked
-data. This can actually be very useful for checking if
-a calibration was done properly.
-figure~\ref{calibration_cake}. 
 
 \section{Polarization Correction}
 The program can apply a polarization correction to the

@@ -74,8 +74,8 @@ procedure to `fit' the calibration values to a
 diffraction patter with known $Q$ values.
 
 \section{The Fitting} 
-\index{Fitting}
-\label{fitting_sec}
+\index{Fitting}\label{fitting_sec}
+
 In order for the fitting algorithm to work, the program 
 must already have an initial guess of the real calibration 
 parameters. This initial guess does not have to be perfect, 
@@ -95,8 +95,16 @@ within each region we know there is a unique peak.
 \begin{SCfigure}
 \centering
 \input{figures/Fitting.tex}
-\caption{Here is a diagram of the peak finding 
-algorithm. ADD MORE OF A CAPTION}
+\caption{Here is a diagram of the peak finding algorithm. 
+The solid circualr black lines represent diffraction
+peaks on the image. The dotted lines represent the
+$Q$ ranges used to find the peaks. Note that the diffraction
+peaks are entirely within the ranges. Finally, the radial
+line represents the program picking a particular $\chi$
+value and looking for peaks inside of the $Q$ ranges.
+Finally, the gaussian peaks represent the program fitting
+a gausian to the intensity profile inside of each of the
+ranges.}
 \label{fitting}
 \end{SCfigure}
 
@@ -161,7 +169,8 @@ $Q_{\text{exp}}$). We can therefore define
 the residual function as
 \begin{equation}\label{residual}
     \text{Residual}(x_c,y_c,d,\lambda,\alpha,\beta,R) =  
-    \sum_{\text{$x,y$ pairs}} (Q_{\text{peak}} - Q_{\text{exp}})^2
+        \sum_{\text{$x,y$ pairs}}
+        (Q_{\text{peak}} - Q_{\text{exp}})^2
 \end{equation}
 Note that the functional dependence comes in from
 calculating $Q_{\text{peak}}$ from a known
@@ -191,7 +200,7 @@ calibration values is found.
 Diffraction image calibration is done with the
 calibration page of the program. A screen shot
 of this page is shown in figure
-\ref{calibration_page} on 
+\ref{calibration_page} on page
 \pageref{calibration_page}.
 
 As described above, to calibrate an image
@@ -238,17 +247,17 @@ I am taking them directly from the levmar website
 That website says that the different reasons why the
 fitting can stop are:
 \begin{itemize}
-    \item ``stopped by small gradient J\^T e''
-    \item ``stopped by small Dp''
-    \item ``stopped by itmax''
-    \item ``start from current p with increased \\mu''
-    \item ``no further error reduction is possible. Restart with increased mu''
-    \item ``stopped by small $||$e$||$\_2''\cite{lourakis04LM}
+    \item stopped by small gradient J\verb!^!T e
+    \item stopped by small Dp
+    \item stopped by itmax
+    \item start from current p with increased $\backslash$mu
+    \item no further error reduction is possible. Restart with increased mu
+    \item stopped by small $||$e$||$\_2\cite{lourakis04LM}
 \end{itemize}
-I think that the first reason to quit {\em stopped by small
-gradient} means that the program found its way
+I think that the first reason to quit (stopped by smallw
+gradient) means that the program found its way
 to the bottom of the hill and is convinced that it did its best
-job minimizing the function. I think that {\em stopped by itmax}
+job minimizing the function. I think that (stopped by itmax)
 means that the program was forced to quit by a hard coded limit
 to the number of loops through the fitting. So if you come across this
 message, you should probably do the fit again with the current values.
@@ -261,15 +270,16 @@ The fitting algorithm also provides a covariance matrix that it finds
 while fitting. I do now know how it calculates this matrix or what
 it exactly what it means physically. Nevertheless, I print it out after the
 fitting is done. 
-\begin{lstlisting}[caption={Display of A Covariance Matrix}]
+\begin{lstlisting}[caption={Display of A Covariance Matrix},
+    basicstyle=\ttfamily\footnotesize]
 Covariance Matrix
-[[  9.43e-04  -1.53e-04   5.36e-05   3.27e-03  -1.77e-03   3.64e-03   2.10e+00]
- [ -1.53e-04   1.17e-03  -1.40e-04  -8.58e-03   3.91e-05  -2.02e-04  -1.25e-01]
- [  5.36e-05  -1.40e-04   2.07e-04   1.38e-02  -1.45e-04   3.12e-04   1.78e-01]
- [  3.27e-03  -8.58e-03   1.38e-02   9.49e-01  -6.44e-03   1.40e-02   8.02e+00]
- [ -1.77e-03   3.91e-05  -1.45e-04  -6.44e-03   4.01e-01  -8.42e-01  -4.76e+02]
- [  3.64e-03  -2.02e-04   3.12e-04   1.40e-02  -8.42e-01   1.77e+00   9.99e+02]
- [  2.10e+00  -1.25e-01   1.78e-01   8.02e+00  -4.76e+02   9.99e+02   5.65e+05]]
+[[  9.43e-04 -1.53e-04  5.36e-05  3.27e-03 -1.77e-03  3.64e-03  2.10e+00]
+ [ -1.53e-04  1.17e-03 -1.40e-04 -8.58e-03  3.91e-05 -2.02e-04 -1.25e-01]
+ [  5.36e-05 -1.40e-04  2.07e-04  1.38e-02 -1.45e-04  3.12e-04  1.78e-01]
+ [  3.27e-03 -8.58e-03  1.38e-02  9.49e-01 -6.44e-03  1.40e-02  8.02e+00]
+ [ -1.77e-03  3.91e-05 -1.45e-04 -6.44e-03  4.01e-01 -8.42e-01 -4.76e+02]
+ [  3.64e-03 -2.02e-04  3.12e-04  1.40e-02 -8.42e-01  1.77e+00  9.99e+02]
+ [  2.10e+00 -1.25e-01  1.78e-01  8.02e+00 -4.76e+02  9.99e+02  5.65e+05]]
 \end{lstlisting}
 The rows (from top to bottom) correspond to \gui{xc}, \gui{yc}, \gui{d}
 \gui{E}, \gui{alpha}, \gui{beta}, and \gui{rotation}. The columns
@@ -281,7 +291,7 @@ algorithm to be really comfortable saying that these are the true uncertainties 
 the fit parameters. Your mileage my vary. Anyway, I print out the root of the 
 diagonals. The printout by the program  
 \begin{lstlisting}[caption={Display of the root of the diagonals}]
-Root of the diagonal of the covariance matrix (I think these are uncertainties)
+Root of the diagonal of the covariance matrix ... 
 xc:  0.0307145820046
 yc:  0.0341970790239
 d:  0.0143735880013
@@ -370,11 +380,93 @@ They are just some property that is already know
 about the detector. 
 
 \section{\texorpdfstring{Displaying Constant $Q$ 
-        lines}{Displaying Constant Q lines}}
+    Lines}{Displaying Constant Q Lines}}
+    \label{displayconstQlines}
+
+After the program has been given a diffraction file,
+a list of the constant $Q$ lines, and some
+calibration parmeters, the program has a very
+useful feature where it can display on top of
+the image the diffraction pattern that should
+show up for the particular $Q$ lines and the
+particular calibration paramters.
+
+The \gui{Draw Q Lines?} button on the 
+\gui{Calibration} page enables this.
+Figure~\ref{constant_q_lines_on_diffraction_image}
+shows what the diffraction image looks like with
+the $Q$ lines drawn on it.
+
+\begin{SCfigure}
+    \centering
+    \includegraphics[scale=.75]{figures/constant_q_lines_on_diffraction_image.eps}
+    \caption{A diffraction image with constant the $Q$
+    lines displayed upon it.}
+    \label{constant_q_lines_on_diffraction_image}
+\end{SCfigure}
+
+Drawing these lines is acutally very easy. For
+each $Q$ value, the proram picks a lot of
+$\chi$ values. We know that each of the $Q$, $\chi$
+values is in the constant $Q$ line so we can use
+the calibration paramters to convert them to $x$, $y$
+values and connect all the pixel coordiantes to 
+make the line.
+
+Constant $Q$ lines can also be drawn on top of the
+caked data. This is described in 
+section~\ref{cakeQlinesandpeaks}.
+
+The color of the $Q$ lines can be changed using the
+\gui{Color} button next to the \gui{Draw Q Lines?} 
+button.
+
+\section{\texorpdfstring{Displaying Constant $\Delta Q$ 
+        Lines}{Displaying Constant delta Q Lines}}
+
+The program needs in addition to the $Q$ values
+a range in $Q$ to find the peaks. See 
+section~\ref{fitting_sec} for more details. Because
+the program has this range, it can also display the
+$\Delta Q$ range on top of the image.
+This can be done with the \gui{Draw dQ Lines?} button
+adn the color of these lines can be changed with the
+corresponding \gui{Color} button. 
+Figure~\ref{constant_dq_lines_on_diffraction_image}
+shows what the diffraction image looks like with
+the $\Delta Q$ lines drawn on it.
+
+\begin{SCfigure}
+    \centering
+    \includegraphics[scale=.75]{figures/constant_dq_lines_on_diffraction_image.eps}
+    \caption{A diffraction image with the constant $\Delta Q$
+    lines displayed upon it.}
+    \label{constant_dq_lines_on_diffraction_image}
+\end{SCfigure}
+
+
+Constant $\Delta Q$ 
+lines can also be drawn on top of the caked data. This 
+is described in section~\ref{cakeQlinesandpeaks}.
 
 \section{Displaying Peaks}
 
+ADD IN MORE HERE ON DISPLAYING PEAKS AND FIGURE~\ref{peaks_on_diffraction_image}
+
+\begin{SCfigure}
+    \centering
+    \includegraphics[scale=.75]{figures/peaks_on_diffraction_image.eps}
+    \caption{A diffraction image with the peaks displayed upon it.}
+    \labelpeaks_on_diffraction_image}{
+\end{SCfigure}
+
+
+Peaks can also be drawn on top of the caked data. This 
+is described in section~\ref{cakeQlinesandpeaks}.
+
 \section{Masking Peaks}
+
+THIS FEATURE IS STILL IN THE WORKS...
 
 \section{Saving the Peak List}
 
