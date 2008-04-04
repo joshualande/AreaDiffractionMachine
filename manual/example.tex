@@ -29,25 +29,42 @@ from the standard crystal can be used in the analysis of the
 rest of the crystal.
 
 To perform this calibration, we first opened up the Area 
-Diffraction Machine. We are presented with
+Diffraction Machine. Figure~\ref{calibration_page_example} shows what we
+are first presented with.
 
-\includegraphics[scale=.75]{figures/calibration_page.eps}
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=.75]{figures/calibration_page.eps}
+    \caption{The calibration tab.}
+    \label{calibration_page_example}
+\end{figure}
 
-From the \gui{Data File} input, we
-load into the program the LaB6 sample file. Once the file
-is loaded in, a new window opens up which shows the diffraction
-data. This window looks like
+From the \gui{Data File} input, we load into the program the LaB6 
+sample file. Once the file is loaded in, a new window opens up 
+which shows the diffraction data. This window is shown in 
+figure~\ref{diffraction_data_window_example}.
 
-\includegraphics[scale=.75]{figures/diffraction_data_window.eps}
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=.75]{figures/diffraction_data_window_example.eps}
+    \caption{The diffraction data window.}
+    \label{diffraction_data_window_example}
+\end{figure}
 
 To do the detector calibration, the program must know the 
 $Q$ values associated 
 with the standard crystal. Since LaB6 is so common, it is
 a preset default in the program. We go into the menu bar, 
 into the \gui{calibration} menu, into the \gui{Standard Q} menu, 
-and then selected Lanthanum Hexaboride. Doing so looks like
+and then selected Lanthanum Hexaboride. This is shown
+in figure~\ref{standard_q_example}.
 
-\includegraphics[scale=.75]{figures/standard_q.eps}
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=.75]{figures/standard_q.eps}
+    \caption{Loading a standard $Q$ file.}
+    \label{standard_q_example}
+\end{figure}
 
 (More standard $Q$ files might be added in the future).
 In order to perform
@@ -64,52 +81,179 @@ we are ready to do the calibration.
 
 But first, we want to examine how good the initial guess 
 is. To do so, we can select the \gui{Draw Q Lines?}
-check box on the Calibration page. When this is selected, 
+check box on the Calibration tab. When this is selected, 
 the program will draw
 on top of the diffraction image red lines corresponding
 to what diffraction pattern should show up on the
 detector (for the given calibration parameters and $Q$
-values). For our example, the program displays
+values). Figure~\ref{bad_calibration_diffraction_image}
+shows what the program displays for our example.
 
-\includegraphics[scale=.75]{figures/bad_calibration_diffraction_image.eps}
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=.75]{figures/bad_calibration_diffraction_image.eps}
+    \caption{The diffraction image with constant the $Q$
+    lines displayed upon it. These lines are calculated
+    for the calibraiton parametesr found in the
+    header of the image. They are not particuarly
+    accurate.}
+    \label{bad_calibration_diffraction_image}
+\end{figure}
 
 Of course, our initial guess isn't
 great so the red lines don't match too well with
 the loaded patter. The data will look like
 
-We can do an initial cake of the data. A caked plot
+We can do a cake of the data. A caked plot
 is a presentation of the data in a different parameter 
 space.  The $x$ axis is $Q$ and the $y$ axis is $\chi$. 
 Ideally, if the calibration parameters are known exactly, 
 the caked data will show up as many vertical lines. 
-We can cake the data by pushing the \gui{AutoCake}
-button on the \gui{Cake} page. When we do so, a new cake 
-window opens up. For our example, our data looks like
+We can cake the data by going to the cake tab. This
+tab is shown in figure~\ref{cake_page_example}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=.75]{figures/caking_page.eps}
+    \caption{The calibration tab.}
+    \label{cake_page_example}
+\end{figure}
+
+On this tab, we have to pushing the \gui{AutoCake}
+. When we do so, a new cake 
+window opens up. Figure~\ref{bad_calibration_cake} 
+shows what the program displays for our example.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=.75]{figures/bad_calibration_cake.eps}
+    \caption{A caked plot with the calibration parameters
+        found in the header of the image.}
+    \label{bad_calibration_cake}
+\end{figure}
 
 We see that for The caked data with the initial guess 
 calibration parameters, our diffraction lines
 have a systematic wiggle. It might be hard to see 
 with the full image, but by zooming into just one
-line, we find the difference to be much more obvious.
+line we find the difference to be much more obvious.
+A zoomed in range is shown in 
+figure~\ref{bad_calibration_cake_zoom}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=.75]{figures/bad_calibration_cake_zoom.eps}
+    \caption{A zoom in of the cake shown in 
+    figure~\ref{bad_calibration_cake}.}
+    \label{bad_calibration_cake_zoom}
+\end{figure}
+
 This means that our initial guess at 
 calibration parameters is not great.
-
 We can now do the calibration. To do so, we push
 the \gui{Do Fit} button on the \gui{Calibration}
-page. After the calibration finishes, the constant
+tab. If the calibraiton did a good job, the constant
 $Q$ lines drawn on the diffraction image move
 so that they are entirely over the diffraction 
-pattern. The cake 
+pattern. This is shown in 
+figure~\ref{good_calibration_diffraction_image}.
 
-This tells us that 
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=.75]{figures/good_calibration_diffraction_image.eps}
+    \caption{The diffraction window after being calibrated.}
+    \label{good_calibration_diffraction_image}
+\end{figure}
 
+The diffraction peaks on the caked image become much straigher.
+The caked window after calibraiton is shown in 
+figure~\ref{good_calibration_cake}.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=.75]{figures/good_calibration_cake.eps}
+    \caption{The cake window after calibration.}
+    \label{good_calibration_cake}
+\end{figure}
+
+They look good even when zoomed in. A corresponding zoom in of
+the caked window in shown in 
+figure~\ref{good_calibration_cake_zoom}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=.75]{figures/good_calibration_cake_zoom.eps}
+    \caption{A zoom in of figure~\ref{good_calibration_cake}.}
+    \label{good_calibration_cake_zoom}
+\end{figure}
+
+After caking the calibrated data and convincing ourselves that
+our calibration parameters are good, we can save the calibration
+parameters to a file for later use. We can do so using the
+\gui{Save to File} button on the \gui{Calibration} tab.
+After selecting the location \gui{C:/Data/LaB6\_cal.dat}, the
+calibration file gets saved as
+\begin{lstlisting}[caption={'The Calibration Parameters File'}]
+# Calibration File
+xc	1722.966078	0
+yc	1724.227970	0
+D	122.691351	0
+E	12707.219316	0
+alpha	-0.052910	0
+beta	0.130553	0
+rotation	-41.523477	0
+pixelLength	100.000000
+pixelHeight	100.000000
+\end{lstlisting}
+Now, we are going to want to use these calibration
+parameters to perform an intensity integration of the
+rest of our data. We can use the intensity
+integrate data to look for peaks in the data.
+The steps for doing the rest of
+this analysis are as follows. Load in particular file we
+are interested in. Load in these calibration parameters
+using the \gui{Load From File} button on the \gui{Calibraion}
+tab.\footnote{If you just did the calibration, the 
+parameters should already be in the inputs. The point is
+just that you could load the parameters into the program
+if you were, say, to open the program at some later point
+in time.}. Withthese values in, we can perform a $Q$
+integration by going to the \gui{Integrate} tab.
+The integration tab is shown in 
+figure~\ref{integration_page}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[scale=.75]{figures/integration_page.eps}
+    \caption{The integration tab.}
+    \label{integration_page}
+\end{figure}
+
+We set the range of the $Q$ integrtaion by setting
+\gui{Q Lower?} to 0 and \gui{Q Upper?} to 5. We
+then set the precision of the integration, or the
+bin size, by setting the \gui{Number of Q?} input
+to 300. Finally, we push the left \gui{Integrate}
+button and a window showing the diffraction data
+opens. 
+
+We can save this data to a file with \gui{Save Data}
+After doing this for all the different files that
+we have, we can load all the data into another program,
+such as Excel, and compare the peaks.
+
+But if there are a lot of files to analyze, this whole
+process can be very time consuming. Instead of doing 
+this analysis by hand, we can automate the process by
+writing a macro to analyze all the files one at a 
+time. First, we put all of our data into \macroline{C:/Data/}.
+The macro that we can run is
 \begin{lstlisting}[caption={'A macro to automate the 
     analysis'}]
 Data File:
 	C:/Data/
 Load From File
-    C:/Data/Lab6_cal.dat
+    C:/Data/LaB6_cal.dat
 Integrate Q Lower?
 	0
 Integrate Q Upper?
@@ -120,4 +264,5 @@ Integrate Q-I
 Save Integration Data
     PATHNAME/FILENAME_int.dat
 \end{lstlisting}
+The first command loads into the file
 
