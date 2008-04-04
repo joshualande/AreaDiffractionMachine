@@ -32,24 +32,24 @@ To perform this calibration, we first opened up the Area
 Diffraction Machine. Figure~\ref{calibration_page_example} shows what we
 are first presented with.
 
-\begin{figure}[h]
+\begin{SCfigure}
     \centering
     \includegraphics[scale=.75]{figures/calibration_page.eps}
     \caption{The calibration tab.}
     \label{calibration_page_example}
-\end{figure}
+\end{SCfigure}
 
 From the \gui{Data File} input, we load into the program the LaB6 
 sample file. Once the file is loaded in, a new window opens up 
 which shows the diffraction data. This window is shown in 
 figure~\ref{diffraction_data_window_example}.
 
-\begin{figure}[h]
+\begin{SCfigure}
     \centering
     \includegraphics[scale=.75]{figures/diffraction_data_window_example.eps}
     \caption{The diffraction data window.}
     \label{diffraction_data_window_example}
-\end{figure}
+\end{SCfigure}
 
 To do the detector calibration, the program must know the 
 $Q$ values associated 
@@ -59,12 +59,12 @@ into the \gui{calibration} menu, into the \gui{Standard Q} menu,
 and then selected Lanthanum Hexaboride. This is shown
 in figure~\ref{standard_q_example}.
 
-\begin{figure}[h]
+\begin{SCfigure}
     \centering
     \includegraphics[scale=.75]{figures/standard_q.eps}
     \caption{Loading a standard $Q$ file.}
     \label{standard_q_example}
-\end{figure}
+\end{SCfigure}
 
 (More standard $Q$ files might be added in the future).
 In order to perform
@@ -89,7 +89,7 @@ detector (for the given calibration parameters and $Q$
 values). Figure~\ref{bad_calibration_diffraction_image}
 shows what the program displays for our example.
 
-\begin{figure}[h]
+\begin{SCfigure}
     \centering
     \includegraphics[scale=.75]{figures/bad_calibration_diffraction_image.eps}
     \caption{The diffraction image with constant the $Q$
@@ -98,7 +98,7 @@ shows what the program displays for our example.
     header of the image. They are not particuarly
     accurate.}
     \label{bad_calibration_diffraction_image}
-\end{figure}
+\end{SCfigure}
 
 Of course, our initial guess isn't
 great so the red lines don't match too well with
@@ -112,25 +112,28 @@ the caked data will show up as many vertical lines.
 We can cake the data by going to the cake tab. This
 tab is shown in figure~\ref{cake_page_example}.
 
-\begin{figure}[h]
+\begin{SCfigure}
     \centering
     \includegraphics[scale=.75]{figures/caking_page.eps}
     \caption{The calibration tab.}
     \label{cake_page_example}
-\end{figure}
+\end{SCfigure}
 
-On this tab, we have to pushing the \gui{AutoCake}
-. When we do so, a new cake 
-window opens up. Figure~\ref{bad_calibration_cake} 
-shows what the program displays for our example.
+On this tab, we have to pushing the \gui{AutoCake}. 
+When we do so, a new cake window opens up. 
+Figure~\ref{bad_calibration_cake} shows what the 
+program displays for our example.
 
-\begin{figure}[h]
+\begin{SCfigure}
     \centering
     \includegraphics[scale=.75]{figures/bad_calibration_cake.eps}
-    \caption{A caked plot with the calibration parameters
-        found in the header of the image.}
+    \caption{A caked plot done with the calibration parameters
+    found in the header of the image. The header parameters
+    are not particuarly obvious and the diffraciton peaks
+    are not particuarly straight. Calibratin helps improve
+    the strightness of the diffraciton peaks.}
     \label{bad_calibration_cake}
-\end{figure}
+\end{SCfigure}
 
 We see that for The caked data with the initial guess 
 calibration parameters, our diffraction lines
@@ -140,13 +143,15 @@ line we find the difference to be much more obvious.
 A zoomed in range is shown in 
 figure~\ref{bad_calibration_cake_zoom}.
 
-\begin{figure}[h]
+\begin{SCfigure}
     \centering
     \includegraphics[scale=.75]{figures/bad_calibration_cake_zoom.eps}
     \caption{A zoom in of the cake shown in 
-    figure~\ref{bad_calibration_cake}.}
+    figure~\ref{bad_calibration_cake}. When zoomed into 
+    diffraction image, the poor calibration ecomes much 
+    more obvious.}
     \label{bad_calibration_cake_zoom}
-\end{figure}
+\end{SCfigure}
 
 This means that our initial guess at 
 calibration parameters is not great.
@@ -158,34 +163,39 @@ so that they are entirely over the diffraction
 pattern. This is shown in 
 figure~\ref{good_calibration_diffraction_image}.
 
-\begin{figure}[h]
+\begin{SCfigure}
     \centering
     \includegraphics[scale=.75]{figures/good_calibration_diffraction_image.eps}
-    \caption{The diffraction window after being calibrated.}
+    \caption{The diffraction window after being calibrated. The
+    constant $Q$ lines fall well on top of the diffraction 
+    peaks.}
     \label{good_calibration_diffraction_image}
-\end{figure}
+\end{SCfigure}
 
 The diffraction peaks on the caked image become much straigher.
 The caked window after calibraiton is shown in 
 figure~\ref{good_calibration_cake}.
 
-\begin{figure}[h]
+\begin{SCfigure}
     \centering
     \includegraphics[scale=.75]{figures/good_calibration_cake.eps}
-    \caption{The cake window after calibration.}
+    \caption{The cake window after calibration.  The lines 
+    are much straigher then the lines in 
+    figure~\ref{bad_calibration_cake} before calibration.}
     \label{good_calibration_cake}
-\end{figure}
+\end{SCfigure}
 
 They look good even when zoomed in. A corresponding zoom in of
 the caked window in shown in 
 figure~\ref{good_calibration_cake_zoom}.
 
-\begin{figure}[h]
+\begin{SCfigure}
     \centering
     \includegraphics[scale=.75]{figures/good_calibration_cake_zoom.eps}
-    \caption{A zoom in of figure~\ref{good_calibration_cake}.}
+    \caption{A zoomed in part of figure~\ref{good_calibration_cake}. 
+    Even at a large zoom in, the line remains very straight.}
     \label{good_calibration_cake_zoom}
-\end{figure}
+\end{SCfigure}
 
 After caking the calibrated data and convincing ourselves that
 our calibration parameters are good, we can save the calibration
@@ -194,7 +204,6 @@ parameters to a file for later use. We can do so using the
 After selecting the location \gui{C:/Data/LaB6\_cal.dat}, the
 calibration file gets saved as
 \begin{lstlisting}[caption={'The Calibration Parameters File'}]
-# Calibration File
 xc	1722.966078	0
 yc	1724.227970	0
 D	122.691351	0
@@ -220,14 +229,14 @@ if you were, say, to open the program at some later point
 in time.}. Withthese values in, we can perform a $Q$
 integration by going to the \gui{Integrate} tab.
 The integration tab is shown in 
-figure~\ref{integration_page}
+figure~\ref{integration_page_example}
 
-\begin{figure}[h]
+\begin{SCfigure}
     \centering
     \includegraphics[scale=.75]{figures/integration_page.eps}
     \caption{The integration tab.}
-    \label{integration_page}
-\end{figure}
+    \label{integration_page_example}
+\end{SCfigure}
 
 We set the range of the $Q$ integrtaion by setting
 \gui{Q Lower?} to 0 and \gui{Q Upper?} to 5. We
@@ -235,9 +244,20 @@ then set the precision of the integration, or the
 bin size, by setting the \gui{Number of Q?} input
 to 300. Finally, we push the left \gui{Integrate}
 button and a window showing the diffraction data
-opens. 
+opens. For a particular iron sample, this window
+is shown in figure~\ref{iron_intensity}.
 
-We can save this data to a file with \gui{Save Data}
+\begin{SCfigure}
+    \centering
+    \includegraphics[scale=.75]{figures/iron_intensity.eps}
+    \caption{The intensity integration window for 
+    a particular iron sample.}
+    \label{iron_intensity}
+\end{SCfigure}
+
+We can save this data to a file with the \gui{Save Data}
+button on the \gui{Integration} page. This data is
+saved out as two column ASCII.
 After doing this for all the different files that
 we have, we can load all the data into another program,
 such as Excel, and compare the peaks.
@@ -264,5 +284,24 @@ Integrate Q-I
 Save Integration Data
     PATHNAME/FILENAME_int.dat
 \end{lstlisting}
-The first command loads into the file
+The first command loads into the program all of the
+diffraction files in the folder \macroline{C:/Data/}
+one at a time and runs the rest of the analysis on
+that particular file. The program then loads in
+the calibration file that we saved earlier and sets the
+integration bounds. Then, the program does a 
+$Q$ vs intensity integration and saves the intensity
+integrated data to a file. The PATHNAME keyword gets
+repalced with teh path leading up to the particular 
+file and the FILENAME keyword gets replaced with 
+the particular file's name. For example, the file
+\macroline{FeL2\_d070\_y3\_01\_05.mar3450} in
+the folder \macroline{C:/Data/} would
+be replaced with
+\macroline{C:/Data/FeL2\_d070\_y3\_01\_05\_int.dat}
+This command will let us save out of our intesnity
+integrated data next to the corresponding diffraction
+file with a useful filename.
+
+
 
