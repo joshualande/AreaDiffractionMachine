@@ -92,7 +92,7 @@ divided up any diffraction image several regions, where
 within each region we know there is a unique peak.
 An example of this is shown in figure~\ref{divide_up_image}.
 
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
     \centering
     \includegraphics[scale=.75]{figures/constant_dq_lines_on_diffraction_image.eps}
     \caption{A division of a diffraction image into
@@ -101,7 +101,7 @@ An example of this is shown in figure~\ref{divide_up_image}.
     \label{divide_up_image}
 \end{SCfigure}
 
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
 \centering
 \input{figures/Fitting.tex}
 \caption{Here is a diagram of the peak finding algorithm. 
@@ -407,7 +407,7 @@ Figure~\ref{constant_q_lines_on_diffraction_image}
 shows what the diffraction image looks like with
 the $Q$ lines drawn on it.
 
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
     \centering
     \includegraphics[scale=.75]{figures/constant_q_lines_on_diffraction_image.eps}
     \caption{A diffraction image with constant the 
@@ -447,7 +447,7 @@ Figure~\ref{constant_dq_lines_on_diffraction_image}
 shows what the diffraction image looks like with
 the $\Delta Q$ lines drawn on it.
 
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
     \centering
     \includegraphics[scale=.75]{figures/constant_dq_lines_on_diffraction_image.eps}
     \caption{A diffraction image with the constant 
@@ -460,7 +460,7 @@ Constant $\Delta Q$
 lines can also be drawn on top of the caked data. This 
 is described in section~\ref{cakeQlinesandpeaks}.
 
-\section{Displaying Peaks}\label{displaying_peaks}
+\section{Displaying Peaks}\label{displaying_peaks_diffraction}
 
 Section~\ref{fitting_sec} describes how the program has to find a bunch
 of peaks on the diffraction image in order to perform the calibration.
@@ -475,7 +475,7 @@ corresponding to diffraction maxima. If many of the peaks that the program
 finds do not correspond to diffraction maxima, it is less likely that 
 the program would do a good job calibrating the diffraction image.
 
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
     \centering
     \includegraphics[scale=.75]{figures/peaks_on_diffraction_image.eps}
     \caption{A diffraction image with the peaks displayed upon it.}
@@ -487,8 +487,44 @@ is described in section~\ref{cakeQlinesandpeaks}.
 
 \section{Masking Peaks}
 
-THIS FEATURE IS STILL IN THE WORKS AND IS INTENDED
-TO BE INCLUDED IN VERSION 2.0. 
+\begin{figure}[htb]
+    \centering
+    \subfloat[A diffraction image with diffraction peaks
+    and two polygon masks displayed on top of it.]{
+    \label{mask_peaks_diffraction}
+    \includegraphics[scale=.75]{figures/mask_peaks_diffraction.eps}}
+    \subfloat[A caked plot with diffraciton peaks and
+    two polygon masks displayed on top of it.]{
+    \label{mask_peaks_cake}
+    \includegraphics[scale=.75]{figures/mask_peaks_cake.eps}}		
+    \caption{Polygon masks can be used to block
+    out certain regions of the image. Whenever
+    a polygon mask is loaded into an image, none
+    of the peaks found in the mask's region will be
+    used while calibrating the image. Furthermore,
+    none of the peaks within the masks will be 
+    displayed on the diffraction image or caked plot.}
+    \label{mask_peaks}
+\end{figure}
+
+The general idea behind masking peaks is allow polygon 
+masks (see chapter~\ref{pixel_masking}) to be used as 
+a way to forbit the program from using any peaks found
+within a certain region. So if a polygon mask covers a 
+certain area of the image, none of the peaks found within that
+area will be used while calibrating. Also, none of 
+the peaks will be displayed on top of the diffraction 
+image or cake image. An example of this is shown in
+figure~\ref{mask_peaks_diffraction}. 
+See section~\ref{displaying_peaks_diffraction}
+for a discussion of displaying peaks on a diffraction
+image.
+Figure~\ref{mask_peaks_cake} shows the same effect on
+top of the corresponding caked plot. See 
+chapter~\ref{Caking} for a discussion of caking.
+In particular, see section~\ref{displaying_peaks_cake} 
+for more information on displaying peaks on a caked
+image.
 
 \section{Saving the Peak List}
 
@@ -505,7 +541,9 @@ the program requires in advance for a diffraction file to
 be loaded, for a standard $Q$ file to be loaded, and for
 a guess at the calibration parameters to be in the inputs.
 
-A typical peak list file looks like
+A typical peak list file looks like\footnote{I have modified
+what a real file looks like a bit. The numbers are really tab 
+separated but I show them space separated for brevity.}
 \begin{lstlisting}[caption={A Peak List File,basicstyle=\ttfamily\tiny}]
 # A list of peaks found in the diffraction image.
 # Calculated on Sun Apr  6 18:06:56 2008
@@ -519,11 +557,25 @@ A typical peak list file looks like
 #   rotation:       0.0000000 degrees
 #   pixel length:     100.0000000 microns
 #   pixel height:     100.0000000 microns
-#	x	y	RealQ	FitQ	chi	width	intensity	2theta
-2016.1 1724.441015	1.511544	1.500079	0.110000	0.007507	5564.325148	13.369599
-2016.6 1719.335890	1.511544	1.502931	1.112479	0.009324	1662.725266	13.395136
+#   x  y  RealQ  FitQ  chi  width  intensity  2theta
+2016.15  1724.44  1.511  1.50  0.11  0.0075 5564.32  13.36
+2016.68  1719.33  1.51  1.50  1.11  0.0093 1662.72  13.39
 \end{lstlisting}
-ADD MORE HERE
+First, the file contains the calibration parameters
+used to generate the peaks. Then it has a comment string
+describing each of the numbers in each of the rows
+that follow. Each row corresponds to a unique peak.
+The first two numbers $x$ and $y$ are
+the $x$ and $y$ pixel coordinate corresponding to
+a location in the diffraction image of the peak. RealQ 
+is the $Q$ value found in the $Q$ list that is already 
+known. FitQ is the $Q$ value calculated 
+from the $(x,y)$ coordinate using the calibration
+parameters. $\chi$ is also calculated from the pixel
+coordinate using the calibration parameters. 
+Intensity is intensity value found in the data at
+this peak. $2\theta$ is calculated at the $(x,y)$ 
+coordinate using the calibration parameters.
 
 \section{Handling Calibration Data}
 

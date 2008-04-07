@@ -1,4 +1,3 @@
-
 When analyzing diffraction data using this program,
 not all of the pixels in an image have to be used in
 the data analysis. In order to make the program
@@ -11,7 +10,7 @@ shot in figure~\ref{masking_page} of this tab.
 
 \section{Threshold Masking}
 
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
     \centering
     \includegraphics[scale=.75]{figures/masking_page.eps}
     \caption{A screen shot of the pixel masking tab. This
@@ -40,7 +39,7 @@ pixels below a certain value when doing diffraction
 analysis. The lowest value can be specified by the 
 \gui{Less Than Mask} input. 
 
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
     \centering
     \includegraphics[scale=.75]{figures/Threshold_Masking.eps}
     \caption{Here is an example of diffraction with a
@@ -54,7 +53,6 @@ analysis. The lowest value can be specified by the
     data analysis.}
     \label{Threshold_Masking}
 \end{SCfigure}
-
 
 When you apply a threshold mask, the pixels over this threshold 
 will be colored differently on the diffraction and cake image. 
@@ -79,7 +77,7 @@ average intensity.
 
 \section{Polygon Masking}
 
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
     \centering
     \includegraphics[scale=.75]{figures/Displayed_Polygon.eps}
     \caption{In this screen shot of a diffraction image, we
@@ -89,7 +87,6 @@ average intensity.
     can use multiple polygons.}
     \label{Displayed_Polygon}
 \end{SCfigure}
-
 
 Sometimes, large areas of a diffraction image are bad 
 and should not be used in any data analysis. For example, 
@@ -124,7 +121,7 @@ value of -4. When you perform an intensity integration,
 any of the masked pixels will simply be ignored when
 calculating average intensities.
 
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
     \centering
     \includegraphics[scale=.75]{figures/Adding_Polygon.eps}
     \caption{Here is a screen shot of the diffraction
@@ -162,8 +159,7 @@ simply unpush the \gui{Add Polygon} button and the
 polygon in progress will be removed and the regular
 bindings will take over.
 
-
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
     \centering
     \includegraphics[scale=.75]{figures/Removing_Polygon.eps}
     \caption{Here is a screen shot of the diffraction
@@ -177,7 +173,6 @@ bindings will take over.
     that will be deleted.}
     \label{Removing_Polygon}
 \end{SCfigure}
-
 
 If you want to remove a polygon that is already in
 the program, you can push the \gui{Remove Polygon}
@@ -241,5 +236,36 @@ As always, comment lines beginning with \# are
 ignored except when they are between coordinates
 in which case they also signify the division of
 separate polygons.
+
+Masking Caked Plots
+
+
+\section{Masking Caked Plots}
+
+\begin{figure}[htb]
+    \centering
+    \subfloat[A rectangular polygon mask in 
+    the middle of a diffraction image]{
+    \label{box_mask_diffraction}
+    \includegraphics[scale=.75]{figures/box_mask_diffraction_image.eps}}
+    \subfloat[The same rectangular mask as 
+    seen on the caked plot]{
+    \label{box_mask_cake}
+    \includegraphics[scale=.75]{figures/box_mask_cake_image.eps}}
+    \caption{An example of how a relatively simple
+    shape drawn on a diffraction image can show
+    up as a very complicated shape on a caked
+    plot. (a) is a diffraction image with a square 
+    mask and (b) is a cake of the same image with 
+    the same mask.}
+    \label{box_mask}
+\end{figure}
+
+Any polygon mask or threshold mask will also show 
+up on the caked plot whenever it should be shown
+on the diffraction image. Polygon can be distorted
+into much different shapes on the caked plot. 
+Figure~\ref{box_mask} shows an example of this.
+
 
 

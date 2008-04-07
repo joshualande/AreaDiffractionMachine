@@ -22,8 +22,8 @@ defined as an intensity plot of the diffraction
 image where the two axis are $Q$ and $\chi$.
 
 To calculate a cake plot, the program implements
-the following algorithm. The program has to somehow bin $Q$ and 
-$\chi$ space. The code itself can try to pick
+the following algorithm. The program has to somehow bin 
+$Q$ and $\chi$ space. The code itself can try to pick
 a range large enough to encompass all of the 
 pixels inside of the diffraction image. Alternately,
 the user can specify by hand the exact range that
@@ -100,11 +100,12 @@ that is being corrected.
 
 \section{Caking with the Program}
 
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
     \centering
     \includegraphics[scale=.75]{figures/caking_page.eps}
-    \caption{A screen shot of the caking tab to the program.
-    This is the tab where you can cake data.} 
+    \caption{A screen shot of the caking tab to 
+    the program.  This is the tab where you can 
+    cake data.} 
     \label{caking_page}
 \end{SCfigure}
 
@@ -123,7 +124,7 @@ with the \gui{Number of Q } and \gui{Number of Chi} inputs.
 Once this is done, you can push the \gui{Do Cake} button to 
 cake the data. 
 
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
     \centering
     \includegraphics[scale=.75]{figures/cake_data_window.eps}
     \caption{A screen shot of the cake data window for
@@ -164,8 +165,6 @@ After the display is resized, the number of bins will
 change correspondingly so that the next time you push
 \gui{AutoCake} it will make the cake window look sharp again.
 
-\section{Masking}
-
 \section{\texorpdfstring{Displaying $Q$ and $\Delta Q$ Lines}
     {Displaying Q and delta Q Lines}}
     \label{cakeQlinesandpeaks}
@@ -184,7 +183,7 @@ $Q$ lines displayed on a caked plot and
 figure~\ref{constant_dq_lines_on_cake_image} shows constant
 $\Delta Q$ lines displayed on a caked plot.
 
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
     \centering
     \includegraphics[scale=.75]{figures/constant_q_lines_on_cake_image.eps}
     \caption{A screen shot of the caked data window
@@ -192,7 +191,7 @@ $\Delta Q$ lines displayed on a caked plot.
     \label{constant_q_lines_on_cake_image}
 \end{SCfigure}
 
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
     \centering
     \includegraphics[scale=.75]{figures/constant_dq_lines_on_cake_image.eps}
     \caption{A screen shot of the caked data window
@@ -201,17 +200,9 @@ $\Delta Q$ lines displayed on a caked plot.
 \end{SCfigure}
 
 
-\section{Displaying Peaks}
+\section{Displaying Peaks}\label{displaying_peaks_cake}
 
-Any peaks that the program finds when performing
-a calibration can be displayed on top of the caked
-data. The peaks will be displayed as crosses.
-Figure~\ref{peaks_on_cake_image} shows peaks
-displayed on a caked plot. Peaks will be displayed on 
-the caked plot whenever they should be displayed on 
-the diffraction image. See section~\ref{displaying_peaks}.
-
-\begin{SCfigure}
+\begin{SCfigure}[1][htb]
     \centering
     \includegraphics[scale=.75]{figures/peaks_on_cake_image.eps}
     \caption{A screen shot of the caked data window
@@ -219,12 +210,20 @@ the diffraction image. See section~\ref{displaying_peaks}.
     \label{peaks_on_cake_image}
 \end{SCfigure}
 
+Any peaks that the program finds when performing
+a calibration can be displayed on top of the caked
+data. The peaks will be displayed as crosses.
+Figure~\ref{peaks_on_cake_image} shows peaks
+displayed on a caked plot. Peaks will be displayed on 
+the caked plot whenever they should be displayed on 
+the diffraction image. See section~\ref{displaying_peaks_diffraction}.
+
 Being able to display $Q$ lines and peaks can
 be very useful for checking if a calibration was 
 done properly. Figure~\ref{calibration_cake} shows
 why this is the case. 
 
-\begin{figure}
+\begin{figure}[htb]
     \centering
     \subfloat[A bad calibration]{
     \label{bad_calibration_cake_zoom_peaks}
@@ -365,6 +364,4 @@ that each line corresponds to a different $\chi$ bin and each of the
 values for a particular $Q$ bins is separated by a space. Just
 as the comment string explains, chi increased down and Q increases to 
 the right. 
-
-
 
