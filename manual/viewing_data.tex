@@ -1,5 +1,5 @@
 
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}
     \centering
     \includegraphics[scale=.75]{figures/calibration_page.eps}
     \caption{A screen shot of the calibration tab to the program.
@@ -22,7 +22,7 @@ use the file selector to pick the file that you want.
 Once the file is loaded, you will be presented with
 the window shown in figure~\ref{diffraction_data_window}
 
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}
     \centering
     \includegraphics[scale=.75]{figures/diffraction_data_window.eps}
     \caption{A screen shot of the diffraction data window for
@@ -110,15 +110,24 @@ the same format.
 
 \section{Saving the Diffraction Image}
 \index{Save}\index{ESRF Data Format}
-You can save the current diffraciton image that you have loaded 
+You can save the current diffraction image that you have loaded 
 as a popular image format. To save the image, you can go into
-the \gui{File} menubar and select the \gui{Save Image} option.
+the \gui{File} menu bar and select the \gui{Save Image} option.
 
-The formats currently allowed are jpg, gif, eps, pdf bmp, png, 
-tiff , and the ESRF data format edf.
+The formats currently allowed are \gui{jpg}, \gui{gif}, \gui{eps}, 
+\gui{pdf}, \gui{bmp}, \gui{png}, \gui{tiff}, and the ESRF data 
+format \gui{edf}.
 
-Because the program will pad any non-sqaure data when
+When you save out the image as a popular image format, it will 
+save out the image with whatever threshold masks, polygon 
+masks, $Q$ lines, $\Delta Q$ lines, and peaks that were displayed 
+over the data as it is displayed by the program. See 
+chapter~\ref{calibration} for a discussion of the $Q$ lines,
+$\Delta Q$ lines, and peaks. See chapter~\ref{pixel_masking}
+for a discussion of threshold masks and polygon masks.
+
+Because the program will pad any non-square data when
 it is loaded to make it square. The program will always save out 
-the images as squares. If this is undesriable, the saved images
+the images as squares. If this is undesirable, the saved images
 will need to be cropped using another program.
 

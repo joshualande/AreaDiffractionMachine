@@ -90,19 +90,28 @@ other peaks that would confuse the computer.
 With the $Q$ values specified along with $Q$ ranges, we can
 divided up any diffraction image several regions, where
 within each region we know there is a unique peak.
-(SHOWN AN EXAMPLE HERE).
+An example of this is shown in figure~\ref{divide_up_image}.
+
+\begin{SCfigure}
+    \centering
+    \includegraphics[scale=.75]{figures/constant_dq_lines_on_diffraction_image.eps}
+    \caption{A division of a diffraction image into
+    $Q$ ranges where each diffraction peak falls 
+    uniquely inside one $Q$ range.}
+    \label{divide_up_image}
+\end{SCfigure}
 
 \begin{SCfigure}
 \centering
 \input{figures/Fitting.tex}
 \caption{Here is a diagram of the peak finding algorithm. 
-The solid circualr black lines represent diffraction
+The solid circular black lines represent diffraction
 peaks on the image. The dotted lines represent the
 $Q$ ranges used to find the peaks. Note that the diffraction
 peaks are entirely within the ranges. Finally, the radial
 line represents the program picking a particular $\chi$
 value and looking for peaks inside of the $Q$ ranges.
-Finally, the gaussian peaks represent the program fitting
+Finally, the Gaussian peaks represent the program fitting
 a gausian to the intensity profile inside of each of the
 ranges.}
 \label{fitting}
@@ -331,8 +340,9 @@ the value, the less likely the program will be to find
 and use bad peaks but the more likely it will be to
 ignore valid good peaks.
 
-\section{Working With Wavelength}
-\label{workWavelength}
+\section{\texorpdfstring{Work in 
+    $\lambda$}{Work in Lambda}}
+    \label{workWavelength}
 
 Often times, one wishes to deal with the wavelength 
 of the incoming beam of light instead of the energy
@@ -366,7 +376,7 @@ all of the calibration parameters. For example,
 the energy of the beam used during the diffraction
 experiment might be already very well known already
 so there would be no reason to calibrate the energy.
-If you wish to fix any of the calibration paramters
+If you wish to fix any of the calibration parameters
 values so that it does not vary during a calibration
 fit, you can use the check boxes under the \gui{Fixed?}
 label to fix the parameter. When the corresponding
@@ -385,11 +395,11 @@ about the detector.
 
 After the program has been given a diffraction file,
 a list of the constant $Q$ lines, and some
-calibration parmeters, the program has a very
+calibration parameters, the program has a very
 useful feature where it can display on top of
 the image the diffraction pattern that should
 show up for the particular $Q$ lines and the
-particular calibration paramters.
+particular calibration parameters.
 
 The \gui{Draw Q Lines?} button on the 
 \gui{Calibration} page enables this.
@@ -400,29 +410,30 @@ the $Q$ lines drawn on it.
 \begin{SCfigure}
     \centering
     \includegraphics[scale=.75]{figures/constant_q_lines_on_diffraction_image.eps}
-    \caption{A diffraction image with constant the $Q$
-    lines displayed upon it.}
+    \caption{A diffraction image with constant the 
+    $Q$ lines displayed on it.}
     \label{constant_q_lines_on_diffraction_image}
 \end{SCfigure}
 
-Drawing these lines is acutally very easy. For
-each $Q$ value, the proram picks a lot of
+Drawing these lines is actually very easy. For
+each $Q$ value, the program picks a lot of
 $\chi$ values. We know that each of the $Q$, $\chi$
 values is in the constant $Q$ line so we can use
-the calibration paramters to convert them to $x$, $y$
-values and connect all the pixel coordiantes to 
+the calibration parameters to convert them to $x$, $y$
+values and connect all the pixel coordinates to 
 make the line.
 
 Constant $Q$ lines can also be drawn on top of the
 caked data. This is described in 
-section~\ref{cakeQlinesandpeaks}.
-
+section~\ref{cakeQlinesandpeaks}.  
 The color of the $Q$ lines can be changed using the
 \gui{Color} button next to the \gui{Draw Q Lines?} 
 button.
 
 \section{\texorpdfstring{Displaying Constant $\Delta Q$ 
         Lines}{Displaying Constant delta Q Lines}}
+        \label{displayconstdQlines}
+        
 
 The program needs in addition to the $Q$ values
 a range in $Q$ to find the peaks. See 
@@ -430,7 +441,7 @@ section~\ref{fitting_sec} for more details. Because
 the program has this range, it can also display the
 $\Delta Q$ range on top of the image.
 This can be done with the \gui{Draw dQ Lines?} button
-adn the color of these lines can be changed with the
+and the color of these lines can be changed with the
 corresponding \gui{Color} button. 
 Figure~\ref{constant_dq_lines_on_diffraction_image}
 shows what the diffraction image looks like with
@@ -439,8 +450,8 @@ the $\Delta Q$ lines drawn on it.
 \begin{SCfigure}
     \centering
     \includegraphics[scale=.75]{figures/constant_dq_lines_on_diffraction_image.eps}
-    \caption{A diffraction image with the constant $\Delta Q$
-    lines displayed upon it.}
+    \caption{A diffraction image with the constant 
+    $\Delta Q$ lines displayed upon it.}
     \label{constant_dq_lines_on_diffraction_image}
 \end{SCfigure}
 
@@ -449,27 +460,70 @@ Constant $\Delta Q$
 lines can also be drawn on top of the caked data. This 
 is described in section~\ref{cakeQlinesandpeaks}.
 
-\section{Displaying Peaks}
+\section{Displaying Peaks}\label{displaying_peaks}
 
-ADD IN MORE HERE ON DISPLAYING PEAKS AND FIGURE~\ref{peaks_on_diffraction_image}
+Section~\ref{fitting_sec} describes how the program has to find a bunch
+of peaks on the diffraction image in order to perform the calibration.
+After the program has found all the peaks, it can conveniently display
+them on top of the diffraction image. This can be done with the
+\gui{Draw Peaks?}. The peaks will be displayed as crosses and the color
+of the peaks can be changed with the corresponding \gui{Color} button.
+Figure~\ref{peaks_on_diffraction_image} shows what the diffraction image
+looks like with the peaks drawn on it. This feature is useful because 
+you can use it to see if the program is actually finding real peaks
+corresponding to diffraction maxima. If many of the peaks that the program 
+finds do not correspond to diffraction maxima, it is less likely that 
+the program would do a good job calibrating the diffraction image.
 
 \begin{SCfigure}
     \centering
     \includegraphics[scale=.75]{figures/peaks_on_diffraction_image.eps}
     \caption{A diffraction image with the peaks displayed upon it.}
-    \labelpeaks_on_diffraction_image}{
+    \label{peaks_on_diffraction_image}
 \end{SCfigure}
-
 
 Peaks can also be drawn on top of the caked data. This 
 is described in section~\ref{cakeQlinesandpeaks}.
 
 \section{Masking Peaks}
 
-THIS FEATURE IS STILL IN THE WORKS...
+THIS FEATURE IS STILL IN THE WORKS AND IS INTENDED
+TO BE INCLUDED IN VERSION 2.0. 
 
 \section{Saving the Peak List}
 
+The program has a feature where it can generate
+a list of diffraction peaks that it finds the 
+diffraction image (just like when it is calibrating)
+but then instead of calibrating the image, the program
+saves out all of the peaks to a data file. This can
+be useful, for example, if you need a list of pixel 
+coordiantes where diffraction peaks are for some further
+data analysis. The \gui{Make/Save Peak List} button can
+be used to save out the peak list. Just as in calibrating,
+the program requires in advance for a diffraction file to
+be loaded, for a standard $Q$ file to be loaded, and for
+a guess at the calibration parameters to be in the inputs.
+
+A typical peak list file looks like
+\begin{lstlisting}[caption={A Peak List File,basicstyle=\ttfamily\tiny}]
+# A list of peaks found in the diffraction image.
+# Calculated on Sun Apr  6 18:06:56 2008
+# Calibration data used to find peaks:
+#   x center:    1725.0000000 pixels
+#   y center:    1725.0000000 pixels
+#   distance:     122.5040000 mm
+#   energy:     12714.2388941 eV
+#   alpha:          0.0000000 degrees
+#   beta:           0.0000000 degrees
+#   rotation:       0.0000000 degrees
+#   pixel length:     100.0000000 microns
+#   pixel height:     100.0000000 microns
+#	x	y	RealQ	FitQ	chi	width	intensity	2theta
+2016.1 1724.441015	1.511544	1.500079	0.110000	0.007507	5564.325148	13.369599
+2016.6 1719.335890	1.511544	1.502931	1.112479	0.009324	1662.725266	13.395136
+\end{lstlisting}
+ADD MORE HERE
 
 \section{Handling Calibration Data}
 
@@ -573,5 +627,15 @@ $D$ values if the first line is instead "D dD" or "D delta D"
 The values should be given instead in $D$ space and the values
 will be converted using~\ref{DtermsQ}.
 
-\section{\texorpdfstring{The \gui{Get From Header} Input}{The Get From Header Input}}
+\section{\texorpdfstring{The \gui{Get From Header?} Input}
+    {The ''Get From Header Input''}}
+
+Often times guesses at the experimental parameters are 
+stored in the header data inside of the diffraction image. 
+The program can try to find these header calibration parameters
+and put them into the calibration parameters inputs in the 
+program. This can be done with the \gui{Get From Header} 
+button.
+
+
 

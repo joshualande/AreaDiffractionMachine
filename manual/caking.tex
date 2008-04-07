@@ -16,7 +16,7 @@ detector by the tangent function.
 Consequently, although the relationship is not 
 strictly linear, $Q$ will increase as $r$ increases
 and therefore $Q$ is an analogous quantity to $r$.
-Also, $\chi$ directly meausres teh angle radially
+Also, $\chi$ corresponds to the angle radially
 around the center of the image. So a cake is really
 defined as an intensity plot of the diffraction 
 image where the two axis are $Q$ and $\chi$.
@@ -24,7 +24,7 @@ image where the two axis are $Q$ and $\chi$.
 To calculate a cake plot, the program implements
 the following algorithm. The program has to somehow bin $Q$ and 
 $\chi$ space. The code itself can try to pick
-a range large enough to encompase all of the 
+a range large enough to encompass all of the 
 pixels inside of the diffraction image. Alternately,
 the user can specify by hand the exact range that
 they want to have caked. But once the bins are
@@ -35,8 +35,8 @@ each bin has a $Q$ and $\chi$ range, but we will
 take the middle of each of these ranges to be the
 particular $Q$ and $\chi$ value corresponding to the
 bin.} we can calculate the corresponding $(x''',y''')$
-pixel coordinate for this bin using 
-(USE EQUATION FOR INVERTED EQUATION). We can then
+pixel coordinate for this bin using~\ref{invertx} and 
+\ref{inverty}. We can then
 look inside the loaded diffraction data for
 this particular intensity value corresponding
 to the $(x''',y''')$ value. This intensity then
@@ -49,28 +49,28 @@ In principle, the caking algorithm could be implemented
 differently. The way it is coded up is to loop over
 all the bins. But one could equally well have looped over
 all the pixels of diffraction data. Each pixel has a
-particular $(x''',y''')$ coordiante. We could use
+particular $(x''',y''')$ coordinate. We could use
 equations~\ref{ytermsydoubleprime} and
 equation~\ref{xtermsxdoubleprime} to calculate the $Q$
-and $\chi$ value corresponding to this coordiante. We
+and $\chi$ value corresponding to this coordinate. We
 could then add the intensity value corresponding to the
 $(x''',y''')$ value into the bin which contains the
 $Q$ and $\chi$ value. After doing this for all the pixels
 in the image, we could then average all the cake bins.
 This method would be more accurate because each of the 
-pixels in the diffraction image would be used in the analyis
+pixels in the diffraction image would be used in the analysis
 where as they are not necessarily all used above. The major
 downside to this implementation is that it does not 
 necessarily put an intensity value into all the bins, where 
 as the method above does. This code be overcome by applying
-the above algoirthm at the end only to the bins for which
+the above algorithm at the end only to the bins for which
 nothing was put into. But the biggest downside of this 
 algorithm is that it is substantially slower because there
 are usually significantly more pixels in the diffraction
 image then bins used in a cake. For example, mar3450 data
 holds $3450\times 3450$ pixels while cakes are typically set
 to have a resolution of $600\times 600$. Although
-this alternateive algorithm was not implemented in the code,
+this alternative algorithm was not implemented in the code,
 it would in principle be easy to code up and it might
 be more desirable in some situations.
 
@@ -100,7 +100,7 @@ that is being corrected.
 
 \section{Caking with the Program}
 
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}
     \centering
     \includegraphics[scale=.75]{figures/caking_page.eps}
     \caption{A screen shot of the caking tab to the program.
@@ -123,7 +123,7 @@ with the \gui{Number of Q } and \gui{Number of Chi} inputs.
 Once this is done, you can push the \gui{Do Cake} button to 
 cake the data. 
 
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}
     \centering
     \includegraphics[scale=.75]{figures/cake_data_window.eps}
     \caption{A screen shot of the cake data window for
@@ -133,10 +133,10 @@ cake the data.
     \label{cake_data_window}
 \end{SCfigure}
 
-After the caked data is created, the progarm will open up a cake data
+After the caked data is created, the program will open up a cake data
 window which displays the cake data interactively.
 The cake data window is just like the diffraction
-data window so everythign said in Chapter~\ref{viewing_data} 
+data window so everything said in Chapter~\ref{viewing_data} 
 carries over. The only real difference is that whenever
 you zoom into the caked data, the program will take the user
 selected zoom range and put it into the range inputs on
@@ -166,52 +166,63 @@ change correspondingly so that the next time you push
 
 \section{Masking}
 
-\section{\texorpdfstring{Displaying $Q$ Lines and Peaks}
-    {Displaying Q Lines and Peaks}}
+\section{\texorpdfstring{Displaying $Q$ and $\Delta Q$ Lines}
+    {Displaying Q and delta Q Lines}}
     \label{cakeQlinesandpeaks}
 
 If a $Q$ list has been loaded into the program, 
-$Q$ and $\Delta Q$ lines can be displayed on top
-of the cake data. Remember that $Q$ lines on the
-caked plot are just straight lines. 
-
-ADD MORE HERE ABOUT THE FIGURES~\ref{constant_q_lines_on_cake_image}
-AND~\ref{constant_dq_lines_on_cake_image}
+constant $Q$ lines or $\Delta Q$ lines can be 
+displayed on top of the cake data. Remember that 
+$Q$ lines on the caked plot are just straight lines. 
+The program will display constant $Q$ lines or 
+$\Delta Q$ lines on top of the caked plot whenever they 
+should be displayed on the diffraction image. See 
+section~\ref{displayconstQlines} and 
+section~\ref{displayconstdQlines}.
+Figure~\ref{constant_q_lines_on_cake_image} shows constant
+$Q$ lines displayed on a caked plot and 
+figure~\ref{constant_dq_lines_on_cake_image} shows constant
+$\Delta Q$ lines displayed on a caked plot.
 
 \begin{SCfigure}
     \centering
     \includegraphics[scale=.75]{figures/constant_q_lines_on_cake_image.eps}
-    \caption{}
+    \caption{A screen shot of the caked data window
+    with constant $Q$ lines drawn on top of it.}
     \label{constant_q_lines_on_cake_image}
 \end{SCfigure}
 
 \begin{SCfigure}
     \centering
     \includegraphics[scale=.75]{figures/constant_dq_lines_on_cake_image.eps}
-    \caption{}
+    \caption{A screen shot of the caked data window
+    with constant $\Delta Q$ lines drawn on top of it.}
     \label{constant_dq_lines_on_cake_image}
 \end{SCfigure}
-
 
 
 \section{Displaying Peaks}
 
 Any peaks that the program finds when performing
 a calibration can be displayed on top of the caked
-data. 
-
-ADD IN MORE HERE ABOUT FIGURE~\ref{peaks_on_cake_image}.
+data. The peaks will be displayed as crosses.
+Figure~\ref{peaks_on_cake_image} shows peaks
+displayed on a caked plot. Peaks will be displayed on 
+the caked plot whenever they should be displayed on 
+the diffraction image. See section~\ref{displaying_peaks}.
 
 \begin{SCfigure}
     \centering
     \includegraphics[scale=.75]{figures/peaks_on_cake_image.eps}
-    \caption{}
+    \caption{A screen shot of the caked data window
+    with diffraction peaks drawn on top of it.}
     \label{peaks_on_cake_image}
 \end{SCfigure}
 
-This can actually be very useful for checking if
-a calibration was done properly.
-figure~\ref{calibration_cake}. 
+Being able to display $Q$ lines and peaks can
+be very useful for checking if a calibration was 
+done properly. Figure~\ref{calibration_cake} shows
+why this is the case. 
 
 \begin{figure}
     \centering
@@ -237,7 +248,7 @@ figure~\ref{calibration_cake}.
 \section{Polarization Correction}
 The program can apply a polarization correction to the
 cake. To apply a polarization correction, you have
-to check the \gui{Do Polarization Correction?} checkbox
+to check the \gui{Do Polarization Correction?} check box
 and then input the value into the \gui{P?} input.
 
 PUT MORE DISCUSSION HERE
@@ -256,7 +267,8 @@ $2\theta$ as its axis.
 \section{Saving Cake Images}
 
 You can save caked
-data out as a jpg, gif, eps, pdf, bmp, png, or tiff.
+data out as a \gui{jpg}, \gui{gif}, \gui{eps}, \gui{pdf}, 
+\gui{bmp}, \gui{png}, or \gui{tiff}.
 When you save out the image as a popular image format, it
 will save out the cake image with whatever threshold masks,
 polygon masks, $Q$ lines, $\Delta Q$ lines, and peaks that
@@ -330,7 +342,7 @@ with special values. Any bins that are outside of the diffraction
 image in cake space are saved as -1. Any bins that were masked
 because they were too large are saved as -2. Any bins that
 were masked because they were too small are saved as -3. Any bins 
-that were inside of a pixel maks are saved as -4. This is all
+that were inside of a pixel mask are saved as -4. This is all
 displayed in the comment string. The program tries to be smart about
 the comment string. If no polygon masks were used, the comment string
 instead contains lines like

@@ -1,12 +1,33 @@
+This program is almost fully automatable with macros. The 
+purpose of macros are to allow you to do data analysis with
+the program as quickly as possible. The program is capable of
+recording macros and running macros. And the macro file format
+is simple enough that it is very easy write them yourself.
+
 \section{Record Macros}
 
+First off, if you are curious what a macro file would look
+like that does a particular set of steps, by far the easiest
+thing to do is record a macro where you perform those steps
+in the analysis. You can then view the corresponding macro file 
+that was saved automatically by the program. To record a macro,
+select \gui{Start Record Macro} in the \gui{Macro} menu 
+bar. Then do the particular steps in question and select
+\gui{Stop Record Macro} in the \gui{Macro} menu bar.
+The program will then ask for a place to save the macro file.
+
 \section{Run Macros}
+
+You can use select \gui{Run Saved Macro} in the \gui{Macro}
+menu to run a macro saved to a file. The program will 
+run all the steps in the macro file and then return control
+of the program.
 
 \section{The Macro File Format}
 
 A macro file contains many commands which tell the program
 how to run. Each command in the GUI gets its own line. 
-The syntax for a command is pretty straightforeward.
+The syntax for a command is pretty straightforward.
 If you want to do
 something in the program, you find the text on top of
 or near the thing and then the macro command is exactly
@@ -18,10 +39,10 @@ calibration data, the macro line is \macroline{Do Fit}.
 Things get more interesting when what you want to do
 requires doing more then just pushing a button. For 
 example, if you want to deselect the \gui{Draw Q Data?} 
-checkbox, your macro needs to specify that you deselect
+check box, your macro needs to specify that you deselect
 this option instead of selecting it. To dos this, the 
 first part of the macro command is the name of the
-checkbox \macroline{Cake} and the next line tells
+check box \macroline{Cake} and the next line tells
 you what you want to do with it. Your macro would
 contain these lines:
 \begin{lstlisting}[caption={'Draw the $Q$ Lines on the Display'}]
@@ -79,7 +100,7 @@ Data File:
 Get From Header
 # ...
 \end{lstlisting}
-But macros files also allow for an eaiser way
+But macros files also allow for an easier way
 to loop over many files and perform the same
 analysis on all of them.  
 To loop over multiple diffraction images at once,
@@ -126,7 +147,7 @@ files in that directory and include them in the list.
 For example, if the folder \macroline{C:/data/} contains
 only the file \macroline{first.mar3450} and
 \macroline{second.mar3450}, an equivalent way of looping
-over these files would be to issue the commadn
+over these files would be to issue the command
 \begin{lstlisting}[caption={'Load the Diffraction Data'}]
 Data File:
     C:/data/
@@ -186,8 +207,8 @@ forward. We introduce a new macro command named
 \macroline{Multiple Data Files} which signifies that
 many files should be loaded. To load in multiple files
 and have their intensities added, this command must be 
-followed by a list of filenaems enclosed within
-[ and ] brackets. Keeping with the same exmaple above,
+followed by a list of filenames enclosed within
+[ and ] brackets. Keeping with the same example above,
 we could load in \macroline{C:/data/first.mar3450} and
 \macroline{C:/data/second.mar3450} and have their
 intensities added using the command
@@ -250,10 +271,10 @@ to avoid ambiguity.
 \section{The FOLDERPATH and FOLDERNAME commands}
 
 To facilitate writing macros that load in and 
-add together several diffraction images, the progarm
+add together several diffraction images, the program
 introduces two new macro commands. The first command is
 \macroline{FOLDERNAME} and will always be replaced
-by the name of the folder contaning the current
+by the name of the folder containing the current
 diffraction file (or files). Since the macro insists 
 that all files are loaded form the same Folder, this
 command is unambiguous. Finally, you can use the 
@@ -274,7 +295,7 @@ folder with an interesting name and then name
 the output files something like 
 \macroline{FOLDERNAME\_int.dat} so that they are all
 given useful names. This is nice because it can, without
-loss of generality, be incoprerated into a loop. Finally,
+loss of generality, be incorporated into a loop. Finally,
 the \macroline{FOLDERPATH} command is useful because you
 can use it to output files one directory up from where all
 the diffraction data is stored.
@@ -377,7 +398,7 @@ and exactly what they do.
 \hline 
     \macrolinenoquotes{Work In eV}&None&Change the state of 
         the program so that the energy calibration parameter 
-        is inputted in units of electronvolts. This is called
+        is inputted in units of electron volts. This is called
         the $eV$ mode of the program. \\
     \macrolinenoquotes{Work in Lambda}&None&Change the state of 
         the program so that the energy calibration parameter

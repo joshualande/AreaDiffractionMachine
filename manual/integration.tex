@@ -19,7 +19,7 @@ Add its intensity to the bin if it should be
 in the bin based upon its value of $Q$, $2\theta$, or 
 $\chi$. Remember that we need to use the calibration
 values to calculate the corresponding $Q$, $2\theta$, and 
-$\chi$ value using equation~\ref{ytermsydoubleprime}
+$\chi$ value using equations~\ref{ytermsydoubleprime}
 \ref{xtermsxdoubleprime}, \ref{chitermsyx}, 
 \ref{2thetatermsr}, and \ref{qterms2theta}.
 After going through all the pixel, the bins then get averaged 
@@ -73,12 +73,13 @@ bins in $Q$ space can be specified with the
 To perform a $Q$ integration, you have to push
 the \gui{Integrate} button on the left.
 
-\begin{SCfigure}[1][htb]
-\centering
-\includegraphics[scale=.75]{figures/integration_page.eps}
-\caption{A screen shot of the integration tab to the 
-    program. This is the tab where you can integrate data.} 
-\label{integration_page}
+\begin{SCfigure}
+    \centering
+    \includegraphics[scale=.75]{figures/integration_page.eps}
+    \caption{A screen shot of the integration tab 
+    to the program. This is the tab where you can 
+    integrate data.} 
+    \label{integration_page}
 \end{SCfigure}
 
 To perform a $\chi$ integration, you can use the inputs
@@ -93,20 +94,20 @@ $\chi$ integration, you have to push the
 
 \section{The Integration Window}
 
-\begin{SCfigure}[1][htb]
-\centering
-\includegraphics[scale=.75]{figures/integration_window_q.eps}
-\caption{A screen shot of the integration window that
+\begin{SCfigure}
+    \centering
+    \includegraphics[scale=.75]{figures/integration_window_q.eps}
+    \caption{A screen shot of the integration window that
     opens up after you perform an intensity integration.} 
-\label{integration_window_q}
+    \label{integration_window_q}
 \end{SCfigure}
 
-\begin{SCfigure}[1][htb]
-\centering
-\includegraphics[scale=.75]{figures/integration_window_chi.eps}
-\caption{A screen shot of the integration window that
+\begin{SCfigure}
+    \centering
+    \includegraphics[scale=.75]{figures/integration_window_chi.eps}
+    \caption{A screen shot of the integration window that
     opens up after you perform an intensity integration.} 
-\label{integration_window_chi}
+    \label{integration_window_chi}
 \end{SCfigure}
 
 After you push the integrate button, a line plot of the 
@@ -223,7 +224,7 @@ in your integration any values too large or too
 small, you can use a threshold mask. If you
 don't want to mask any values inside of a certain
 region, you can use a polygon mask. 
-Refer to Chapter \input{masking} for information 
+Refer to Chapter \ref{pixel_masking} for information 
 about how to apply a pixel mask.
 
 \section{Saving Integrated Data}

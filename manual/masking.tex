@@ -9,21 +9,20 @@ a mask to a diffraction image by going to the
 \gui{Masking} tab of the GUI. There is a screen
 shot in figure~\ref{masking_page} of this tab.
 
-
 \section{Threshold Masking}
 
-\begin{SCfigure}[1][htb]
-\centering
-\includegraphics[scale=.75]{figures/masking_page.eps}
-\caption{The page of the GUI for pixel masking. This 
-page allows for threshold masking and polygon masking. 
-Threshold masking can be used to have the program 
-ignore all pixels with intensity above or below
-a certain value when doing data analysis. 
-Polygon masking can be used to have the programme
-ignore all pixels in certain areas of the image
-when doing data analysis.} 
-\label{masking_page}
+\begin{SCfigure}
+    \centering
+    \includegraphics[scale=.75]{figures/masking_page.eps}
+    \caption{A screen shot of the pixel masking tab. This
+    tab allows for threshold masking and polygon masking. 
+    Threshold masking can be used to have the program 
+    ignore all pixels with intensity above or below
+    a certain value when doing data analysis. 
+    Polygon masking can be used to have the programme
+    ignore all pixels in certain areas of the image
+    when doing data analysis.} 
+    \label{masking_page}
 \end{SCfigure}
 
 The top half of the \gui{Masking} tab is devoted to 
@@ -41,19 +40,19 @@ pixels below a certain value when doing diffraction
 analysis. The lowest value can be specified by the 
 \gui{Less Than Mask} input. 
 
-\begin{SCfigure}[1][htb]
-\centering
-\includegraphics[scale=.75]{figures/Threshold_Masking.eps}
-\caption{Here is an example of diffraction with a
-greater than mask and less than mask applied.
-All pixels in this image with intensity greater than 5000 
-have been colored green. All pixels in this image with 
-intensity less than 30 have been colored red. Applying
-an intensity mask can be a useful way to see if a detector's
-pixels have been overloaded and it can also be used to
-ensure that no overloaded pixels are used in subsequent
-data analysis.}
-\label{Threshold_Masking}
+\begin{SCfigure}
+    \centering
+    \includegraphics[scale=.75]{figures/Threshold_Masking.eps}
+    \caption{Here is an example of diffraction with a
+    greater than mask and less than mask applied.
+    All pixels in this image with intensity greater than 5000 
+    have been colored green. All pixels in this image with 
+    intensity less than 30 have been colored red. Applying
+    an intensity mask can be a useful way to see if a detector's
+    pixels have been overloaded and it can also be used to
+    ensure that no overloaded pixels are used in subsequent
+    data analysis.}
+    \label{Threshold_Masking}
 \end{SCfigure}
 
 
@@ -80,15 +79,15 @@ average intensity.
 
 \section{Polygon Masking}
 
-\begin{SCfigure}[1][htb]
-\centering
-\includegraphics[scale=.75]{figures/Displayed_Polygon.eps}
-\caption{In this screen shot of a diffraction image, we
-see two polygon masks that have been added to the
-image. One of them is blocking the beam stop and
-the other is just there for show. Note that this program 
-can use multiple polygons.}
-\label{Displayed_Polygon}
+\begin{SCfigure}
+    \centering
+    \includegraphics[scale=.75]{figures/Displayed_Polygon.eps}
+    \caption{In this screen shot of a diffraction image, we
+    see two polygon masks that have been added to the
+    image. One of them is blocking the beam stop and
+    the other is just there for show. Note that this program 
+    can use multiple polygons.}
+    \label{Displayed_Polygon}
 \end{SCfigure}
 
 
@@ -125,16 +124,16 @@ value of -4. When you perform an intensity integration,
 any of the masked pixels will simply be ignored when
 calculating average intensities.
 
-\begin{SCfigure}[1][htb]
-\centering
-\includegraphics[scale=.75]{figures/Adding_Polygon.eps}
-\caption{Here is a screen shot of the diffraction
-image where the user is adding a new polygon 
-mask that will be added into the program.
-This mask will completely cover up the beam stop
-and ensure that those values are not later used
-when performing an intensity integration.}
-\label{Adding_Polygon}
+\begin{SCfigure}
+    \centering
+    \includegraphics[scale=.75]{figures/Adding_Polygon.eps}
+    \caption{Here is a screen shot of the diffraction
+    image where the user is adding a new polygon 
+    mask that will be added into the program.
+    This mask will completely cover up the beam stop
+    and ensure that those values are not later used
+    when performing an intensity integration.}
+    \label{Adding_Polygon}
 \end{SCfigure}
 
 To add a polygon mask to the image, you have to push
@@ -164,19 +163,19 @@ polygon in progress will be removed and the regular
 bindings will take over.
 
 
-\begin{SCfigure}[1][htb]
-\centering
-\includegraphics[scale=.75]{figures/Removing_Polygon.eps}
-\caption{Here is a screen shot of the diffraction
-image where the user is in the process of removing
-a polygon. To remove a polygon, you have to push the
-\gui{Remove Polygon} button and then click on the
-polygon in the diffraction image that you want to
-remove. When you mouse over a polygon,
-the program will display a border around it so that
-you know that that particular polygon is the one
-that will be deleted.}
-\label{Removing_Polygon}
+\begin{SCfigure}
+    \centering
+    \includegraphics[scale=.75]{figures/Removing_Polygon.eps}
+    \caption{Here is a screen shot of the diffraction
+    image where the user is in the process of removing
+    a polygon. To remove a polygon, you have to push the
+    \gui{Remove Polygon} button and then click on the
+    polygon in the diffraction image that you want to
+    remove. When you mouse over a polygon,
+    the program will display a border around it so that
+    you know that that particular polygon is the one
+    that will be deleted.}
+    \label{Removing_Polygon}
 \end{SCfigure}
 
 

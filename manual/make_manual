@@ -17,6 +17,17 @@ bibtex AreaDiffractionMachineManual
 makeindex AreaDiffractionMachineManual
 latex AreaDiffractionMachineManual
 latex AreaDiffractionMachineManual
+echo 
+echo 
+echo 
+echo 
+echo 
+echo 
+echo 
+echo 
+echo 
+echo 
+latex AreaDiffractionMachineManual
 dvips -t letter -o AreaDiffractionMachineManual.ps AreaDiffractionMachineManual.dvi
 # This prepress option will make the program
 # create images that look less compressed
