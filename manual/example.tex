@@ -1,50 +1,48 @@
-In this section, I will present a pedagogically interesting 
-example which demonstrates several of the programs features. 
-The purpose of this chapter is neither to be comprehensive
-nor to be particularly detailed. It should instead give a 
-sense of the type of analysis that can easily be done with 
-this program and motivate the rest of the manual. 
-further details and information on any of 
-the things of below can be found to the appropriate sections 
-of the manual.
+This section will present a pedagogically interesting 
+example which demonstrates several of the programs important
+features.  The purpose of this chapter is neither to be 
+comprehensive nor to be particularly detailed. It will instead 
+give a sense of the type of analysis that can be done easily with 
+this program. It will motivate the rest of the manual. further details 
+and information on any of the things described below can be found in 
+the appropriate sections of the manual.
 
 David, a user of the program, was studying iron thin films 
 using powder diffraction. He was particularly interested in 
 measuring the shifts in diffraction peaks of a sample. To 
-realize this experimentally, he used a diffraction machine 
-to capture the image of the standard calibration crystal 
-Lanthanum Hexaboride (LaB6). Without changing the experimental 
-parameters, he then imaged many samples for which they wanted 
-to measure a shift.
+realize this experimentally, he capture the image of the 
+standard calibration crystal Lanthanum Hexaboride (LaB6). 
+Without changing the experimental parameters, he then imaged 
+many samples for which he wanted to measure the shift.
 
-I will describe the steps that would be needed to do this
-analysis. First, we will calibrate the diffraction detector.
+The steps that are needed to do this analysis will be
+described. First, we will calibrate the diffraction detector.
 This is to say that we want to determine the precise 
 experimental parameters that characterized the diffraction
 machine when the images were captured (for example, the distance
 between sample and detector, the energy of the x-rays, etc). Since 
-the image of the calibration crystal was taken at the sample
+the image of the standard calibration crystal was taken at the same
 time as the images of interest, the calibration parameters inferred
-from the standard crystal can be used in the analysis of the
-rest of the crystal.
+from the standard crystal can be used to analyze the
+rest of data.
 
-To perform this calibration, we first opened up the Area 
-Diffraction Machine. Figure~\ref{calibration_page_example} shows what we
-are first presented with.
-
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}[1][hbtp]
     \centering
     \includegraphics[scale=.75]{figures/calibration_page.eps}
     \caption{The calibration tab.}
     \label{calibration_page_example}
 \end{SCfigure}
 
+To perform this calibration, we first opened up the Area 
+Diffraction Machine. Figure~\ref{calibration_page_example} shows what we
+are first presented with.
+
 From the \gui{Data File} input, we load into the program the LaB6 
-sample file. Once the file is loaded in, a new window opens up 
+file. Once the file is loaded in, a new window opens up 
 which shows the diffraction data. This window is shown in 
 figure~\ref{diffraction_data_window_example}.
 
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}[1][hbtp]
     \centering
     \includegraphics[scale=.75]{figures/diffraction_data_window_example.eps}
     \caption{The diffraction data window.}
@@ -59,7 +57,7 @@ into the \gui{calibration} menu, into the \gui{Standard Q} menu,
 and then selected Lanthanum Hexaboride. This is shown
 in figure~\ref{standard_q_example}.
 
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}[1][hbtp]
     \centering
     \includegraphics[scale=.75]{figures/standard_q.eps}
     \caption{Loading a standard $Q$ file.}
@@ -88,7 +86,7 @@ detector (for the given calibration parameters and $Q$
 values). Figure~\ref{bad_calibration_diffraction_image}
 shows what the program displays for our example.
 
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}[1][hbtp]
     \centering
     \includegraphics[scale=.75]{figures/bad_calibration_diffraction_image.eps}
     \caption{The diffraction image with constant the $Q$
@@ -111,7 +109,7 @@ the caked data will show up as many vertical lines.
 We can cake the data by going to the cake tab. This
 tab is shown in figure~\ref{cake_page_example}.
 
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}[1][hbtp]
     \centering
     \includegraphics[scale=.75]{figures/caking_page.eps}
     \caption{The calibration tab.}
@@ -123,7 +121,7 @@ When we do so, a new cake window opens up.
 Figure~\ref{bad_calibration_cake} shows what the 
 program displays for our example.
 
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}[1][hbtp]
     \centering
     \includegraphics[scale=.75]{figures/bad_calibration_cake.eps}
     \caption{A caked plot done with the calibration parameters
@@ -142,7 +140,7 @@ line we find the difference to be much more obvious.
 A zoomed in range is shown in 
 figure~\ref{bad_calibration_cake_zoom}.
 
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}[1][hbtp]
     \centering
     \includegraphics[scale=.75]{figures/bad_calibration_cake_zoom.eps}
     \caption{A zoom in of the cake shown in 
@@ -162,7 +160,7 @@ so that they are entirely over the diffraction
 pattern. This is shown in 
 figure~\ref{good_calibration_diffraction_image}.
 
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}[1][hbtp]
     \centering
     \includegraphics[scale=.75]{figures/good_calibration_diffraction_image.eps}
     \caption{The diffraction window after being calibrated. The
@@ -175,7 +173,7 @@ The diffraction peaks on the caked image become much straigher.
 The caked window after calibraiton is shown in 
 figure~\ref{good_calibration_cake}.
 
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}[1][hbtp]
     \centering
     \includegraphics[scale=.75]{figures/good_calibration_cake.eps}
     \caption{The cake window after calibration.  The lines 
@@ -188,7 +186,7 @@ They look good even when zoomed in. A corresponding zoom in of
 the caked window in shown in 
 figure~\ref{good_calibration_cake_zoom}.
 
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}[1][hbtp]
     \centering
     \includegraphics[scale=.75]{figures/good_calibration_cake_zoom.eps}
     \caption{A zoomed in part of figure~\ref{good_calibration_cake}. 
@@ -213,31 +211,77 @@ rotation	-41.523477	0
 pixelLength	100.000000
 pixelHeight	100.000000
 \end{lstlisting}
-Now, we are going to want to use these calibration
-parameters to perform an intensity integration of the
-rest of our data. We can use the intensity
+
+\begin{SCfigure}[1][hbtp]
+    \centering
+    \includegraphics[scale=.75]{figures/masking_page.eps}
+    \caption{A screen shot of the pixel masking tab.}
+    \label{masking_page_example}
+\end{SCfigure}
+
+As can be seen in figure~\ref{diffraction_data_window_example},
+there is a beam stop on the left side of the image which is
+obstrucing part of the image. We know that none of the pixels
+blocked by the beam stop contain any interesting information
+so we are going to want to tell the program to ignore any pixels
+blocked by the mask. We can do so with a polygon mask. All
+polygon masking is done on the \gui{masking} tab. A screenshot
+of this tab is shown in figure~\ref{masking_page_example}.
+We want to add a rectangular polygon mask on top of the beam
+stop in the image. To do so, we push the \gui{Add Mask} button.
+We then move to the diffraction image and draw the beamstop
+on the image by left clicking nodes on the screen. We add the
+final node by right clicking. After having drawn the polygon mask, 
+our diffraction image is shown in figure~\ref{masked_beam_stop}.
+
+\begin{SCfigure}[1][hbtp]
+    \centering
+    \includegraphics[scale=.75]{figures/masked_beam_stop.eps}
+    \caption{}
+    \label{masked_beam_stop}
+\end{SCfigure}
+
+Once we decide we are happy with our polygon mask, we can
+save it to a file using the \gui{Save Mask} button.
+The file gets saved out as
+\begin{lstlisting}[caption={'beam_stop_mask.dat'}]
+# Polygon(s) drawn on Mon Apr 14 00:33:12 2008
+25.6749379653	1634.63771712
+42.7915632754	1814.36228288
+1959.85359801	1857.15384615
+1959.85359801	1626.07940447
+\end{lstlisting}
+We can then load in this mask when we do the rest of
+our analysis. The mask will make sure that none of the
+the pixels within the beam stop are used for any subsequent
+analysis.
+
+Now, we are going to want to perform an intensity integration 
+of the rest of our data. We can use the intensity
 integrate data to look for peaks in the data.
 The steps for doing the rest of
 this analysis are as follows. Load in particular file we
 are interested in. Load in these calibration parameters
-using the \gui{Load From File} button on the \gui{Calibraion}
+using the \gui{Load From File} button on the \gui{Calibration}
 tab.\footnote{If you just did the calibration, the 
 parameters should already be in the inputs. The point is
 just that you could load the parameters into the program
 if you were, say, to open the program at some later point
-in time.}. Withthese values in, we can perform a $Q$
-integration by going to the \gui{Integrate} tab.
-The integration tab is shown in 
+in time.}. Next, we can load in our previously recorded
+beam stop mask using the \gui{Load Mask} button on the
+\gui{Masking} page. With everything loaded into the program, 
+we can perform a $Q$ integration by going to the 
+\gui{Integrate} tab. The integration tab is shown in 
 figure~\ref{integration_page_example}
 
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}[1][hbtp]
     \centering
     \includegraphics[scale=.75]{figures/integration_page.eps}
     \caption{The integration tab.}
     \label{integration_page_example}
 \end{SCfigure}
 
-We set the range of the $Q$ integrtaion by setting
+We set the range of the $Q$ integration by setting
 \gui{Q Lower?} to 0 and \gui{Q Upper?} to 5. We
 then set the precision of the integration, or the
 bin size, by setting the \gui{Number of Q?} input
@@ -246,7 +290,7 @@ button and a window showing the diffraction data
 opens. For a particular iron sample, this window
 is shown in figure~\ref{iron_intensity}.
 
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}[1][hbtp]
     \centering
     \includegraphics[scale=.75]{figures/iron_intensity.eps}
     \caption{The intensity integration window for 
@@ -273,6 +317,8 @@ Data File:
 	C:/Data/
 Load From File
     C:/Data/LaB6_cal.dat
+Load Mask
+    C:/Data/beam_stop_mask.dat
 Integrate Q Lower?
 	0
 Integrate Q Upper?
@@ -288,7 +334,8 @@ diffraction files in the folder \macroline{C:/Data/}
 one at a time and runs the rest of the analysis on
 that particular file. The program then loads in
 the calibration file that we saved earlier and sets the
-integration bounds. Then, the program does a 
+integration bounds. Then the progarm loads in the
+beam stop mask. Then, the program does a 
 $Q$ vs intensity integration and saves the intensity
 integrated data to a file. The PATHNAME keyword gets
 repalced with teh path leading up to the particular 
@@ -310,9 +357,9 @@ graph. If we did this, we would obtain a plot
 that looked something like the graph shown
 in figure~\ref{excel_peak_shift}.
 
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}[1][hbtp]
     \centering
-    \includegraphics[scale=.75]{figures/excel_peak_shift.eps}
+    \includegraphics[scale=.5]{figures/excel_peak_shift.eps}
     \caption{An example of what the shift in peaks might
     look like when two diffraction patterns were plotted
     in Excel on top of one another.}
