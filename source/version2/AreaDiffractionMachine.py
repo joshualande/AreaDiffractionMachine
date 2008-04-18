@@ -4282,11 +4282,11 @@ in either Q or 2theta mode.")
                 qLower,chiLower = self.getQChiCakeImageCoordinates(x0,y0)
                 qUpper,chiUpper = self.getQChiCakeImageCoordinates(x1,y1)
 
-                qLower = min(qLower,qUpper)
-                qUpper = max(qLower,qUpper)
+                qLower,qUpper = \
+                    min(qLower,qUpper),max(qLower,qUpper)
 
-                chiLower = min(chiLower,chiUpper)
-                chiUpper = max(chiLower,chiUpper)
+                chiLower,chiUpper = \
+                    min(chiLower,chiUpper),max(chiLower,chiUpper)
 
                 if self.Qor2Theta.get() == "Work in Q":
                     type = "Q"
