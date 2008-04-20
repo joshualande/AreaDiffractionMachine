@@ -1,17 +1,11 @@
 \section{The Integration Algorithm}
 
-The purpose of performing an intensity integration is 
-to create a plot of average intensity as a function
-of either $Q$, $2\theta$, or $\chi$. The algorithm
-for performing an intensity integration is pretty
-straight forward. In order to perform an intensity
-integration, we must already know the calibration values
-of the experiment for the particular image that will
-be integrated. Than, a range and bin size for the
-integration must be give. For example, you might
-want to do a $Q-I$ integration from 2 to 5 with
-100 bins. Whatever the range is, it 
-must be specified before an integration is done.
+An intensity integraiton is a plot of average inensity as 
+a function either $Q$, $2\theta$, or $\chi$. The calibraiton 
+values for the diffraction data must already be known before 
+the integraiton is done. A range and bin size for the
+integration must be give. For example, a $Q-I$ integration 
+might have a range from 2 to 5 with 100 bins. 
 
 The algorithm for performing the intensity integration
 is as follows: loop over every pixel in the image. 
@@ -185,11 +179,11 @@ As was described in the integration algorithm
 section, an integration in one parameter can 
 be constrained by another parameter. For example,
 a $Q$ or $2\theta$ integration can be done only 
-of values in a particular $\chi$ range. Also,
-A $\chi$ integration can be done only of a
+of values in a particular $\chi$ range. 
+$\chi$ integration can only be done of a
 particular $Q$ or $2\theta$ range. Of course,
-it would be meaningless to constrain $Q$ by
-$2\theta$.
+it would be pointless to constrain $Q$ to a
+certain range of $2\theta$.
 
 To constrain the integration using the program,
 there are two convenient 
@@ -288,12 +282,9 @@ done.
 If you perform an intensity integration in $\chi$
 space instead, the header file will say
 \macroline{\# Chi vs I Intensity Integration}
-If two files were added together
-and then integrated, the header file will say
-\begin{lstlisting}[caption={'Alternate Header'}]
-# Intensity integration of: C:/first.mar3450 C:/first.mar3450
-\end{lstlisting}
-Follwing the header string is the line
+If two files were added together and then integrated, the 
+header file will contain the names of both files.
+Follwing the header string the line
 \macroline{\# Q Avg Intensity} (or \macroline{\# Chi Avg Intensity}
 or \macroline{\# 2theta	Avg Intensity}). Following it is
 the data. Each line contains one of the bins. The data
