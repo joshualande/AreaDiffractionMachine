@@ -92,7 +92,7 @@ divided up any diffraction image several regions, where
 within each region we know there is a unique peak.
 An example of this is shown in figure~\ref{divide_up_image}.
 
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}[1][htbp]
     \centering
     \includegraphics[scale=.75]{figures/constant_dq_lines_on_diffraction_image.eps}
     \caption{A division of a diffraction image into
@@ -101,7 +101,7 @@ An example of this is shown in figure~\ref{divide_up_image}.
     \label{divide_up_image}
 \end{SCfigure}
 
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}[1][htbp]
 \centering
 \input{figures/Fitting.tex}
 \caption{Here is a diagram of the peak finding algorithm. 
@@ -207,9 +207,8 @@ calibration values is found.
 \section{Calibrating With the Program}
 
 Diffraction image calibration is done with the
-calibration tab of the program. A screen shot
-of this tab is shown in figure
-\ref{calibration_tab} on tab
+calibration tab of the program. This tab is shown 
+in figure \ref{calibration_tab} on tab
 \pageref{calibration_tab}.
 
 As described above, to calibrate an image
@@ -407,7 +406,7 @@ Figure~\ref{constant_q_lines_on_diffraction_image}
 shows what the diffraction image looks like with
 the $Q$ lines drawn on it.
 
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}[1][htbp]
     \centering
     \includegraphics[scale=.75]{figures/constant_q_lines_on_diffraction_image.eps}
     \caption{A diffraction image with constant the 
@@ -447,7 +446,7 @@ Figure~\ref{constant_dq_lines_on_diffraction_image}
 shows what the diffraction image looks like with
 the $\Delta Q$ lines drawn on it.
 
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}[1][htbp]
     \centering
     \includegraphics[scale=.75]{figures/constant_dq_lines_on_diffraction_image.eps}
     \caption{A diffraction image with the constant 
@@ -475,7 +474,7 @@ corresponding to diffraction maxima. If many of the peaks that the program
 finds do not correspond to diffraction maxima, it is less likely that 
 the program would do a good job calibrating the diffraction image.
 
-\begin{SCfigure}[1][htb]
+\begin{SCfigure}[1][htbp]
     \centering
     \includegraphics[scale=.75]{figures/peaks_on_diffraction_image.eps}
     \caption{A diffraction image with the peaks displayed upon it.}
@@ -518,13 +517,12 @@ image or cake image. An example of this is shown in
 figure~\ref{mask_peaks_diffraction}. 
 See section~\ref{displaying_peaks_diffraction}
 for a discussion of displaying peaks on a diffraction
-image.
-Figure~\ref{mask_peaks_cake} shows the same effect on
-top of the corresponding caked plot. See 
+image.  Figure~\ref{mask_peaks_cake} shows the same effect 
+on top of the corresponding caked plot. See 
 chapter~\ref{Caking} for a discussion of caking.
 In particular, see section~\ref{displaying_peaks_cake} 
 for more information on displaying peaks on a caked
-image.
+image. This feature was added in version 2.0.0.
 
 \section{Saving the Peak List}
 

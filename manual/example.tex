@@ -2,7 +2,7 @@ This section will present a pedagogically interesting
 example which demonstrates several of the programs important
 features.  The purpose of this chapter is neither to be 
 comprehensive nor to be particularly detailed. It will instead 
-give a sense of the type of analysis that can be done easily with 
+give a sense of the type of analysis that can be done with 
 this program. It will motivate the rest of the manual. further details 
 and information on any of the things described below can be found in 
 the appropriate sections of the manual.
@@ -215,7 +215,7 @@ pixelHeight	100.000000
 \begin{SCfigure}[1][hbtp]
     \centering
     \includegraphics[scale=.75]{figures/masking_tab.eps}
-    \caption{A screen shot of the pixel masking tab.}
+    \caption{The pixel masking tab.}
     \label{masking_tab_example}
 \end{SCfigure}
 
@@ -237,7 +237,11 @@ our diffraction image is shown in figure~\ref{masked_beam_stop}.
 \begin{SCfigure}[1][hbtp]
     \centering
     \includegraphics[scale=.75]{figures/masked_beam_stop.eps}
-    \caption{}
+    \caption{Here is the same diffraction data as in 
+    figure~\ref{diffraction_data_window_example} but with a
+    polygon mask drawn over the beam stop. This polygon mask
+    will stop the beam stop below it from being used in
+    subsequent data analysis.}
     \label{masked_beam_stop}
 \end{SCfigure}
 
@@ -269,7 +273,10 @@ just that you could load the parameters into the program
 if you were, say, to open the program at some later point
 in time.}. Next, we can load in our previously recorded
 beam stop mask using the \gui{Load Mask} button on the
-\gui{Masking} tab. With everything loaded into the program, 
+\gui{Masking} tab. We also have to make sure polygon masks
+are used in the analysis by making sure the 
+\gui{Do Polygon Mask?} check box is selected.
+With everything loaded into the program, 
 we can perform a $Q$ integration by going to the 
 \gui{Integrate} tab. The integration tab is shown in 
 figure~\ref{integration_tab_example}
@@ -319,6 +326,8 @@ Load From File
     C:/Data/LaB6_cal.dat
 Load Mask
     C:/Data/beam_stop_mask.dat
+Do Polygon Mask?
+    Select
 Integrate Q Lower?
 	0
 Integrate Q Upper?
