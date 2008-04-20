@@ -342,7 +342,7 @@ directly measurable experimental quantities.
 
 We can invert these formula to learn what
 $x''$ and $y''$ are in terms of $x$ and $y$.
-Doing this gets us
+We have:
 \begin{equation}\label{invertx}
     x''=\frac{dx}{d\cos\beta-x\sin\beta-
     \cos\beta(x\cos\beta+d)/(\tfrac{x}{y}\cot\alpha+1)}
@@ -351,7 +351,7 @@ and
 \begin{equation}\label{inverty}
     y''=\frac{dx\cos\beta/(\tfrac{x}{y}\cos\alpha+\sin\alpha)}
     {d\cos\beta-x\sin\beta-
-    \cos\beta(x\cos\beta+d)/(\tfrac{x}{y}\cot\alpha+1)}
+    \cos\beta(x\cos\beta+d)/(\tfrac{x}{y}\cot\alpha+1)}.
 \end{equation}
 
 \section{\texorpdfstring{$Q$, $2\theta$, and $\chi$}{Q, 2theta, and chi}}
@@ -396,7 +396,7 @@ and
 The quantity $Q$ is often used instead of $2\theta$. 
 they are related by
 \begin{equation}\label{qterms2theta}
-    Q = \frac{4\pi \sin(2\theta/2)}{\lambda}
+    Q = 4\pi \sin(2\theta/2)/\lambda
 \end{equation}
 The reason for using $Q$ instead of $2\theta$ is because 
 diffraction theory shows that the $Q$ values of preferential 
@@ -407,12 +407,12 @@ Alternately, energy could be used in this formula.
 To do so, energy can be related to wavelength using
 the De Broglie's formula
 \begin{equation}
-E = \frac{hc}{\lambda}
+E = hc/\lambda
 \end{equation}
 Finally, sometimes people use the quantity $D$ instead.
 $D$ is related to $Q$ by
 \begin{equation}\label{DtermsQ}
-    D = \frac{2\pi}{Q}
+    D = 2\pi/Q
 \end{equation}
 Using equation~\ref{conversionToPixels},
 we now have a way of relating pixel
@@ -427,44 +427,42 @@ this transformation can in practice be done
 will be given in section~\ref{calibration}
 
 
-\section{Implementation In Code}
-
-For reference, this section present the C source 
-code used in the computer program to perform the 
-transformation from pixel values on a tilted 
-detector to $(Q,\chi)$ and back again. 
-Listing~\ref{getTwoThetaChi} presents the function
-\code{getTwoThetaChi()} which converts real pixel
-coordinates $(x_d,y_d)$, called \code{xPixel}
-and \code{yPixel}, into the values $2\theta$ and $\chi$, 
-called \code{twoTheta} and \code{chi} using the 
-transformation described above. In order to perform 
-this transformation, the program must be given
-the values $x_c$, $y_c$, $ps$, $d$, 
-$\alpha$, $\beta$, and $R$. For $x_c$ and $y_c$, 
-the function takes in the variables $xCenter$ and
-$yCenter$. The program takes in \code{pixelLength} 
-and \code{pixelHeight} for $ps$ to identify the
-width and height of each pixel (which should be the 
-same). The program takes in the sines and cosines
-of $\alpha$, $\beta$, and $R$ to allow for increased
-efficiency. These variables are called \code{ cos\_beta}
-\code{sin\_beta},\code{cos\_alpha},\code{sin\_alpha},
-\code{cos\_rotation}, and \code{sin\_rotation}. 
-Note that this function calculates $2\theta$ instead
-of $Q$ or $D$ but it takes a trivial amount of work
-to the additional conversion.
-\begin{lstlisting}[caption={Code to convert pixel coordinates on a real detector into $(Q,\chi)$ coordinates},label=getTwoThetaChi]
-The Code will go here one of these days...
-\end{lstlisting}
-Listing~\ref{getXY} presents the function \code{getXY()} 
-which does the inverse transformation of 
-function~\ref{getTwoThetaChi}. It uses the same
-terminology for parameters as that function.
-
-\begin{lstlisting}[caption={Code to convert $(Q,\chi)$ values into pixel coordinates on a real detector},label=getXY]
-Other code will go here one of these days...
-\end{lstlisting}
-
-
-
+%\section{Implementation In Code}
+%
+%For reference, this section present the C source 
+%code used in the computer program to perform the 
+%transformation from pixel values on a tilted 
+%detector to $(Q,\chi)$ and back again. 
+%Listing~\ref{getTwoThetaChi} presents the function
+%\code{getTwoThetaChi()} which converts real pixel
+%coordinates $(x_d,y_d)$, called \code{xPixel}
+%and \code{yPixel}, into the values $2\theta$ and $\chi$, 
+%called \code{twoTheta} and \code{chi} using the 
+%transformation described above. In order to perform 
+%this transformation, the program must be given
+%the values $x_c$, $y_c$, $ps$, $d$, 
+%$\alpha$, $\beta$, and $R$. For $x_c$ and $y_c$, 
+%the function takes in the variables $xCenter$ and
+%$yCenter$. The program takes in \code{pixelLength} 
+%and \code{pixelHeight} for $ps$ to identify the
+%width and height of each pixel (which should be the 
+%same). The program takes in the sines and cosines
+%of $\alpha$, $\beta$, and $R$ to allow for increased
+%efficiency. These variables are called \code{ cos\_beta}
+%\code{sin\_beta},\code{cos\_alpha},\code{sin\_alpha},
+%\code{cos\_rotation}, and \code{sin\_rotation}. 
+%Note that this function calculates $2\theta$ instead
+%of $Q$ or $D$ but it takes a trivial amount of work
+%to the additional conversion.
+%\begin{lstlisting}[caption={Code to convert pixel coordinates on a real detector into $(Q,\chi)$ coordinates},label=getTwoThetaChi]
+%The Code will go here one of these days...
+%\end{lstlisting}
+%Listing~\ref{getXY} presents the function \code{getXY()} 
+%which does the inverse transformation of 
+%function~\ref{getTwoThetaChi}. It uses the same
+%terminology for parameters as that function.
+%
+%\begin{lstlisting}[caption={Code to convert $(Q,\chi)$ values into pixel coordinates on a real detector},label=getXY]
+%Other code will go here one of these days...
+%\end{lstlisting}
+%

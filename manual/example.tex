@@ -28,13 +28,13 @@ rest of data.
 
 \begin{SCfigure}[1][hbtp]
     \centering
-    \includegraphics[scale=.75]{figures/calibration_page.eps}
+    \includegraphics[scale=.75]{figures/calibration_tab.eps}
     \caption{The calibration tab.}
-    \label{calibration_page_example}
+    \label{calibration_tab_example}
 \end{SCfigure}
 
 To perform this calibration, we first opened up the Area 
-Diffraction Machine. Figure~\ref{calibration_page_example} shows what we
+Diffraction Machine. Figure~\ref{calibration_tab_example} shows what we
 are first presented with.
 
 From the \gui{Data File} input, we load into the program the LaB6 
@@ -107,13 +107,13 @@ space.  The $x$ axis is $Q$ and the $y$ axis is $\chi$.
 Ideally, if the calibration parameters are known exactly, 
 the caked data will show up as many vertical lines. 
 We can cake the data by going to the cake tab. This
-tab is shown in figure~\ref{cake_page_example}.
+tab is shown in figure~\ref{cake_tab_example}.
 
 \begin{SCfigure}[1][hbtp]
     \centering
-    \includegraphics[scale=.75]{figures/caking_page.eps}
+    \includegraphics[scale=.75]{figures/caking_tab.eps}
     \caption{The calibration tab.}
-    \label{cake_page_example}
+    \label{cake_tab_example}
 \end{SCfigure}
 
 On this tab, we have to pushing the \gui{AutoCake}. 
@@ -214,9 +214,9 @@ pixelHeight	100.000000
 
 \begin{SCfigure}[1][hbtp]
     \centering
-    \includegraphics[scale=.75]{figures/masking_page.eps}
+    \includegraphics[scale=.75]{figures/masking_tab.eps}
     \caption{A screen shot of the pixel masking tab.}
-    \label{masking_page_example}
+    \label{masking_tab_example}
 \end{SCfigure}
 
 As can be seen in figure~\ref{diffraction_data_window_example},
@@ -226,7 +226,7 @@ blocked by the beam stop contain any interesting information
 so we are going to want to tell the program to ignore any pixels
 blocked by the mask. We can do so with a polygon mask. All
 polygon masking is done on the \gui{masking} tab. A screenshot
-of this tab is shown in figure~\ref{masking_page_example}.
+of this tab is shown in figure~\ref{masking_tab_example}.
 We want to add a rectangular polygon mask on top of the beam
 stop in the image. To do so, we push the \gui{Add Mask} button.
 We then move to the diffraction image and draw the beamstop
@@ -244,7 +244,7 @@ our diffraction image is shown in figure~\ref{masked_beam_stop}.
 Once we decide we are happy with our polygon mask, we can
 save it to a file using the \gui{Save Mask} button.
 The file gets saved out as
-\begin{lstlisting}[caption={'beam_stop_mask.dat'}]
+\begin{lstlisting}[caption={'beam\_stop\_mask.dat'}]
 # Polygon(s) drawn on Mon Apr 14 00:33:12 2008
 25.6749379653	1634.63771712
 42.7915632754	1814.36228288
@@ -269,16 +269,16 @@ just that you could load the parameters into the program
 if you were, say, to open the program at some later point
 in time.}. Next, we can load in our previously recorded
 beam stop mask using the \gui{Load Mask} button on the
-\gui{Masking} page. With everything loaded into the program, 
+\gui{Masking} tab. With everything loaded into the program, 
 we can perform a $Q$ integration by going to the 
 \gui{Integrate} tab. The integration tab is shown in 
-figure~\ref{integration_page_example}
+figure~\ref{integration_tab_example}
 
 \begin{SCfigure}[1][hbtp]
     \centering
-    \includegraphics[scale=.75]{figures/integration_page.eps}
+    \includegraphics[scale=.75]{figures/integration_tab.eps}
     \caption{The integration tab.}
-    \label{integration_page_example}
+    \label{integration_tab_example}
 \end{SCfigure}
 
 We set the range of the $Q$ integration by setting
@@ -299,7 +299,7 @@ is shown in figure~\ref{iron_intensity}.
 \end{SCfigure}
 
 We can save this data to a file with the \gui{Save Data}
-button on the \gui{Integration} page. This data is
+button on the \gui{Integration} tab. This data is
 saved out as two column ASCII.
 After doing this for all the different files that
 we have, we can load all the data into another program,

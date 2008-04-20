@@ -207,10 +207,10 @@ calibration values is found.
 \section{Calibrating With the Program}
 
 Diffraction image calibration is done with the
-calibration page of the program. A screen shot
-of this page is shown in figure
-\ref{calibration_page} on page
-\pageref{calibration_page}.
+calibration tab of the program. A screen shot
+of this tab is shown in figure
+\ref{calibration_tab} on tab
+\pageref{calibration_tab}.
 
 As described above, to calibrate an image
 you must have already loaded into the program
@@ -349,7 +349,7 @@ of the incoming beam of light instead of the energy
 of the beam. Of course, the energy and wavelength
 are intemately related by the formula
 \begin{equation}
-    E=\frac{hc}{\lambda}
+    E=hc/\lambda
 \end{equation}
 If you wish to work with wavelength in units of
 nanometers instead of energy in units of electron 
@@ -402,7 +402,7 @@ show up for the particular $Q$ lines and the
 particular calibration parameters.
 
 The \gui{Draw Q Lines?} button on the 
-\gui{Calibration} page enables this.
+\gui{Calibration} tab enables this.
 Figure~\ref{constant_q_lines_on_diffraction_image}
 shows what the diffraction image looks like with
 the $Q$ lines drawn on it.
@@ -579,7 +579,7 @@ coordinate using the calibration parameters.
 
 \section{Handling Calibration Data}
 
-There are inputs in the calibration page of the
+There are inputs in the calibration tab of the
 program for input of the calibration parameters.
 \gui{xc} is for the $x$ center, \gui{yc} is
 for the y center, \gui{d} is for the distance,
@@ -635,9 +635,7 @@ is to not fix the parameter.
 Instead of energy, the wavelength of the incoming
 beam of light can be stored in a calibration file.
 The wavelength line would look like 
-\begin{lstlisting}[caption={Wavelength Parameter}]
-wavelength	0.973540
-\end{lstlisting}
+\macroline{wavelength	0.973540}.
 When the program is in wavelength mode, the program
 will save out calibration parameters with this line
 instead of the one above. The program will load in a 
@@ -652,7 +650,7 @@ section~\ref{workWavelength}.
 
 $Q$ data is always loaded into the program from files. 
 $Q$ data can be loaded into the program with the \gui{Q Data:}
-input on the calibration page. 
+input on the calibration tab. 
 You can either type in the filename of the $Q$ file by hand 
 and push the load button or click on the folder icon to the 
 side and use the file selector to pick the file that you want.

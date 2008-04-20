@@ -1,135 +1,108 @@
 \section{Calibration}
 
-The Calibration tab lets you load into the program 
-x-ray diffraction data and it lets you calibrate 
-this data to determine the experimental parameters 
-that characterize the diffraction experiment. You 
-can load in diffraction data using the 
-\gui{Data File:} input. The program 
-recognizes \gui{mar2300}, \gui{mar3450}, 
+The \gui{Calibration} tab can be used to load
+diffraction data into the program. The tab can
+be used to calibrate diffraction data to determine the 
+experimental parameters that characterize the experiment. 
+The data can be loaded using the \gui{Data File:} input. 
+The program recognizes \macroline{mar2300}, \macroline{mar3450}, 
 \index{Mar2300}\index{Mar3450}\index{MarCCD}\index{Tiff}
-\gui{mccd}, and \gui{tiff} data. To load 
-multiple files at once, and work the with sum image, 
-you need to go into the file part of the menu and 
-select \gui{Open Multiple Files}.
+\macroline{mccd}, and \macroline{tiff}, and \macroline{edf} data. 
+Multiple files can be loaded into the program
+by selecting multiple files with the file selector.
+The sum image will be used.
 
-Image Calibration is used to infer the experimental 
-setup by analyzing standard diffraction data. This 
-program characterizes a diffraction experiment 
-with several parameters:
+This program characterizes a diffraction experiment 
+according to the parameters:
 \index{Calibration Parameters}
 \index{X Center}\index{Y Center}
 \index{Detector Distance}\index{$\alpha$}
 \index{$\beta$}\index{Rotation}\index{Pixel Scale}
 \begin{itemize}
-    \item \gui{xc:}, \gui{yc:} - The $x$ 
+    \item \gui{xc:}, \gui{yc:} - the $x$ 
 and $y$ coordinates on the detector where the incoming 
 x-ray beam would have hit the detector were there 
 no sample in the way (in pixels).
-    \item \gui{d:} - Distance from sample to 
-        detector (in mm).
-    \item \gui{E:} - Energy of the incoming beam (in eV).
-    \item \gui{alpha:}, \gui{beta:} 2 orthogonal tilt 
-        parameters of the detector (in degrees).
-    \item \gui{R:} - The rotation of the detector 
-        around the center (in degrees).
-    \item \gui{pl:} - The pixel length of the image. 
-        The width of one pixel (in microns).
+    \item \gui{d:} - the distance from the sample to 
+    detector (in mm).
+    \item \gui{E:} - the energy of the incoming beam (in eV).
+    \item \gui{alpha:}, \gui{beta:} 2 tilt parameters of 
+    the detector (in degrees).
+    \item \gui{R:} - the rotation of the detector 
+    around the center (in degrees).
+    \item \gui{pl:} - the pixel length of the image. 
+    The width of one pixel (in microns).
     \item \gui{ph:} - The pixel height of the image. 
-        The height of one pixel (in microns).
+    The height of one pixel (in microns).
 \end{itemize}
-
 Before calibrating an image, three things must be done. 
-First, you must load data taken of a standard calibration 
-\index{$Q$ Data}
-sample. Then, you must load a $Q$ data file with $Q$ values 
-of peaks corresponding to the sample. Finally, the program 
-needs an initial guess at the calibration values. This can 
-be done with the \gui{Parameters} inputs. You can sometimes 
-find some of the calibration data in the header of a 
-diffraction file. If the header contains any of this data, 
-you can push the \gui{Get From Header} button to put the 
-header values into the inputs. Once an initial guess is 
-given, the \gui{Do Fit} button will refine the calibration 
-parameters and get the best guess at the real experimental 
-parameters.
+First, the calibration data must be loaded.
+Second, a $Q$ data file with the standard $Q$ values for the
+sample must be loaded.
+Third, an initial guess of the calibration parameters must be
+loaded. This can be done with the \gui{Parameters} inputs. A
+decent guess at the calibration parameters can sometimes
+be found in the header of a diffraction file. These values
+can be loaded into the program using the \gui{Get From Header} 
+button to.  The \gui{Do Fit} button will perform the calibration 
+and find a best guess at the real experimental parameters.
 
-\index{$2\theta$}
-$2\theta$ is the angle of scatter of a particular beam of light 
-which left the crystal and arrived at the detector at a certain 
-point. $2\theta$ is a property of all points on the detector 
-dependent on exactly how the diffraction experiment is set up. 
-$Q$ is defined as $Q=4\pi \times \sin(2\theta/2)/\lambda$, the 
-wavelength of the incoming beam. $D$ is defined as $2\pi/Q$.
+The \gui{Work in Lambda} selection in the \gui{Calibration} menu can
+be used to switch the program to work with the x-ray's
+wavelength instead of its energy. The relationship 
+between these values is $E=hc/\lambda$. The calibration parameter 
+\gui{E:} will be replaced with \gui{$\lambda$:} and the current 
+value will be converted. 
 
-If you prefer to deal with a photons' wavelength instead of its 
-energy, you can go into the Calibration menu and switch from
-\gui{Work in eV} to \gui{Work in Lambda}. If you do so, the
-calibration parameter \gui{E:} will be replaced with
-\gui{$\lambda$:} and the current value will be converted. 
-The conversion between these is $E=hc/\lambda$.
+The \gui{Q Data:} input lets you load in standard $Q$ data files. 
+This program stores several standard $Q$ files. The can be selected
+through the \gui{Standard Q} menu in the \gui{Calibration} menu.
 
-The \gui{Q Data:} input lets you load in $Q$ data. The Format
-of a $Q$ data file is a 2 column space or tab separated plain
-text file. The first line must be \gui{Q    dQ}. The rest of
-the file must be lines of $Q$ values followed by a $\Delta Q$
-range. The $\Delta Q$ range gives the program a range in the
-image where it can find the real diffraction peaks. You can
-give a list of $D$ values instead. The first line must be of
-the form \gui{D   dD} and this must be followed by lines of
-$D$ and $\Delta D$. For the fit to work, no other diffraction
-peaks in the image can fall within a $Q$ range. This program
-stores many standard $Q$ files. To get at them, click the 
-\gui{Calibration} option in the menu, then the \gui{Standard Q}
-option, and pick the crystal that you are using.
-
-You can modify the fit in a couple of ways. To do the fit,
-the calibration algorithm will look a certain number of 
-places in the image to find diffraction peak. It does by
-running from the center of the image out and looking for
-peaks in the $\Delta Q$ ranges. Once the program finds
-these peaks, it can store the peak list and use the same
-one when fitting again. This option can be changed using
-the \gui{Use Old Peak List (if possible)?} selection. If
-you want to change the number of peaks that the program
-tries to find, you can use the \gui{Number of Chi?} input.
+The calibration fit can be modified in a couple of ways.
+The calibration algorithm will look 
+the diffraction data to find diffraction peak. It does so by
+running from the center of the image out. 
+The number of peaks that the program tries to find can be
+set with the \gui{Number of Chi?} input.
 This tells the program how many of these radial slices from 
-the center should be done. The \gui{Stddev?} input tell the 
-program what ratio higher the peak must be then the standard
-deviation of the background near the peak in order for the
+the center of the image should be done. The \gui{Stddev?} input 
+tells the program what ratio higher the peak must be then the 
+standard deviation of the background near the peak in order for the
 peak to be considered real. The higher the value, the more
 picky the program is about finding legitimate peaks.
 
-If you know some of the experimental parameters exactly, you
-can push the \gui{Fixed?} check box associated with that
-variable and it will be not refined when fitting. The pixel 
-length and pixel height are never refined.
+If some of the experimental parmaetesr are known exactly, 
+pushing the \gui{Fixed?} check box will fix the associated 
+variable so that it will be not refined when fitting. The pixel 
+length and pixel height can never be refined so this does not
+apply for them.
 
 To see how good the current calibration parameters are at
-characterizing the loaded data, you can use the 
-\gui{Draw Q Lines?} check box to make the program draw
-on the diffraction image the lines of constant $Q$ given
-by the $Q$ data file. You can also draw the $Q$ range 
-specified in the $Q$ file using the \gui{Draw dQ Lines?} 
-check box. To see what peaks the program found while doing the 
-fit, you can select the \gui{Draw Peaks?} check box and the
-peaks will be displayed on top of the diffraction image.
+characterizing the loaded data, the \gui{Draw Q Lines?} 
+check box can be used to make the program draw
+on the diffraction image lines of constant $Q$ specified
+by the $Q$ data file. The $\Delta Q$ ranges specified in 
+the $Q$ file can also be drawn using the \gui{Draw dQ Lines?} 
+check box. The \gui{Draw Peaks?} check box can be used to 
+display on top of the diffraction image all of the peaks that
+were found while doing the fit.
 
-You can zoom into the diffraction image by left clicking
+The diffraction image can be zoomed into by left clicking
 in the image, dragging your mouse, and then releasing.
-You can zoom out by right clicking on the image. You can
-pan across the image by shift clicking on the image and 
-then dragging. You can make the image bigger or smaller 
-by resizing the window.
+The image can be zoomed out of by right clicking on the image. 
+The image can be panned across by shift clicking on the image 
+and dragging. The image can be made bigger or smaller by 
+resizing the window.
 
-In the file menu, you can use the \gui{Save Image} option
+In the file menu, the \gui{Save Image} option can be used 
 to save the current diffraction file in several popular
 image formats. The image will be saved with the current
-zoom level and any $Q$ lines, $\Delta Q$ lines, or peaks
-drawn on top of it.
+zoom level and any $Q$ lines, $\Delta Q$ lines, peaks, or
+masks drawn on top of it.
 
 \section{Masking}
 \index{Pixel Masking}
+
 You can make the program ignore certain pixels when doing
 diffraction analysis. This is all done on the \gui{Masking}
 tab. To have the program ignore pixels above or below a 
