@@ -212,43 +212,39 @@ to save out the intensity integration data as two column ASCII.
 
 \section{Macro}\index{Macros}
 
-When performing a task many times, it is often easiest to 
-write a record a macro and then run it for all the tasks.
+Macros can often be used to greatly speed up the data analysis. 
 The \gui{Start Record Macro} option in the \gui{Macro} menu
-can be used to begin recording a macro. After the desired
-tasks are recorded, the \gui{Stop Record Macro} option will
-stop recording the macro and save it to a file. The
-\gui{Run Saved Macro} option can be used to run a macro from
-a file. 
+will begin recording a macro. After the desired
+tasks have been recorded, the \gui{Stop Record Macro} option will
+stop the recording and save the commands to a file. The
+\gui{Run Saved Macro} option will run a macro file.
 
 Small edits to a macro file can make them much more versatile. 
 Most macro commands are just the name of the GUI item
 possibly followed by whatever the GUI would want (such as a 
-filename or number). The macro command to load a diffraction 
+filename or a number). The macro command to load a diffraction 
 file is \macroline{Data File:}. It must be followed by a line with 
-a filename. Instead of a filename, the \macroline{Data File:} macro
-line can be followed by a list of filenames,
+a filename. It can also be followed by a list of filenames,
 a directory containing diffraction data, or some combination
 of each. The program will run the subsequent macro lines on
-every file given in the list and on all diffraction files found 
-in any folders in the list. The loop over diffraction
-files will end with a subsequent \macroline{Data File:} command,
-a \macroline{END LOOP} line, or the end of the macro file.
+every file in the list and all diffraction files found 
+in any folders in the list. The loop will end with a subsequent 
+\macroline{Data File:} command, a \macroline{END LOOP} line, or 
+the end of the macro file.
 
 When lopping over diffraction files, there is special 
-markup which makes it easy to output files into useful
-places with useful names. There are special markup names
+markup which makes it easy to save files in a loop to useful
+places with useful names. They are 
 \macroline{BASENAME} and \macroline{FILENAME}. Whenever the
-program runs across \macroline{BASENAME} in the macro file,
-that string will be replaced with the path of the current
-diffraction file that has been loaded. Similarly, 
+program finds \macroline{BASENAME} in a macro file,
+it will be replaced with the path of the current
+diffraction file that has been loaded. 
 \macroline{FILENAME} will be replaced with the filename of
-the current diffraction file. You could recreate the 
-diffraction file (if it was of type mar3450) with the macro 
+the current diffraction file. You could recreate a
+diffraction file (if's extension was mar3450) with the macro 
 command \macroline{PATHNAME/FILENAME.mar3450}.
-This markup can be used to save things with useful names. For
-example, the macro line \macroline{Save Integration Data}
-could be followed by the line
-\macroline{PATHNAME/FILENAME\_int.dat}. It would save the intensity
-integration for all diffraction files in a loop right next to the
-diffraction file with a useful name.
+An exmaple of these keywords being used would be the macro line 
+\macroline{Save Integration Data} followed by the line
+\macroline{PATHNAME/FILENAME\_int.dat}. The macro would always
+save the intensity integrated data right next to the diffraction 
+file with a name similar to the diffraction file.

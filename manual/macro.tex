@@ -1,50 +1,56 @@
-This program is almost fully automatable with macros. The 
-purpose of macros are to allow you to do data analysis with
-the program as quickly as possible. The program is capable of
-recording macros and running macros. And the macro file format
-is simple enough that it is very easy write them yourself.
+This program is almost fully automatable with macros. Macros
+canb e used to perform data analysis as quickly as possible. 
+The program is capable of recording macros and running macros. 
+The macro file format is simple enough that it is easy write 
+or modify macro files by hand.
+
+\begin{SCfigure}[1][hbtp]
+    \centering
+    \includegraphics[scale=.75]{figures/macro.eps}
+    \caption{The \gui{Macro} menu bar. This is
+    where macros are recorded and run.}
+    \label{macro_figure}
+\end{SCfigure}
 
 \section{Record Macros}
 
-First off, if you are curious what a macro file would look
-like that does a particular set of steps, by far the easiest
-thing to do is record a macro where you perform those steps
-in the analysis. You can then view the corresponding macro file 
-that was saved automatically by the program. To record a macro,
-select \gui{Start Record Macro} in the \gui{Macro} menu 
-bar. Then do the particular steps in question and select
-\gui{Stop Record Macro} in the \gui{Macro} menu bar.
-The program will then ask for a place to save the macro file.
+The easiest way to create a macro is to record it. A macro
+can be recorded by selecting the \gui{Start Record Macro} 
+option in the \gui{Macro} menu 
+bar. Figure~\ref{macro_figure} shows the \gui{Macro} menu bar.
+After all of the steps that should be recoreded are finished, 
+pushing \gui{Stop Record Macro} will save the macro file to
+a selectable file.
 
 \section{Run Macros}
 
-You can use select \gui{Run Saved Macro} in the \gui{Macro}
-menu to run a macro saved to a file. The program will 
-run all the steps in the macro file and then return control
-of the program.
+The \gui{Run Saved Macro} option in the \gui{Macro}
+menu to run a macro file. The program will run all the 
+steps in the macro file and then return control of 
+the program. This is how analysis can be done with
+macro files.
 
 \section{The Macro File Format}
 
-A macro file contains many commands which tell the program
-how to run. Each command in the GUI gets its own line. 
-The syntax for a command is pretty straightforward.
-If you want to do
-something in the program, you find the text on top of
-or near the thing and then the macro command is exactly
-that text. If you want to get the calibration data from the
-header of the image, the macro line is
-\macroline{Get From Header}. If you want to fit the 
-calibration data, the macro line is \macroline{Do Fit}.
+A macro file contains a list of commands which tell the 
+program what to do. Each command in the GUI is on its
+own line. The syntax for macro commands is pretty 
+straightforward. Macro commands are the 
+text corresponding to the part of the GUI that does 
+the command. For example, to make the macro get the 
+calibration data from the header of the image, the macro 
+command is \macroline{Get From Header}. To fit the calibration
+data from within a macro, the command is 
+\macroline{Do Fit}.
 
-Things get more interesting when what you want to do
+Things get more interesting when the GUI item requires
 requires doing more then just pushing a button. For 
-example, if you want to deselect the \gui{Draw Q Data?} 
-check box, your macro needs to specify that you deselect
-this option instead of selecting it. To dos this, the 
-first part of the macro command is the name of the
-check box \macroline{Cake} and the next line tells
-you what you want to do with it. Your macro would
-contain these lines:
+example, to deselect the \gui{Draw Q Data?} 
+check box, the macro needs to specify that the check box
+gets deselect instead of selected.
+For these, the macro commands need to be followed by
+a second line with the particular. For this example, 
+we would write
 \begin{lstlisting}[caption={'Draw the $Q$ Lines on the Display'}]
 Draw Q Data?
     Select
@@ -52,21 +58,16 @@ Draw Q Data?
 Draw Q Data?
     Deselect
 \end{lstlisting}
-The exact same format is used for user input. To change
-the calibration values, your macro file would look like:
+It is the same when numbers should be set. To change
+a calibration values, the macro would look like:
 \begin{lstlisting}[caption={'Input a Number'}]
 xc:
     1752.3
 beta:
     5.23
 \end{lstlisting}
-Finally, some of the Gui commands require a file name.
-For example, you must provide a file name to load a 
-diffraction file or save a caked image. Whenever the
-command has a required file, the next line in the macro 
-file should be that file name. For example, if you wanted 
-to save the cake image, your macro file would contain the 
-line: 
+These are treated just the same. The following
+macro command would save the cake as an image:
 \begin{lstlisting}[caption={'Save the Caked Image'}]
 Save Caked Image
     C:/data/cake_output.jpg
@@ -76,7 +77,7 @@ If you look on the first tab, there are three inputs
 at the top:
 \gui{Get From Header:}, \gui{dark current:}, and 
 \gui{Q data:}. The macro command to load any of these
-is a little bit ambiguous. When using the acutal GUI, 
+is a little bit ambiguous. When using the actual GUI, 
 you would, at least in principle, type in the name of
 a file and then press load. But there is no reason to
 make the GUI so redundant. So to load in any of these
