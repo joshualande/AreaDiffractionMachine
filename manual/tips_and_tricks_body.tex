@@ -54,7 +54,7 @@ between these values is $E=hc/\lambda$. The calibration parameter
 \gui{E:} will be replaced with \gui{$\lambda$:} and the current 
 value will be converted. 
 
-The \gui{Q Data:} input lets you load in standard $Q$ data files. 
+The \gui{Q Data:} input can be used to load in standard $Q$ data files. 
 This program stores several standard $Q$ files. The can be selected
 through the \gui{Standard Q} menu in the \gui{Calibration} menu.
 
@@ -88,7 +88,7 @@ display on top of the diffraction image all of the peaks that
 were found while doing the fit.
 
 The diffraction image can be zoomed into by left clicking
-in the image, dragging your mouse, and then releasing.
+in the image, dragging the mouse, and then releasing.
 The image can be zoomed out of by right clicking on the image. 
 The image can be panned across by shift clicking on the image 
 and dragging. The image can be made bigger or smaller by 
@@ -141,114 +141,114 @@ will save all the polygons in the program to a file.
 The \gui{Load Mask} button will load into the program
 all of the polygons in a file.
 
-\section{Cake}
-\index{$\chi$}\index{$Q$}\index{Cake}
-A caked image is a plot of diffraction data in $Q$, 
-$\chi$ space. $\chi$ is a measure of the angle around 
-what would be the incoming x-ray beam if the beam was 
-not scattered. By convention, $\chi$ is equal to 0
-degrees to the right of the pixel center of the image 
-and increases while going counterclockwise. To cake the
-data, you need to give the program a range and bin size 
-in both $Q$ and $\chi$. When you push \gui{Do Cake}, the
-program will present a new window with the caked data in
-it. You can interact with the cake image just like with
-the diffraction image described above. If you have one of
-the \gui{Draw Q Lines}, or \gui{Draw dQ Lines} or 
-\gui{Draw Peaks} boxes selected from the \gui{Calibration} 
-tab, these will also be drawn on the cake image. In particular,
-the $Q$ and $\Delta Q$ lines are just vertical lines on the
-caked image. You can save the caked data as plain text 
-using the \gui{Save Data} button. You can save the caked 
-image as a popular image format using the \gui{Save Image}
-button. The image will have the $Q$ lines and peaks saved
-in the image if that option is selected when saving.
+\section{Caking}
+\index{$\chi$}\index{$Q$}\index{Caking}
 
-You can also apply a polarization correction to the caked
-data using the \gui{Do Polarization Correction?} check box
-and the \gui{P?} input. The formula to calculate a 
-polarization correction is:
+A caked image is a plot of diffraction data in $Q$ vs 
+$\chi$ space. $\chi$ is a measure of the angle around 
+the incoming x-ray beam. By convention, $\chi$ is equal to 0
+degrees to the right of the center of the image. It
+increases in a counterclockwise direction. 
+The program needs to know a range and bin size in $Q$ and
+$\chi$ in order make a caked plot. the \gui{Do Cake} button
+will create a caked plot of the data. The 
+program will present a new window with the caked data in
+it. The caked window can be interacted with just like
+the diffraction window. Any $Q$ lines, $\Delta Q$ lines,
+and peaks that are drawn on top of the diffraction image
+will also be displayed on top of the cake image.
+The $Q$ and $\Delta Q$ lines are just vertical lines on the
+caked image. The \gui{Save Data} button will save a caked plot 
+as plain text. The \gui{Save Image} button will save the
+caked plot as a popular image format.
+The image will have any $Q$ lines or peaks saved drawn on 
+the caked plot saved on top of it.
+
+The \gui{Do Polarization Correction?} button will apply a 
+polarization correction to the caked plot. The polarization
+of the incoming beam can be specified with the 
+\gui{P?} input. The formula for calculating the 
+polarization correction is
 \begin{eqnarray}
     I&=&Im/PF \\ 
     PF&=&P(1 - (\sin(2\theta)\sin(\chi-90))^2) + 
     (1 - P)(1 - (\sin(2\theta)\cos(\chi-90))^2)
 \end{eqnarray}
-with $Im$ the measured intensity. There is a convenient
-feature called AutoCake which picks a range of $Q$ and $\chi$ 
-values and then cakes that range. AutoCake will pick the
-smallest cake range so that the whole image shows up in
-the cake. It will pick the bin size so that each pixel 
-displayed on the screen corresponds to a single bin.
+with $Im$ the measured intensity. 
+
+There is a convenient button called \gui{AutoCake} which 
+automatically picks the smallest cake range so that the whole 
+image shows up in the cake. It then pick the bin size so that 
+each pixel displayed on the screen is a single bin.  It then 
+caked the data. This button can be used to quickly make a
+good cake.
 
 \section{Integrate}
 \index{Intensity Integration}
-Intensity integration lets you calculate average intensity
-as a function of $Q$, $\chi$, or $2\theta$. By default, the
-option is to integrate in $Q$ or $\chi$. If you want to 
-integrate in $2\theta$, you must click on the integrate 
-option of the menu and select \gui{Work in 2theta} instead
-of \gui{Work in Q}. To integrate intensity, you need to
-give a lower value, an upper value, and a bin size. With 
-these inputs, the \gui{Integrate} button will perform the
-integration. This data will be plotted in a new window.
-By default, the integration will be over all possible values
-of the other independent variable. If you integrate in $Q$,
-it will be for all $\chi$. This can be changed by using the
-constrain checkboxes. For example, to integrate in $Q$ only
-for the $\chi$ values between 0 and 90, you would select the
-\gui{Constraint With Range on Right?} option and the put in
-the \gui{Chi Lower?} input the value 0 and the \gui{Chi Upper?}
-input the value 90.  When you then pushed the integrate button, 
-the program would apply the proper constraints.
 
-You can apply the same sort of polarization correcting when 
-integrating. You can also save integration data using the
-\gui{Save Data} button. The output file will be many rows
-of two column plain text data. 
+An intensity integration is a plot of average intensity
+vs $Q$, $\chi$, or $2\theta$. By default, the option is to 
+integrate in $Q$ or $\chi$. The \gui{Work in 2theta} select 
+in the file menu can be used make the program integrate
+in $2\theta$ instead of $Q$.  
+
+The program needs to know a range (both a lower and upper value)
+and a bin size in order to perform an intensity integration.
+When these values are loaded, the \gui{Integrate} button will 
+perform an integration. A new window will open up with the
+data in it. By default, the integration will be over all 
+possible values of the other variable. For example, if you integrate 
+in $Q$, it will be over all $\chi$. This can be changed using the
+constraint check boxes. 
+
+For example, selecting the \gui{Constraint With Range on Right?}
+check box and setting the \gui{Chi Lower?} input to 0 and the
+\gui{Chi Upper?} into to 90 will cause the integration in $Q$
+to be only of pixel values with $\chi$ values between 0 and 90. 
+
+Just like a caked plot, a polarization can be applied during
+an intensity integration. The \gui{Save Data} button can be used
+to save out the intensity integration data as two column ASCII. 
 
 \section{Macro}\index{Macros}
-If you want to perform a complicated task many times, the
-easiest thing to do is to record a macro of all the commands
-and then run the macro instead of doing everything by hand.
-To record a macro, go into the Macro part of the menu and
-select \gui{Start Record Macro}. After doing the tasks you
-want recorded, push \gui{Stop Record Macro} and can save 
-these macro commands to a text file. To run a macro file,
-you can go into the Macro part of the menu and select
-\gui{Run Saved Macro}. 
 
-By editing macro files by hand, you can make them much more
-useful. Most macro commands are just the name of the GUI item
-possibly followed by whatever that thing would want (like a 
+When performing a task many times, it is often easiest to 
+write a record a macro and then run it for all the tasks.
+The \gui{Start Record Macro} option in the \gui{Macro} menu
+can be used to begin recording a macro. After the desired
+tasks are recorded, the \gui{Stop Record Macro} option will
+stop recording the macro and save it to a file. The
+\gui{Run Saved Macro} option can be used to run a macro from
+a file. 
+
+Small edits to a macro file can make them much more versatile. 
+Most macro commands are just the name of the GUI item
+possibly followed by whatever the GUI would want (such as a 
 filename or number). The macro command to load a diffraction 
-file is \macroline{Data File:} followed by a line with a
-filename such as \macroline{C:/somefolder/thefile.mar3450}.
-The filename line can be replaced by a list of filenames,
+file is \macroline{Data File:}. It must be followed by a line with 
+a filename. Instead of a filename, the \macroline{Data File:} macro
+line can be followed by a list of filenames,
 a directory containing diffraction data, or some combination
-of both. The program will run the subsequent macro lines on
+of each. The program will run the subsequent macro lines on
 every file given in the list and on all diffraction files found 
-in any folders given in the list. The loop over diffraction
-files will end with a subsequent \macroline{Data File:} line,
+in any folders in the list. The loop over diffraction
+files will end with a subsequent \macroline{Data File:} command,
 a \macroline{END LOOP} line, or the end of the macro file.
 
-When lopping over diffraction files, there is a special 
-markup which makes it easy to save files into the right 
-place. This can be done with the special markup names
+When lopping over diffraction files, there is special 
+markup which makes it easy to output files into useful
+places with useful names. There are special markup names
 \macroline{BASENAME} and \macroline{FILENAME}. Whenever the
 program runs across \macroline{BASENAME} in the macro file,
-that string will be replaced with the current base of the 
+that string will be replaced with the path of the current
 diffraction file that has been loaded. Similarly, 
-\macroline{FILENAME} will get replaced with the filename of
-the current diffraction file. In our previous example,
-\macroline{BASENAME} would get replaced with
-\macroline{C:/somefolder} and \macroline{PATHNAME} would get 
-replaced with \macroline{thefile}. You could recreate the 
-original file name with \macroline{PATHNAME/FILENAME.mar3450}.
+\macroline{FILENAME} will be replaced with the filename of
+the current diffraction file. You could recreate the 
+diffraction file (if it was of type mar3450) with the macro 
+command \macroline{PATHNAME/FILENAME.mar3450}.
 This markup can be used to save things with useful names. For
 example, the macro line \macroline{Save Integration Data}
-followed by the line
-\macroline{PATHNAME/FILENAME\_int.dat} would, for
-our previously loaded file, save the integrated intensity data
-as \macroline{C:/somefolder/thefile\_int.dat}. For
-all other diffraction data being looped over, the diffraction data
-would get saved next to the corresponding data file.
+could be followed by the line
+\macroline{PATHNAME/FILENAME\_int.dat}. It would save the intensity
+integration for all diffraction files in a loop right next to the
+diffraction file with a useful name.
