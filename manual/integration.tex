@@ -1,37 +1,37 @@
-\section{The Integration Algorithm}
+\section{The Integration Algorithm}\label{integration_algorithm}
 
-An intensity integraiton is a plot of average inensity as 
-a function either $Q$, $2\theta$, or $\chi$. The calibraiton 
-values for the diffraction data must already be known before 
-the integraiton is done. A range and bin size for the
+An intensity integration is a plot of average intensity as 
+a function either $Q$, $2\theta$, or $\chi$. The calibration 
+values for the diffraction data must be known before 
+the integration is done. A range and bin size for the
 integration must be give. For example, a $Q-I$ integration 
 might have a range from 2 to 5 with 100 bins. 
 
 The algorithm for performing the intensity integration
 is as follows: loop over every pixel in the image. 
-Add its intensity to the bin if it should be
-in the bin based upon its value of $Q$, $2\theta$, or 
-$\chi$. Remember that we need to use the calibration
-values to calculate the corresponding $Q$, $2\theta$, and 
-$\chi$ value using equations~\ref{ytermsydoubleprime}
+Add its intensity to a bin if it $Q$, $2\theta$, 
+or $\chi$ value falls within the bin's range.
+We need to know the calibration values because
+they are used to calculate $Q$, $2\theta$ and $\chi$
+from the pixel's coordinates using 
+using equations~\ref{ytermsydoubleprime}
 \ref{xtermsxdoubleprime}, \ref{chitermsyx}, 
 \ref{2thetatermsr}, and \ref{qterms2theta}.
-After going through all the pixel, the bins then get averaged 
-together. 
+After binning all the pixel, the bins are then averaged.
 
-This program can constrain the integration. 
+This program can constrain the integration range. 
 This means that you can perform, for example,
 a $Q$ integration of only those pixels with some
-particular range of $\chi$ values. Or, you can
-constrain your $\chi$ integration to on a particular
+particular $\chi$ range. Or, you can
+constrain your $\chi$ integration to a particular
 $Q$ range. This could be used, for example, to
-perform a $\chi$ integration of only a particular
+perform a $\chi$ integration of only one
 diffraction peak. The algorithm for performing
-the constraint isn't any more complicated. You just
-only bin a particular intensity value if it is
-allowed by the constraint.
+the constraint isn't different. You just
+only bin intensity values which are allowed by 
+by the constraint.
 
-Finally, the program can perform a polarization 
+The program can perform a polarization 
 correction to the integration. The polarization 
 correction formula is
 \begin{align}
@@ -39,51 +39,44 @@ correction formula is
     PF&=P(1 - (\sin(2\theta)\sin(\chi-90))^2) + 
     (1 - P)(1 - (\sin(2\theta)\cos(\chi-90))^2)
 \end{align}
-with $Im$ the measured intensity. If this
-is selected, what happens
-then is that all pixels have their intensity
-value corrected by this formula before they
-are binned. Note that the $2\theta$ and $\chi$
-values correspond to the particular value
-that is being corrected.
+with $Im$ the measured intensity.  The $2\theta$ 
+and $\chi$ values correspond to the particular 
+value that is being corrected. If this option
+is selected, all pixels have their intensity
+corrected by this formula before they
+are binned. 
 
 \section{Integrating with the Program}
 
-
-In order to perform a cake of the program you will have to 
-already have loaded into the program one or more diffraction
-data files and you will have to input calibration data
-into the program. Figure~\ref{integration_tab} shows the
+The program requires one or more diffraction images and
+calibration parameters to be loaded into the program
+before an intensity integration can be done.
+Figure~\ref{integration_tab} shows the
 \gui{Integrate} tab. This is where integration is done.
-Notice that there are two separate inputs on the tab. 
-The input on the left is titled \gui{Q-I Integration}
-and is for performing $Q$ integration.
-The inputs on the left allow you to specify a
-range in $Q$ that should be integrated.
-The $Q$ range can be inputted with the
-\gui{Q Lower?}, \gui{Q Upper?} inputs. The number of
-bins in $Q$ space can be specified with the
-\gui{Number of Q?} input. 
-To perform a $Q$ integration, you have to push
-the \gui{Integrate} button on the left.
+There are two sets of inputs on the tab. 
+The inputs on the left is titled \gui{Q-I Integration}
+and can be used for performing $Q$ integration.
+The \gui{Q Lower?} and \gui{Q Upper?} inputs on the left 
+can be used to specify an integration range in $Q$.
+The number of bins in $Q$ space can be specified with the
+\gui{Number of Q?} input. The \gui{Integrate} button
+on the left can be used to perform a $Q$ integration.
 
 \begin{SCfigure}[1][htbp]
     \centering
     \includegraphics[scale=.75]{figures/integration_tab.eps}
-    \caption{The integration tab. This is where data
-    can be integrated.} 
+    \caption{The integration tab. This is where intensity
+    integration is done.} 
     \label{integration_tab}
 \end{SCfigure}
 
-To perform a $\chi$ integration, you can use the inputs
-on the right under the name \gui{Chi-I Integration}.
-The inputs on the right allow you to specify
-a range in $\chi$ with the \gui{Chi Lower?} and
-\gui{Chi Upper?} inputs. The number of bins in
-$\chi$ space can be specified with the
-\gui{Number of Chi?} input. To perform the
-$\chi$ integration, you have to push the
-\gui{Integrate} button on the right.
+The inputs on the right is titled \gui{Chi-I Integration}
+and can be used for performing a $\chi$ integration.
+The \gui{Q Lower?} and \gui{Q Upper?} inputs on the right
+can be used to specify an integration range in $\chi$.
+The number of bins in $\chi$ space can be specified with the
+\gui{Number of Chi?} input. The \gui{Integrate} button
+on the right can be used to perform $\chi$ integration.
 
 \section{The Integration Window}
 
@@ -104,130 +97,120 @@ $\chi$ integration, you have to push the
     \label{integration_window_chi}
 \end{SCfigure}
 
-After you push the integrate button, a line plot of the 
-integrated data will be displayed in a new window. 
+After the program finishes integrating, a line plot
+of the integrated data will be displayed in a new window. 
 Figure~\ref{integration_window_q} shows 
-the window displaying $Q$ integrated data
+the integration window displaying $Q-I$ integrated data
 and figure~\ref{integration_window_chi} shows the
-window displaying $\chi$ integrated ata.
-Similar to the diffraction data display and the cake 
-data display, this window has a couple of nice featuers
+window displaying $\chi-I$ integrated data.
+This window has a couple of nice features for interacting
+with the data:
 \begin{itemize}
-    \item {\em Zoom into the data} - To zoom, left click
-    on the data and hold down on the mouse. When you drag 
-    the cursor, the program will create a resizing square. 
-    When you let go of the mouse, the selected square will 
-    be used as the outer bound and the image will be zoomed 
-    into it. 
-    \item {\em Zoom out of the data} - To unzoom, right
-    click on the graph
-    \item {\em Resize the window} - This will make the graph
-    either larger or smaller. To do so, click on the bottom 
-    right corner and drag. 
-    \item {\em Read coordinates for a selected point} -
-    When you mouse over the graph, the selected $Q$ (or $\chi$
-    or $2\theta$) and intensity value will be displayed.
-    \item {\em Log Scaling} - The \gui{Log Scale?} check box
+    \item {\em Zoom into the data} -- left click on the plot and 
+    hold down on the mouse. When the mouse is moved around, the
+    program will create a resizing rectangle.  When the mouse is 
+    released, the program will zoom into the selected range.
+    \item {\em Zoom out of the data} -- right
+    click on the plot.
+    \item {\em Resize the window} -- click on the bottom right 
+    corner of the window and drag. The window will resize just 
+    like any other window and the plot will become larger or 
+    smaller.  
+    \item {\em Read coordinates for a selected point} --
+    when mousing over certain the plot, the selected $Q$, $\chi$
+    or $2\theta$ and intensity value will be displayed on
+    the bottom of the window.
+    \item {\em Log Scaling} -- the \gui{Log Scale?} check box
     will toggle whether to display a log scale of the data.
 \end{itemize}
 
 \section{\texorpdfstring{Working in $2\theta$}{Working in 2theta}}
 
-This program can integrate in $2\theta$ instead of $Q$. To 
-do so, you have to go into menu bar up top and select
-the \gui{Work in 2theta} option instead of the
-\gui{Work in Q} option. Once you do this, the whole program
-will just act like it was set to work in $2\theta$ all
-along. The labels
-on the program will change so that the option will say
-\gui{2$\theta$-I Integration}. The other inputs will change
-to \gui{2$\theta$ Lower}, \gui{2$\theta$ Upper}, and
-\gui{Number of 2$\theta$}. When you push the left
-\gui{Integrate} button, the program will integrate 
-in $2\theta$ and the window that opens will show a plot
-of average intensity as a function of $2\theta$.
+This program can integrate in $2\theta$ instead of $Q$. This
+The \gui{Work in 2theta} option in the menu bar can be used
+to change the way that integration is done. This option will
+make the label on the left to say 
+\gui{$2\theta$-I Integration}. The inputs below will 
+change to \gui{$2\theta$ Lower}, \gui{$2\theta$ Upper}, 
+and \gui{Number of $2\theta$}. The 
+\gui{Integrate} button will then perform an integrate 
+in $2\theta$. The diffraction window will display
+average intensity as a function of $2\theta$.
 If there are any values in the \gui{Q Lower} or
-\gui{Q Upper}, they will be convert to $2\theta$
-values when the program switches over. If you switch
-from $2\theta$ back to $Q$, they will be converted
-the other way.
+\gui{Q Upper}, they will be convert from $Q$ to $2\theta$
+values when the program switches. The \gui{Work in Q} option
+in the menu bar can be used to change the program 
+back to working with $Q$. Any values in the \gui{$2\theta$ Lower?}
+or \gui{$2\theta$ Upper?} will be converted back.
 
 \section{AutoIntegrate}
 
-There is a convenience function similar to the
-\gui{AutoCake} button called \gui{AutoIntegrate}. 
-\gui{AutoIntegrate} will try to pick a nice range 
+There is a convenience function called \gui{AutoIntegrate} 
+that is similar to the \gui{AutoCake} button.
+\gui{AutoIntegrate} will try to pick a nice integration range 
 and then do the integration. The AutoIntegrate button 
 on the left will guess at a nice range of $Q$ 
-or $2\theta$ values and then do the $Q$ or
-$2\theta$ integration.
+(or $2\theta$) and then do the $Q$ (or
+$2\theta$) integration.
 It will always make the lower $Q$ or $2\theta$ 
 value 0 and the upper value large enough
 to include all the data.
-It will set the number of $Q$ or $2\theta$ values to
-200.
-
-The \gui{AutoIntegrate} button on the right 
-will guess a nice range of $\chi$ and then
+It will set the number of $Q$ or $2\theta$ to
+200. The \gui{AutoIntegrate} button on the right 
+will guess a nice range of $\chi$ and 
 do the $\chi$ integration. It will always 
 set \gui{Chi Lower} to -180, \gui{Chi Upper} to
 180, and \gui{Number of Chi} to 200.
 
 \section{Constraining the Inputs}
 
-As was described in the integration algorithm 
-section, an integration in one parameter can 
-be constrained by another parameter. For example,
-a $Q$ or $2\theta$ integration can be done only 
-of values in a particular $\chi$ range. 
-$\chi$ integration can only be done of a
-particular $Q$ or $2\theta$ range. Of course,
-it would be pointless to constrain $Q$ to a
-certain range of $2\theta$.
+As was described in 
+section~\ref{integration_algorithm}, an integration 
+of one parameter can be constrained by another 
+parameter. For example, a $Q$ or $2\theta$ 
+integration can be done only of values in a 
+particular $\chi$ range. $\chi$ integration 
+can only be done of a particular $Q$ or $2\theta$ 
+range. Of course, it would be pointless to 
+constrain $Q$ to a certain range of $2\theta$
+or vice versa.
 
 To constrain the integration using the program,
 there are two convenient 
 \gui{Constrain With Range On Right?} and 
 \gui{Constrain With Range On Left?} check boxes.
-When you select
-\gui{Constrain With Range On Right?}, the
-$Q$ or $2\theta$ integration being done
-will be constrained in $\chi$ by range
-set with \gui{Chi Lower} and \gui{Chi Upper}.
-When you select
-\gui{Constrain With Range On Left?}, the
-$\chi$ integration will be constrained by
-either $Q$ or $2\theta$ (whichever mode the
-program is currently in) by the lower and
-upper inputs to the left.
+
+When \gui{Constrain With Range On Right?} is
+selected,
+the $Q$ or $2\theta$ integration being done
+will be constrained in $\chi$ by the chi
+range specified by \gui{Chi Lower} and 
+\gui{Chi Upper}. When 
+\gui{Constrain With Range On Left?} is selected, 
+the $\chi$ integration will be constrained by
+either the $Q$ range specified by \gui{Q Lower?}
+and \gui{Q Upper?} or the $2\theta$ range specified by 
+\gui{$2\theta$ Lower?} and \gui{$2\theta$ Upper?}.
 
 \section{Masking}
 
-The program can allows for masking of certain
-pixels inside the image. 
-Masking of intensity integrated data will be done
-whenver the
+The program allows for masking of certain
+pixels while integrating. Masking of intensity 
+integrated data is done whenever the
 \gui{Do Greater Than Mask?}, \gui{Do Less Than Mask?},
 or \gui{Do Polygon Mask?} check boxes are selected.
 Whenever the program finds an intensity value
-that you specify should be masked (either because it 
-is too large, too small, or in a polygon mask), it makes
-sure not to bin that pixel and acts as though
-it does not exist. So if you don't want to include
-in your integration any values too large or too
-small, you can use a threshold mask. If you
-don't want to mask any values inside of a certain
-region, you can use a polygon mask. 
-Refer to Chapter \ref{pixel_masking} for information 
-about how to apply a pixel mask.
+that should should be masked (either because it 
+is too large, too small, or in a polygon mask), the
+program will ignore the pixel and not bin it.
+Refer to Chapter \ref{pixel_masking} for a discussion
+of masking.
 
 \section{Saving Integrated Data}
 
-After you have pushed the \gui{Integrate} buton
-and performed a $Q$, $2\theta$, or $\chi$ integration,
-you can save out the intensity integrated data
-using the \gui{Save Data} button. The format of 
-an intensity integration data file is as follows:
+The intensity integrated data can be saved to a file
+using the \gui{Save Data} button. 
+A typical integration file looks like:
 \begin{lstlisting}[caption={'A Cake Data File'}]
 # Q vs I Intensity Integration
 # Intensity integration of: C:/data/LaB6_14_02_56.mar3450 
@@ -276,21 +259,25 @@ an intensity integration data file is as follows:
 ...
 \end{lstlisting}
 The header is a bunch of lines that begin with \#.
-Each line says something useful about the state
-of the program when the integratinon was
-done. 
-If you perform an intensity integration in $\chi$
-space instead, the header file will say
-\macroline{\# Chi vs I Intensity Integration}
-If two files were added together and then integrated, the 
-header file will contain the names of both files.
-Follwing the header string the line
+The header describes the state that the program was
+in when the intensity integration was performed.
+The fist line describes what type of integration was
+performed. For example, if a $\chi-I$ integration was 
+performed, the header file will say
+\macroline{\# Chi vs I Intensity Integration}.
+The header then contains the name(s) of the diffraction
+files that were integrated. The header contains the
+calibration parameters that were used when integrating.
+The header contains information about any polarization
+correction, greater or less than mask that was applied,
+polygon mask that was applied. It describes any constrains 
+on the integration and finally the integration range and 
+step size.  Following the header is the line
 \macroline{\# Q Avg Intensity} (or \macroline{\# Chi Avg Intensity}
 or \macroline{\# 2theta	Avg Intensity}). Following it is
-the data. Each line contains one of the bins. The data
-is tab seperated. The first number is the middle $Q$ (or
-$\chi$ or $2\theta$ value) in the bin and the second number
-is the average intensity.
+the data. Each line contains two numbers corresponding to one bins. 
+The first number is the middle $Q$ (or $\chi$ or $2\theta$ value) 
+in the bin and the second number is the average intensity.
 
 
 

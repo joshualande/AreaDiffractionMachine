@@ -107,7 +107,7 @@ An example of this is shown in figure~\ref{divide_up_image}.
 \caption{Here is a diagram of the peak finding algorithm. 
 The solid circular black lines represent diffraction
 peaks on the image. The dotted lines represent the
-$Q$ ranges used to find the peaks. Note that the diffraction
+$Q$ ranges used to find the peaks. The diffraction
 peaks are entirely within the ranges. Finally, the radial
 line represents the program picking a particular $\chi$
 value and looking for peaks inside of the $Q$ ranges.
@@ -181,7 +181,7 @@ the residual function as
         \sum_{\text{$x,y$ pairs}}
         (Q_{\text{peak}} - Q_{\text{exp}})^2
 \end{equation}
-Note that the functional dependence comes in from
+The functional dependence comes from
 calculating $Q_{\text{peak}}$ from a known
 $(x,y)$ coordinate. We see that the smaller the 
 Residual is, the closer we have come to finding 
@@ -381,12 +381,13 @@ fit, you can use the check boxes under the \gui{Fixed?}
 label to fix the parameter. When the corresponding
 check box is checked, the parameter will not vary
 during the fit. When it is not checked, the
-parameter will vary during the fit. Note that you
-can not fix or not fix the pixel length and 
-pixel height. This is because these are never
+parameter will vary during the fit. You
+can not fix the pixel length and 
+pixel height because they are always held fixed. This is 
+because these are never
 the short of thing that one would want to vary.
-They are just some property that is already know
-about the detector. 
+They are some property of the detector that is known in
+advance.
 
 \section{\texorpdfstring{Displaying Constant $Q$ 
     Lines}{Displaying Constant Q Lines}}

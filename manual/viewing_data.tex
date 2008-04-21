@@ -32,25 +32,24 @@ shown in figure~\ref{diffraction_data_window}.
 You can use the diffraction data window to interact with your 
 diffraction data. you can:
 \begin{itemize}
-    \item {\em Zoom into the data} -- left click on
-    the data and hold down on the mouse. When you drag the cursor, 
-    the program will create a resizing square. When you let go of the
-    mouse, the selected square will be used as the outer bound and
-    the image will be zoomed into it.
+    \item {\em Zoom into the data} -- left click on the data and 
+    hold down on the mouse. When the mouse is moved around, the
+    program will create a resizing square.  When the mouse is released,
+    the program will zoom into the selected range.
     \item {\em Zoom out of the data} -- right click on
     the data.
     \item {\em Pan across the data} -- hold shift, push down either mouse
     button, and then move the mouse around and the image will move 
     with it. Let go of the mouse to stop panning.
-    \item {\em Resize the window} -- Click on the bottom right corner of
+    \item {\em Resize the window} -- click on the bottom right corner of
     the window and drag. The window will reszie just like any
-    other program.  
-    \item {\em Read coordinates for a selected point} -- When you
-    mouse over the image, the $x$, $y$, $Q$, $\chi$, and $I$
+    other window and the data will become larger or smaller.  
+    \item {\em Read coordinates for a selected point} -- when mousing
+    over the image, the $x$, $y$, $Q$, $\chi$, and $I$
     values for that pixel will be displayed at the bottom of the
     window. $Q$ and $\chi$ will only be dipslayed if valid calibration
     data is loaded into the program. See chapter~\ref{calibration}.
-    \item {\em Change the Color Map} -- The \gui{Colormaps} selector 
+    \item {\em Change the Color Map} -- the \gui{Colormaps} selector 
     can be used to change the particular color map used to display the 
     data.
     \item {\em Invert the Color Map} -- The \gui{Invert?} checkbox can 
@@ -61,11 +60,11 @@ diffraction data. you can:
     value that will be maped to the lowest part of
     the color map and the hi value corresonds to the intensity
     value that will be mapped to the highest part of the color
-    map. \footnote{Technically, what you actually set is what
+    map. \footnote{Technically, what is set is the
     percentage of the most intense pixel in the image should be 
     mapped to the lowest or highest value in the color map.}
     This feature is useful because it can help make visible certain
-    intensity ranges of the image.
+    intensity ranges in the image.
     \item {\em Log Scaling} - By default, intensity values are linearly 
     mapped to colors in the color map. The \gui{Log Scale?} checkbox 
     can be selected to instead apply a log scale mapping of the intensity 

@@ -103,39 +103,43 @@ masks drawn on top of it.
 \section{Masking}
 \index{Pixel Masking}
 
-You can make the program ignore certain pixels when doing
-diffraction analysis. This is all done on the \gui{Masking}
-tab. To have the program ignore pixels above or below a 
-certain value, use the threshold masking option.
-You can have the program ignore all pixels that are larger 
-then a certain value by selecting 
-\gui{Do Greater Than Mask?} and putting the particular value
-into the \gui{(Pixels Can't Be) Greater Than Mask:} input.
-You can have the program ignore all pixels less than a certain
-value with the corresponding \gui{Do Less Than Mask?}
-and the \gui{(Pixel's Can't Be) Less Than Mask:} input.
-Once you set the threshold, these any pixel either too large
-or too small will be displayed on the diffraction and cake
-displays as a different color. That color is user 
-specified by the color inputs next to the checkboxes. 
-When you do an intensity integration, these pixels are 
-not used in the averages.
+The program can ignore certain pixels in an image
+when performing diffraction analysis. This is done 
+on the \gui{Masking} tab.  Threshold masking can be 
+used to ignore pixels above or below a certain value.
 
-You can also have the program mask certain whole areas 
-of the image if those pixels are undesirable for some 
-reason. If you wish to do so, select the 
-\gui{Do Polygon Mask?} option. To draw the image on the
-screen that you do not want, click \gui{Add Polygon} and
-then then left click on the diffraction image for each 
-of the vertices of the polygon that you want to mask out.
-To draw the final vertex and finish the polygon, just
-use right click. To remove any polygon, push the 
-\gui{Remove Polygon} button and click on the polygon that
-you want to get rid of. You can remove all the polygons
-in the program using the \gui{Clear Mask} button, save
-all the polygons in the program to a file using the
-\gui{Save Mask} button, and load saved polygons using
-the \gui{Load Mask} button.
+All pixels larger than a certain value can be ignored by
+checking the \gui{Do Greater Than Mask?} check box
+and specifying the value in the 
+\gui{(Pixels Can't Be) Greater Than Mask:} input.
+All pixels less than a certain value can be ignored by
+checking the \gui{Do Less Than Mask?} check box 
+and specifying the value in the 
+\gui{(Pixels Can't Be) Less Than Mask:} input.
+The overloaded or underloaded pixels will show up
+as a different color on the diffraction and cake displays.
+That color can be specified by the color inputs next to the 
+check boxes. When a threshold mask is applied, masked pixels
+will not be used during an intensity integration.
+
+The program can mask certain areas of the diffraction image
+using polygon masks. The \gui{Do Polygon Mask?} check box 
+will enable polygon masking. Any masks in the program
+will be displayed over the diffraction data and cake data.
+Any masked pixels will not be used during an intensity
+integration. The \gui{Add Polygon} button can be used to 
+draw new polygon masks. To draw a mask, simply push
+the button, then left click all the
+nodes on the diffraction image except the last one, and
+finally right click the final node. This will create the 
+polygon. The \gui{Remove Polygon} button can be used to 
+remove polygons from the diffraction image. Simply push
+the button, then click on the polygon that should be
+removed. The \gui{Clear Mask} button will remove all
+the polygons form the program. The \gui{Save Mask} button
+will save all the polygons in the program to a file.
+The \gui{Load Mask} button will load into the program
+all of the polygons in a file.
 
 \section{Cake}
 \index{$\chi$}\index{$Q$}\index{Cake}
