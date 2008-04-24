@@ -8,49 +8,34 @@
     \label{DiffractionSetup}
 \end{SCfigure}
 
-X-ray diffraction is the process of shining a beam of 
-high energy x-rays at a crystal. It is
-modeled as in figure~\ref{DiffractionSetup}. 
-Cones of light leave the crystal at certain angles to 
-the incoming beam. These cones of light are then 
-captured by a detector. Usually, the interesting thing
-to measure when doing x-ray diffraction are the scattering
-angles of these 
-cones of light. By convention, the scattering angle of light,
-measured with respect to the outgoing beam, is called 
-$2\theta$. If we placed the detector perpendicular 
-to the incoming beam, as in figure~\ref{DiffractionSetup}, 
-the cones of light would be detected as circles of high 
-intensity. Were we to know certain experimental parameters 
-such as the distance from the sample to the detector and 
+X-ray diffraction can be models as in figure~\ref{DiffractionSetup}. 
+Cones of light leave the crystal at particular angles to 
+the incoming beam. These cones of light are 
+captured by a detector. By convention, the scattering angle 
+of the x-rays measured with respect to the incoming beam is called 
+$2\theta$. Usually, the interesting thing to measure by doing x-ray 
+diffraction is the scattering angles of these cones of light. 
+If we placed a detector perpendicular 
+to the incoming beam, the cones of light would be detected as 
+circles of high intensity. 
+If we knew the distance from the sample to the detector and 
 the distance from the center of the detector to a 
 particular ring (or really any point on the detector), 
 we could easily calculate the scattering angle of the
-light that ended up at that particular spot on the detector. 
-Suppose that the distance from the crystal to the detector 
+light. If the distance from the crystal to the detector 
 is $d$ and the distance from the center of the detector 
-to our particular point on the detector is $r$, as is 
-shown in figure~\ref{MeasureAngleFlatDetector}. Then the 
+to our particular point on the detector is $r$, then the 
 scattering angle is
 \begin{equation}
-    \tan2\theta = \frac{r}{d}
+    \tan2\theta = \frac{r}{d}.
 \end{equation}
-Here, the radius $r=\sqrt{x^2+y^2}$.
-Unfortunnatley, life is not always as simple as this. In 
-particular, the assumption that the detector is exactly 
-perpendicular to the incoming beam is unphysical. It 
-is unphysical because perfect alignment can never be 
-achieved. The detector will always in practice be 
-slightly offset with respect to the incoming beam, even 
-if only slightly. Failing to account for this tilt would
-introduce 
-a systematic error in measuring $2\theta$ and doing any other 
-sort of data analysis. It is also unphysical because there 
-are often good reasons to collect diffraction data from 
-detectors at significant tilts. The main reason 
-would be to collect data at more extreme angles without 
-needing to use a larger detector. This can be seen
-in figure~\ref{HigherQValues}. 
+This is shown in figure~\ref{MeasureAngleFlatDetector}. 
+life is not always so simple. The detector is never
+exactly perpendicular to the incoming beam.  In practice, 
+the detector will always be slightly offset with respect 
+to the incoming beam. Failing to account for this would
+introduce a systematic error in a measurement of scattering
+angles. 
 
 \begin{SCfigure}[1][htbp]
     \centering
@@ -67,22 +52,12 @@ in figure~\ref{HigherQValues}.
     \label{MeasureAngleFlatDetector}
 \end{SCfigure}
 
-So there is a need to analyze detectors that are 
-tilted. I will present here a theory of tilted detectors 
-first developed by Abhik Kumar in~\cite{Kumar05}.
-\index{Abhik Kumar} My derviation will result in 
+There is a need to analyze diffraction data on detectors that are 
+not perpendicular to the incomming x-rays. We will present a 
+theory of tilted detectors first developed by Abhik Kumar 
+in~\cite{Kumar05}.\index{Abhik Kumar} Our derivation will result in 
 different formulas because of a different assumption
-about how the detector is tilted from the initial to
-the final state.
-
-\begin{SCfigure}[1][htbp]
-    \centering
-    \input{figures/HigherQValues.tex}
-    \caption{This diagram illustrates how tilted geometries 
-    allow for the collection of diffraction data at more 
-    extreme angles without the need for a larger detector.}
-    \label{HigherQValues}
-\end{SCfigure}
+about how the detector is tilted. 
 
 What we are interested in is mathematically describing 
 position coordinates on a tilted detector by relating 
