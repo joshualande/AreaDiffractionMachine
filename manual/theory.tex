@@ -230,18 +230,6 @@ Plugging in and simplifying
 
 \section{\texorpdfstring{The $R$ Rotation}{The R Rotation}}
 
-\begin{SCfigure}[1][htbp]
-    \centering
-    \input{figures/RotationFormula.tex}
-    \caption{Here, we take a point on a plane rotated
-    by angle $\beta$ about $\hat y$ and by angle
-    $\alpha$ about $\hat x'$. We then rotated this point
-    about a line normal to the plane going through the
-    origin by angle $R$. Rotating the point is 
-    equivalent to rotating the plane.}
-    \label{RotationFormula}
-\end{SCfigure}
-
 We now deal with the final rotation. We relate
 the coordinate $(x'',y'')$ on the previous tilted 
 detector to the point $(x''',y''')$ on a detector 
@@ -302,72 +290,55 @@ and
 \begin{SCfigure}[1][htbp]
     \centering
     \input{figures/TwoTheta.tex}
-    \caption{For a particular point $(x,y)$, we
-    always associate two quantities: $2\theta$ and $\chi$.
-    $2\theta$ is the angle of scattering 
-    of the beam, or the angle that an incoming beam is 
-    deflected by when it diffracts off the crystal. 
-    $\chi$ is a measure of the azimuthal angle around 
-    the beam. It tells you in what direction radially 
-    outwards (with respect to the undeflected beam) 
-    the outgoing beam was was scattered.}
+    \caption{For a particular point $(x,y)$ on an 
+    untilted detector, we define two quantities:
+    $2\theta$ and $\chi$. $2\theta$ is the angle of 
+    scattering of the beam. $\chi$ is a measure of the 
+    azimuthal angle of the scattered light around 
+    the beam.}
     \label{TwoTheta}
 \end{SCfigure}
 
 We now have a way of relating $(x''',y''')$, 
-a point on a detector with a pitch $\beta$, 
-tilt $\alpha$, and a roll $R$ applied to it, 
-to a point on an untilted detector $(x,y)$
-where a beam of light would have intersected
-were it not to hit the tilted detector.
-With this relationship, we can now relate
-these quantities to theoretically motivated 
-quantities. In particular, the angle of scattering 
-of a beam is by convention called $2\theta$ and a 
-quantity measuring the scattering angle around the 
-incoming beam is called $\chi$. These quantities 
-are shown in figure~\ref{TwoTheta}. We can see that 
-the relationship between $(x,y)$ and $2\theta$ and 
-$\chi$ is
+a point on a detector rotated by angle $\beta$, 
+$\alpha$, and $R$ to a point $(x,y)$
+on an untilted detector.
+We relate $(x,y)$ to theoretically motivated 
+quantities. $2\theta$, the angle of scattering 
+of a beam, is calculated as
 \begin{equation}\label{2thetatermsr}
-    \tan2\theta = \frac{r}{d} = \frac{\sqrt{x^2+y^2}}{d}
+    \tan2\theta = \frac{r}{d} = \frac{\sqrt{x^2+y^2}}{d}.
 \end{equation}
-and
+$\chi$, the angle around the beam, is calculated as
 \begin{equation}\label{chitermsyx}
-    \tan\chi = \frac{y}{x}
+    \tan\chi = \frac{y}{x}.
 \end{equation}
-The quantity $Q$ is often used instead of $2\theta$. 
-they are related by
+$Q$ is calculated as
 \begin{equation}\label{qterms2theta}
-    Q = 4\pi \sin(2\theta/2)/\lambda
+    Q = 4\pi \sin(2\theta/2)/\lambda.
 \end{equation}
-The reason for using $Q$ instead of $2\theta$ is because 
-diffraction theory shows that the $Q$ values of preferential 
-scattering of a crystal is a material property independent 
-of the experimental setup (such as $d$ and $\lambda$). 
-
-Alternately, energy could be used in this formula.
-To do so, energy can be related to wavelength using
-the De Broglie's formula
+Diffraction theory shows that the $Q$ values of preferential 
+scattering for a crystal are a material property independent 
+of the experimental setup. 
+We could use energy instead of wavelength in this formula 
+using the De Broglie's formula
 \begin{equation}
-E = hc/\lambda
+    E = hc/\lambda.
 \end{equation}
-Finally, sometimes people use the quantity $D$ instead.
-$D$ is related to $Q$ by
+Some people use the quantity $D$ instead of $Q$
 \begin{equation}\label{DtermsQ}
-    D = 2\pi/Q
+    D = 2\pi/Q.
 \end{equation}
-Using equation~\ref{conversionToPixels},
-we now have a way of relating pixel
+
+We now have a way of relating pixel
 coordinates $(x_d,y_d)$ read directly off
 of a detector to the
 theoretically motivated coordinates $(Q,\chi)$.
-In order to do this conversion, we must use
-the values $x_c$, $y_c$, $ps$, $d$, $\lambda$,
+This relationship assumes that we know
+$x_c$, $y_c$, $pl$, $ph$, $d$, $\lambda$,
 $\alpha$, $\beta$, and $R$. A discussion of
-how these values can be determined so that
-this transformation can in practice be done
-will be given in section~\ref{calibration}
+how these values can be determined experimentally
+is given in section~\ref{calibration}.
 
 
 %\section{Implementation In Code}
