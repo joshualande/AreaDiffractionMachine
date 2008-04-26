@@ -246,50 +246,40 @@ We now deal with the final rotation. We relate
 the coordinate $(x'',y'')$ on the previous tilted 
 detector to the point $(x''',y''')$ on a detector 
 tilted about a line normal to this detector going 
-through its center.
-
-the plane that goes through the center of the
-detector. We will call this final
-point $(x''',y''')$. This is shown schematically 
-in figure~\ref{RotationFormula}. The equation for 
-this rotation is
-\begin{align}\label{rotation}
-    x''&=x'''\cos R + y'''\cos R\\
-    y''&=y'''\cos R - x'''\cos R
+through its center. These points are related by
+\begin{align}
+    x''&=x'''\cos R + y'''\cos R\label{rotation1}\\
+    y''&=y'''\cos R - x'''\cos R\label{rotation2}
 \end{align}
-Applying equation \ref{rotation} onto equation 
-\ref{xtermsxdoubleprime} and \ref{ytermsydoubleprime}
-give us the relationship that we wanted all along.
+Applying equation~\ref{rotation1} and \ref{rotation2}
+to equation \ref{xtermsxdoubleprime} and \ref{ytermsydoubleprime}
+gives us the needed relationship between a point on an untilted
+detector and the corresponding point on a tilted detector.
 
-\section{Relationship to Pixel Coordinates}
+\section{Pixel Coordinates}
 
-$(x''',y''')$ is suppose to represent what we actually
-measure on a real detector. Unfortunately, things are
-not quite so easy. We do not actually measure these
-values. The whole formalism assumes that we are 
-measuring distances from the point on the
-detector where the beam would hit were it not to be
-diffracted. Unfortunately, it is not at all clear
-what this point is. A discussion of how to find
-this center center will
-be given in section~\ref{calibration}, but for now
-lets simply state that there is some point on the detector
-that is the center and call it $(x_c,y_c)$ 
-We are interested in some other pixel reading
-on the detector which corresponds to the point
-$(x''',y''')$. Lets call it $(x_d,y_d)$. 
+$(x''',y''')$ represents the distance between the center 
+and a point on the real detector. We do not actually
+measure this distance. What we actually have experimentally
+are pixel coordinates on a detector. There is some pixel 
+coordinate on the detector corresponding to the center of
+the detector\footnote{This is the point that the x-rays would
+hit were they not to diffract off the crystal}. We will call 
+it $(x_c,y_c)$.  We will call the pixel coordinate on the detector
+$(x_d,y_d)$ that corresponds to the point $(x''',y''')$.
+We want to relate ($x_d,y_d$) which we measure directly
+to $(x''',y''')$ and then to $(x,y)$.
 There is some material property of the detector 
-describing the distance between each pixel
+describing the width of each pixel
 (e.g. \unit[1000]{mm/pixel}). We will call
-this width $ps$. We can relate these quantities 
-using:
+this width $pl$. There is a corresponding
+quantity that is the height of each pixel.
+We can relate the pixel coordinates to the physical distances
+by
 \begin{align}\label{conversionToPixels}
-    x'''&=(x_d-x_c) \times ps &
-    y'''&=(y_d-y_c) \times ps
+    x'''&=(x_d-x_c) \times pl &
+    y'''&=(y_d-y_c) \times ph.
 \end{align}
-This means that, in terms of $(x_c,y_c)$ and $ps$,
-we can relate $(x,y)$ and $(x_d,y_d)$ which are
-directly measurable experimental quantities.
 
 \section{Inverting the Equations}
 
