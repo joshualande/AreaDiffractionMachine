@@ -4,7 +4,7 @@
 \usepackage{tocbibind}
 
 % Change ToC title
-%\renewcommand\contentsname{Table of Contents}
+\renewcommand\contentsname{Table of Contents}
 
 % Section numbering only of main sections
 %\setcounter{secnumdepth}{0}
@@ -64,47 +64,27 @@
 
 \tableofcontents
 
-\chapter{Tips and Tricks}
-\index{Tips and Tricks}
 \input{tips_and_tricks_body}
 
-\chapter{An Example}
-\index{Example}
 \input{example}
 
-\chapter{Viewing Diffraction Data}\label{viewing_data}
 \input{viewing_data}
 
-\chapter{Detector Geometries}
-\index{Diffraction Theory}
-\index{Detector Geometries}
 \input{theory}
 
-\chapter{Calibration}\label{calibration}
-\index{Calibration}
 \input{calibration}
 
-
-\chapter{Pixel Masking}\label{pixel_masking}
-\index{Pixel Masking}
 \input{masking}
 
-
-\chapter{Caking}\label{Caking}
 \input{caking}
 
-\chapter{Intensity Integration}
-\index{Intensity Integration}
 \input{integration}
 
-\chapter{Macros}
-\index{Macros}
 \input{macro}
 
-\chapter{Software Licensing}
-\index{Software Licensing}
 \input{licensing}
 
+% include both bibliographies
 \bibliographystyle{plain}
 \bibliography{AreaDiffractionMachineManual} 
 
