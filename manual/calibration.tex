@@ -1,286 +1,216 @@
 \chapter{Calibration}\label{calibration}
 
-One of the most common types of analysis of diffraction data
-is to perform an intensity integration in $Q$. This will 
-create a plot of average intensity as a function of $Q$.
-Since powder diffraction procedures cones of light, this means
-that the intensity should be uniformly large for some $Q$
-values and uniformly low for others, leading to $Q$ values
-where the intensity sharply peaks. The $Q$ values that lead 
-to these peaks can be used to learn structural information
-about the crystals that are being diffracted. So in principle,
-using the transformations just described, it should be easy
-to convert all of the pixel coordinates $(x_d,y_d)$ into
-$Q$ values and then plot average intensity as a function of
-$Q$. The only problem we would face is that in order to do
-the transformation, we would need to know the values of the
-the parameters that characterize an experiment. These are
-\index{$\alpha$}\index{$\beta$}\index{Rotation}
-$x_c$, $y_c$, $d$, $\lambda$, $\alpha$, $\beta$, and 
-$R$.\footnote{The pixel scale $ps$ is usually know in advance 
-as a uniform property of the detector being used.} Calibration
-then is the process used to find what we will now call the
-calibration values.
+Diffraction data can not be analyzed without
+a knowledge of how the diffraction experiment was 
+set up. Calibration is the process used to find these
+values.
 
-\section{The Calibration Algorithm}\label{cal_algorithm}\index{calibration}
+\section{The Calibration Algorithm}
+    \label{cal_algorithm}\index{calibration}
 
-Although in principle all the calibration values could be
-experimentally measured, in practice they can not be
-directly measured to an acceptable level of precision. 
-Instead, a standard calibration procedure is used to 
-infer these values from real diffraction data. The 
-trick to doing this calibration is to image a standard
-while performing the diffraction analysis of an 
-unknown sample. Assuming that the diffraction machine
-was not changed between the collection of the 
-standard crystal and the diffraction of the unknown sample, 
-the calibration data corresponding to the two 
-images will be the same. So, if we can figure out the
-calibration values of the standard crystal, we can
-use these values when analyzing the unknown crystal.
-This is exactly what is done in practice.
-
-What it means to use a standard crystal is to know the
-particular $Q$ values for which the crystal preferentially
-scatters light. With this information, and the 
-calibration values for some particular experiment,
-we could in principle figure out exactly what diffraction
-pattern we should find. This do this, we could, for
+In principle, all the calibration values could be
+measured directly from a diffraction experiment.
+But in practice, they can not be measured to an 
+acceptable level of precision. 
+Instead, a calibration procedure is used to 
+infer these values from the diffraction data. 
+It is done by first imaging a standard
+crystal before imaging an interesting sample. Assuming 
+that the diffraction machine was not altered between the 
+imaging of the calibration standard and the 
+imaging of the unknown sample, 
+the calibration parameters for both sets of data 
+are the same. 
+If the calibration values could be figured out from
+the pattern of the standard crystal, this information 
+could be used to analyze the other data.
+What it means to use a standard crystal is to know 
+in advance its $Q$ values of preferential 
+scattering. With these and with the 
+calibration values for the diffraction machine,
+we can figure out exactly what diffraction
+pattern we should expect. To do this, we could, for
 each $Q$ value, vary $\chi$ and calculate the 
-$(x_d,y_d)$ coordinate corresponding to that $(Q,\chi)$
-pair. After using enough $\chi$ values, we would be 
-able to fill in the rings as they would show up on 
-the detector.
-
+corresponding $(x_d,y_d)$ par. This would tell us 
+where on the detector all the light scattered to.
 In fact, my program can do just this. If you load in 
-a set of $Q$ values (see section 
-\ref{TheQValues})\index{$Q$ Values}
-and then put into the program some calibration values,
-and then push the \gui{Draw Q Values?} check box, 
-you can then see what the particular diffraction
-image would have shown up on the detector. 
-This is described thoroughly in 
-section~\ref{displayconstQlines}
+a set of $Q$ values, enter into the program 
+calibration values, and then push the 
+\gui{Draw Q Values?} check box, 
+the program will draw on top of the diffraction
+image what pattern should show up on the detector.
+This feature described in section~\ref{displayconstQlines}
 
-Being able to do this still leaves us with a hard 
-problem to solve. For particular calibration values,
-we can easily calculate what the diffraction pattern 
-should look like. But what we really know is what
-the calibration values are for the known diffraction
-pattern of a standard crystal. In order to perform the
-real calibration, then, we can vary the calibration 
-values until they make the pattern that can be calculated
-to show up to match the pattern that was actually 
-captured. The process of image calibration then is a 
-procedure to `fit' the calibration values to a
-diffraction patter with known $Q$ values.
+In order to perform the calibration, we can vary the 
+calibration values until they make the calculated pattern 
+match the pattern that was captured. We want to `fit' the 
+calibration parameters to a diffraction patter. 
 
 \section{The Fitting} 
 \index{Fitting}\label{fitting_sec}
 
 In order for the fitting algorithm to work, the program 
-must already have an initial guess of the real calibration 
-parameters. This initial guess does not have to be perfect, 
-but it should be somewhat close. The algorithm them requires 
-a list of the known $Q$ values. And it additionally requires 
+must already have an initial guess at the calibration 
+parameters. The algorithm requires 
+a list of the known $Q$ values and it requires 
 a range for each of these $Q$ values. In order for the 
-algorithm to work properly, inside of this $Q$ range (as 
+algorithm to work, inside of this $Q$ range (as 
 calculated by the initial calibration value guess) there 
-should be the peaks that we are interested in and no spurious 
-other peaks that would confuse the computer.
-
-With the $Q$ values specified along with $Q$ ranges, we can
-divided up any diffraction image several regions, where
-within each region we know there is a unique peak.
+should uniquely be the peaks that we are interested in fitting.
 An example of this is shown in figure~\ref{divide_up_image}.
 
 \begin{SCfigure}[1][htbp]
     \centering
-    \includegraphics[scale=.75]{figures/constant_dq_lines_on_diffraction_image.eps}
-    \caption{A division of a diffraction image into
-    $Q$ ranges where each diffraction peak falls 
-    uniquely inside one $Q$ range.}
+    \includegraphics[scale=.75]
+    {figures/constant_dq_lines_on_diffraction_image.eps}
+    \caption{The diffraction image is divided into
+    $Q$ ranges. Each diffraction peak falls
+    uniquely into one $Q$ range.}
     \label{divide_up_image}
 \end{SCfigure}
 
 \begin{SCfigure}[1][htbp]
-\centering
-\input{figures/Fitting.tex}
-\caption{Here is a diagram of the peak finding algorithm. 
-The solid circular black lines represent diffraction
-peaks on the image. The dotted lines represent the
-$Q$ ranges used to find the peaks. The diffraction
-peaks are entirely within the ranges. Finally, the radial
-line represents the program picking a particular $\chi$
-value and looking for peaks inside of the $Q$ ranges.
-Finally, the Gaussian peaks represent the program fitting
-a gausian to the intensity profile inside of each of the
-ranges.}
-\label{fitting}
+    \centering
+    \input{figures/Fitting.tex}
+    \caption{This is a diagram of the peak finding algorithm. 
+    The solid black circles represent diffraction peaks. The 
+    dotted lines represent the $Q$ ranges. The radial line
+    represents the program picking a 
+    particular $\chi$ value and looking for peaks along it.
+    The program fits a Gaussian to the intensity 
+    profile inside each of the ranges to find diffraction 
+    peaks.}
+    \label{fitting}
 \end{SCfigure}
 
-Our algorithm first requires\index{Peak Finding}
-finding $(x,y)$ coordinates 
-of many diffraction peaks. To do so, the algorithm will 
-pick some $\chi$ value and then 
+The fitting algorithm first\index{Peak Finding}
+finds the $(x,y)$ coordinates for many diffraction peaks. 
+To do so, it picks a $\chi$ value and 
 spread radially out from the center of the diffraction
-image in this $\chi$ direction.\footnote{Remember
-that the center is specified by the initial calibration 
-values}. Between the given $Q$ range (for each of the $Q$ 
-ranges), the program stores an array of all the data point 
-on the line. It then fits a Gaussian to the data and the
-$(x,y)$ coordinate of the center of this Gaussian $(x,y)$ 
-is taken to be the peak. A diagram showing this algorithm
-is shown in figure~\ref{fitting}. This method is
-then done for many different evenly spaced $\chi$ values
-and the particular value can be selected by the user
-for increased accuracy.
+image. The program makes an array of the intensity
+values between each $Q$ range. It then fits a Gaussian to 
+the ranges and the center of the Gaussian is taken as
+the diffraction peak peak. Figure~\ref{fitting} shows
+a diagram of this. This is done for many evenly spaced 
+$\chi$ values. The number of $\chi$ slices used can
+be selected by the user. See section~\ref{num_chi_and_stddev}.
 
-The only really tricky part about this step is that
-there is not always a consistent diffraction ring 
-around the image and therefore some of these fits 
-should not find peaks. Whenever this occurs, the program
-just ignores the current fit and moves to the next. 
-But figuring out when some particular peak is bad
-is not particularly obvious. The method that this
-program uses is to ensure each peak passes a few
-tests. The first test is that the fit peak was
-too close to the edge of the image. So any peak where
-the Gaussian fit's center plus or minus twice the fit's
-standard deviation gets outside of the $Q$ range is
+There is not always a consistent diffraction ring 
+all the way around the image. Some of these fits are
+not real peaks and should be ignored. To remove these
+spurious peaks, the program applies several tests
+to the peaks. The first test is that the Gaussian fit was
+not too close to the edge of the image. Any peak where
+the fit's center plus or minus twice the fit's
+standard deviation is outside of the $Q$ range is
 considered too close to the edge of the image.
-The next test that is done is to calculate is the
-standard deviation of the data outside of the peak is
-significant when compared to the height of the peak
-fit. To do this, the code calculates the standard 
-deviation of all the pixels that are farther then twice
-the peak's fit standard deviation away from the
-center of the peak. If the height of the peak
-divided by this calculated background standard deviation
-is smaller then some particular value, the peak is
-considered bad. This value is called by the program
-\gui{Stddev} and can be specified by the user from user.
-\index{Stddev}
-Presumably, the higher that \gui{Stddev} is, the
-more picky the program is about what a good peak looks
-like. This isn't the most robust method for finding peaks,
-but it seems to work pretty well and it should be easy 
-in principle to add new tests to the algorithm.
+Next, the program tests if the height of the peak 
+divided by the standard deviation of the data outside
+of the peak is smaller than a certain value. If so,
+the peak is not considered to be significant enough.
+This value is called \gui{Stddev} and can be specified 
+by the user.\index{Stddev} See section \ref{num_chi_and_stddev}.
+The higher the value of \gui{Stddev} is, the
+more picky the program is about allowing peaks. 
 
-After compiling a list of diffraction peaks in the image,
-the program can then define a residual function which
-we can minimize to find the best fit calibration values.
-To do so, we can convert the $(x,y)$ coordinate
-of each of the peaks into a 
-$(Q_{\text{peak}},\chi_{\text{peak}})$ pair. 
-For each of these $(x,y)$ coordinates, we also
-know what the input $Q$ list says the experimental $Q$ 
-value for this peak should be (which we will call 
-$Q_{\text{exp}}$). We can therefore define
-the residual function as
+After making a list of peaks, the program defines a residual 
+function which describes how good the current calibration
+parameters are. It converts the $(x,y)$ coordinate
+of each peaks into a $(Q^{\text{peak}},\chi^{\text{peak}})$ 
+pair. Since each peak has a known $Q$ value (which we will 
+call $Q^{\text{exp}}$), we define the residual function as
 \begin{equation}\label{residual}
     \text{Residual}(x_c,y_c,d,\lambda,\alpha,\beta,R) =  
         \sum_{\text{$x,y$ pairs}}
-        (Q_{\text{peak}} - Q_{\text{exp}})^2
+        (Q^{\text{peak}} - Q^{\text{exp}})^2
 \end{equation}
 The functional dependence comes from
-calculating $Q_{\text{peak}}$ from a known
-$(x,y)$ coordinate. We see that the smaller the 
-Residual is, the closer we have come to finding 
-the real calibration values which characterized
-the diffraction experiment. If we had perfect
-calibration parameters, the residual should be
-equal to zero. But it is well defined for any
-calibration parameters. So we can take this 
-function of 7 variables and minimize it. 
-The value of this function at its minimized 
-is the best guess calibration values.
-There are plenty of computer algorithm that
-can minimize arbitrary multi-variable functions.
-The one that this code uses is called the 
-Levenberg-Marquardt\index{Least Squares Minimization}
-nonlinear least squares algorithm
-and the particular implementation that is used
-to to perform the calibration is Manolis Lourakis's
-levmar library\cite{lourakis04LM}. Ideally, 
-once the minimization is done, a good guess at the
-calibration values is found.
+calculating $Q^{\text{peak}}$ for particular
+calibration parameter.
+The smaller the Residual is, the closer we are to
+having all our peaks have the desired $Q$ values.
+If we had a perfect calibration, the residual would
+be zero. 
+
+The program takes this function of 7 variables (the
+calibration parameters) and minimizes it. 
+Ideally, the calibration parameters that minimize the 
+residual are a good guess at the calibration parameters.
+The program uses the Levenberg-Marquardt nonlinear 
+least squares algorithm to minimize the residual. 
+The particular implementation used by the program
+is Manolis Lourakis's
+levmar library\cite{lourakis04LM}. 
 
 \section{Calibrating With the Program}
 
-Diffraction image calibration is done with the
-calibration tab of the program. This tab is shown 
-in figure \ref{calibration_tab} on tab
-\pageref{calibration_tab}.
+Calibration is done with the
+\gui{Calibration} tab. This tab is shown 
+in figure \ref{calibration_tab} on page
+\pageref{calibration_tab}. An image
+can be calibrated after a diffraction
+image of a standard crystal has been loaded
+into the program, the $Q$ values for that
+crystal have been loaded, and an initial guess 
+at the calibration parameters had been loaded.
 
-As described above, to calibrate an image
-you must have already loaded into the program
-a diffraction data file, a $Q$ data 
-file for the particular sample that was
-taken, and an initial guess at the calibration 
-data.
+Once these have been loaded, the \gui{Do Fit}
+button can be used to refine the calibration
+parameters. The program will use the calibration 
+algorithm described in section~\ref{cal_algorithm}. 
+Once the program finds a best guess for the 
+calibration parameters, it will put the parameters 
+into the inputs. 
 
-Once you have done these three things, you can
-simply push the \gui{Do Fit} button to
-calibrate the diffraction data. The program will
-then perform the calibration algorithm as described
-in section~\ref{cal_algorithm}. Once the program
-finds a best guess for the new calibration
-values, it will put those values into the inputs. 
-
-While fitting the program will print to the
-console some useful things. Most interesting,
-the program will calculate the residual function
-divided by the number of \ref{residual} and display
-print the value to the terminal before and after
-the calibration is done\footnote{Actually, the program
+The program will print to the console some useful things
+while it does the fit. The program will calculate the residual 
+function (equation \ref{residual}) before and 
+after the calibration and print the values to the
+console\footnote{Actually, the program
 calculates the residual function divided by the number
 of peaks. So it really displays the residual per peak, 
-which is a more useful quantity because it would not
-change if more peaks were used in the fit}
-The output will look like
+which is a more useful quantity because is independent
+of the number of peaks.}. The output will look like
 \begin{lstlisting}[caption={Displaying the Residual}]
  - Before fitting, the calculated residual is 5.336138e-04
  - Doing the fitting
  - After fitting, the calculated residual is 6.532131e-06
 \end{lstlisting}
-The program will then display the reason why the fitting
-algorithm decided to quit doing the fitting and decided
-that it found its best guess. For example, the program
+The program will display the reason why the fitting
+algorithm decided to quit. For example, the program
 might print out
 \begin{lstlisting}[caption={Reason For Quitting}]
  - Reason for quitting the fit: 2-stopped by small gradient J^T e
 \end{lstlisting}
-The different reasons are told to me by the levmar fitting algorithm.
-I am taking them directly from the levmar website
-\url{http://www.ics.forth.gr/~lourakis/levmar/}
-That website says that the different reasons why the
+These reason are told to the program by the fitting
+algorithm and they are described on the levmar website
+(\url{http://www.ics.forth.gr/~lourakis/levmar/}).
+That site says that the different reasons why the
 fitting can stop are:
 \begin{itemize}
     \item stopped by small gradient J\verb!^!T e
     \item stopped by small Dp
     \item stopped by itmax
     \item start from current p with increased $\backslash$mu
-    \item no further error reduction is possible. Restart with increased mu
+    \item no further error reduction is possible. 
+    Restart with increased mu
     \item stopped by small $||$e$||$\_2\cite{lourakis04LM}
 \end{itemize}
-I think that the first reason to quit (stopped by smallw
-gradient) means that the program found its way
+Stopped by small gradient means that the program found its way
 to the bottom of the hill and is convinced that it did its best
-job minimizing the function. I think that (stopped by itmax)
+job minimizing the function. Stopped by itmax
 means that the program was forced to quit by a hard coded limit
-to the number of loops through the fitting. So if you come across this
-message, you should probably do the fit again with the current values.
-I honestly don't know enough about the levmar fitting algorithm to
-know what the other messages really mean. If you need to know, you 
-should go into the fitting algorithm's documentation and see what you 
-can find out.
+on the number of loops through the fitting. The fit should
+probably be done again to find the best guess.
+I don't know enough about the levmar fitting algorithm to know 
+what the other messages really mean. If you need to know, you 
+should read the fitting algorithm's documentation. 
 
-The fitting algorithm also provides a covariance matrix that it finds
-while fitting. I do now know how it calculates this matrix or what
-it exactly what it means physically. Nevertheless, I print it out after the
-fitting is done. 
-\begin{lstlisting}[caption={Display of A Covariance Matrix},
+The fitting algorithm also displays a covariance matrix that 
+it calculates while fitting. I do now know how it calculates this 
+and I do not know what it means physically. 
+The program print it out after the fitting. 
+\begin{lstlisting}[caption={A Covariance Matrix},
     basicstyle=\ttfamily\footnotesize]
 Covariance Matrix
 [[  9.43e-04 -1.53e-04  5.36e-05  3.27e-03 -1.77e-03  3.64e-03  2.10e+00]
@@ -291,15 +221,14 @@ Covariance Matrix
  [  3.64e-03 -2.02e-04  3.12e-04  1.40e-02 -8.42e-01  1.77e+00  9.99e+02]
  [  2.10e+00 -1.25e-01  1.78e-01  8.02e+00 -4.76e+02  9.99e+02  5.65e+05]]
 \end{lstlisting}
-The rows (from top to bottom) correspond to \gui{xc}, \gui{yc}, \gui{d}
+The rows (from top to bottom and from left to right) correspond 
+to \gui{xc}, \gui{yc}, \gui{d}
 \gui{E}, \gui{alpha}, \gui{beta}, and \gui{rotation}. The columns
-(from left to right) also correspond to \gui{xc}, \gui{yc}, \gui{d}
-\gui{E}, \gui{alpha}, \gui{beta}, and \gui{rotation}. I think that the
-square root of the diagonal elements of the covariance matrix are supposed to 
-correspond to uncertainties, but I do not know enough about the minimization
-algorithm to be really comfortable saying that these are the true uncertainties in
-the fit parameters. Your mileage my vary. Anyway, I print out the root of the 
-diagonals. The printout by the program  
+I think that the square root of the diagonal elements of the covariance 
+matrix are supposed to correspond to uncertainties, but I do not know 
+enough about the minimization algorithm to really be comfortable saying 
+that these values are meaningful. The program print out the square root of 
+the diagonals. 
 \begin{lstlisting}[caption={Display of the root of the diagonals}]
 Root of the diagonal of the covariance matrix ... 
 xc:  0.0307145820046
@@ -310,182 +239,146 @@ alpha:  0.633295666676
 beta:  1.32940880588
 rotation:  751.595873785
 \end{lstlisting}
-    
-If you do not like the guess for the calibration 
-parameters, you can always unto to the previous
-calibration values before the fit using the
-\gui{Previous Values} input.
+The program can undo to the previous calibration
+parameters using the \gui{Previous Values} input.
 
-\section{\texorpdfstring{The \gui{Number of Chi?} 
-        and \gui{Stddev?} Input}{The Number of 
-        Chi and Stddev Inputs}}
+\section{\texorpdfstring{\gui{Number of Chi?} 
+        and \gui{Stddev?}}{``Number of 
+        Chi'' and ``Stddev?''}}
+        \label{num_chi_and_stddev}
 
 The calibration algorithm requires starting
 at the center and moving across the image in constant
-$\chi$ slices (see section~\ref{cal_algorithm} or 
-figure~\ref{fitting} for a graphical representation).
-The number of these slices around the image that
-should be done is user selectable using the 
-\gui{Number Of Chi?} input. The default value is 360.
-The more $\chi$ slices that are used, the slower
-the fit will be.
+$\chi$ slices (see section~\ref{cal_algorithm}).
+The number of these slices that are used
+can be set using the \gui{Number Of Chi?} input. 
+The default value is 360. 
 
 Section \ref{fitting_sec} describes how the program
-uses a parameter to determine how picky it should
-be in allowing peaks that it finds. Roughly, this
-parameter corresponds to how many times larger
-the peak has to be then the background noise outside
-of the peak. This parameter can be set using the 
+has a parameter that determine how picky it is
+about keeping peaks. This parameter can be set using the 
 \gui{Stddev?} input. The default value is 5. The higher 
-the value, the less likely the program will be to find
-and use bad peaks but the more likely it will be to
-ignore valid good peaks.
+the value, the more likely it is that the program will ignore
+valid peaks but the but the more likely it is that the program
+will ignore valid peaks.
 
 \section{\texorpdfstring{Work in 
     $\lambda$}{Work in Lambda}}
     \label{workWavelength}
 
-Often times, one wishes to deal with the wavelength 
-of the incoming beam of light instead of the energy
-of the beam. Of course, the energy and wavelength
-are intemately related by the formula
+Often, it is desirable to work with the wavelength 
+of the beam instead of its energy. Of course, these
+values are related by
 \begin{equation}
-    E=hc/\lambda
+    E=hc/\lambda.
 \end{equation}
-If you wish to work with wavelength in units of
-nanometers instead of energy in units of electron 
-volts, you can change the state of the program so 
-that the program works with wavelength instead
-of energy. To do so, you have to go into the menu bar
-and change the radio select from \gui{Work in eV}
-to \gui{Work in Lambda}. Once you do that, the 
-calibration parameter input will be labeled
-$\lambda$. Any number in that input will then be converted.
-After the parameter is modified during a fit,
-the program will put the wavelength value into
-the input. Finally, when the calibration
-parameters are saved to a file, the wavelength will
-saved to the file instead of the energy.
-
+The \gui{Work in Lambda} radio select in the menu bar
+can be used to to work with wavelength in units of nanometers, 
+instead of energy, in units of electron volts. 
+This can be changed back using the \gui{Work in eV} input.
+When the program switches to working with wavelength,
+the energy input \gui{E} will be relabeled
+\gui{$\lambda$} and the value in the input will be converted.
+When working with wavelength, the 
+wavelength will saved to the file instead of the energy when
+saving experimental parameters.
 
 \section{Fixing Calibration Parameters}
 \label{fix_parameters}
 
 When fitting calibration parameters, it is not
 always desirable to allow the program to vary
-all of the calibration parameters. For example,
-the energy of the beam used during the diffraction
-experiment might be already very well known already
-so there would be no reason to calibrate the energy.
-If you wish to fix any of the calibration parameters
-values so that it does not vary during a calibration
-fit, you can use the check boxes under the \gui{Fixed?}
-label to fix the parameter. When the corresponding
-check box is checked, the parameter will not vary
-during the fit. When it is not checked, the
-parameter will vary during the fit. You
-can not fix the pixel length and 
-pixel height because they are always held fixed. This is 
-because these are never
-the short of thing that one would want to vary.
-They are some property of the detector that is known in
-advance.
+all of the parameters. For example,
+the energy of the beam might be well known already
+so it would be desirable to keep its value fixed.
+The \gui{Fixed?} check boxes next to the parameter
+inputs can be used to fix the corresponding parameter
+so that it doesn't vary.
+The pixel length and pixel height can not be fixed 
+because they are never refined. 
+They are never the short of thing that one would want to vary.
 
 \section{\texorpdfstring{Displaying Constant $Q$ 
     Lines}{Displaying Constant Q Lines}}
     \label{displayconstQlines}
 
-After the program has been given a diffraction file,
-a list of the constant $Q$ lines, and some
-calibration parameters, the program has a very
-useful feature where it can display on top of
-the image the diffraction pattern that should
+After a diffraction file, a list of $Q$ values,
+and calibration parameters have been loaded into
+the program, the program can display on top of
+the diffraction data the diffraction pattern that should
 show up for the particular $Q$ lines and the
 particular calibration parameters.
-
-The \gui{Draw Q Lines?} button on the 
-\gui{Calibration} tab enables this.
+This can be done with the \gui{Draw Q Lines?} button on the 
+\gui{Calibration} tab. 
 Figure~\ref{constant_q_lines_on_diffraction_image}
-shows what the diffraction image looks like with
-the $Q$ lines drawn on it.
+shows an example. The way that this is done is
+described in section~\ref{calibration}.
+Constant $Q$ lines can also be drawn on top of the
+caked data. This is described in 
+section~\ref{cakeQlinesandpeaks}.  The color of the 
+$Q$ lines can be changed using the
+\gui{Color} button next to the \gui{Draw Q Lines?} 
+button.
 
 \begin{SCfigure}[1][htbp]
     \centering
-    \includegraphics[scale=.75]{figures/constant_q_lines_on_diffraction_image.eps}
-    \caption{A diffraction image with constant the 
+    \includegraphics[scale=.75]
+        {figures/constant_q_lines_on_diffraction_image.eps}
+    \caption{A diffraction image with constant 
     $Q$ lines displayed on it.}
     \label{constant_q_lines_on_diffraction_image}
 \end{SCfigure}
 
-Drawing these lines is actually very easy. For
-each $Q$ value, the program picks a lot of
-$\chi$ values. We know that each of the $Q$, $\chi$
-values is in the constant $Q$ line so we can use
-the calibration parameters to convert them to $x$, $y$
-values and connect all the pixel coordinates to 
-make the line.
-
-Constant $Q$ lines can also be drawn on top of the
-caked data. This is described in 
-section~\ref{cakeQlinesandpeaks}.  
-The color of the $Q$ lines can be changed using the
-\gui{Color} button next to the \gui{Draw Q Lines?} 
-button.
-
 \section{\texorpdfstring{Displaying Constant $\Delta Q$ 
-        Lines}{Displaying Constant delta Q Lines}}
-        \label{displayconstdQlines}
-        
+    Lines}{Displaying Constant delta Q Lines}}
+    \label{displayconstdQlines}
 
-The program needs in addition to the $Q$ values
-a range in $Q$ to find the peaks. See 
-section~\ref{fitting_sec} for more details. Because
-the program has this range, it can also display the
-$\Delta Q$ range on top of the image.
-This can be done with the \gui{Draw dQ Lines?} button
-and the color of these lines can be changed with the
+The program can also display on top of the diffraction
+data the $Q$ range. The use of this range is 
+described in section~\ref{fitting_sec}. 
+This can be done with the \gui{Draw dQ Lines?} button.
+The color of these lines can be changed with the
 corresponding \gui{Color} button. 
 Figure~\ref{constant_dq_lines_on_diffraction_image}
-shows what the diffraction image looks like with
-the $\Delta Q$ lines drawn on it.
+shows an example.
+Constant $\Delta Q$ can also be displayed on top 
+of caked data. This is described in 
+section~\ref{cakeQlinesandpeaks}.
 
 \begin{SCfigure}[1][htbp]
     \centering
-    \includegraphics[scale=.75]{figures/constant_dq_lines_on_diffraction_image.eps}
-    \caption{A diffraction image with the constant 
-    $\Delta Q$ lines displayed upon it.}
+    \includegraphics[scale=.75]
+    {figures/constant_dq_lines_on_diffraction_image.eps}
+    \caption{A diffraction image with the $\Delta Q$ range 
+    displayed on top of it.}
     \label{constant_dq_lines_on_diffraction_image}
 \end{SCfigure}
 
+\section{Displaying Peaks}
+    \label{displaying_peaks_diffraction}
 
-Constant $\Delta Q$ 
-lines can also be drawn on top of the caked data. This 
+Section~\ref{fitting_sec} describes how the 
+program finds a list of diffraction peaks 
+when it performs the image calibration.  
+After the program finds the peaks, it can display 
+them on top of the diffraction image. 
+The \gui{Draw Peaks?} can be used to 
+display the peaks as crosses. 
+The color of the peaks can be changed with the 
+corresponding \gui{Color} button.  
+Figure~\ref{peaks_on_diffraction_image} shows 
+an example of this. This feature can be used
+to see if the program is finding real peaks.
+Peaks can also be drawn on top of the caked data. This 
 is described in section~\ref{cakeQlinesandpeaks}.
-
-\section{Displaying Peaks}\label{displaying_peaks_diffraction}
-
-Section~\ref{fitting_sec} describes how the program has to find a bunch
-of peaks on the diffraction image in order to perform the calibration.
-After the program has found all the peaks, it can conveniently display
-them on top of the diffraction image. This can be done with the
-\gui{Draw Peaks?}. The peaks will be displayed as crosses and the color
-of the peaks can be changed with the corresponding \gui{Color} button.
-Figure~\ref{peaks_on_diffraction_image} shows what the diffraction image
-looks like with the peaks drawn on it. This feature is useful because 
-you can use it to see if the program is actually finding real peaks
-corresponding to diffraction maxima. If many of the peaks that the program 
-finds do not correspond to diffraction maxima, it is less likely that 
-the program would do a good job calibrating the diffraction image.
 
 \begin{SCfigure}[1][htbp]
     \centering
-    \includegraphics[scale=.75]{figures/peaks_on_diffraction_image.eps}
+    \includegraphics[scale=.75]
+    {figures/peaks_on_diffraction_image.eps}
     \caption{A diffraction image with the peaks displayed upon it.}
     \label{peaks_on_diffraction_image}
 \end{SCfigure}
-
-Peaks can also be drawn on top of the caked data. This 
-is described in section~\ref{cakeQlinesandpeaks}.
 
 \section{Masking Peaks}
 
@@ -494,58 +387,40 @@ is described in section~\ref{cakeQlinesandpeaks}.
     \subfloat[A diffraction image with diffraction peaks
     and two polygon masks displayed on top of it.]{
     \label{mask_peaks_diffraction}
-    \includegraphics[scale=.75]{figures/mask_peaks_diffraction.eps}}\;\;
-    \subfloat[A caked plot with diffraciton peaks and
+    \includegraphics[scale=.7]
+    {figures/mask_peaks_diffraction.eps}}\;\;
+    \subfloat[A caked plot with diffraction peaks and
     two polygon masks displayed on top of it.]{
     \label{mask_peaks_cake}
-    \includegraphics[scale=.75]{figures/mask_peaks_cake.eps}}
-    \caption{Polygon masks can be used to block
-    out certain regions of the image. Whenever
-    a polygon mask is loaded into an image, none
-    of the peaks found in the mask's region will be
-    used while calibrating the image. Furthermore,
-    none of the peaks within the masks will be 
-    displayed on the diffraction image or caked plot.}
+    \includegraphics[scale=.7]{figures/mask_peaks_cake.eps}}
+    \caption{When a polygon mask is in the program, none
+    of the peaks found in the mask will be used while 
+    calibrating the image.}
     \label{mask_peaks}
 \end{figure}
 
-The general idea behind masking peaks is allow polygon 
-masks (see chapter~\ref{pixel_masking}) to be used as 
-a way to forbit the program from using any peaks found
-within a certain region. So if a polygon mask covers a 
-certain area of the image, none of the peaks found within that
-area will be used while calibrating. Also, none of 
-the peaks will be displayed on top of the diffraction 
-image or cake image. An example of this is shown in
-figure~\ref{mask_peaks_diffraction}. 
-See section~\ref{displaying_peaks_diffraction}
-for a discussion of displaying peaks on a diffraction
-image.  Figure~\ref{mask_peaks_cake} shows the same effect 
-on top of the corresponding caked plot. See 
-chapter~\ref{Caking} for a discussion of caking.
-In particular, see section~\ref{displaying_peaks_cake} 
-for more information on displaying peaks on a caked
-image. This feature was added in version 2.0.0.
+Polygon masks can be used to stop the program from using peaks 
+found in certain regions of the image. See chapter~\ref{pixel_masking} 
+for a discussion of masking. No peaks found within polygon masks
+will be used when calibrating the diffraction image.
+Figure~\ref{mask_peaks_diffraction} shows an example of this. 
+Figure~\ref{mask_peaks_cake} shows the same effect on on a caked 
+plot. See chapter~\ref{Caking} for a discussion of caking. In 
+particular, see section~\ref{displaying_peaks_cake} for more 
+information on displaying peaks on a caked image. This feature was 
+added in version 2.0.0.
 
 \section{Saving the Peak List}
 
-The program has a feature where it can generate
-a list of diffraction peaks that it finds the 
-diffraction image (just like when it is calibrating)
-but then instead of calibrating the image, the program
-saves out all of the peaks to a data file. This can
-be useful, for example, if you need a list of pixel 
-coordiantes where diffraction peaks are for some further
-data analysis. The \gui{Make/Save Peak List} button can
-be used to save out the peak list. Just as in calibrating,
-the program requires in advance for a diffraction file to
-be loaded, for a standard $Q$ file to be loaded, and for
-a guess at the calibration parameters to be in the inputs.
-
-A typical peak list file looks like\footnote{I have modified
-what a real file looks like a bit. The numbers are really tab 
-separated but I show them space separated for brevity.}
-\begin{lstlisting}[caption={A Peak List File,basicstyle=\ttfamily\tiny}]
+The program can make a list of diffraction peaks and 
+save them to a file. If a diffraction image, a list of
+standard $Q$ values, and calibration parameters are loaded
+in the program, the \gui{Make/Save Peak List} button can
+be used to save out the peak list. 
+A typical peak list file looks like\footnote{The file
+has been modified a bit. The numbers should be tab 
+separated but are displayed as space separated for brevity.}
+\begin{lstlisting}[caption={Peaks.dat,basicstyle=\ttfamily\tiny}]
 # A list of peaks found in the diffraction image.
 # Calculated on Sun Apr  6 18:06:56 2008
 # Calibration data used to find peaks:
@@ -560,55 +435,39 @@ separated but I show them space separated for brevity.}
 #   pixel height:     100.0000000 microns
 #   x  y  RealQ  FitQ  chi  width  intensity  2theta
 2016.15  1724.44  1.511  1.50  0.11  0.0075 5564.32  13.36
-2016.68  1719.33  1.51  1.50  1.11  0.0093 1662.72  13.39
+2016.68  1719.33  1.51   1.50  1.11  0.0093 1662.72  13.39
 \end{lstlisting}
-First, the file contains the calibration parameters
-used to generate the peaks. Then it has a comment string
-describing each of the numbers in each of the rows
-that follow. Each row corresponds to a unique peak.
-The first two numbers $x$ and $y$ are
-the $x$ and $y$ pixel coordinate corresponding to
-a location in the diffraction image of the peak. RealQ 
-is the $Q$ value found in the $Q$ list that is already 
-known. FitQ is the $Q$ value calculated 
-from the $(x,y)$ coordinate using the calibration
-parameters. $\chi$ is also calculated from the pixel
-coordinate using the calibration parameters. 
-Intensity is intensity value found in the data at
-this peak. $2\theta$ is calculated at the $(x,y)$ 
-coordinate using the calibration parameters.
+The file contains the calibration parameters
+used to generate the peaks. Each peak gets its
+own line in the file. Each peak is a list of 
+tab separated numbers. The first two numbers are
+the $x$ and $y$ pixel coordinate corresponding of
+the peak. The next number is the $Q$ value found in the 
+$Q$ list. The next number is the $Q$ value calculated 
+at the peak using the calibration
+parameters. The next number is the $\chi$ value calculated 
+from the pixel coordinate using the calibration parameters. 
+The next number is the intensity value at the peak. The final
+number is the $2\theta$ value calculated at peak using 
+the calibration parameters.
 
 \section{Handling Calibration Data}
 
-There are inputs in the calibration tab of the
-program for input of the calibration parameters.
-\gui{xc} is for the $x$ center, \gui{yc} is
-for the y center, \gui{d} is for the distance,
+There are inputs on the \gui{Calibration} tab 
+for the calibration parameters.
+\gui{xc} is for the $x$ pixel coordinate of the center of
+the image, \gui{yc} is for the $y$ pixel coordinate of
+the center of the image, \gui{d} is for the distance from
+the sample to the detector,
 \gui{E} (or \gui{$\lambda$:}) is for the energy
-or wavelength. The $\alpha$, $\beta$, and
-$R$ inputs are for the three angles. 
-\gui{pl} stands for the pixel length
-and \gui{ph} stands for the pixel height.
-
-You can directly input calibration data using 
-the inputs and once the data is in the inputs
-it can be used by the program to do the calibration
-(or the caking or anything else).
-
-But there are a couple of other ways to deal
-with calibration data.
-You can load and save calibration program
-from the program using the \gui{Load From File}
-and \gui{Save To File} buttons. This is nice
-because it can be used, for example, to save 
-the data that was found by calibration data
-for future reference. As you will see, the 
-calibration data files can handle information
-about whether the parameters should be fixed
-(see section \ref{fix_parameters}).
-
-The format for a calibration data file is 
-pretty simple. Below is  an example
+or wavelength of the beam. The $\alpha$, $\beta$, and
+$R$ inputs are for the three rotation angles. 
+\gui{pl} is for the pixel length
+and \gui{ph} is for the pixel height.
+The calibration parameters can be directly entered
+using the inputs or they can be loaded and saved 
+using the \gui{Load From File} and \gui{Save To File} 
+buttons. The format for a calibration data file is 
 \begin{lstlisting}[caption={Calibration Parameters}]
 # Calibration File
 xc	1725.000000	0
@@ -623,40 +482,31 @@ pixelHeight	100.000000
 \end{lstlisting}
 Comment lines beginning with
 a \# and are ignored. Each of the parameters
-gets its own line. Each parameter name is 
-followed by some spaces or tabs and then the
+is on its own line. Each line is the parameter's 
+name followed by spaces or tabs and the
 value. The value can be followed by an optional
-second number which is either zero or one.
-The second number corresponds to whether or
-not the parameter should be fixed while
-fitting. One means fix the parameter. Zero means
-let it very. If no number is given, the default
-is to not fix the parameter.
-
-Instead of energy, the wavelength of the incoming
-beam of light can be stored in a calibration file.
-The wavelength line would look like 
+second number that is whether that parameter
+should be fixed or not. 1 means fix the parameter and 0 
+means to let it very. if there is no number, the parameter will
+not be fixed. Instead of energy, the wavelength of the incoming
+beam can be stored in a calibration file.
+The wavelength line looks like 
 \macroline{wavelength	0.973540}.
 When the program is in wavelength mode, the program
-will save out calibration parameters with this line
-instead of the one above. The program will load in a 
-file containing either no matter what mode the program 
-is in. It will do the conversion if it has to do put 
-the right value into the input. See 
-section~\ref{workWavelength}.
+will wavelength instead of energy as one of the calibration parameters 
+The program will load files containing either and do the 
+conversion. See section~\ref{workWavelength} for a discussion
+of the program working with wavelength instead of energy.
 
 
 \section{\texorpdfstring{Handling $Q$ Data}{Handling Q Data}}
 \label{TheQValues}\index{Q Data}
 
-$Q$ data is always loaded into the program from files. 
-$Q$ data can be loaded into the program with the \gui{Q Data:}
-input on the calibration tab. 
-You can either type in the filename of the $Q$ file by hand 
-and push the load button or click on the folder icon to the 
-side and use the file selector to pick the file that you want.
-
-The $Q$ data file format is pretty simple. Below is an example 
+$Q$ data is loaded into the program with the \gui{Q Data:}
+input on the \gui{Calibration} tab. The filename can either 
+be entered by hand and then loaded or picked from a file selector 
+by pushing the button with the folder icon on it.  Below is an example 
+of the $Q$ data file format: 
 \begin{lstlisting}[caption={Lanthanum Hexaboride.dat},label=LaB6]
 # This is Q Data for Lanthanum Hexaboride
 Q   dQ
@@ -668,25 +518,19 @@ Q   dQ
 3.702525225 .05
 ...
 \end{lstlisting}
-Comment lines beginning with a \# and are always ignored. The
-first line in the file should be of the form "Q  dQ" or "Q  delta Q" 
-to specify that this is a list of $Q$ values. The rest of the
-file should have $Q$ values followed a $\Delta Q$ range.
+Comment lines beginning with a \# are ignored. The
+first line in the file should be "Q  dQ" or "Q  delta Q". The 
+rest of the are lines of $Q$ values followed a $\Delta Q$ range.
 All $Q$ values must be larger than 0. None of the $Q$ ranges can 
-overlap. Instead of inputting $Q$ values, the program can input
-$D$ values if the first line is instead "D dD" or "D delta D"
-The values should be given instead in $D$ space and the values
-will be converted using~\ref{DtermsQ}.
+overlap. Instead of $Q$ values, the program can input $D$ values 
+If the first line is instead "D dD" or "D delta D" the rest of 
+the file will be taken to be $D$ and $\Delta D$ values.
+The values will be convert using equation~\ref{DtermsQ}. 
 
 \section{\texorpdfstring{The \gui{Get From Header?} Input}
     {The ''Get From Header Input''}}
 
-Often times guesses at the experimental parameters are 
-stored in the header data inside of the diffraction image. 
-The program can try to find these header calibration parameters
-and put them into the calibration parameters inputs in the 
-program. This can be done with the \gui{Get From Header} 
-button.
-
-
-
+Sometimes calibration parameters are stored in the header of
+a diffraction file.  The \gui{Get From Header} button will 
+make the program try to find these values and load them into the 
+program.

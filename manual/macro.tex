@@ -1,7 +1,7 @@
 \chapter{Macros}
 
 This program is almost fully automatable with macros. Macros
-canb e used to perform data analysis as quickly as possible. 
+can be used to perform data analysis as quickly as possible. 
 The program is capable of recording macros and running macros. 
 The macro file format is simple enough that it is easy write 
 or modify macro files by hand.
@@ -20,7 +20,7 @@ The easiest way to create a macro is to record it. A macro
 can be recorded by selecting the \gui{Start Record Macro} 
 option in the \gui{Macro} menu 
 bar. Figure~\ref{macro_figure} shows the \gui{Macro} menu bar.
-After all of the steps that should be recoreded are finished, 
+After all of the steps that should be recorded are finished, 
 pushing \gui{Stop Record Macro} will save the macro file to
 a selectable file.
 
@@ -46,7 +46,7 @@ data from within a macro, the command is
 \macroline{Do Fit}.
 
 Things get more interesting when the GUI item requires
-requires doing more then just pushing a button. For 
+requires doing more than just pushing a button. For 
 example, to deselect the \gui{Draw Q Data?} 
 check box, the macro needs to specify that the check box
 gets deselect instead of selected.
@@ -172,7 +172,7 @@ diffraction file that is loaded using the string
 name itself using the string \macroline{FILENAME}. 
 So, in our previous example, if we had loaded the
 file \macroline{C:/data/second\_file.mar3450},
-\macroline{PATHNAME} would get chaned into 
+\macroline{PATHNAME} would get changed into 
 \macroline{C:/data} and \macroline{PATHNAME} would
 get evaluated to \macroline{second\_file} without
 the extension. In effect, you can imagine building 
@@ -240,17 +240,17 @@ and \macroline{second.mar3450} added together and then
 \macroline{third.mar3450} and \macroline{fourth.mar3450}
 added together. But this gets cumbersome. Alternately,
 you can simply take all of the files that you want to be 
-added together and analyzed and group them into subfolders. 
-Each of the subfolders will contain only files that should
+added together and analyzed and group them into sub folders. 
+Each of the sub folders will contain only files that should
 be added together and analyzed. If you then give the
-macro the name of the folder containing all these subfolders,
-it will loop over all the subfolders. 
+macro the name of the folder containing all these sub folders,
+it will loop over all the sub folders. 
 
 For example, suppose we created the folder \macroline{C:/data}.
-Inside of this folder is the subfolder \macroline{A}
+Inside of this folder is the sub folder \macroline{A}
 containing the files \macroline{first.mar3450} and 
 \macroline{second.mar3450}. Also inside of the data folder
-is the subfolder \macroline{B} containing the files
+is the sub folder \macroline{B} containing the files
 \macroline{third.mar3450} and \macroline{fourth.mar3450}.
 We could do the exact same data analysis as above by 
 issuing the macro command with only the data folder name.
@@ -365,7 +365,7 @@ Polygon Mask Color?
     or \macroline{E Fixed}, the computer program will
     automatically set the GUI to \macroline{Work in eV}.
     If you issue the command or \macroline{lambda:} or
-    \macroline{lambda fixed:} then the comptuer program
+    \macroline{lambda fixed:} then the computer program
     will set the GUI to \macroline{Work in Lambda}. You
     can also explicitly set the GUI to either mode using
     the command \macroline{Work in eV} or
@@ -477,7 +477,7 @@ and exactly what they do.
         This is the width of one pixel (in microns).\\
     \macrolinenoquotes{ph}&Number&The pixel height of the image.
         This is the height of one pixel (in microns).\\
-    \macrolinenoquotes{Draw Q Lines?}&\selectordeselect&Sets wether 
+    \macrolinenoquotes{Draw Q Lines?}&\selectordeselect&Sets whether 
         or not to draw constant $Q$ lines on the screen.\\
     \macrolinenoquotes{Draw Q Lines Color?}&color&Sets the color 
         of the constant $Q$ lines that are displayed on 
@@ -495,7 +495,7 @@ and exactly what they do.
         data and the caked data.\\
     \macrolinenoquotes{Update}&None&Update the diffraction image.\\
     \macrolinenoquotes{Save Calibration}&Filename&Saves the
-        current calibration values in the GUI as plaintext
+        current calibration values in the GUI as plain text
         ASCII to a file.\\
     \macrolinenoquotes{Do Fit}&None&Fit the calibration values to 
         a loaded diffraction image.\\

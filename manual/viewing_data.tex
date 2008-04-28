@@ -1,124 +1,118 @@
 \chapter{Viewing Diffraction Data}\label{viewing_data}
 
+The Area Diffraction Machine will first present 
+the \gui{Calibration} tab. This is shown in 
+figure~\ref{calibration_tab}. The \gui{Data File:} input can be 
+used to load diffraction data either by typing in the filename by hand 
+and pushing the load button or by clicking on the folder icon and
+using the file selector. After the file is loaded, 
+the diffraction window shown in figure~\ref{diffraction_data_window}.
+will open. 
+
 \begin{SCfigure}[1][htbp]
     \centering
-    \includegraphics[scale=.75]{figures/calibration_tab.eps}
-    \caption{The calibration tab.
-    This is what you see when you first open the program. 
-    This tab allows you to load diffraction
-    data into the program.} 
+    \includegraphics[scale=.75]
+    {figures/calibration_tab.eps}
+    \caption{The calibration tab. This is what is 
+    shown when the program first opens. This tab can be used
+    to load diffraction data into the program.} 
     \label{calibration_tab}
 \end{SCfigure}
 
-When you first opep the Area Diffraction Machine, you
-will see the calibration tab. It is shown in 
-figure~\ref{calibration_tab}. The first thing you
-will probably want to do is load diffraction data into
-the program. This can be done with the \gui{Data File:} input
-either by typin in the filename by hand and pushing the
-load button or clicking on the folder icon and
-using a file selector. After the file is loaded, a
-diffraction data window will open. This window is 
-shown in figure~\ref{diffraction_data_window}.
-
 \begin{SCfigure}[1][htbp]
     \centering
-    \includegraphics[scale=.75]{figures/diffraction_data_window.eps}
-    \caption{The diffraction data window. This 
-    window will open after a file is 
-    loaded. This windows allows you to interact with diffraction 
-    data.} 
+    \includegraphics[scale=.75]
+    {figures/diffraction_data_window.eps}
+    \caption{This diffraction data window will open after 
+    a file is loaded. This windows can be used to interact 
+    with the diffraction data.} 
     \label{diffraction_data_window}
 \end{SCfigure}
 
-You can use the diffraction data window to interact with your 
-diffraction data. you can:
+The diffraction data window can be used to interact with the
+diffraction data. The window can be used to:
 \begin{itemize}
     \item {\em Zoom into the data} -- left click on the data and 
-    hold down on the mouse. When the mouse is moved around, the
-    program will create a resizing square.  When the mouse is released,
-    the program will zoom into the selected range.
+    hold down on the mouse. When moving the mouse around, the
+    program will create a resizable square. When the mouse is released,
+    the program will zoom into the selected region.
     \item {\em Zoom out of the data} -- right click on
     the data.
     \item {\em Pan across the data} -- hold shift, push down either mouse
-    button, and then move the mouse around and the image will move 
+    button, and then move the mouse around. The image will move 
     with it. Let go of the mouse to stop panning.
     \item {\em Resize the window} -- click on the bottom right corner of
-    the window and drag. The window will reszie just like any
-    other window and the data will become larger or smaller.  
+    the window and drag. The window will resize just like any
+    other window and the image will become larger or smaller.  
     \item {\em Read coordinates for a selected point} -- when mousing
     over the image, the $x$, $y$, $Q$, $\chi$, and $I$
-    values for that pixel will be displayed at the bottom of the
-    window. $Q$ and $\chi$ will only be dipslayed if valid calibration
-    data is loaded into the program. See chapter~\ref{calibration}.
+    values for the current pixel will be displayed at the bottom of the
+    window. $Q$ and $\chi$ will only be displayed if valid calibration
+    data is loaded into the program. See chapter~\ref{calibration} for
+    a discussion of calibration data.
     \item {\em Change the Color Map} -- the \gui{Colormaps} selector 
-    can be used to change the particular color map used to display the 
+    can be used to change the particular color map used when displaying the 
     data.
-    \item {\em Invert the Color Map} -- The \gui{Invert?} checkbox can 
+    \item {\em Invert the Color Map} -- The \gui{Invert?} check box can 
     can be used to invert the colors of the color map.
     \item {\em Low \& Hi Pixels} -- The sliders to the right of the 
-    image can be used to change the intensity scaling of the
-    image. The low value corresponds to the intenisty 
-    value that will be maped to the lowest part of
-    the color map and the hi value corresonds to the intensity
-    value that will be mapped to the highest part of the color
-    map. \footnote{Technically, what is set is the
-    percentage of the most intense pixel in the image should be 
-    mapped to the lowest or highest value in the color map.}
-    This feature is useful because it can help make visible certain
-    intensity ranges in the image.
+    image can be used to change the intensity scale of the
+    image. The low value corresponds to the percentage of
+    the most intensity pixel value that will be mapped to the lowest part of
+    the color map and the hi value corresponds to the percentage of
+    the most intense pixel value that will be mapped to the highest 
+    part of the color map.  This feature is useful because it can help make 
+    visible certain intensity ranges in the image.
     \item {\em Log Scaling} - By default, intensity values are linearly 
-    mapped to colors in the color map. The \gui{Log Scale?} checkbox 
-    can be selected to instead apply a log scale mapping of the intensity 
+    mapped to colors in the color map. The \gui{Log Scale?} check box 
+    can be used to instead apply a log scale mapping of the intensity 
     values to the color map.
 \end{itemize}
 
 \section{File Formats}
 
-The program can load in Mar data: \macroline{.mar2300}, 
+The program can load Mar data: \macroline{.mar2300}, 
 \macroline{.mar3450}, and the \macroline{.mccd} Mar CCD format.
-It can load in standard \macroline{.tiff} data. 
-It can load in the ESRF Data Format \macroline{.edf}.
-The program can only display square data. Whenever non-square
-data is loaded into the program, the program will simply pad 
-out the image until it is a square with pixels who's intensity is 0. 
+It can load standard \macroline{.tiff} data. 
+It can load the ESRF Data Format \macroline{.edf}.
+The program can only deal with square data so whenever non-square
+data is loaded, the data will be padded out with blank values
+until the data is square.
 
 \section{Loading Multiple Images}
 
-Using the same file input, you can load multiple files into 
-the program at the same time. If multiple files are put in 
-the \gui{Data File:} text input  and separated by spaces, they
-will all be loaded in. Alternately, the diffraction data file 
+The \gui{Data File:} input can be used to load multiple files
+at the same time.
+If multiple files are typed into the \gui{Data File:} input and
+are separated by spaces, they will all be loaded in. 
+Alternately, the diffraction data file 
 selector can be used to select multiple files at the same time.
 All of the selected files will be loaded.
-When several files are loaded at the same time, the program will 
-add the intensities of the images pixel by pixel and work with the 
-combined image.  This can be useful for analyzing several images 
-taken of the same sample. The program can only add together files 
+The program will add the intensities of the images pixel by pixel 
+and work with the combined image. The program can only add files 
 of the same format.
 
-\section{Saving the Diffraction Image}
+\section{Saving Diffraction Data}
 \index{Save}\index{ESRF Data Format}
 
-You can save diffraction data in the program as a popular image format. 
-The data can be saved by doing to the \gui{File} menu bar and selecting 
-the \gui{Save Image} option.  The formats currently allowed are \gui{jpg}, 
+Diffraction data can be saved as several popular image formats. 
+The data can be saved from the \gui{File} menu using 
+the \gui{Save Image} option. The formats currently allowed are \gui{jpg}, 
 \gui{gif}, \gui{eps}, \gui{pdf}, \gui{bmp}, \gui{png}, \gui{tiff}, and 
 the ESRF data format \gui{edf}.
 
 Images saved as a popular image format will be saved with whatever
 threshold masks, polygon masks, $Q$ lines, $\Delta Q$ lines, and peaks 
-are currently displayed over the data in the diffraction data 
-window. And it will be saved at whatever the current zoom level 
-is.\footnote{This is not the case with ESRF data. When an image
-is saved as an ESRF file, it will be saved un-zoomed with none
+are currently displayed in the program. They will be saved
+at whatever the current zoom level is.\footnote{This is not the case with 
+ESRF data. ESRF data will be saved unzoomed with none
 of the lines or masks on top of it.} See chapter~\ref{calibration} for 
 a discussion of the $Q$ lines, $\Delta Q$ lines, and peaks. See 
 chapter~\ref{pixel_masking} for a discussion of threshold masks and 
 polygon masks.
 
 Because the program will pad any non-square data when
-it is loaded to. The program will always save out 
-all images as squares. If this is undesirable, the saved images
+it is loaded, the program will always save square
+images. If this is undesirable, the saved images
 will need to be cropped using another program.
 

@@ -1,149 +1,144 @@
 \chapter{An Example}
 This section will present a pedagogically interesting 
-example which demonstrates several of the programs important
+example which demonstrates several of the program's important
 features.  The purpose of this chapter is neither to be 
 comprehensive nor to be particularly detailed. It will instead 
-give a sense of the type of analysis that can be done with 
-this program. It will motivate the rest of the manual. further details 
+give a sense of the types of analysis that can be done with 
+this program. It will act as a motivation for the rest of the manual. 
+Further details 
 and information on any of the things described below can be found in 
 the appropriate sections of the manual.
 
 David, a user of the program, was studying iron thin films 
 using powder diffraction. He was particularly interested in 
-measuring the shifts in diffraction peaks of a sample. To 
-realize this experimentally, he capture the image of the 
+measuring the shift in diffraction peaks of his sample. To 
+realize this experimentally, he capture data of the 
 standard calibration crystal Lanthanum Hexaboride (LaB6). 
 Without changing the experimental parameters, he then imaged 
-many samples for which he wanted to measure the shift.
+many samples that he wanted to analyze. 
 
 The steps that are needed to do this analysis will be
-described. First, we will calibrate the diffraction detector.
-This is to say that we want to determine the precise 
-experimental parameters that characterized the diffraction
-machine when the images were captured (for example, the distance
-between sample and detector, the energy of the x-rays, etc). Since 
-the image of the standard calibration crystal was taken at the same
-time as the images of interest, the calibration parameters inferred
+described. The diffraction detector needs to first be calibrated.
+This will determine the precise experimental parameters that 
+characterize the diffraction machine when the data was captured
+(for example, the distance between sample and detector, the energy 
+of the x-rays, etc). Since the image of the standard was taken at the same
+time as the other images, the calibration parameters inferred
 from the standard crystal can be used to analyze the
 rest of data.
 
-\begin{SCfigure}[1][hbtp]
+\begin{SCfigure}[1][bthp]
     \centering
-    \includegraphics[scale=.75]{figures/calibration_tab.eps}
+    \includegraphics[scale=.75]
+    {figures/calibration_tab.eps}
     \caption{The calibration tab.}
     \label{calibration_tab_example}
 \end{SCfigure}
 
-To perform this calibration, we first opened up the Area 
-Diffraction Machine. Figure~\ref{calibration_tab_example} shows what we
-are first presented with.
-
-From the \gui{Data File} input, we load into the program the LaB6 
-file. Once the file is loaded in, a new window opens up 
-which shows the diffraction data. This window is shown in 
+To perform this calibration, the Area Diffraction Machine needs 
+to be opened. Figure~\ref{calibration_tab_example} shows what 
+is first displayed. Using the \gui{Data File} input, the LaB6
+file can be loaded.. A new window opens up which shows the 
+diffraction data. This window is shown in 
 figure~\ref{diffraction_data_window_example}.
 
-\begin{SCfigure}[1][hbtp]
+\begin{SCfigure}[1][bthp]
     \centering
-    \includegraphics[scale=.75]{figures/diffraction_data_window_example.eps}
+    \includegraphics[scale=.75]
+    {figures/diffraction_data_window_example.eps}
     \caption{The diffraction data window.}
     \label{diffraction_data_window_example}
 \end{SCfigure}
 
-To do the detector calibration, the program must know the 
-$Q$ values associated 
-with the standard crystal. Since LaB6 is so common, it is
-a preset default in the program. We go into the menu bar, 
-into the \gui{calibration} menu, into the \gui{Standard Q} menu, 
-and then selected Lanthanum Hexaboride. This is shown
-in figure~\ref{standard_q_example}.
+To calibrate the detector, the program must know the 
+$Q$ values for the standard crystal. Since LaB6 is so common, it is
+a preset default in the program. It can be loaded from
+the \gui{Standard Q} option in the \gui{Calibration} menu.
+This is shown in figure~\ref{standard_q_example}.
 
-\begin{SCfigure}[1][hbtp]
+\begin{SCfigure}[1][bthp]
     \centering
-    \includegraphics[scale=.75]{figures/standard_q.eps}
-    \caption{Loading a standard $Q$ file.}
+    \includegraphics[scale=.75]
+    {figures/standard_q.eps}
+    \caption{Loading a standard $Q$ file.
+    (More standard $Q$ files might be added in the future).}
     \label{standard_q_example}
 \end{SCfigure}
 
-(More standard $Q$ files might be added in the future).
-In order to perform image calibration, the program finally 
-needs to know an initial guess at the calibration parameters. 
-Although one could enter these parameters by hand, often 
-times decent guesses at the experimental parameters are 
-stored in the header data inside of the diffraction image. 
+In order to calibration the detector, the program also
+needs an initial guess of the calibration parameters. 
+Decent guesses at the experimental parameters are often
+stored in the diffraction data's header. 
 The program can try to find these header calibration values 
-and put them into the inputs in the program. To do this, 
-we could pushed the \gui{Get From Header} button. With the 
-image, the $Q$ values, and an initial guess in the program, 
-we are ready to do the calibration. 
+and put them into the program. This is done with the
+\gui{Get From Header} button. After the image, the $Q$ values, 
+and an initial guess at the parameters have been loaded, 
+The detector can be calibrated.
 
-But first, we want to examine how good the initial guess 
-is. To do so, we can select the \gui{Draw Q Lines?}
-check box on the Calibration tab. When this is selected, 
+But first, it is a good practice to examine how good the 
+initial guess is. This is be done with the \gui{Draw Q Lines?}
+check box on the \gui{Calibration} tab. When this is selected, 
 the program will draw
-on top of the diffraction image red lines corresponding
-to what diffraction pattern should show up on the
-detector (for the given calibration parameters and $Q$
+on top of the diffraction image what pattern should show 
+up on the detector (for the given calibration parameters and $Q$
 values). Figure~\ref{bad_calibration_diffraction_image}
-shows what the program displays for our example.
+shows an example. Of course, the initial guess isn't
+great because the lines don't match the real pattern.
 
-\begin{SCfigure}[1][hbtp]
+\begin{SCfigure}[1][bthp]
     \centering
-    \includegraphics[scale=.75]{figures/bad_calibration_diffraction_image.eps}
-    \caption{The diffraction image with constant the $Q$
-    lines displayed upon it. These lines are calculated
-    for the calibraiton parametesr found in the
-    header of the image. They are not particuarly
-    accurate.}
+    \includegraphics[scale=.75]
+    {figures/bad_calibration_diffraction_image.eps}
+    \caption{The diffraction image with constant $Q$
+    lines displayed on it. These lines were calculated
+    for the calibration parameters found in the
+    image header and are not particularly accurate.}
     \label{bad_calibration_diffraction_image}
 \end{SCfigure}
 
-Of course, our initial guess isn't
-great so the red lines don't match too well with
-the loaded patter. The data will look like
+The diffraction data can be caked. A cake is a plot
+of the data in $Q$ vs. $\chi$ space. 
+If the calibration parameters are known exactly, 
+the diffraction peaks will show up as many vertical lines.
+If the parameters are not exact, the diffraction peaks
+will have a distortion to them.
+The data can be caked on the \gui{Cake} tab using the 
+\gui{AutoCake} button and a new window will open. 
+this tab is shown in figure~\ref{cake_tab_example} 
+and the cake window is shown in 
+figure~\ref{bad_calibration_cake}.
+The diffraction peaks on the caked data with the header 
+calibration parameters is not very straight. It has a 
+systematic wiggle. It might be hard to see 
+with the full image but is very obvious when one line
+is zoomed into, as in 
+figure~\ref{bad_calibration_cake_zoom}.
 
-We can do a cake of the data. A caked plot
-is a presentation of the data in a different parameter 
-space.  The $x$ axis is $Q$ and the $y$ axis is $\chi$. 
-Ideally, if the calibration parameters are known exactly, 
-the caked data will show up as many vertical lines. 
-We can cake the data by going to the cake tab. This
-tab is shown in figure~\ref{cake_tab_example}.
 
-\begin{SCfigure}[1][hbtp]
+\begin{SCfigure}[1][bthp]
     \centering
-    \includegraphics[scale=.75]{figures/caking_tab.eps}
+    \includegraphics[scale=.75]
+    {figures/caking_tab.eps}
     \caption{The calibration tab.}
     \label{cake_tab_example}
 \end{SCfigure}
 
-On this tab, we have to pushing the \gui{AutoCake}. 
-When we do so, a new cake window opens up. 
-Figure~\ref{bad_calibration_cake} shows what the 
-program displays for our example.
-
-\begin{SCfigure}[1][hbtp]
+\begin{SCfigure}[1][bthp]
     \centering
-    \includegraphics[scale=.75]{figures/bad_calibration_cake.eps}
-    \caption{A caked plot done with the calibration parameters
-    found in the header of the image. The header parameters
-    are not particuarly obvious and the diffraciton peaks
-    are not particuarly straight. Calibratin helps improve
-    the strightness of the diffraciton peaks.}
+    \includegraphics[scale=.75]
+    {figures/bad_calibration_cake.eps}
+    \caption{A cake done with the calibration parameters
+    found in the image header. These parameters
+    are not particularly good and the diffraction peaks
+    are not very straight. Calibration improves
+    the straightness of these peaks.}
     \label{bad_calibration_cake}
 \end{SCfigure}
 
-We see that for The caked data with the initial guess 
-calibration parameters, our diffraction lines
-have a systematic wiggle. It might be hard to see 
-with the full image, but by zooming into just one
-line we find the difference to be much more obvious.
-A zoomed in range is shown in 
-figure~\ref{bad_calibration_cake_zoom}.
-
-\begin{SCfigure}[1][hbtp]
+\begin{SCfigure}[1][bthp]
     \centering
-    \includegraphics[scale=.75]{figures/bad_calibration_cake_zoom.eps}
+    \includegraphics[scale=.75]
+    {figures/bad_calibration_cake_zoom.eps}
     \caption{A zoom in of the cake shown in 
     figure~\ref{bad_calibration_cake}. When zoomed into 
     diffraction image, the poor calibration becomes much 
@@ -151,57 +146,51 @@ figure~\ref{bad_calibration_cake_zoom}.
     \label{bad_calibration_cake_zoom}
 \end{SCfigure}
 
-This means that our initial guess at 
-calibration parameters is not great.
-We can now do the calibration. To do so, we push
-the \gui{Do Fit} button on the \gui{Calibration}
-tab. If the calibraiton did a good job, the constant
-$Q$ lines drawn on the diffraction image move
-so that they are entirely over the diffraction 
-pattern. This is shown in 
-figure~\ref{good_calibration_diffraction_image}.
+Calibration can be done to improve the experimental
+parameters. It is done with the \gui{Do Fit} button 
+on the \gui{Calibration} tab. If the calibration is good, 
+the constant $Q$ lines drawn on the diffraction image 
+entirely overlap the real diffraction patter. 
+This is shown in figure~\ref{good_calibration_diffraction_image}.
+The peaks on the caked image also become much straighter.
+The caked data after calibration is shown in 
+figure~\ref{good_calibration_cake}.
+figure~\ref{good_calibration_cake_zoom} shows that they
+look good even when zoomed in.
 
-\begin{SCfigure}[1][hbtp]
+\begin{SCfigure}[1][bthp]
     \centering
-    \includegraphics[scale=.75]{figures/good_calibration_diffraction_image.eps}
+    \includegraphics[scale=.75]
+    {figures/good_calibration_diffraction_image.eps}
     \caption{The diffraction window after being calibrated. The
     constant $Q$ lines fall well on top of the diffraction 
     peaks.}
     \label{good_calibration_diffraction_image}
 \end{SCfigure}
 
-The diffraction peaks on the caked image become much straigher.
-The caked window after calibraiton is shown in 
-figure~\ref{good_calibration_cake}.
-
-\begin{SCfigure}[1][hbtp]
+\begin{SCfigure}[1][bthp]
     \centering
-    \includegraphics[scale=.75]{figures/good_calibration_cake.eps}
+    \includegraphics[scale=.75]
+    {figures/good_calibration_cake.eps}
     \caption{The cake window after calibration.  The lines 
-    are much straigher then the lines in 
+    are much straighter than the lines in 
     figure~\ref{bad_calibration_cake} before calibration.}
     \label{good_calibration_cake}
 \end{SCfigure}
 
-They look good even when zoomed in. A corresponding zoom in of
-the caked window in shown in 
-figure~\ref{good_calibration_cake_zoom}.
-
-\begin{SCfigure}[1][hbtp]
+\begin{SCfigure}[1][bthp]
     \centering
-    \includegraphics[scale=.75]{figures/good_calibration_cake_zoom.eps}
+    \includegraphics[scale=.75]
+    {figures/good_calibration_cake_zoom.eps}
     \caption{A zoomed in part of figure~\ref{good_calibration_cake}. 
     Even at a large zoom in, the line remains very straight.}
     \label{good_calibration_cake_zoom}
 \end{SCfigure}
 
-After caking the calibrated data and convincing ourselves that
-our calibration parameters are good, we can save the calibration
-parameters to a file for later use. We can do so using the
-\gui{Save to File} button on the \gui{Calibration} tab.
-After selecting the location \gui{C:/Data/LaB6\_cal.dat}, the
-calibration file gets saved as
-\begin{lstlisting}[caption={'The Calibration Parameters File'}]
+After calibration, the calibration parameters can be saved to 
+a file for later use using the \gui{Save to File} button on the 
+\gui{Calibration} tab. The calibration parameters gets saved as
+\begin{lstlisting}[caption={'C:/Data/LaB6\_cal.dat'}]
 xc	1722.966078	0
 yc	1724.227970	0
 D	122.691351	0
@@ -213,42 +202,17 @@ pixelLength	100.000000
 pixelHeight	100.000000
 \end{lstlisting}
 
-\begin{SCfigure}[1][hbtp]
-    \centering
-    \includegraphics[scale=.75]{figures/masking_tab.eps}
-    \caption{The pixel masking tab.}
-    \label{masking_tab_example}
-\end{SCfigure}
-
-As can be seen in figure~\ref{diffraction_data_window_example},
-there is a beam stop on the left side of the image which is
-obstrucing part of the image. We know that none of the pixels
-blocked by the beam stop contain any interesting information
-so we are going to want to tell the program to ignore any pixels
-blocked by the mask. We can do so with a polygon mask. All
-polygon masking is done on the \gui{masking} tab. A screenshot
-of this tab is shown in figure~\ref{masking_tab_example}.
-We want to add a rectangular polygon mask on top of the beam
-stop in the image. To do so, we push the \gui{Add Mask} button.
-We then move to the diffraction image and draw the beamstop
-on the image by left clicking nodes on the screen. We add the
-final node by right clicking. After having drawn the polygon mask, 
-our diffraction image is shown in figure~\ref{masked_beam_stop}.
-
-\begin{SCfigure}[1][hbtp]
-    \centering
-    \includegraphics[scale=.75]{figures/masked_beam_stop.eps}
-    \caption{Here is the same diffraction data as in 
-    figure~\ref{diffraction_data_window_example} but with a
-    polygon mask drawn over the beam stop. This polygon mask
-    will stop the beam stop below it from being used in
-    subsequent data analysis.}
-    \label{masked_beam_stop}
-\end{SCfigure}
-
-Once we decide we are happy with our polygon mask, we can
-save it to a file using the \gui{Save Mask} button.
-The file gets saved out as
+As figure~\ref{diffraction_data_window_example} shows,
+there is a beam stop in the image obstructing part of the data. 
+None of the pixels blocked by the beam stop are part of the interference
+pattern so they should be ignored. They can be ignored with a polygon mask
+on the \gui{masking} tab. The masking tab is shown in 
+figure~\ref{masking_tab_example}. A rectangular mask is 
+put on top of the beam stop. The diffraction image with
+the mask is shown in
+figure~\ref{masked_beam_stop}.
+The \gui{Save Mask} button can be used to save the mask
+to a file. The saved file is
 \begin{lstlisting}[caption={'beam\_stop\_mask.dat'}]
 # Polygon(s) drawn on Mon Apr 14 00:33:12 2008
 25.6749379653	1634.63771712
@@ -256,69 +220,67 @@ The file gets saved out as
 1959.85359801	1857.15384615
 1959.85359801	1626.07940447
 \end{lstlisting}
-We can then load in this mask when we do the rest of
-our analysis. The mask will make sure that none of the
-the pixels within the beam stop are used for any subsequent
-analysis.
+This mask can be loaded into the program later when
+doing the rest of the analysis.
 
-Now, we are going to want to perform an intensity integration 
-of the rest of our data. We can use the intensity
-integrate data to look for peaks in the data.
-The steps for doing the rest of
-this analysis are as follows. Load in particular file we
-are interested in. Load in these calibration parameters
-using the \gui{Load From File} button on the \gui{Calibration}
-tab.\footnote{If you just did the calibration, the 
-parameters should already be in the inputs. The point is
-just that you could load the parameters into the program
-if you were, say, to open the program at some later point
-in time.}. Next, we can load in our previously recorded
-beam stop mask using the \gui{Load Mask} button on the
-\gui{Masking} tab. We also have to make sure polygon masks
-are used in the analysis by making sure the 
-\gui{Do Polygon Mask?} check box is selected.
-With everything loaded into the program, 
-we can perform a $Q$ integration by going to the 
-\gui{Integrate} tab. The integration tab is shown in 
-figure~\ref{integration_tab_example}
-
-\begin{SCfigure}[1][hbtp]
+\begin{SCfigure}[1][bthp]
     \centering
-    \includegraphics[scale=.75]{figures/integration_tab.eps}
+    \includegraphics[scale=.75]
+    {figures/masking_tab.eps}
+    \caption{The pixel masking tab.}
+    \label{masking_tab_example}
+\end{SCfigure}
+
+\begin{SCfigure}[1][bthp]
+    \centering
+    \includegraphics[scale=.75]
+    {figures/masked_beam_stop.eps}
+    \caption{THis is the same data that is in
+    figure~\ref{diffraction_data_window_example} with a
+    mask drawn over the beam stop. The mask will ensure
+    that the beam stop will not be used in subsequent analysis.}
+    \label{masked_beam_stop}
+\end{SCfigure}
+
+After calibrating the detector and creating the beam stop mask, 
+the rest of the data can be analyzed. This is done by 
+performing an intensity integration on each of the other files.
+The intensity integrated data is what contains the diffraction peaks.
+To perform the integration, the diffraction file must first be loaded.
+The calibration parameters determined earlier must be loaded and the
+beam stop mask must be loaded using the \gui{Load Mask} button on the
+\gui{Masking} tab. The \gui{Do Polygon Mask?} check box needs to
+be selected to ensure that the polygon masks are used in the analysis.
+Then, a $Q-I$ integration is done by going to the \gui{Integration} tab
+and pushing the \gui{AutoIntegrate} button on the left side of the tab.
+This is shown in figure~\ref{integration_tab_example}.
+One of the iron samples is shown in figure~\ref{iron_intensity}.
+
+\begin{SCfigure}[1][bthp]
+    \centering
+    \includegraphics[scale=.75]
+    {figures/integration_tab.eps}
     \caption{The integration tab.}
     \label{integration_tab_example}
 \end{SCfigure}
 
-We set the range of the $Q$ integration by setting
-\gui{Q Lower?} to 0 and \gui{Q Upper?} to 5. We
-then set the precision of the integration, or the
-bin size, by setting the \gui{Number of Q?} input
-to 300. Finally, we push the left \gui{Integrate}
-button and a window showing the diffraction data
-opens. For a particular iron sample, this window
-is shown in figure~\ref{iron_intensity}.
-
-\begin{SCfigure}[1][hbtp]
+\begin{SCfigure}[1][bthp]
     \centering
-    \includegraphics[scale=.75]{figures/iron_intensity.eps}
+    \includegraphics[scale=.75]
+    {figures/iron_intensity.eps}
     \caption{The intensity integration window for 
     a particular iron sample.}
     \label{iron_intensity}
 \end{SCfigure}
 
-We can save this data to a file with the \gui{Save Data}
-button on the \gui{Integration} tab. This data is
-saved out as two column ASCII.
-After doing this for all the different files that
-we have, we can load all the data into another program,
-such as Microsoft Excel, and compare the peaks.
-
-But if there are a lot of files to analyze, this whole
-process can be very time consuming. Instead of doing 
-this analysis by hand, we can automate the process by
-writing a macro to analyze all the files one at a 
-time. First, we put all of our data into \macroline{C:/Data/}.
-The macro that we can run is
+The intensity integrated data can be saved to a file
+using the \gui{Save Data} button on the \gui{Integration} tab. 
+The data is saved out as two column ASCII. This same 
+process could be done to all the files that need to be 
+analyzed but if there were a lot of files to analyze, this 
+process would be very time consuming. If all of the data was in 
+the folder \macroline{C:/Data/}, all the data could be analyzed by 
+running the macro
 \begin{lstlisting}[caption={'A macro to automate the 
     analysis'}]
 Data File:
@@ -329,51 +291,40 @@ Load Mask
     C:/Data/beam_stop_mask.dat
 Do Polygon Mask?
     Select
-Integrate Q Lower?
-	0
-Integrate Q Upper?
-	5
-Integrate Number of Q?
-	300
-Integrate Q-I
+AutoIntegrate Q-I
 Save Integration Data
     PATHNAME/FILENAME_int.dat
 \end{lstlisting}
-The first command loads into the program all of the
+The first command loads into the program all the
 diffraction files in the folder \macroline{C:/Data/}
 one at a time and runs the rest of the analysis on
-that particular file. The program then loads in
-the calibration file that we saved earlier and sets the
-integration bounds. Then the progarm loads in the
-beam stop mask. Then, the program does a 
-$Q$ vs intensity integration and saves the intensity
-integrated data to a file. The PATHNAME keyword gets
-repalced with teh path leading up to the particular 
+each of them. The macro loads in the calibration parameters
+that were saved earlier and then loads in the beam stop 
+mask. The program then does a $Q-I$ intensity integration and 
+saves the integration data to a file. The PATHNAME keyword gets
+replaced with the path leading up to the particular 
 file and the FILENAME keyword gets replaced with 
-the particular file's name. For example, the file
+the particular diffraction file's name. For example, the file
 \macroline{FeL2\_d070.mar3450} in
 the folder \macroline{C:/Data/} would
 be replaced with
 \macroline{C:/Data/FeL2\_d070\_int.dat}
-This command will let us save out of our intesnity
-integrated data next to the corresponding diffraction
-file with a useful filename.
+This command saves out the intensity integrated data next 
+to the corresponding diffraction file with a useful name.
 
-After we run this macro, all of our data will 
-be saved out into text files. We can, for
-example, open the files in Excel and plot
-the different diffraction patterns on the same
-graph. If we did this, we would obtain a plot
-that looked something like the graph shown
+After the macro is run, all the data will be analyzed. The
+intensity integrated data can be open in Excel. 
+The diffraction patterns of different data can be plotted on
+the same graph to look for shifts in teh diffraction peaks. 
+This data would look something like the graph shown
 in figure~\ref{excel_peak_shift}.
 
-\begin{SCfigure}[1][hbtp]
+\begin{SCfigure}[1][bthp]
     \centering
-    \includegraphics[scale=.5]{figures/excel_peak_shift.eps}
+    \includegraphics[scale=.5]
+    {figures/excel_peak_shift.eps}
     \caption{An example of what the shift in peaks might
     look like when two diffraction patterns were plotted
     in Excel on top of one another.}
     \label{excel_peak_shift}
 \end{SCfigure}
-
-

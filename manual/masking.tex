@@ -6,7 +6,7 @@ the program ignore certain pixels when doing the analysis,
 this program allows for two types of pixel masking:
 threshold masking and polygon masking. You can 
 apply either of these from the 
-\gui{Masking} tab. figure~\ref{masking_tab}
+\gui{Masking} tab. Figure~\ref{masking_tab}
 shows this tab. 
 
 \section{Threshold Masking}
@@ -52,7 +52,7 @@ When you apply a threshold mask, the pixels over this threshold
 will all be colored differently on the diffraction and cake image. 
 You can specify what you want these masked to be colored 
 with the \gui{Color} button next to the greater 
-than and less then masks. Figure~\ref{Threshold_Masking} shows 
+than and less than masks. Figure~\ref{Threshold_Masking} shows 
 what a diffraction image looks like when all pixels
 with intensity above 5000 are colored green and all pixels 
 below 30 are colored red.
@@ -69,14 +69,6 @@ calculating average intensity.
 
 \section{Polygon Masking}
 
-\begin{SCfigure}[1][htbp]
-    \centering
-    \includegraphics[scale=.75]{figures/Displayed_Polygon.eps}
-    \caption{Here are two polygon masks that have been applied
-    to a diffraction image. One of them blocks the beam stop.}
-    \label{Displayed_Polygon}
-\end{SCfigure}
-
 Sometimes, large areas of a diffraction image should not
 be included in any data analysis. For example, 
 often a beam stop blocks part of the detector
@@ -86,6 +78,14 @@ polygon masking feature. Polygons can be drawn around
 certain parts of the diffraction image and those parts 
 of the image will not be used in any subsequent analysis. 
 This program can handle multiple polygons at the same time.
+
+\begin{SCfigure}[1][htbp]
+    \centering
+    \includegraphics[scale=.75]{figures/Displayed_Polygon.eps}
+    \caption{Here are two polygon masks that have been applied
+    to a diffraction image. One of them blocks the beam stop.}
+    \label{Displayed_Polygon}
+\end{SCfigure}
 
 So long as the \gui{Do Polygon Mask?} check box is
 selected, the polygon masks will be used 
@@ -193,11 +193,11 @@ ignored.
     \subfloat[A rectangular polygon mask in 
     the middle of a diffraction image]{
     \label{box_mask_diffraction}
-    \includegraphics[scale=.75]{figures/box_mask_diffraction_image.eps}}\;\;
+    \includegraphics[scale=.7]{figures/box_mask_diffraction_image.eps}}\;\;
     \subfloat[The same rectangular mask on
     a caked plot]{
     \label{box_mask_cake}
-    \includegraphics[scale=.75]{figures/box_mask_cake_image.eps}}
+    \includegraphics[scale=.7]{figures/box_mask_cake_image.eps}}
     \caption{An example of how a relatively simple
     shape on a diffraction image will can look very
     different on a caked plot.}
