@@ -2,7 +2,7 @@
 
 \section{Calibration}
 
-The \gui{Calibration} tab can be used to load
+The \gui{Calibration} tab can also be used to load
 diffraction data into the program. The tab can
 be used to calibrate diffraction data to determine the 
 parameters that characterize the experiment. 
@@ -11,59 +11,57 @@ The program recognizes \macroline{mar2300}, \macroline{mar3450},
 \index{Mar2300}\index{Mar3450}\index{MarCCD}\index{Tiff}
 \macroline{mccd}, \macroline{tiff}, and \macroline{edf} data. 
 Multiple files can be loaded into the program at the same
-time using the file selector. The sum image is what is loaded.
+time using the file selector and the sum image is loaded.
 
 This program characterizes a diffraction experiment 
-according to these parameters:
+according to the parameters:
 \index{Calibration Parameters}
 \index{X Center}\index{Y Center}
 \index{Detector Distance}\index{$\alpha$}
 \index{$\beta$}\index{Rotation}\index{Pixel Scale}
 \begin{itemize}
-    \item \gui{xc:}, \gui{yc:} - the $x$ 
-and $y$ coordinate on the detector where the incoming 
-x-ray beam would have hit the detector were there 
-no sample in the way (in pixels).
+    \item \gui{xc:}, \gui{yc:} - the $(x,y)$ pixel coordinate 
+    on the detector where the incoming 
+    x-ray beam would have hit the detector were there 
+    no sample in the way (in pixels).
     \item \gui{d:} -- the distance from the sample to 
     the detector (in mm).
     \item \gui{E:} -- the energy of the incoming beam (in eV).
-    \item \gui{alpha:}, \gui{beta:} -- 2 rotations of 
+    \item \gui{alpha:}, \gui{beta:} \gui{R} -- 3 rotations of 
     the detector (in degrees).
-    \item \gui{R:} -- the third rotation of the detector 
-    around its center (in degrees).
-    \item \gui{pl:} -- the pixel length of the image - 
+    \item \gui{pl:} -- the pixel length of the detector - 
     the width of one pixel (in microns).
-    \item \gui{ph:} -- The pixel height of the image -
+    \item \gui{ph:} -- The pixel height of the detector -
     the height of one pixel (in microns).
 \end{itemize}
 Before calibrating an image, three things must be done. 
 First, the diffraction data must be loaded.
-Second, a $Q$ data file with the standard $Q$ values for the
+Second, a $Q$ data file with standard $Q$ values for the
 sample must be loaded.
 Third, an initial guess of the calibration parameters must be
 loaded. A guess at the calibration parameters can sometimes
-be found in the header of a diffraction file. These values
+be found in the header of the diffraction file. These values
 can be loaded into the program using the \gui{Get From Header} 
 button.  The \gui{Do Fit} button will perform the calibration 
 and find a best guess at the real experimental parameters.
 
 The \gui{Work in Lambda} option in the \gui{Calibration} menu can
-be used to switch the program to work with the x-ray's
+be used to make the program work with the x-ray's
 wavelength instead of its energy. The calibration parameter 
 \gui{$\lambda$:} will be used instead of \gui{E:}.
 
 The \gui{Q Data:} input will load into the program standard $Q$ data files. 
-This program stores several standard $Q$ files. They can be selected
+This program stores several standard $Q$ files that can be selected
 through the \gui{Standard Q} option of the \gui{Calibration} menu.
 
 The calibration algorithm can be modified in a couple of ways.
-It finds peaks in the diffraction data by 
+The program finds peaks in the diffraction data by 
 running from the center of the image out. 
 The number of radial slices that the program uses
 can be set with the \gui{Number of Chi?} input.
 The \gui{Stddev?} input 
 tells the program what ratio higher a peak must be than the 
-standard deviation of the background near it in order for the
+standard deviation of the background near it for the
 peak to be considered real. The higher the value, the more
 picky the program is about finding legitimate peaks.
 
@@ -72,15 +70,14 @@ the \gui{Fixed?} check box associated with that variable
 will stop it from being refined when fitting. The pixel 
 length and pixel height are never refined. 
 
-To see how good the current calibration parameters are at
-characterizing the loaded data, the \gui{Draw Q Lines?} 
+To see how good the current calibration parameters are, 
+the \gui{Draw Q Lines?} 
 check box will make the program draw 
 on the diffraction image lines of constant $Q$ specified
 by the $Q$ data file. The $\Delta Q$ ranges specified in 
-the $Q$ file can be drawn using the \gui{Draw dQ Lines?} 
-check box. The \gui{Draw Peaks?} check box can be used to 
-display all of the diffraction peaks that were found while 
-calibrating.
+the $Q$ data file can be drawn using the \gui{Draw dQ Lines?} 
+check box. The diffraction peaks that were found while
+calibrating can be displayed using the \gui{Draw Peaks?} check box. 
 
 The diffraction image can be zoomed into by left clicking
 on the image, dragging the mouse, and then releasing.
@@ -102,7 +99,7 @@ The program can ignore certain pixels in an image
 when performing diffraction analysis. This can be done
 using the \gui{Masking} tab.  Threshold masking can be 
 used to ignore pixels above or below a certain value.
-All pixels larger than a certain value can be ignored 
+All pixels larger than a certain value can be masked 
 using the \gui{Do Greater Than Mask?} check box
 and specifying the value in the 
 \gui{(Pixels Can't Be) Greater Than Mask:} input.
@@ -120,14 +117,14 @@ will not be used during an intensity integration.
 The program can mask areas of the diffraction image
 using polygon masks. The \gui{Do Polygon Mask?} check box 
 will enable this. Any masks in the program
-will be displayed over the diffraction data and cake data.
+will be displayed over the diffraction data and cake images.
 Any masked pixels will not be used during an intensity
 integration. The \gui{Add Polygon} button can be used to 
 draw new polygon masks. To draw a mask, simply push
 the button, left click all the
 nodes on the diffraction image except the last one, and
-then right click the final node. This will create the 
-polygon. The \gui{Remove Polygon} button can be used to 
+then right click the final node. 
+The \gui{Remove Polygon} button can be used to 
 remove polygons from the diffraction image. Simply push
 the button and then click on the polygon that should be
 removed. The \gui{Clear Mask} button will remove all
@@ -142,11 +139,10 @@ A cake is a plot of diffraction data in $Q$ vs.
 $\chi$ space. $\chi$ is a measure of the angle around 
 the incoming x-ray beam. By convention, $\chi$ is equal to 
 $0\degrees$ to the right of the center of the image and
-increases in the counterclockwise direction. 
+increases in a counterclockwise direction. 
 The program needs to know a range and bin size in $Q$ and
 $\chi$ in order to make a caked plot. The \gui{Do Cake} button
-will create a caked plot of the data. The 
-program will open a new window with the caked data in
+will create a cake and open a new window with the caked data in
 it. The caked window can be interacted with just like
 the diffraction window. There is a button called \gui{AutoCake} that 
 picks a cake range with the whole diffraction image in it 
@@ -155,9 +151,9 @@ and peaks that are drawn on the diffraction image
 will also be drawn on the caked image.
 The \gui{Save Data} button will save the caked data
 to a file as plain text. The \gui{Save Image} button will save the
-caked plot as a popular image format.
-The saved image will contain any $Q$ lines or peaks that are drawn on 
-the caked plot.
+caked plot as a popular image format with
+any $Q$ lines or peaks that are drawn on 
+the caked plot saved on top of it.
 
 The \gui{Do Polarization Correction?} button will apply a 
 polarization correction to the caked plot. The polarization
@@ -180,14 +176,12 @@ vs. $Q$, $\chi$, or $2\theta$. By default, the options
 available are to integrate in $Q$ or $\chi$. The 
 \gui{Work in 2theta} option in the menu bar can be used 
 to make the program integrate in $2\theta$ instead of $Q$.  
-
 The program needs to know a range (both a lower and upper value)
 and a bin size in order to perform an intensity integration.
 When these values have been loaded, the \gui{Integrate} button will 
-perform the integration. A new window will open up with the
-data in it. By default, the integration will be over all 
-possible values of the other variable. For example, if you integrate 
-in $Q$, it will be over all $\chi$. This can be changed using the
+perform the integration. A new window will open with a plot of data.
+By default, the integration will be over all 
+possible values of the other variable. This can be changed using the
 constraint check boxes. 
 For example, selecting the \gui{Constraint With Range on Right?}
 check box and setting the \gui{Chi Lower?} input to 0 and the
@@ -196,7 +190,7 @@ to be only of pixel's with $\chi$ between 0 and 90.
 
 A polarization correction can be applied during
 an intensity integration. The \gui{Save Data} button can be used
-to save the intensity integration data to a file as two column ASCII. 
+to save the intensity data to a file as two column ASCII. 
 
 \section{Macro}\index{Macros}
 
@@ -214,19 +208,18 @@ filename or a number). The macro command to load a diffraction
 file is \macroline{Data File:} followed by a line with 
 a filename. It can also be followed by a list of filenames,
 a directory containing diffraction data, or some combination
-of each. The program will run the subsequent macro lines on
+of each. The program will run the subsequent macro on
 every file in the list and all diffraction files 
 in folders in the list. The loop will end with a subsequent 
 \macroline{Data File:} line, a \macroline{END LOOP} line, or 
 the end of the macro file.
 
-When looping over diffraction files, there is a special 
+When looping over diffraction files, there is special 
 markup which makes it easy to save files in a loop with 
-useful names. They are 
-\macroline{BASENAME} and \macroline{FILENAME}. Whenever the
+useful names. Whenever the
 program finds \macroline{BASENAME} in a macro file,
 it will be replaced with the path of the current
-diffraction file that has been loaded and
+diffraction file that has been loaded. Similarly, 
 \macroline{FILENAME} will be replaced with the filename of
 the current diffraction file. A
 diffraction file with the extension \macroline{.mar3450} could be 

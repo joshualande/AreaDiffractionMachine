@@ -23,7 +23,7 @@ the detector will always be slightly titled with respect
 to the incoming beam. Failing to account for this would
 introduce a systematic error in the angle measurements.
 
-\begin{SCfigure}[1][htbp]
+\begin{SCfigure}[1][bthp]
     \centering
     \input{figures/DiffractionSetup.tex}
     \caption{An X-Ray diffraction setup. X-rays scatter from a 
@@ -33,7 +33,7 @@ introduce a systematic error in the angle measurements.
     \label{DiffractionSetup}
 \end{SCfigure}
 
-\begin{SCfigure}[1][htbp]
+\begin{SCfigure}[1][bthp]
     \centering
     \input{figures/MeasureAngleFlatDetector.tex}
     \caption{The same setup as in figure~\ref{DiffractionSetup}. 
@@ -76,7 +76,7 @@ detector. What we want to figure out
 is the corresponding point that we would be looking
 at the imagined untilted detector.
 
-\begin{SCfigure}[1][htbp]
+\begin{SCfigure}[1][bthp]
     \centering
     \input{figures/PhysicalSetup.tex}
     \caption{Here, the detector 
@@ -174,7 +174,7 @@ Figure~\ref{PitchY_B} is a more geometrical diagram.
 Figure~\ref{PitchY_C} shows a cross section of the $y=0$
 axis.
 
-\begin{SCfigure}[1][htbp]
+\begin{SCfigure}[1][bthp]
     \centering
     \input{figures/PitchY_A.tex} 
     \label{PitchY_A}
@@ -183,7 +183,7 @@ axis.
     and then by $\alpha$ around the $\hat x'$ axis.}
 \end{SCfigure}
 
-\begin{SCfigure}[1][htbp]
+\begin{SCfigure}[1][bthp]
     \centering
     \input{figures/PitchY_B.tex} 
     \label{PitchY_B}
@@ -191,7 +191,7 @@ axis.
     of the figure in figure~\ref{PitchY_A}.}
 \end{SCfigure}
 
-\begin{SCfigure}[1][htbp]
+\begin{SCfigure}[1][bthp]
     \centering
     \input{figures/PitchY_C.tex} 
     \label{PitchY_C}
@@ -305,6 +305,20 @@ $Q$ is calculated as
 \begin{equation}\label{qterms2theta}
     Q = 4\pi \sin(2\theta/2)/\lambda.
 \end{equation}
+
+\begin{SCfigure}[1][bthp]
+    \centering
+    \input{figures/TwoTheta.tex}
+    \caption{For a particular point $(x,y)$ on an 
+    untilted detector, we define two quantities:
+    $2\theta$ and $\chi$. $2\theta$ is the angle of 
+    scattering of the beam. $\chi$ is a measure of the 
+    azimuthal angle of the scattered light around 
+    the beam.}
+    \label{TwoTheta}
+\end{SCfigure}
+
+These are shown, for a particular point, in figure~\ref{TwoTheta}.
 Diffraction theory shows that the $Q$ values of preferential 
 scattering for a crystal are a material property independent 
 of the experimental setup. 
@@ -317,18 +331,6 @@ Some people use the quantity $D$ instead of $Q$
 \begin{equation}\label{DtermsQ}
     D = 2\pi/Q.
 \end{equation}
-
-\begin{SCfigure}[1][htbp]
-    \centering
-    \input{figures/TwoTheta.tex}
-    \caption{For a particular point $(x,y)$ on an 
-    untilted detector, we define two quantities:
-    $2\theta$ and $\chi$. $2\theta$ is the angle of 
-    scattering of the beam. $\chi$ is a measure of the 
-    azimuthal angle of the scattered light around 
-    the beam.}
-    \label{TwoTheta}
-\end{SCfigure}
 
 We now have a way of relating pixel
 coordinates $(x_d,y_d)$ read directly off

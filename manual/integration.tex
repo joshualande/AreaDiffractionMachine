@@ -22,16 +22,16 @@ using equations~\ref{ytermsydoubleprime}
 After binning all the pixel, the bins are then averaged.
 
 This program can constrain the integration range. 
-This means that you can perform, for example,
-a $Q$ integration of only those pixels with some
-particular $\chi$ range. Or, you can
-constrain your $\chi$ integration to a particular
+This can be used, for example, to integrate
+in $Q$ only those pixels with some particular 
+$\chi$ range. It can also be used to integrate
+in $\chi$ only for a particular
 $Q$ range. This could be used, for example, to
 perform a $\chi$ integration of only one
 diffraction peak. The algorithm for performing
-the constraint isn't different. You just
-only bin intensity values which are allowed by 
-by the constraint.
+the constraint isn't particularly different. Only
+pixels in the image allowed by the constraint
+are put into the intensity bins.
 
 The program can perform a polarization 
 correction to the integration. The polarization 
@@ -64,7 +64,7 @@ The number of bins in $Q$ space can be specified with the
 \gui{Number of Q?} input. The \gui{Integrate} button
 on the left can be used to perform a $Q$ integration.
 
-\begin{SCfigure}[1][htbp]
+\begin{SCfigure}[1][bthp]
     \centering
     \includegraphics[scale=.75]{figures/integration_tab.eps}
     \caption{The integration tab. This is where intensity
@@ -82,22 +82,19 @@ on the right can be used to perform $\chi$ integration.
 
 \section{The Integration Window}
 
-\begin{SCfigure}[1][htbp]
+\begin{figure}
     \centering
-    \includegraphics[scale=.75]{figures/integration_window_q.eps}
+    \subfloat[A $Q-I$ integration.]{
+    \label{integration_window_q}
+    \includegraphics[scale=.75]{figures/integration_window_q.eps}\;\;}
+    \subfloat[A $\chi-I$ integration.]{
+    \label{integration_window_chi}
+    \includegraphics[scale=.75]{figures/integration_window_chi.eps}}
     \caption{The integration window that
     opens up after an intensity integration 
     is performed.} 
-    \label{integration_window_q}
-\end{SCfigure}
-
-\begin{SCfigure}[1][htbp]
-    \centering
-    \includegraphics[scale=.75]{figures/integration_window_chi.eps}
-    \caption{The integration window that opens up after 
-    you perform an intensity integration.} 
-    \label{integration_window_chi}
-\end{SCfigure}
+    \label{integration_window_both}
+\end{figure}
 
 After the program finishes integrating, a line plot
 of the integrated data will be displayed in a new window. 
