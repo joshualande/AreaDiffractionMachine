@@ -1,26 +1,25 @@
 \chapter{Pixel Masking}\label{pixel_masking}
 
-When analyzing diffraction dat, not all of the pixels in 
+When analyzing diffraction data, not all of the pixels in 
 an image should be used in the analysis. In order to make 
-the program ignore certain pixels when doing the analysis, 
+the program ignore certain pixels, 
 this program allows for two types of pixel masking:
 threshold masking and polygon masking. You can 
 apply either of these from the 
-\gui{Masking} tab. Figure~\ref{masking_tab}
-shows this tab. 
+\gui{Masking} tab shown in  figure~\ref{masking_tab}.
 
 \section{Threshold Masking}
 
 \begin{SCfigure}[1][bthp]
     \centering
     \includegraphics[scale=.75]{figures/masking_tab.eps}
-    \caption{The pixel masking tab. It allows for threshold 
-    masking and polygon masking.} 
+    \caption{The pixel masking tab can be used to add
+    a threshold mask or a polygon masking.} 
     \label{masking_tab}
 \end{SCfigure}
 
 The top half of the \gui{Masking} tab is devoted to 
-threshold masking. Threshold masking allows all pixels, 
+threshold masking. Threshold masks allows all pixels, 
 either above a certain intensity or below a certain 
 intensity, to be ignored when doing the diffraction 
 analysis. The \gui{Do Greater Than Mask?} check box can 
@@ -28,8 +27,8 @@ be used to apply a mask that will cause all pixels
 greater than a certain value to be ignored.
 The \gui{(Pixel's Can't Be) Greater Than Mask} input 
 can be used to specify the maximum pixel value.
-Correspondingly, the \gui{Do Less Than Mask} check box
-can be used to make the program ignores all
+The \gui{Do Less Than Mask} check box
+can be used to make the program ignore all
 pixels below a certain value. The particular value can 
 be specified with the \gui{Less Than Mask} input. 
 
@@ -39,66 +38,62 @@ be specified with the \gui{Less Than Mask} input.
     \caption{A diffraction image with a
     greater than mask and less than mask.
     All pixels with intensity greater than 5000 
-    have been colored green. All pixels with 
+    have been colored green and all pixels with 
     intensity less than 30 have been colored red. Applying
-    an intensity mask can be a useful way to see if a detector's
+    an intensity mask can be used to see if a detector's
     pixels have been overloaded. They can also be a used to
-    ensure that no overloaded pixels are used in subsequent
+    ensure that overloaded pixels are not used in the
     data analysis.}
     \label{Threshold_Masking}
 \end{SCfigure}
 
-When you apply a threshold mask, the pixels over this threshold 
-will all be colored differently on the diffraction and cake image. 
-You can specify what you want these masked to be colored 
-with the \gui{Color} button next to the greater 
+When applying a threshold mask, the pixels above or below
+the threshold 
+will be colored on the diffraction and cake image. 
+The color can be set with the \gui{Color} button next to the greater 
 than and less than masks. Figure~\ref{Threshold_Masking} shows 
-what a diffraction image looks like when all pixels
+diffraction image when all pixels
 with intensity above 5000 are colored green and all pixels 
 below 30 are colored red.
 
-When caked data is saved out to a file, any of the pixels 
+When caked data is saved, any of the pixels 
 that are larger than the greater than mask are saved 
 as -2. Any of the pixels smaller than the less than mask
-are saved as -3.  If you need to analyze caked data outside 
-the program, this behaviour needs to be accounted for.
+are saved as -3. This behaviour needs to be accounted for
+when analyzing caked data outside the program.
 
-When an intensity integration is saved to a file, 
+When an integrating intensity, 
 any of the too high or too low pixels are simply ignored when 
 calculating average intensity. 
 
 \section{Polygon Masking}
 
 Sometimes, large areas of a diffraction image should not
-be included in any data analysis. For example, 
+be included in the data analysis. For example, 
 often a beam stop blocks part of the detector
 and the pixels behind the beam stop should be ignored. 
-To allow for this sort of masking, the program has a 
-polygon masking feature. Polygons can be drawn around 
-certain parts of the diffraction image and those parts 
-of the image will not be used in any subsequent analysis. 
+This can be done with a polygon masks. Polygons can be drawn 
+on the diffraction image and those parts 
+of the image will not be used in subsequent analysis. 
 This program can handle multiple polygons at the same time.
 
 \begin{SCfigure}[1][bthp]
     \centering
     \includegraphics[scale=.75]{figures/Displayed_Polygon.eps}
-    \caption{Here are two polygon masks that have been applied
-    to a diffraction image. One of them blocks the beam stop.}
+    \caption{Two polygon masks that have been applied
+    to this diffraction image. One of them covers the beam stop.}
     \label{Displayed_Polygon}
 \end{SCfigure}
 
 So long as the \gui{Do Polygon Mask?} check box is
 selected, the polygon masks will be used 
 when performing subsequent analysis. 
-The polygons will be displayed on the diffraction and cake image. 
-Any pixel in the diffraction or cake image that is inside one of
-the polygons will have a different color.
-An example of polygons on a diffraction image are 
-shown in figure~\ref{Displayed_Polygon}.
-The color of the polygon masks can be changed using 
-using the \gui{Color} button
+As figure~\ref{Displayed_Polygon} shows,
+the polygons will be colored on the diffraction and
+cake image.  The color of the polygon masks can be set 
+with the \gui{Color} button
 next to the \gui{Do Polygon Mask?} check box.
-When caked data is saved out, any pixels inside 
+When caked data is saved, any pixels inside 
 polygon masks will be given an intensity 
 value of -4. During an intensity integration 
 masked pixels will be ignored.
@@ -106,53 +101,49 @@ masked pixels will be ignored.
 \begin{SCfigure}[1][bthp]
     \centering
     \includegraphics[scale=.75]{figures/Adding_Polygon.eps}
-    \caption{Here is the interface for adding a new polygon 
-    mask to the program. This particular mask will cover 
-    the beam stop so that the beam stop does not affect
-    the intensity integration.}
+    \caption{A new polygon mask is being added to the 
+    program. This particular mask will cover 
+    the beam stop.}
     \label{Adding_Polygon}
 \end{SCfigure}
 
-A polygon mask can be added to the image by pushing
+A polygon mask can be added to the image with
 the \gui{Add Polygon} button on the \gui{Masking} tab. 
-This button will stay down when pushed.  Pushing it puts 
+This button will stay down when pushed and puts
 the program in polygon drawing mode.  In this mode, the 
-diffraction image will behave differently. The diffraction
-image can no longer be zoomed or panned.
+diffraction image can no longer be zoomed or panned.
 Instead, left clicking on the diffraction image will make
-the program draw the polygon.  The first left click adds the
+the program draw a polygon mask.  The first left click adds the
 first vertex. Each success left click add another vertex. 
-The drawing can be finished by right clicking (this will
-also create a final vertex). Right clicking will make
-the program exit the drawing mode, return to its
-original state, and add the polygon into the program. 
+The drawing can be finished and the final vertex added by right 
+clicking. The program return to its
+normal state and add the polygon into the program. 
 Multiple polygons can be added using the \gui{Add Polygon}
 button. Figure~\ref{Adding_Polygon} shows 
 the program when a polygon is
-being drawn. Drawing a polygon can be aborted without
-saving the mask by unpushing the \gui{Add Polygon} button.
+being drawn. A half drawn polygon can be aborted without finishing
+it by unpushing the \gui{Add Polygon} button.
 
 \begin{SCfigure}[1][bthp]
     \centering
     \includegraphics[scale=.75]{figures/Removing_Polygon.eps}
-    \caption{Here is the diffraction
-    image window as a polygon is about to be removed.
+    \caption{A polygon is about to be removed.
     When mousing over a polygon to remove it,
     the program will display a red border around it.}
     \label{Removing_Polygon}
 \end{SCfigure}
 
 The \gui{Remove Polygon} button can be used to remove
-a polygon in the program. Like the \gui{Add Polygon} 
+a polygon from the program. Like the \gui{Add Polygon} 
 button, this button will stay pushed and change the
-behavior of the diffraction image. After the 
-\gui{Remove Polygon} button is pushed, clicking over
+behavior of the diffraction image. After pushing the 
+\gui{Remove Polygon} button, clicking over
 a particular polygon will remove it.
 After the polygon is removed, the program will 
 return to its normal state.
 Figure~\ref{Removing_Polygon} shows what the diffraction
 window looks like when a polygon is about to be removed.
-The program can be returned to its normal state without
+The program can return to its normal state without
 removing a polygon by unpushing the \gui{Remove Polgyon}
 button.
 
@@ -161,10 +152,9 @@ all the polygons at once. The \gui{Save Mask} button
 can be used to save all the polygons to a file.
 A file of polygons can be added to the program 
 using the 
-\gui{Load Mask} button. The file for polygon
-files is very simple. For the polygons in 
-figure~\ref{Displayed_Polygon}, the following
-file would be saved:
+\gui{Load Mask} button. A polygon
+file is very simple. The polygons in 
+figure~\ref{Displayed_Polygon} were saved as
 \begin{lstlisting}[caption={'polygons.dat'}]
 # Polygon(s) drawn on Thu Feb 07 00:00:21 2008
 93.140587183	1098.06704199
@@ -181,33 +171,33 @@ file would be saved:
 729.601266267	709.981262058
 \end{lstlisting}
 Each line is an ($x$,$y$) coordinate for one of 
-the nodes of a polygon.  The coordinates are separated
+the nodes of the polygon.  The coordinates are separated
 by spaces. Each polygon is separated by a newline.  
 Comment lines beginning with \# are 
 ignored. 
 
 \section{Masking Caked Plots}
 
+Any polygon masks or threshold masks will also 
+show up on the caked plot. As figure~\ref{box_mask} shows, 
+polygons on a diffraction image can look very distorted on 
+a caked plot. 
+
 \begin{figure}[htb]
     \centering
     \subfloat[A rectangular polygon mask in 
     the middle of a diffraction image]{
     \label{box_mask_diffraction}
-    \includegraphics[scale=.7]{figures/box_mask_diffraction_image.eps}}\;\;
+    \includegraphics[scale=.7]
+    {figures/box_mask_diffraction_image.eps}}\hspace{1em}
     \subfloat[The same rectangular mask on
     a caked plot]{
     \label{box_mask_cake}
     \includegraphics[scale=.7]{figures/box_mask_cake_image.eps}}
-    \caption{An example of how a relatively simple
-    shape on a diffraction image will can look very
-    different on a caked plot.}
+    \caption{A relatively simple shape on a diffraction image 
+    can look very different on a caked plot.}
     \label{box_mask}
 \end{figure}
-
-Any polygon mask or threshold mask will also 
-show up on the caked plot. Polygons on the 
-diffraction image can look very distorted on 
-caked plots. Figure~\ref{box_mask} shows an example.
 
 
 

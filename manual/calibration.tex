@@ -1,6 +1,6 @@
 \chapter{Calibration}\label{calibration}
 
-Diffraction data can not be analyzed without
+Area Diffraction data can only be analyzed with
 a knowledge of how the diffraction experiment was 
 set up. Calibration is the process used to find these
 values.
@@ -10,52 +10,50 @@ values.
 
 In principle, all the calibration values could be
 measured directly from a diffraction experiment.
-But in practice, they can not be measured to an 
+In practice, they can not be measured to an 
 acceptable level of precision. 
 Instead, a calibration procedure is used to 
 infer these values from the diffraction data. 
-It is done by first imaging a standard
-crystal before imaging an interesting sample. Assuming 
+It is done by first imaging a calibration standard
+before imaging an interesting sample. Assuming 
 that the diffraction machine was not altered between the 
 imaging of the calibration standard and the 
 imaging of the unknown sample, 
 the calibration parameters for both sets of data 
-are the same. 
+will be the same. 
 If the calibration values could be figured out from
 the pattern of the standard crystal, this information 
 could be used to analyze the other data.
 What it means to use a standard crystal is to know 
 in advance its $Q$ values of preferential 
-scattering. With these and with the 
-calibration values for the diffraction machine,
+scattering. With these and with 
+calibration parameters,
 we can figure out exactly what diffraction
-pattern we should expect. To do this, we could, for
+pattern we should expect on the detector. To do this, we could, for
 each $Q$ value, vary $\chi$ and calculate the 
-corresponding $(x_d,y_d)$ par. This would tell us 
-where on the detector all the light scattered to.
+corresponding $(x_d,y_d)$ part. 
 In fact, my program can do just this. If you load in 
-a set of $Q$ values, enter into the program 
-calibration values, and then push the 
-\gui{Draw Q Values?} check box, 
-the program will draw on top of the diffraction
+a set of $Q$ values and enter into the program 
+calibration parameters, the 
+\gui{Draw Q Values?} check box 
+will draw on top of the diffraction
 image what pattern should show up on the detector.
 This feature described in section~\ref{displayconstQlines}
 
 In order to perform the calibration, we can vary the 
-calibration values until they make the calculated pattern 
-match the pattern that was captured. We want to `fit' the 
-calibration parameters to a diffraction patter. 
+calibration parameters until they make the calculated pattern 
+match the pattern that was captured. The calibration parameters 
+are fit to the diffraction pattern. 
 
-\section{The Fitting} 
+\section{Fitting} 
 \index{Fitting}\label{fitting_sec}
 
 In order for the fitting algorithm to work, the program 
 must already have an initial guess at the calibration 
-parameters. The algorithm requires 
-a list of the known $Q$ values and it requires 
+parameters, a list of the known $Q$ values, and 
 a range for each of these $Q$ values. In order for the 
 algorithm to work, inside of this $Q$ range (as 
-calculated by the initial calibration value guess) there 
+calculated by the initial calibration values) there 
 should uniquely be the peaks that we are interested in fitting.
 An example of this is shown in figure~\ref{divide_up_image}.
 
@@ -84,24 +82,24 @@ An example of this is shown in figure~\ref{divide_up_image}.
 \end{SCfigure}
 
 The fitting algorithm first\index{Peak Finding}
-finds the $(x,y)$ coordinates for many diffraction peaks. 
+finds $(x,y)$ coordinates for many diffraction peaks. 
 To do so, it picks a $\chi$ value and 
 spread radially out from the center of the diffraction
 image. The program makes an array of the intensity
-values between each $Q$ range. It then fits a Gaussian to 
-the ranges and the center of the Gaussian is taken as
+values in each range. It then fits a Gaussian to 
+the ranges and the peak of the Gaussian is taken as
 the diffraction peak peak. Figure~\ref{fitting} shows
 a diagram of this. This is done for many evenly spaced 
-$\chi$ values. The number of $\chi$ slices used can
+$\chi$ values. The number of $\chi$ slices can
 be selected by the user. See section~\ref{num_chi_and_stddev}.
 
 There is not always a consistent diffraction ring 
-all the way around the image. Some of these fits are
+all the way around the image. Some of the Gaussian fits are
 not real peaks and should be ignored. To remove these
 spurious peaks, the program applies several tests
-to the peaks. The first test is that the Gaussian fit was
-not too close to the edge of the image. Any peak where
-the fit's center plus or minus twice the fit's
+to each peak. The first test is that the Gaussian fit was
+not too close to the edge of the image. Any peak whose 
+fit center plus or minus twice the fit's
 standard deviation is outside of the $Q$ range is
 considered too close to the edge of the image.
 Next, the program tests if the height of the peak 
@@ -110,13 +108,13 @@ of the peak is smaller than a certain value. If so,
 the peak is not considered to be significant enough.
 This value is called \gui{Stddev} and can be specified 
 by the user.\index{Stddev} See section \ref{num_chi_and_stddev}.
-The higher the value of \gui{Stddev} is, the
+The higher the value of \gui{Stddev}, the
 more picky the program is about allowing peaks. 
 
 After making a list of peaks, the program defines a residual 
 function which describes how good the current calibration
 parameters are. It converts the $(x,y)$ coordinate
-of each peaks into a $(Q^{\text{peak}},\chi^{\text{peak}})$ 
+of each peak into a $(Q^{\text{peak}},\chi^{\text{peak}})$ 
 pair. Since each peak has a known $Q$ value (which we will 
 call $Q^{\text{exp}}$), we define the residual function as
 \begin{equation}\label{residual}
@@ -126,18 +124,18 @@ call $Q^{\text{exp}}$), we define the residual function as
 \end{equation}
 The functional dependence comes from
 calculating $Q^{\text{peak}}$ for particular
-calibration parameter.
-The smaller the Residual is, the closer we are to
-having all our peaks have the desired $Q$ values.
+calibration parameters.
+The smaller the residual is, the closer we are to
+having all our peaks have the desired $Q$ value.
 If we had a perfect calibration, the residual would
 be zero. 
 
 The program takes this function of 7 variables (the
 calibration parameters) and minimizes it. 
 Ideally, the calibration parameters that minimize the 
-residual are a good guess at the calibration parameters.
+residual are the best guess at the calibration parameters.
 The program uses the Levenberg-Marquardt nonlinear 
-least squares algorithm to minimize the residual. 
+least squares minimization algorithm to minimize the residual. 
 The particular implementation used by the program
 is Manolis Lourakis's
 levmar library\cite{lourakis04LM}. 
@@ -145,32 +143,28 @@ levmar library\cite{lourakis04LM}.
 \section{Calibrating With the Program}
 
 Calibration is done with the
-\gui{Calibration} tab. This tab is shown 
+\gui{Calibration} tab shown 
 in figure \ref{calibration_tab} on page
 \pageref{calibration_tab}. An image
 can be calibrated after a diffraction
-image of a standard crystal has been loaded
-into the program, the $Q$ values for that
+image of a standard crystal has been loaded, the $Q$ values for that
 crystal have been loaded, and an initial guess 
-at the calibration parameters had been loaded.
+at the calibration parameters have been loaded.
 
-Once these have been loaded, the \gui{Do Fit}
-button can be used to refine the calibration
-parameters. The program will use the calibration 
-algorithm described in section~\ref{cal_algorithm}. 
-Once the program finds a best guess for the 
-calibration parameters, it will put the parameters 
-into the inputs. 
+The \gui{Do Fit}
+button can be used to refine the calibration parameters using the 
+calibration algorithm described in section~\ref{cal_algorithm}. 
+The best guess for the calibration parameters will be put in
+the inputs on the \gui{Calibration} tab.
 
 The program will print to the console some useful things
-while it does the fit. The program will calculate the residual 
+while it does the calibration. The program will calculate the residual 
 function (equation \ref{residual}) before and 
-after the calibration and print the values to the
+after the calibration and print the value to the
 console\footnote{Actually, the program
-calculates the residual function divided by the number
-of peaks. So it really displays the residual per peak, 
-which is a more useful quantity because is independent
-of the number of peaks.}. The output will look like
+calculates the residual per peak. 
+It is a more useful quantity because it is independent
+of the number of peaks found.}. The output will look like
 \begin{lstlisting}[caption={Displaying the Residual}]
  - Before fitting, the calculated residual is 5.336138e-04
  - Doing the fitting
@@ -223,7 +217,7 @@ Covariance Matrix
 \end{lstlisting}
 The rows (from top to bottom and from left to right) correspond 
 to \gui{xc}, \gui{yc}, \gui{d}
-\gui{E}, \gui{alpha}, \gui{beta}, and \gui{rotation}. The columns
+\gui{E}, \gui{alpha}, \gui{beta}, and \gui{rotation}. 
 I think that the square root of the diagonal elements of the covariance 
 matrix are supposed to correspond to uncertainties, but I do not know 
 enough about the minimization algorithm to really be comfortable saying 
@@ -250,16 +244,15 @@ parameters using the \gui{Previous Values} input.
 The calibration algorithm requires starting
 at the center and moving across the image in constant
 $\chi$ slices (see section~\ref{cal_algorithm}).
-The number of these slices that are used
+The number of these slices 
 can be set using the \gui{Number Of Chi?} input. 
 The default value is 360. 
 
-Section \ref{fitting_sec} describes how the program
-has a parameter that determine how picky it is
-about keeping peaks. This parameter can be set using the 
+Section \ref{fitting_sec} describes the \gui{Stddev} parameter.
+It can be set using the 
 \gui{Stddev?} input. The default value is 5. The higher 
 the value, the more likely it is that the program will ignore
-valid peaks but the but the more likely it is that the program
+bad peaks but the more likely it is that the program
 will ignore valid peaks.
 
 \section{\texorpdfstring{Work in 
@@ -273,14 +266,14 @@ values are related by
     E=hc/\lambda.
 \end{equation}
 The \gui{Work in Lambda} radio select in the menu bar
-can be used to to work with wavelength in units of nanometers, 
+can be used to work with wavelength in units of nanometers, 
 instead of energy, in units of electron volts. 
 This can be changed back using the \gui{Work in eV} input.
 When the program switches to working with wavelength,
 the energy input \gui{E} will be relabeled
 \gui{$\lambda$} and the value in the input will be converted.
 When working with wavelength, the 
-wavelength will saved to the file instead of the energy when
+wavelength will be saved to the file instead of the energy when
 saving experimental parameters.
 
 \section{Fixing Calibration Parameters}
@@ -290,13 +283,12 @@ When fitting calibration parameters, it is not
 always desirable to allow the program to vary
 all of the parameters. For example,
 the energy of the beam might be well known already
-so it would be desirable to keep its value fixed.
+so it would be desirable to keep it fixed.
 The \gui{Fixed?} check boxes next to the parameter
 inputs can be used to fix the corresponding parameter
 so that it doesn't vary.
 The pixel length and pixel height can not be fixed 
 because they are never refined. 
-They are never the short of thing that one would want to vary.
 
 \section{\texorpdfstring{Displaying Constant $Q$ 
     Lines}{Displaying Constant Q Lines}}
@@ -312,7 +304,7 @@ This can be done with the \gui{Draw Q Lines?} button on the
 \gui{Calibration} tab. 
 Figure~\ref{constant_q_lines_on_diffraction_image}
 shows an example. The way that this is done is
-described in section~\ref{calibration}.
+described in section~\ref{cal_algorithm}.
 Constant $Q$ lines can also be drawn on top of the
 caked data. This is described in 
 section~\ref{cakeQlinesandpeaks}.  The color of the 
@@ -341,7 +333,7 @@ The color of these lines can be changed with the
 corresponding \gui{Color} button. 
 Figure~\ref{constant_dq_lines_on_diffraction_image}
 shows an example.
-Constant $\Delta Q$ can also be displayed on top 
+Constant $\Delta Q$ lines can also be displayed on top 
 of caked data. This is described in 
 section~\ref{cakeQlinesandpeaks}.
 
@@ -350,7 +342,7 @@ section~\ref{cakeQlinesandpeaks}.
     \includegraphics[scale=.75]
     {figures/constant_dq_lines_on_diffraction_image.eps}
     \caption{A diffraction image with the $\Delta Q$ range 
-    displayed on top of it.}
+    displayed on it.}
     \label{constant_dq_lines_on_diffraction_image}
 \end{SCfigure}
 
@@ -362,13 +354,13 @@ program finds a list of diffraction peaks
 when it performs the image calibration.  
 After the program finds the peaks, it can display 
 them on top of the diffraction image. 
-The \gui{Draw Peaks?} can be used to 
-display the peaks as crosses. 
-The color of the peaks can be changed with the 
-corresponding \gui{Color} button.  
+The \gui{Draw Peaks?} check box can be used to 
+display the peaks on the diffraction image as crosses. 
 Figure~\ref{peaks_on_diffraction_image} shows 
 an example of this. This feature can be used
 to see if the program is finding real peaks.
+The color of the peaks can be changed with the 
+corresponding \gui{Color} button.  
 Peaks can also be drawn on top of the caked data. This 
 is described in section~\ref{cakeQlinesandpeaks}.
 
@@ -376,7 +368,8 @@ is described in section~\ref{cakeQlinesandpeaks}.
     \centering
     \includegraphics[scale=.75]
     {figures/peaks_on_diffraction_image.eps}
-    \caption{A diffraction image with the peaks displayed upon it.}
+    \caption{A diffraction image with diffraction peaks 
+    displayed on it.}
     \label{peaks_on_diffraction_image}
 \end{SCfigure}
 
@@ -385,7 +378,7 @@ is described in section~\ref{cakeQlinesandpeaks}.
 \begin{figure}[htb]
     \centering
     \subfloat[A diffraction image with diffraction peaks
-    and two polygon masks displayed on top of it.]{
+    and two polygon masks displayed on it.]{
     \label{mask_peaks_diffraction}
     \includegraphics[scale=.7]
     {figures/mask_peaks_diffraction.eps}}\;\;
@@ -405,7 +398,7 @@ for a discussion of masking. No peaks found within polygon masks
 will be used when calibrating the diffraction image.
 Figure~\ref{mask_peaks_diffraction} shows an example of this. 
 Figure~\ref{mask_peaks_cake} shows the same effect on on a caked 
-plot. See chapter~\ref{Caking} for a discussion of caking. In 
+plot. In 
 particular, see section~\ref{displaying_peaks_cake} for more 
 information on displaying peaks on a caked image. This feature was 
 added in version 2.0.0.

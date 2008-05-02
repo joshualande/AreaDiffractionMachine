@@ -1,18 +1,15 @@
 \chapter{Detector Geometries}\label{theory_chapter}
 
 X-ray diffraction can be modeled as in figure~\ref{DiffractionSetup}. 
-Cones of light preferentially leave a crystal at particular angles to 
-the incoming beam. These cones of light are 
-captured by a detector. The scattering angle 
-of an x-rays is called 
-$2\theta$. Usually, the interesting thing to measure by doing x-ray 
-diffraction is $2\theta$. If we placed a detector perpendicular 
+Cones of light preferentially leave a crystal and Usually, the 
+interesting thing to measure with x-ray 
+diffraction is the scattering angle 
+$2\theta$. If we placed a detector perpendicular 
 to the incoming beam, the cones of light would be detected as 
 circles of high intensity. 
 If we knew the distance $d$ from the sample to the detector and 
 the distance $r$ from the center of the detector to a 
-particular ring, we could easily calculate the scattering angle 
-of the light 
+particular ring, we could easily calculate the scattering angle as
 \begin{equation}
     \tan2\theta = \frac{r}{d}.
 \end{equation}
@@ -27,9 +24,7 @@ introduce a systematic error in the angle measurements.
     \centering
     \input{figures/DiffractionSetup.tex}
     \caption{An X-Ray diffraction setup. X-rays scatter from a 
-    3-D sample and are captured by a 2-D detector. In this 
-    setup, the detector is perpendicular to the incoming 
-    x-ray beam.}
+    sample and are captured by a detector.}
     \label{DiffractionSetup}
 \end{SCfigure}
 
@@ -46,52 +41,50 @@ introduce a systematic error in the angle measurements.
 
 There is a need to analyze diffraction data on detectors that are 
 not perpendicular to the incoming x-rays. We will present a 
-theory of tilted detectors first developed by Abhik Kumar 
-in~\cite{Kumar05}.\index{Abhik Kumar} Our derivation will result in 
+theory of tilted detectors first developed by Abhik Kumar\cite{Kumar05}.
+\index{Abhik Kumar} Our derivation will result in 
 different formulas because of different assumptions
 about how the detector is tilted. 
 
-What we are interested in relating
+We are interested in relating
 coordinates on a tilted detector 
 to theoretically motivated quantities such as 
-the scattering angles of the beam that hit the
-detector. We must first work
+the scattering angle of the beam that hit the
+point. We must first work
 out the transformation of points on a tilted detector
-to points on an untilted detector a known distance
-away. This is to say
+to points on an untilted detector. This is to say
 that we want to figure out where on an untilted 
 detector a beam would have hit were it to hit
 the untilted detector instead of the tilted detector.
 We will call the point on the untilted detector
 as measured on the untilted detector $(x,y)$ 
 and the corresponding point on the tilted detector
-as measured on the tilted detector as $(x''',y''')$. 
+as measured on the tilted detector $(x''',y''')$. 
 The reason for the three primes will become obvious
 shortly. This is shown in 
 figure~\ref{PhysicalSetup}. Another way to think
 about this is to imagine putting your 
 head at the crystal and looking directly 
 at some point on a real
-detector. What we want to figure out
-is the corresponding point that we would be looking
+detector. We want to figure out
+the corresponding point that would be seen be looking
 at the imagined untilted detector.
 
 \begin{SCfigure}[1][bthp]
     \centering
     \input{figures/PhysicalSetup.tex}
-    \caption{Here, the detector 
+    \caption{The detector 
     is titled with respect to the 
-    incoming beam. We will call a point on 
-    the tilted detector $(x''',y''')$. We are interested in 
-    relating this point to the point $(x,y)$ on an imagined 
-    untilted detector.}
+    incoming beam. We are interested in relating
+    the point on the tilted detector $(x''',y''')$ to the
+    point $(x,y)$ on the imagined untilted detector.}
     \label{PhysicalSetup}
 \end{SCfigure}
 
 \section{The Three Tilt Angels}
 \index{$\alpha$} \index{$\beta$} \index{Rotation} \index{Tilt}
 In order to relate these points, we need to find a way to 
-describe an arbitrary tilt. To do so, we will 
+describe an arbitrary tilt. We will 
 characterize a titled detector as an untitled detector
 that has 3 successive rotations applied to it. 
 We will first rotate the detector about the detector's $y$
@@ -99,20 +92,19 @@ axis. We will then rotate the detector about the detectors
 new $x'$ axis. Finally, we will rotate the detector about
 a vector normal to the detector going through its center.
 These rotations are shown in figure~\ref{ThreeTilts}.
-We can solve our original problem much easier if we deal
+We can solve our original problem if we deal
 with each rotation separately.
 
 \begin{figure}[htb]
     \centering
-    \subfloat[The tilt angle $\beta$. This angle characterizes
+    \subfloat[$\beta$ characterizes
     a rotation around the $\hat{y}$ axis.]{
-    \label{beta}\input{figures/BetaRotation.tex}}\;\;
-    \subfloat[The tilt angle $\alpha$. This angle characterizes
-    a rotation around the $\hat{x}'$ axis. What 
-    exactly $\hat{x}'$ is will be described shortly]{
-    \label{alpha}\input{figures/AlphaRotation.tex}}\;\;
-    \subfloat[The rotation angle $R$. This is a rotation about
-    a vector normal to $\hat{x}''$ and $\hat{y}''$]{
+    \label{beta}\input{figures/BetaRotation.tex}}\hspace{1em}
+    \subfloat[$\alpha$ characterizes
+    a subsequent rotation around the new $\hat{x}'$ axis.]{
+    \label{alpha}\input{figures/AlphaRotation.tex}}\hspace{1em}
+    \subfloat[$R$ characterizes the subsequent rotation about
+    a vector normal to the plane.]{
     \label{R_fig}\input{figures/Rotation.tex}}
     \caption{Any detector tilt can be characterized 
     by three successive rotations.}
@@ -127,36 +119,35 @@ with each rotation separately.
     \hfill
     \subfloat[]{
     \label{PitchX_B}\input{figures/PitchX_B.tex}}
-    \caption{A diagram of the situation depicted in 
-    figure~\ref{PhysicalSetup} where only the 
-    $\beta$ rotation about $\hat y$ has been applied.}
+    \caption{The untilted detector is rotated by $\beta$ around
+    $\hat y$.}
     \label{PitchX}
 \end{figure}
 
-We will first apply to our untitled detector a rotation 
+We first apply to our untitled detector a rotation 
 around $\hat{y}$ by angle $\beta$.
 We begin with a point $(x,y)$ on an
 untilted detector and relate it to its corresponding point 
 $(x',y')$ on the rotated detector.
 A diagram of this is shown in figure~\ref{PitchX}.  
 We can use the geometry of these diagrams 
-relate these coordinates. Using
-similar triangles, we have
+to relate these coordinates. Using
+similar triangles:
 \begin{equation}
     \frac{x}{d}=\frac{x'\cos\beta}{d+x'\sin\beta}.
 \end{equation}
 Or
 \begin{equation}\label{xTermsxPrime}
-    \boxed{x = \frac{dx'\cos\beta}{d+x'\sin\beta}}
+    \boxed{x = \frac{dx'\cos\beta}{d+x'\sin\beta}}.
 \end{equation}
 Again, we have
 \begin{align}
     \frac{y}{a}&=\frac{y'}{a+b}\\
     \frac{d}{a}&=\frac{d+x'\sin\beta}{a+b}.
 \end{align}
-It follows that
+So
 \begin{equation}\label{yTermsxPrime}
-	\boxed{y= \frac{dy'}{d+x'\sin\beta}}
+	\boxed{y= \frac{dy'}{d+x'\sin\beta}}.
 \end{equation}
 Equation~\ref{xTermsxPrime} and \ref{yTermsxPrime} are 
 the equations relating a point on an
@@ -165,14 +156,13 @@ on the tilted detector.
 
 \section{\texorpdfstring{The $\alpha$ Roll}{The alpha Roll}}
 
-We take the point $(x',y')$ on the tilted 
-plane and relate it to the point $(x'',y'')$ on a
-plane rotated first $\beta$ about $\hat y$ and by
-$\alpha$ around $\hat{x}'$. 
-Figure~\ref{PitchY_A} is a diagram of these planes.
-Figure~\ref{PitchY_B} is a more geometrical diagram.
-Figure~\ref{PitchY_C} shows a cross section of the $y=0$
-axis.
+We take the point $(x',y')$ on the plane rotated by $\beta$
+around $\hat y$ and relate it to the point $(x'',y'')$ on a
+plane then tilted by $\alpha$ around $\hat{x}'$. 
+Figure~\ref{PitchY_A} is a diagram this plane.
+Figure~\ref{PitchY_B} is a more geometrical diagram and
+figure~\ref{PitchY_C} shows a cross section of the $y=0$
+plane.
 
 \begin{SCfigure}[1][bthp]
     \centering
@@ -180,7 +170,7 @@ axis.
     \label{PitchY_A}
     \caption{A diagram of a plane that has been 
     rotate by angle $\beta$ about the $\hat y$ axis 
-    and then by $\alpha$ around the $\hat x'$ axis.}
+    and then by $\alpha$ about the $\hat x'$ axis.}
 \end{SCfigure}
 
 \begin{SCfigure}[1][bthp]
@@ -188,7 +178,7 @@ axis.
     \input{figures/PitchY_B.tex} 
     \label{PitchY_B}
     \caption{A more geometrical diagram
-    of the figure in figure~\ref{PitchY_A}.}
+    of figure~\ref{PitchY_A}.}
 \end{SCfigure}
 
 \begin{SCfigure}[1][bthp]
@@ -202,11 +192,11 @@ axis.
 From figure~\ref{PitchY_C}, we see  
 that $f=y''\sin\alpha\cos\beta$. From figure~\ref{PitchY_B},
 we see that $h=y''\cos\alpha$. Using similar
-triangles
+triangles:
 \begin{equation}
     \frac{y}{a} = \frac{y''\cos\alpha}{a+b+c}.
 \end{equation}
-Using similar triangles again
+Again:
 \begin{equation}
     \frac{d}{a} = \frac{d+x''\sin\beta+f}{a+b+c}.
 \end{equation}
@@ -230,11 +220,10 @@ Plugging in and simplifying
 
 \section{\texorpdfstring{The $R$ Rotation}{The R Rotation}}
 
-We now deal with the final rotation. We relate
-the coordinate $(x'',y'')$ on the previous tilted 
-detector to the point $(x''',y''')$ on a detector 
-tilted about a line normal to this detector going 
-through its center. These points are related by
+The final rotation is by angle $R$ about a vector normal
+to the plane. We relate the coordinate $(x'',y'')$ on the 
+previously tilted detector to the point $(x''',y''')$ on 
+a detector then rotated about its center:
 \begin{align}
     x''&=x'''\cos R + y'''\cos R\label{rotation1}\\
     y''&=y'''\cos R - x'''\cos R\label{rotation2}
@@ -248,24 +237,23 @@ detector and the corresponding point on a tilted detector.
 
 $(x''',y''')$ represents the distance between the center 
 and a point on the real detector. We do not actually
-measure this distance. What we actually have experimentally
+measure this distance. What we experimentally measure
 are pixel coordinates on a detector. There is some pixel 
-coordinate on the detector corresponding to the center of
+coordinate corresponding to the center of
 the detector\footnote{This is the point that the x-rays would
 hit were they not to diffract off the crystal}. We will call 
-it $(x_c,y_c)$.  We will call the pixel coordinate on the detector
-$(x_d,y_d)$ that corresponds to the point $(x''',y''')$.
-We want to relate ($x_d,y_d$) which we measure directly
-to $(x''',y''')$ and then to $(x,y)$.
+it $(x_c,y_c)$.  We will call $(x_d,y_d)$ the 
+pixel coordinate on the detector
+that corresponds to the point $(x''',y''')$.
+We want to relate ($x_d,y_d$) to $(x''',y''')$.
 There is some material property of the detector 
-describing the width of each pixel
-(e.g. \unit[1000]{mm/pixel}). We will call
-this width $pl$. There is a corresponding
-quantity that is the height of each pixel.
+called the pixel length ($pl$) that describes the width of each pixel
+(e.g. \unit[1000]{mm/pixel}). There is a corresponding
+quantity $ph$ that is the height of each pixel.
 We can relate the pixel coordinates to the physical distances
 by
 \begin{align}\label{conversionToPixels}
-    x'''&=(x_d-x_c) \times pl &
+    x'''&=(x_d-x_c) \times pl, &
     y'''&=(y_d-y_c) \times ph.
 \end{align}
 
@@ -287,13 +275,14 @@ and
 
 \section{\texorpdfstring{$Q$, $2\theta$, and $\chi$}{Q, 2theta, and chi}}
 
-We now have a way of relating $(x''',y''')$, 
+We now have a way to relate $(x''',y''')$, 
 a point on a detector rotated by angle $\beta$, 
 $\alpha$, and $R$ to a point $(x,y)$
 on an untilted detector.
-We relate $(x,y)$ to theoretically motivated 
-quantities. $2\theta$, the angle of scattering 
-of a beam, is calculated as
+We now relate $(x,y)$ to theoretically motivated 
+quantities. Figure \ref{TwoTheta} shows that
+$2\theta$, the angle of scattering 
+of a beam, is 
 \begin{equation}\label{2thetatermsr}
     \tan2\theta = \frac{r}{d} = \frac{\sqrt{x^2+y^2}}{d}.
 \end{equation}
@@ -310,20 +299,15 @@ $Q$ is calculated as
     \centering
     \input{figures/TwoTheta.tex}
     \caption{For a particular point $(x,y)$ on an 
-    untilted detector, we define two quantities:
-    $2\theta$ and $\chi$. $2\theta$ is the angle of 
-    scattering of the beam. $\chi$ is a measure of the 
+    untilted detector, we define $2\theta$ as the angle of 
+    scattering of the beam and $\chi$ as the
     azimuthal angle of the scattered light around 
     the beam.}
     \label{TwoTheta}
 \end{SCfigure}
 
-These are shown, for a particular point, in figure~\ref{TwoTheta}.
-Diffraction theory shows that the $Q$ values of preferential 
-scattering for a crystal are a material property independent 
-of the experimental setup. 
-We could use energy instead of wavelength in this formula 
-using the De Broglie's formula
+We could use incoming beam's energy instead of its wavelength 
+using De Broglie's formula
 \begin{equation}
     E = hc/\lambda.
 \end{equation}
@@ -332,14 +316,13 @@ Some people use the quantity $D$ instead of $Q$
     D = 2\pi/Q.
 \end{equation}
 
-We now have a way of relating pixel
-coordinates $(x_d,y_d)$ read directly off
+If we knew $x_c$, $y_c$, $pl$, $ph$, $d$, $\lambda$,
+$\alpha$, $\beta$, and $R$ for an experiment, could
+relate pixel coordinates $(x_d,y_d)$ read directly off
 of a detector to the
-theoretically motivated coordinates $(Q,\chi)$.
-This relationship assumes that we know
-$x_c$, $y_c$, $pl$, $ph$, $d$, $\lambda$,
-$\alpha$, $\beta$, and $R$. A discussion of
-how these values can be determined experimentally
+theoretically motivated quantities $Q$ and $\chi$.
+A discussion of how these detector parameters can be 
+determined experimentally
 is given in section~\ref{calibration}.
 
 %\section{Implementation In Code}
