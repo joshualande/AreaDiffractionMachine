@@ -14,31 +14,29 @@ In practice, they can not be measured to an
 acceptable level of precision. 
 Instead, a calibration procedure is used to 
 infer these values from the diffraction data. 
-It is done by first imaging a calibration standard
+Calibration is done by imaging a calibration standard
 before imaging an interesting sample. Assuming 
 that the diffraction machine was not altered between the 
 imaging of the calibration standard and the 
 imaging of the unknown sample, 
 the calibration parameters for both sets of data 
 will be the same. 
-If the calibration values could be figured out from
+If the calibration values could be determined from
 the pattern of the standard crystal, this information 
 could be used to analyze the other data.
 What it means to use a standard crystal is to know 
 in advance its $Q$ values of preferential 
-scattering. With these and with 
+scattering. With these and with the
 calibration parameters,
 The diffraction pattern that should show up on the detector can
 be calculated by, 
-each $Q$ value, varying $\chi$ and calculating the 
-corresponding $(x_d,y_d)$ part. 
-The program can do this. If you load in 
-a set of $Q$ values and enter into the program 
-calibration parameters, the 
-\gui{Draw Q Values?} check box 
+for each $Q$ value, varying $\chi$ and calculating the 
+corresponding $(x_d,y_d)$ pair. The program can do this. 
+If a set of $Q$ values and calibration parameters is enter into 
+the program, the \gui{Draw Q Values?} check box 
 will draw on top of the diffraction
 image what pattern should show up on the detector.
-This feature described in section~\ref{displayconstQlines}
+This feature described in section~\ref{displayconstQlines}.
 
 In order to perform the calibration, the calibration parameters 
 are varied until they make the calculated pattern match the pattern 
@@ -51,10 +49,10 @@ diffraction pattern.
 In order for the fitting algorithm to work, the program 
 must already have an initial guess at the calibration 
 parameters, a list of the known $Q$ values, and 
-a range for each of these $Q$ values. In order for the 
-algorithm to work, inside of this $Q$ range (as 
+a range for each of these $Q$ values. Inside of this 
+$Q$ range (as 
 calculated by the initial calibration values) there 
-should uniquely be a diffraction peak.
+must uniquely be the diffraction peak.
 An example of this is shown in figure~\ref{divide_up_image}.
 
 \begin{SCfigure}[1][bthp]
@@ -90,8 +88,9 @@ values in each range. It then fits a Gaussian to
 the ranges and the peak of the Gaussian is taken as
 the diffraction peak peak. Figure~\ref{fitting} shows
 a diagram of this. This is done for many evenly spaced 
-$\chi$ values. The number of $\chi$ slices can
-be selected by the user. See section~\ref{num_chi_and_stddev}.
+$\chi$ values. 
+Section~\ref{num_chi_and_stddev} describes how the
+number of $\chi$ slices can be set by the user. 
 
 There is not always a consistent diffraction ring 
 all the way around the image. Some of the Gaussian fits are

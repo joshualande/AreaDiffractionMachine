@@ -11,7 +11,7 @@ might have a range from 2 to 5 with 100 bins.
 
 The algorithm for performing an intensity integration
 is as follows: loop over every pixel in the image. 
-Add its intensity to a bin if it $Q$, $2\theta$, 
+Add its intensity to a bin if its $Q$, $2\theta$, 
 or $\chi$ value falls within the bin's range.
 Remember that the calibration parameters are used to 
 calculate these from the pixel coordinates.
@@ -20,14 +20,12 @@ After binning all the pixels, the bins are then averaged.
 This program can constrain the integration range. 
 This can be used, for example, to integrate
 in $Q$ only those pixels with some particular 
-$\chi$ range. It can also be used to integrate
+$\chi$ range or to integrate
 in $\chi$ for only a particular
 $Q$ range. This could be used, for example, to
 perform a $\chi$ integration of only one
-diffraction peak. The algorithm for performing
-the constraint isn't particularly different. Only
-pixels allowed by the constraint
-are binned.
+diffraction peak. The program applies the constraint
+by only binning pixels allowed by the constraint.
 
 The program can perform a polarization 
 correction by correcting all pixel before they
@@ -237,11 +235,10 @@ A typical integration file looks like:
 0.185910	0.000000
 ...
 \end{lstlisting}
-The header is a bunch of lines that begin with \#.
 The header describes the state of the program 
-when the intensity integration was performed.
+when the integration was performed.
 The fist line describes what type of integration was
-performed. For example, if a $\chi-I$ integration was 
+performed. If a $\chi-I$ integration was 
 performed, the header file would say
 \macroline{\# Chi vs I Intensity Integration}.
 The header then contains the name(s) of the diffraction
@@ -249,7 +246,7 @@ files that were integrated, the
 calibration parameters that were used when integrating,
 any polarization correction that was used, and any threshold 
 It describes any constrains 
-on the integration and the integration range.  Following the header 
+on the integration and the integration range. Following the header 
 is the line
 \macroline{\# Q Avg Intensity} (or \macroline{\# Chi Avg Intensity}
 or \macroline{\# 2theta	Avg Intensity}) followed by 

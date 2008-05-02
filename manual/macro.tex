@@ -65,19 +65,19 @@ Save Caked Image
 Diffraction data is loaded with the command
 \begin{lstlisting}
 Data File:
-    C:/first.mar3450
+    C:/foo.mar3450
 \end{lstlisting}
 Diffraction files in a list will be looped over and the same
 analysis can be performed on all of them.
 For example,
 \begin{lstlisting}
 Data File:
-    C:/first.mar3450 C:/second.mar3450 
+    C:/foo.mar3450 C:/bar.mar3450 
 # ...
 \end{lstlisting}
 will run the subsequent macro lines on
-the file \macroline{C:/first.mar3450} and
-then on the file \macroline{C:/second.mar3450}.
+the file \macroline{C:/foo.mar3450} and
+then on the file \macroline{C:/bar.mar3450}.
 The loop will end when one of three things happens: a subsequent line 
 in the macro file is \macroline{END LOOP}, more diffraction data
 is loaded using the \macroline{Data File:} command, or
@@ -86,8 +86,8 @@ the macro file ends.
 Directories can also be given. The program 
 will (non-recursively) look for all diffraction
 files in the directory and include them in the list. If the folder
-\macroline{C:/data} contained the file \macroline{first.mar3450}
-and \macroline{second.mar3450}, these files could
+\macroline{C:/data} contained the file \macroline{foo.mar3450}
+and \macroline{bar.mar3450}, these files could
 be looped over with the command
 \begin{lstlisting}
 Data File:
@@ -121,10 +121,10 @@ Save Integration Data
     FILENAME/PATHNAME\_int.dat
 \end{lstlisting}
 This would save the intensity data for
-\macroline{C:/data/first.mar3450} as
-\macroline{C:/data/first\_int.dat} and
-the intensity data for \macroline{C:/data/second.mar3450} as
-\macroline{C:/data/second\_int.dat}, etc. 
+\macroline{C:/data/foo.mar3450} as
+\macroline{C:/data/foo\_int.dat} and
+the intensity data for \macroline{C:/data/bar.mar3450} as
+\macroline{C:/data/bar\_int.dat}, etc. 
 
 \section{Loading Multiple Images}
 
@@ -132,12 +132,12 @@ Multiple diffraction files can be loaded and their
 intensities added. The macro command to do this is
 \macroline{Multiple Data Files} followed by a list of filenames
 enclosed with [ and ] brackets. 
-\macroline{C:/data/first.mar3450} and
-\macroline{C:/data/second.mar3450} could be loaded at the
+\macroline{C:/data/foo.mar3450} and
+\macroline{C:/data/bar.mar3450} could be loaded at the
 same time with the macro
 \begin{lstlisting}
 Multiple Data Files:
-    [C:/data/first.mar3450 C:/data/second.mar3450]
+    [C:/data/foo.mar3450 C:/data/bar.mar3450]
 # ...
 \end{lstlisting}
 All of the files that are added together must be in the same folder
@@ -148,63 +148,62 @@ several of these bracketed lists on a line.
 For example:
 \begin{lstlisting}
 Multiple Data Files:
-    [C:/first.mar3450 C:/second.mar3450] [C:/third.mar3450 C:/fourth.mar3450]
+    [C:/a.mar3450 C:/b.mar3450] [C:/c.mar3450 C:/d.mar3450]
 # ...
 \end{lstlisting}
-will separately loop over \macroline{first.mar3450} 
-and \macroline{second.mar3450} added together and then 
-\macroline{third.mar3450} and \macroline{fourth.mar3450}
+will separately loop over \macroline{a.mar3450} 
+and \macroline{b.mar3450} added together and then 
+\macroline{c.mar3450} and \macroline{d.mar3450}
 added together. Alternately,
 all of the files that need to be analyzed can be grouped into 
 subfolders. If each subfolder contains only files that should
 be added together, the \macroline{Multiple Data Files} command
 followed by the base folder will loop over each of the subfolders
-and add all of the files in the subfolder together.
-For example, suppose the folder \macroline{C:/data}
+and add all of the files in each subfolder together.
+For example, the folder \macroline{C:/data}
 contained the sub folder \macroline{A} containing the files 
-\macroline{first.mar3450} and \macroline{second.mar3450}
+\macroline{a.mar3450} and \macroline{b.mar3450}
 and suppose \macroline{C:/data} also contained the 
 sub folder \macroline{B} containing the files
-\macroline{third.mar3450} and \macroline{fourth.mar3450}.
+\macroline{c.mar3450} and \macroline{d.mar3450}.
 The macro command
 \begin{lstlisting}
 Multiple Data Files:
     C:/data
 # ...
 \end{lstlisting}
-would first load \macroline{first.mar3450} and 
-\macroline{second.mar3450} and run the through loop.
-It would then load \macroline{third.mar3450} and 
-\macroline{fourth.mar3450} and run the through loop.
-Multiple Lists of files and ] and multiple
+would first load \macroline{a.mar3450} and 
+\macroline{b.mar3450} and run the through loop.
+It would then load \macroline{c.mar3450} and 
+\macroline{d.mar3450} and run the through loop.
+Multiple Lists of files and multiple
 folders containing subfolders can be put after
 the \macroline{Multiple Data Files} line. They
 must all be on the same line and separated by spaces.
-
 Since the all the files added together must come
 from the same folder, \macroline{PATHNAME} is
-unambiguous. To avoid ambiguity, \macroline{FILENAME} 
-is replaced by the string \macroline{MULTIPLE\_FILES}.
+unambiguous. \macroline{FILENAME} is replaced by the 
+string \macroline{MULTIPLE\_FILES} to avoid ambiguity.
 
 \section{FOLDERPATH and FOLDERNAME}
 
 To facilitate writing macros that load and 
 add together diffraction files in a loop, 
-the program introduces the \macroline{FOLDERNAME}
+macros allow the \macroline{FOLDERNAME}
 and \macroline{FOLDERPATH} syntax.
 \macroline{FOLDERNAME} will be replaced
 by the name of the folder containing the current
-diffraction file (or files). \macroline{FOLDERPATH} 
+diffraction file(s). \macroline{FOLDERPATH} 
 will be replaced by the path leading to the folder 
 containing the file. A \macroline{mar3450}
 file can be reconstructed as 
 \macroline{FOLDERPATH/FOLDERNAME/FILENAME.mar3450}.
 \macroline{FOLDERNAME} is useful because if multiple
-files have been loaded at the same time, things can be saved
-with the enclosing folders name. If multiple subfolders
+files have been loaded at the same time, output can be saved
+with the enclosing folder's name. If multiple subfolders
 are looped over, the output of the program for each set of 
-files can be given a meaningful names if each of the subfolders
-has a meaningful name.
+files can be given a meaningful name using the subfolder's
+name.
 
 \section{Setting Colors in a Macro}
 
@@ -212,11 +211,10 @@ There are several places in the program where a
 color can be selected. Colors can be set from
 inside a macro but the names of the colors is
 a little confusing. The easiest way to figure out 
-the syntax for setting a color is to record a macro,
-set the color, and then copy and paste.
-
+the macro command to set a color is to record a macro
+and then copy and paste.
 Technically, the program will accept 
-any color which the tk GUI framework accepts. tk
+any color string that the tk GUI framework accepts. tk
 will accept quite a few colors by their English name (such as 
 \macroline{red}).\footnote{\url{http://wiki.tcl.tk/16166} 
 contains a list of all the allowed color names.} 
@@ -525,7 +523,7 @@ decimal and 00 to ff in hexadecimal. For example, \#ff0000 is red.
     \macrolinenoquotes{Integrate Do Polarization Correction?}&
     \selectordeselect&Sets whether or not to use a polarization
     correction when integrating.\\
-    \macrolinenoquotes{Integrate P?}&Number form 0 to 1&Sets
+    \macrolinenoquotes{Integrate P?}&Number from 0 to 1&Sets
     the polarization use when integrating.\\
     \macrolinenoquotes{Integration Data Log Scale?}&
     \selectordeselect&Sets whether or not to display
