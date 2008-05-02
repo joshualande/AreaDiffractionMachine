@@ -3,19 +3,16 @@
 \section{The Caking Algorithm}
 
 A caked plot is similar to a radial ($r$ vs. $\theta$) plot 
-of the diffraction data as it would appear if it were
+of the area diffraction data as it would appear if it were
 captured on an untilted detector. A radial plot will turn
 circles of constant $r$ into straight lines.
 Caking is important because diffraction peaks will 
 also become straight lines. A caked plot is actually a 
-plot of $Q$ vs. $\chi$. Equation \ref{qterms2theta} shows
-that $Q$ is related by the $\sin$ function to 
-$2\theta$. From equation~\ref{2thetatermsr},
-$2\theta$ is related to the radius $r$ by the tangent function.
+plot of $Q$ vs. $\chi$. 
 Although the relationship is not linear, $Q$ increase as $r$ 
 increases and therefore $Q$ is similar to $r$.
-$\chi$ corresponds to the angle radially around x-ray
-beam. So a cake of $Q$ vs. $\chi$ is analogous to a radial 
+$\chi$ corresponds to the angle radially around the x-ray
+beam. So a cake is analogous to a radial 
 plot.
 
 Cakes are calculated as follows.
@@ -37,7 +34,7 @@ that should be masked (either because it is too
 large, too small, or in a polygon mask), it fills
 that part of the caked array with a particular 
 negative value. When the caked data is displayed,
-these negative values shown with special colors.
+these negative values are shown a with special color.
 
 The program can perform a polarization correction of
 the caked data. The polarization 
@@ -55,7 +52,7 @@ are binned.
 
 \section{Caking With the Program}
 
-Caking is done on the \gui{Caking} tab shown in figure~\ref{caking_tab}
+Caking is done with the \gui{Caking} tab shown in figure~\ref{caking_tab}
 The program can only cake data after diffraction data and calibration
 parameters have been loaded into the program.
 In order to cake, this program needs to know the range
@@ -63,14 +60,14 @@ in $Q$ and $\chi$ space that should be caked.
 This can be specified with the \gui{Q Lower?}, \gui{Q Upper?}
 \gui{Chi Lower?}, and \gui{Chi Upper?} inputs.
 The program also needs to know how many $Q$ and $\chi$ bins to 
-create when caking data. This can be set
+create when caking. This can be set
 with the \gui{Number of Q?} and \gui{Number of Chi?} inputs.
 The \gui{Do Cake} button can then be used to cake the data. 
 
 \begin{SCfigure}[1][bthp]
     \centering
     \includegraphics[scale=.75]{figures/caking_tab.eps}
-    \caption{Caking is done on the \gui{Caking} tab.} 
+    \caption{Caking is done with the \gui{Caking} tab.} 
     \label{caking_tab}
 \end{SCfigure}
 
@@ -83,7 +80,7 @@ The \gui{Do Cake} button can then be used to cake the data.
 \end{SCfigure}
 
 After the cake finishes, the program will open a caked data
-window that displays the cake data interactively.
+window that displays the cake interactively.
 The caked data window acts just like the diffraction
 data window so everything in Chapter~\ref{viewing_data} 
 carries over. The only difference is that whenever
@@ -95,13 +92,13 @@ can be taken to the previous zoom range with the
 
 \section{AutoCake}
 
-\gui{AutoCake} is a button to the \gui{Cake} tab that 
+\gui{AutoCake} is a button on the \gui{Cake} tab that 
 will guess a good range of $Q$ and $\chi$ 
-values, put them into the input, and then push the 
+values, put them into the inputs, and then push the 
 \gui{Do Cake} button automatically. It can be used to
-create a cake without much work. The program will pick a range
+create a cake without much work. \gui{AutoCake} will pick a range
 that puts the entire diffraction image into the cake. It will pick
-the bins sizes so that each displayed pixel correspond to one bin. 
+a bin sizes so that each displayed pixel correspond to one bin. 
 This will ensure that the cake looks as sharp as the computer 
 can display it.
 
@@ -111,8 +108,8 @@ can display it.
 
 If a $Q$ list has been loaded into the program, 
 constant $Q$ lines or $\Delta Q$ lines can be 
-displayed on top of the cake data. Remember that 
-constant $Q$ lines on the diffraction image are straight
+displayed on top of the cake. 
+Constant $Q$ lines on the diffraction image are 
 vertical lines on the caked plot. 
 The program will display constant $Q$ lines or 
 $\Delta Q$ lines on the caked plot whenever they 
@@ -141,13 +138,14 @@ $\Delta Q$ lines displayed on a caked plot.
     \subfloat[A cake with diffraction peaks drawn on top of it.]{
     \label{peaks_on_cake_image}
     \includegraphics[scale=.75]{figures/peaks_on_cake_image.eps}}
+    \caption{}
     \label{calibration_cake}
 \end{figure}
 
 \section{Displaying Peaks}\label{displaying_peaks_cake}
 
-Any peaks that the program finds when performing
-a calibration can be displayed on top of the caked
+Any peaks that the program finds when 
+calibrating can be displayed on top of the caked
 data as crosses. Peaks will be displayed on the caked plot whenever 
 they are displayed on the diffraction image. 
 Figure~\ref{peaks_on_cake_image} 
@@ -165,41 +163,40 @@ Figure~\ref{calibration_cake} illustrates this principle.
     \label{good_calibration_cake_zoom_peaks}
     \includegraphics[scale=.75]{figures/good_calibration_cake_zoom_peaks.eps}}		
     \caption{Displaying peaks and constant $Q$ lines on top of a 
-    cake of a standard crystal can be used to tell if the data is properly 
+    cake of a calibration standard can be used to tell if the data was properly 
     calibrated. If the calibration is bad, the diffraction peaks will have 
     a systematic distortion. If the calibration is good, all the peaks will 
     cluster very close to their particular $Q$ value and there will be no 
-    systematic distortion. This can be used to see if the program is properly 
-    calibrating diffraction data.}
+    systematic distortion.}
     \label{calibration_cake_zoom}
 \end{figure}
 
 \section{Polarization Correction}
-The program can apply a polarization correction to the
-cake. The \gui{Do Polarization Correction?} check box
-can be used to apply a polarization and the 
-polarization value can be set with the \gui{P?} input.
+
+The \gui{Do Polarization Correction?} check box
+can be used to apply a polarization correction to the cake
+and the polarization value can be set with the \gui{P?} input.
 
 \section{\texorpdfstring{Working in $2\theta$}{Working in 2theta}}
 
 Caked plots can have $2\theta$ instead of $Q$ as one
-of the axes.  This can be done by changing the program
-to $2\theta$ mode by doing into the file menu and selecting 
+of the axes. The program can change 
+to $2\theta$ mode by going into the file menu and selecting 
 the \gui{Work in 2theta} option. When this is selected,
 all the names in the program will change from $Q$ to $2\theta$. 
 The program will have \gui{$2\theta$ Lower}, \gui{$2\theta$ Upper}, 
 and \gui{Number of $2\theta$} as inputs. The allowed range will
 then be in $2\theta$ and the program will display the cake image with
-$2\theta$ as its axis. The corresponding \gui{Work in Q} option 
+$2\theta$ as an axis. The corresponding \gui{Work in Q} option 
 can be used to return the program to caking in $Q$.
-This feature was introduces in version 2.0.0 of the program.
+This feature was introduced in version 2.0.0.
 
 \section{Saving Cake Data}
 
-Caked data can also be saved as a plain text data file
+Caked data can be saved as a plain text 
 using the \gui{Save Data} button. The format for cake files is 
 a long comment string followed by the data in rows of numbers:
-\begin{lstlisting}[caption={'caked\_data.dat'}]
+\begin{lstlisting}
 # Cake of: N:/data/LaB6_14_02_56.mar3450 
 # Data Caked on Wed Mar 12 21:30:55 2008
 # Calibration data used to make the cake:
@@ -242,40 +239,38 @@ a long comment string followed by the data in rows of numbers:
 #   Pixels inside of a polygon masks are saved as -4
 # chi increased down. Q increases to the right
 \end{lstlisting}
-the comment string describes what state the program was in when the 
+the header describes what state the program was in when the 
 cake was done. It first lists the name of the diffraction 
-file(s) that were caked. It then lists the calibration parameters 
-used when caking the data. It then lists the polarization correction, 
-the greater than mask and the less than mask that were used. It then lists 
-the pixel 
-coordinates of any polygons that were used when caking.  It then lists 
+file(s) that were caked. It then lists the calibration parameters, 
+the polarization correction, the threshold masks, and the polygon masks 
+used when caking. It then lists the pixel 
+coordinates of any polygons used.  It then lists 
 the range of the cake and the number of bins that were used.
-The program tries to be smart about the comment string. If no 
-masks were used, the comment string would instead contains 
-\begin{lstlisting}[caption={'Alternate Header'}]
+The program tries to be smart about the comment string. So if
+no masks were used, the comment string would instead contains 
+\begin{lstlisting}
 # No greater than mask was applied
 # No less than mask was applied
 # No polygon masks were applied
 \end{lstlisting}
-If the program is working in $2\theta$ mode, the comment string will 
-instead say something like
-\begin{lstlisting}[caption={'Another Alternate Header'}]
+If the program is working in $2\theta$, the comment string would
+instead say 
+\begin{lstlisting}
 #   2theta Lower = 0.000000
 #   2theta Upper = 62.814525
 #   number of 2theta = 560.000000
 #   2theta Step = 0.112169
 \end{lstlisting}
 
-Next in the file is the data. Each line in the file is of constant 
+Then comes the data. Each line is of constant 
 $\chi$ and contains many numbers separated by
 spaces. Each column is of constant $Q$. $\chi$ increases down and 
 $Q$ increases to the right. The program sets certain bins in 
-in the data to special values. Bins that are outside the diffraction
-image are saved as -1. Bins that are masked because they were too 
-large are saved as -2. Bins that are masked because they were too 
-small are saved as -3. Bins that are inside a pixel mask are saved 
-as -4. This is also put in the comment string. 
-
+the data to special values. Bins outside the diffraction
+image are saved as -1. Bins masked because they are too 
+large are saved as -2. Bins masked because they are too 
+small are saved as -3. Bins inside a pixel mask are saved 
+as -4. This is also noted in the comment string. 
 
 \section{Saving Cake Images}
 

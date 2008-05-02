@@ -28,11 +28,11 @@ What it means to use a standard crystal is to know
 in advance its $Q$ values of preferential 
 scattering. With these and with 
 calibration parameters,
-we can figure out exactly what diffraction
-pattern we should expect on the detector. To do this, we could, for
-each $Q$ value, vary $\chi$ and calculate the 
+The diffraction pattern that should show up on the detector can
+be calculated by, 
+each $Q$ value, varying $\chi$ and calculating the 
 corresponding $(x_d,y_d)$ part. 
-In fact, my program can do just this. If you load in 
+The program can do this. If you load in 
 a set of $Q$ values and enter into the program 
 calibration parameters, the 
 \gui{Draw Q Values?} check box 
@@ -40,10 +40,10 @@ will draw on top of the diffraction
 image what pattern should show up on the detector.
 This feature described in section~\ref{displayconstQlines}
 
-In order to perform the calibration, we can vary the 
-calibration parameters until they make the calculated pattern 
-match the pattern that was captured. The calibration parameters 
-are fit to the diffraction pattern. 
+In order to perform the calibration, the calibration parameters 
+are varied until they make the calculated pattern match the pattern 
+that was captured. The calibration parameters are fit to the 
+diffraction pattern. 
 
 \section{Fitting} 
 \index{Fitting}\label{fitting_sec}
@@ -54,7 +54,7 @@ parameters, a list of the known $Q$ values, and
 a range for each of these $Q$ values. In order for the 
 algorithm to work, inside of this $Q$ range (as 
 calculated by the initial calibration values) there 
-should uniquely be the peaks that we are interested in fitting.
+should uniquely be a diffraction peak.
 An example of this is shown in figure~\ref{divide_up_image}.
 
 \begin{SCfigure}[1][bthp]
@@ -125,10 +125,9 @@ call $Q^{\text{exp}}$), we define the residual function as
 The functional dependence comes from
 calculating $Q^{\text{peak}}$ for particular
 calibration parameters.
-The smaller the residual is, the closer we are to
-having all our peaks have the desired $Q$ value.
-If we had a perfect calibration, the residual would
-be zero. 
+The smaller the residual, the closer the 
+calibration parameters are to 
+a perfect calibration.
 
 The program takes this function of 7 variables (the
 calibration parameters) and minimizes it. 
@@ -165,7 +164,7 @@ console\footnote{Actually, the program
 calculates the residual per peak. 
 It is a more useful quantity because it is independent
 of the number of peaks found.}. The output will look like
-\begin{lstlisting}[caption={Displaying the Residual}]
+\begin{lstlisting}
  - Before fitting, the calculated residual is 5.336138e-04
  - Doing the fitting
  - After fitting, the calculated residual is 6.532131e-06
@@ -173,7 +172,7 @@ of the number of peaks found.}. The output will look like
 The program will display the reason why the fitting
 algorithm decided to quit. For example, the program
 might print out
-\begin{lstlisting}[caption={Reason For Quitting}]
+\begin{lstlisting}
  - Reason for quitting the fit: 2-stopped by small gradient J^T e
 \end{lstlisting}
 These reason are told to the program by the fitting
@@ -204,8 +203,7 @@ The fitting algorithm also displays a covariance matrix that
 it calculates while fitting. I do now know how it calculates this 
 and I do not know what it means physically. 
 The program print it out after the fitting. 
-\begin{lstlisting}[caption={A Covariance Matrix},
-    basicstyle=\ttfamily\footnotesize]
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
 Covariance Matrix
 [[  9.43e-04 -1.53e-04  5.36e-05  3.27e-03 -1.77e-03  3.64e-03  2.10e+00]
  [ -1.53e-04  1.17e-03 -1.40e-04 -8.58e-03  3.91e-05 -2.02e-04 -1.25e-01]
@@ -223,7 +221,7 @@ matrix are supposed to correspond to uncertainties, but I do not know
 enough about the minimization algorithm to really be comfortable saying 
 that these values are meaningful. The program print out the square root of 
 the diagonals. 
-\begin{lstlisting}[caption={Display of the root of the diagonals}]
+\begin{lstlisting}
 Root of the diagonal of the covariance matrix ... 
 xc:  0.0307145820046
 yc:  0.0341970790239
@@ -413,7 +411,7 @@ be used to save out the peak list.
 A typical peak list file looks like\footnote{The file
 has been modified a bit. The numbers should be tab 
 separated but are displayed as space separated for brevity.}
-\begin{lstlisting}[caption={Peaks.dat,basicstyle=\ttfamily\tiny}]
+\begin{lstlisting}[basicstyle=\ttfamily\tiny]
 # A list of peaks found in the diffraction image.
 # Calculated on Sun Apr  6 18:06:56 2008
 # Calibration data used to find peaks:
@@ -461,7 +459,7 @@ The calibration parameters can be directly entered
 using the inputs or they can be loaded and saved 
 using the \gui{Load From File} and \gui{Save To File} 
 buttons. The format for a calibration data file is 
-\begin{lstlisting}[caption={Calibration Parameters}]
+\begin{lstlisting}
 # Calibration File
 xc	1725.000000	0
 yc	1725.000000	0
@@ -500,7 +498,7 @@ input on the \gui{Calibration} tab. The filename can either
 be entered by hand and then loaded or picked from a file selector 
 by pushing the button with the folder icon on it.  Below is an example 
 of the $Q$ data file format: 
-\begin{lstlisting}[caption={Lanthanum Hexaboride.dat},label=LaB6]
+\begin{lstlisting}
 # This is Q Data for Lanthanum Hexaboride
 Q   dQ
 1.511543809 .05
@@ -512,11 +510,12 @@ Q   dQ
 ...
 \end{lstlisting}
 Comment lines beginning with a \# are ignored. The
-first line in the file should be "Q  dQ" or "Q  delta Q". The 
+first line in the file should be \macroline{Q  dQ} or 
+\macroline{Q  delta Q}. The 
 rest of the are lines of $Q$ values followed a $\Delta Q$ range.
 All $Q$ values must be larger than 0. None of the $Q$ ranges can 
 overlap. Instead of $Q$ values, the program can input $D$ values 
-If the first line is instead "D dD" or "D delta D" the rest of 
+If the first line is instead \macroline{D dD} or \macroline{D delta D} the rest of 
 the file will be taken to be $D$ and $\Delta D$ values.
 The values will be convert using equation~\ref{DtermsQ}. 
 

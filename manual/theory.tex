@@ -4,12 +4,14 @@ X-ray diffraction can be modeled as in figure~\ref{DiffractionSetup}.
 Cones of light preferentially leave a crystal and Usually, the 
 interesting thing to measure with x-ray 
 diffraction is the scattering angle 
-$2\theta$. If we placed a detector perpendicular 
+$2\theta$. If a detector was placed perpendicular 
 to the incoming beam, the cones of light would be detected as 
 circles of high intensity. 
-If we knew the distance $d$ from the sample to the detector and 
+If the distance $d$ 
+from the sample to the detector was and 
 the distance $r$ from the center of the detector to a 
-particular ring, we could easily calculate the scattering angle as
+particular ring were known, the scattering angle could
+be calculated as
 \begin{equation}
     \tan2\theta = \frac{r}{d}.
 \end{equation}
@@ -352,7 +354,7 @@ is given in section~\ref{calibration}.
 %Note that this function calculates $2\theta$ instead
 %of $Q$ or $D$ but it takes a trivial amount of work
 %to the additional conversion.
-%\begin{lstlisting}[caption={Code to convert pixel coordinates on a real detector into $(Q,\chi)$ coordinates},label=getTwoThetaChi]
+%\begin{lstlisting}
 %The Code will go here one of these days...
 %\end{lstlisting}
 %Listing~\ref{getXY} presents the function \code{getXY()} 
@@ -360,6 +362,6 @@ is given in section~\ref{calibration}.
 %function~\ref{getTwoThetaChi}. It uses the same
 %terminology for parameters as that function.
 %
-%\begin{lstlisting}[caption={Code to convert $(Q,\chi)$ values into pixel coordinates on a real detector},label=getXY]
+%\begin{lstlisting}
 %Other code will go here one of these days...
 %\end{lstlisting}

@@ -1,382 +1,255 @@
 \chapter{Macros}
 
 This program is almost fully automatable with macros. Macros
-can be used to perform data analysis as quickly as possible. 
-The program is capable of recording macros and running macros. 
-The macro file format is simple enough that it is easy write 
-or modify macro files by hand.
+can be used to quickly analyze data. 
+This program is capable of recording and running macros and
+it is easy to write and modify macro files. 
 
 \begin{SCfigure}[1][hbtp]
     \centering
     \includegraphics[scale=.75]{figures/macro.eps}
-    \caption{The \gui{Macro} menu bar. This is
-    where macros are recorded and run.}
+    \caption{The \gui{Macro} menu bar is used to
+    record and run macros.}
     \label{macro_figure}
 \end{SCfigure}
 
-\section{Record Macros}
+\section{Record and Run Macros}
 
-The easiest way to create a macro is to record it. A macro
-can be recorded by selecting the \gui{Start Record Macro} 
+The easiest way to create a macro is to record it by selecting 
+the \gui{Start Record Macro} 
 option in the \gui{Macro} menu 
-bar. Figure~\ref{macro_figure} shows the \gui{Macro} menu bar.
-After all of the steps that should be recorded are finished, 
-pushing \gui{Stop Record Macro} will save the macro file to
-a selectable file.
-
-\section{Run Macros}
-
-The \gui{Run Saved Macro} option in the \gui{Macro}
-menu to run a macro file. The program will run all the 
-steps in the macro file and then return control of 
-the program. This is how analysis can be done with
-macro files.
+bar shown in  figure~\ref{macro_figure}. 
+After all of the desired steps are finished, 
+the \gui{Stop Record Macro} option will save the macro to
+a file. The \gui{Run Saved Macro} option in the \gui{Macro}
+menu will run all the commands in a saved macro. 
 
 \section{The Macro File Format}
 
-A macro file contains a list of commands which tell the 
-program what to do. Each command in the GUI is on its
-own line. The syntax for macro commands is pretty 
-straightforward. Macro commands are the 
+A macro file is a list of commands, each on their own line, that tells the 
+program what to do.
+The syntax for macros is straightforward. Macro commands are the 
 text corresponding to the part of the GUI that does 
-the command. For example, to make the macro get the 
-calibration data from the header of the image, the macro 
-command is \macroline{Get From Header}. To fit the calibration
-data from within a macro, the command is 
-\macroline{Do Fit}.
-
-Things get more interesting when the GUI item requires
-requires doing more than just pushing a button. For 
-example, to deselect the \gui{Draw Q Data?} 
-check box, the macro needs to specify that the check box
-gets deselect instead of selected.
-For these, the macro commands need to be followed by
-a second line with the particular. For this example, 
-we would write
-\begin{lstlisting}[caption={'Draw the $Q$ Lines on the Display'}]
+the command. 
+For example, the macro command \macroline{Get From Header} 
+will get the calibration data from the header of the 
+image.\footnote{Because of the ambiguity of some GUI items,
+some macro command have different names. 
+For example, the \gui{Number Of Chi} input shows up multiple
+places in the program so the macro commands are instead
+\macroline{Fit Number of Chi?}, \macroline{Integrate Number Of Chi?},
+and \macroline{Cake Number Of Chi?}. When in doubt, 
+section~\ref{macro_commands_table} has a list of all macro commands.}
+Things get more interesting when the GUI item is more complicated
+then a button. The \gui{Draw Q Data?} check box needs to know if it 
+is selected or deselect. The macro command is
+\begin{lstlisting}
 Draw Q Data?
     Select
-# Or, to not display them:
-Draw Q Data?
-    Deselect
+# Or, Deslect to not display them
 \end{lstlisting}
-It is the same when numbers should be set. To change
-a calibration values, the macro would look like:
-\begin{lstlisting}[caption={'Input a Number'}]
-xc:
-    1752.3
+Entering numbers is similar:
+\begin{lstlisting}
 beta:
     5.23
 \end{lstlisting}
-These are treated just the same. The following
-macro command would save the cake as an image:
-\begin{lstlisting}[caption={'Save the Caked Image'}]
+So are filenames:
+\begin{lstlisting}
 Save Caked Image
-    C:/data/cake_output.jpg
-\end{lstlisting}
-
-If you look on the first tab, there are three inputs
-at the top:
-\gui{Get From Header:}, \gui{dark current:}, and 
-\gui{Q data:}. The macro command to load any of these
-is a little bit ambiguous. When using the actual GUI, 
-you would, at least in principle, type in the name of
-a file and then press load. But there is no reason to
-make the GUI so redundant. So to load in any of these
-using a macro command, all you have to do is give the 
-name of the input and then the filename. It will 
-automatically load the file without you explicitly
-giving the \macroline{load} line. So, for example,
-to load in the $Q$ data, you would include the 
-following lines:
-\begin{lstlisting}[caption={'Load the $Q$ Data'}]
-Q Data:
-    C:/data/q_data.dat
+    C:/cake_output.jpg
 \end{lstlisting}
 
 \section{Looping Over Diffraction Data}
 \label{LoopOverDiffractionData}
 
-To analyze a file, the command is just 
-\begin{lstlisting}[caption={'Load the Diffraction Data'}]
+Diffraction data is loaded with the command
+\begin{lstlisting}
 Data File:
-    C:/data/first.mar3450
-Get From Header
+    C:/first.mar3450
+\end{lstlisting}
+Diffraction files in a list will be looped over and the same
+analysis can be performed on all of them.
+For example,
+\begin{lstlisting}
+Data File:
+    C:/first.mar3450 C:/second.mar3450 
 # ...
 \end{lstlisting}
-But macros files also allow for an easier way
-to loop over many files and perform the same
-analysis on all of them.  
-To loop over multiple diffraction images at once,
-you could simply give more files after the first 
-one. The loop will end when 
-one of the 3 things in the macro 
-file happens: a subsequent line in the macro
-file reads \macroline{END LOOP}, more diffraction data
-is loaded using the command \macroline{Data File:}, or
-the macro file ends. For example, if we look at this 
-macro file.
-\begin{lstlisting}[caption={'Loop Over Diffraction Data'}]
-Data File:
-    C:/data/first.mar3450 C:/data/second.mar3450 
-Integrate Q Lower?
-    .25
-Integrate Q-I
-END_LOOP
-Draw Q Lines?
-    Select
-# ...
-\end{lstlisting}
-We see that it would get evaluated just like this
-macro file:
-\begin{lstlisting}[caption={'An Equivalent Macro'}]
-Data File:
-    C:/data/first.mar3450 
-Integrate Q Lower?
-    .25
-Integrate Q-I
-Data File:
-    C:/data/second.mar3450 
-Integrate Q Lower?
-    .25
-Integrate Q-I
-Draw Q Lines?
-    Select
-# ...
-\end{lstlisting}
-You can even give it whole directories. When
-you give it a directory to loop over, the program 
-will (non-recursively) look for all the diffraction 
-files in that directory and include them in the list. 
-For example, if the folder \macroline{C:/data/} contains
-only the file \macroline{first.mar3450} and
-\macroline{second.mar3450}, an equivalent way of looping
-over these files would be to issue the command
-\begin{lstlisting}[caption={'Load the Diffraction Data'}]
+will run the subsequent macro lines on
+the file \macroline{C:/first.mar3450} and
+then on the file \macroline{C:/second.mar3450}.
+The loop will end when one of three things happens: a subsequent line 
+in the macro file is \macroline{END LOOP}, more diffraction data
+is loaded using the \macroline{Data File:} command, or
+the macro file ends. 
+
+Directories can also be given. The program 
+will (non-recursively) look for all diffraction
+files in the directory and include them in the list. If the folder
+\macroline{C:/data} contained the file \macroline{first.mar3450}
+and \macroline{second.mar3450}, these files could
+be looped over with the command
+\begin{lstlisting}
 Data File:
     C:/data/
 # ...
 \end{lstlisting}
-You can put as many folder and files after a 
-\macroline{Data File:} line as you wish.
-Just make sure to put them all on the same line 
-or the program will complain.
+Multiple folders and multiple files can be in the list.
+They must be on the same line and separated by spaces.
 
-\section{The PATHNAME and FILENAME Commands}
+\section{PATHNAME and FILENAME}
 
-Finally, there is a convenience markup which can help
-you make fancy macros. Whenever you have loaded data 
-in, you can refer to the part name of the current
-diffraction file that is loaded using the string
-\macroline{PATHNAME} and you can refer to the file
-name itself using the string \macroline{FILENAME}. 
-So, in our previous example, if we had loaded the
-file \macroline{C:/data/second\_file.mar3450},
-\macroline{PATHNAME} would get changed into 
+When a diffraction file is loaded by the macro,
+any subsequent lines in the file will have
+the string \macroline{PATHNAME} replaced with the
+path of the current diffraction file and 
+\macroline{FILENAME} replaced with the filename
+of the current diffraction file.
+For the file \macroline{C:/data/first.mar3450},
+\macroline{PATHNAME} would be replaced by
 \macroline{C:/data} and \macroline{PATHNAME} would
-get evaluated to \macroline{second\_file} without
-the extension. In effect, you can imagine building 
-back the full name from \macroline{PATHNAME} and
-\macroline{FILENAME} using an equation line
-\begin{equation*}
-    \text{\macrolinenoquotes{C:/data/second\_file.mar3450}=
-    \macrolinenoquotes{FILENAME/PATHNAME.mar3450}}
-\end{equation*}
-These commands are useful because they allow you to
-loop over many files at once but still save things 
-in useful places and with useful names. It would be
-easy, for example, to save the intensity data you
-calculate for each file being looped over using the 
-macro command:
-\begin{lstlisting}[caption={'Using the FILENAME and PATHNAME Markup'}]
+be replaced by \macroline{first}. A \macroline{.mar3450}
+file could be reconstructed as 
+\macroline{FILENAME/PATHNAME.mar3450}
+
+While looping over multiple files, these commands can be used to
+save things in useful places with useful names. It would be
+easy, for example, to save intensity integrated data with the
+macro:
+\begin{lstlisting}
 Save Integration Data
     FILENAME/PATHNAME\_int.dat
 \end{lstlisting}
-This would save, for example, 
-\macroline{C:/data/first.mar3450}'s intensity data to
-\macroline{C:/data/first\_int.dat},
-\macroline{C:/data/second.mar3450}'s intensity data 
-to \macroline{C:/data/second\_int.dat}, and the
-same for all the others. This feature lets you have
-the macro to save each of the files to the right place
-and give it a useful name.
+This would save the intensity data for
+\macroline{C:/data/first.mar3450} as
+\macroline{C:/data/first\_int.dat} and
+the intensity data for \macroline{C:/data/second.mar3450} as
+\macroline{C:/data/second\_int.dat}, etc. 
 
-\section{Loops Over Multiple Images}
+\section{Loading Multiple Images}
 
-We know from chapter~\ref{viewing_data} that
-you can load in multiple diffraction images and add them
-together. But we have not yet talked about how this can
-be done inside of a macro. The syntax is pretty straight
-forward. We introduce a new macro command named
-\macroline{Multiple Data Files} which signifies that
-many files should be loaded. To load in multiple files
-and have their intensities added, this command must be 
-followed by a list of filenames enclosed within
-[ and ] brackets. Keeping with the same example above,
-we could load in \macroline{C:/data/first.mar3450} and
-\macroline{C:/data/second.mar3450} and have their
-intensities added using the command
-\begin{lstlisting}[caption={'Add the intensities'}]
+Multiple diffraction files can be loaded and their 
+intensities added. The macro command to do this is
+\macroline{Multiple Data Files} followed by a list of filenames
+enclosed with [ and ] brackets. 
+\macroline{C:/data/first.mar3450} and
+\macroline{C:/data/second.mar3450} could be loaded at the
+same time with the macro
+\begin{lstlisting}
 Multiple Data Files:
     [C:/data/first.mar3450 C:/data/second.mar3450]
 # ...
 \end{lstlisting}
-The program enforces that
-all of the files are in the same folder. This is done
-so that that the \macroline{PATHNAME} variable remains 
-meaningful when looping over multiple images.
-
-You can then incorporate this into a loop in
-one of two ways. First, you can simply put several
-of these bracketed lists into the macro and each
-of the lists will be analyzed separately. For example,
-\begin{lstlisting}[caption={'Loop Over the Analysis'}]
+All of the files that are added together must be in the same folder
+so that that the \macroline{PATHNAME} syntax remains 
+meaningful.
+These sets of files can be looped over by putting
+several of these bracketed lists on a line.
+For example:
+\begin{lstlisting}
 Multiple Data Files:
     [C:/first.mar3450 C:/second.mar3450] [C:/third.mar3450 C:/fourth.mar3450]
 # ...
 \end{lstlisting}
-This will separately loop over \macroline{first.mar3450} 
+will separately loop over \macroline{first.mar3450} 
 and \macroline{second.mar3450} added together and then 
 \macroline{third.mar3450} and \macroline{fourth.mar3450}
-added together. But this gets cumbersome. Alternately,
-you can simply take all of the files that you want to be 
-added together and analyzed and group them into sub folders. 
-Each of the sub folders will contain only files that should
-be added together and analyzed. If you then give the
-macro the name of the folder containing all these sub folders,
-it will loop over all the sub folders. 
-
-For example, suppose we created the folder \macroline{C:/data}.
-Inside of this folder is the sub folder \macroline{A}
-containing the files \macroline{first.mar3450} and 
-\macroline{second.mar3450}. Also inside of the data folder
-is the sub folder \macroline{B} containing the files
+added together. Alternately,
+all of the files that need to be analyzed can be grouped into 
+subfolders. If each subfolder contains only files that should
+be added together, the \macroline{Multiple Data Files} command
+followed by the base folder will loop over each of the subfolders
+and add all of the files in the subfolder together.
+For example, suppose the folder \macroline{C:/data}
+contained the sub folder \macroline{A} containing the files 
+\macroline{first.mar3450} and \macroline{second.mar3450}
+and suppose \macroline{C:/data} also contained the 
+sub folder \macroline{B} containing the files
 \macroline{third.mar3450} and \macroline{fourth.mar3450}.
-We could do the exact same data analysis as above by 
-issuing the macro command with only the data folder name.
-\begin{lstlisting}[caption={'Using the Folder Syntax'}]
+The macro command
+\begin{lstlisting}
 Multiple Data Files:
     C:/data
 # ...
 \end{lstlisting}
-You can also put as many folders and lists separated
-by [ and ] as you wish onto the line and it will loop
-over all of them.
+would first load \macroline{first.mar3450} and 
+\macroline{second.mar3450} and run the through loop.
+It would then load \macroline{third.mar3450} and 
+\macroline{fourth.mar3450} and run the through loop.
+Multiple Lists of files and ] and multiple
+folders containing subfolders can be put after
+the \macroline{Multiple Data Files} line. They
+must all be on the same line and separated by spaces.
 
-Since the macro function insists that all files 
-that are added together are in the same folder,
-the \macroline{PATHNAME} command will properly expand 
-to the path that all of the files that were added 
-together have. But since they all have different file 
-names, the \macroline{FILENAME} command will always be 
-replaced by the string \macroline{MULTIPLE\_FILES}
-to avoid ambiguity.
+Since the all the files added together must come
+from the same folder, \macroline{PATHNAME} is
+unambiguous. To avoid ambiguity, \macroline{FILENAME} 
+is replaced by the string \macroline{MULTIPLE\_FILES}.
 
-\section{The FOLDERPATH and FOLDERNAME commands}
+\section{FOLDERPATH and FOLDERNAME}
 
-To facilitate writing macros that load in and 
-add together several diffraction images, the program
-introduces two new macro commands. The first command is
-\macroline{FOLDERNAME} and will always be replaced
+To facilitate writing macros that load and 
+add together diffraction files in a loop, 
+the program introduces the \macroline{FOLDERNAME}
+and \macroline{FOLDERPATH} syntax.
+\macroline{FOLDERNAME} will be replaced
 by the name of the folder containing the current
-diffraction file (or files). Since the macro insists 
-that all files are loaded form the same Folder, this
-command is unambiguous. Finally, you can use the 
-command \macroline{FOLDERPATH}. It will always be 
-replaced by the path leading up to the folder 
-containing the file. Therefore, we can now specify 
-where the current file is by using the macro command
-\begin{equation*}
-    \text{\macrolinenoquotes{FILENAME/PATHNAME.mar3450}}
-\end{equation*}
-or the command
-\begin{equation*}
-    \text{\macrolinenoquotes{FOLDERPATH/FOLDERNAME/FILENAME.mar3450}}
-\end{equation*}
-Basically, this is useful because if you are adding
-together multiple files, you can put them all in a
-folder with an interesting name and then name 
-the output files something like 
-\macroline{FOLDERNAME\_int.dat} so that they are all
-given useful names. This is nice because it can, without
-loss of generality, be incorporated into a loop. Finally,
-the \macroline{FOLDERPATH} command is useful because you
-can use it to output files one directory up from where all
-the diffraction data is stored.
+diffraction file (or files). \macroline{FOLDERPATH} 
+will be replaced by the path leading to the folder 
+containing the file. A \macroline{mar3450}
+file can be reconstructed as 
+\macroline{FOLDERPATH/FOLDERNAME/FILENAME.mar3450}.
+\macroline{FOLDERNAME} is useful because if multiple
+files have been loaded at the same time, things can be saved
+with the enclosing folders name. If multiple subfolders
+are looped over, the output of the program for each set of 
+files can be given a meaningful names if each of the subfolders
+has a meaningful name.
 
 \section{Setting Colors in a Macro}
 
-There are several places in the program where you can
-pick the color of something using a color selector.
-It is a little trickier to do.  When you issue a macro 
-command that wants to know the color of something, you 
-have to tell it what that color is. By far the easiest
-way to figure out exactly what the macro line should
-loop like is to simply record a macro where select
-the color that you want and then copy the macro lines
-into your file.
+There are several places in the program where a
+color can be selected. Colors can be set from
+inside a macro but the names of the colors is
+a little confusing. The easiest way to figure out 
+the syntax for setting a color is to record a macro,
+set the color, and then copy and paste.
 
-But if you are curious exactly what the format for
-colors looks like, you can see that picking a color
-will generally look like this:
-\begin{lstlisting}[caption={'Use the Folder Syntax'}]
-Polygon Mask Color?
-    red
-\end{lstlisting}
-But it is a bit tricky trying to figure out exactly what 
-colors will work. Technically, this program will accept 
-any color which tk will accept. The colors that tk
-will accept by name are all described here:
-\url{http://wiki.tcl.tk/16166}. But tk can also accept
-colors based upon their RGB value. To specify a color
-by its RGB value, the color must be preceded by a \#
-and followed by the RGB values in hexadecimal.
-Each of the RGB values range from 0 to 255 in
-decimal or (00 to ff in hexadecimal).
-For example, pure red would be specified by the color
-\#ff0000. So we could replace the macro command above
-with the identical
-\begin{lstlisting}[caption={'Use the Folder Syntax'}]
-Polygon Mask Color?
-    #ff0000
-\end{lstlisting}
+Technically, the program will accept 
+any color which the tk GUI framework accepts. tk
+will accept quite a few colors by their English name (such as 
+\macroline{red}).\footnote{\url{http://wiki.tcl.tk/16166} 
+contains a list of all the allowed color names.} 
+Tk also accepts colors
+by their RGB value. A color is written as \#
+followed by the color's RGB value in hexadecimal.
+Each red, green, and blue value ranges from 0 to 255 in
+decimal and 00 to ff in hexadecimal. For example, \#ff0000 is red. 
 
 \section{Little Tidbits}\label{Little Tidbits}
 \begin{itemize}
-    \item Any of the macro commands themselves are case
-    insensitive. The command \macroline{GeT fRoM hEaDeR} 
-    is just as valid as the command 
-    \macroline{gET fROM hEADER} and 
-    \macroline{Get From Header}. You don't have to sweat it. 
-    \item White spaces at the beginning and end of the 
+    \item Macro commands are not case
+    sensitive. The command \macroline{GeT fRoM hEaDeR} 
+    is just as valid as 
+    \macroline{Get From Header}. 
+    \item White spaces at the beginning and end of a
     line are ignored. In the preceding examples, the
     spaces separating macro commands from input values
-    such as file names are there only to increase 
-    readability. You don't need them if you don't 
-    want.
-    \item Any new lines in a macro file are ignored.
-    \item comment lines of the form 
-    \macroline{\# A comment} are ignored.
-    \item You don't have to worry about explicitly moving 
-    from tab to tab in the computer program. The computer 
-    program will move to the right automatically before
-    performs the action.
-    \item When you issue the macro command \macroline{E:} 
-    or \macroline{E Fixed}, the computer program will
-    automatically set the GUI to \macroline{Work in eV}.
-    If you issue the command or \macroline{lambda:} or
-    \macroline{lambda fixed:} then the computer program
-    will set the GUI to \macroline{Work in Lambda}. You
-    can also explicitly set the GUI to either mode using
-    the command \macroline{Work in eV} or
-    \macroline{Work in Lambda}.
+    was only there to increase readability. 
+    \item New lines in a macro file are ignored.
+    \item Comment lines beginning with \# 
+    are ignored.
+    \item The program will automatically move
+    between tabs as it executes different commands 
+    on different tabs. 
+    \item Usually, macro commands will not be recorded
+    when the macro item is selected through the menu bar. The
+    only exceptions are items that can only be accessed
+    that way.
 \end{itemize}
 
 
-\section{Macro Commands}
-
-Below is a table describing all of the macro command 
-and exactly what they do.
+\section{List of Macro Commands}\label{macro_commands_table}
 
 \begin{center}
 
@@ -398,140 +271,116 @@ and exactly what they do.
 
 \hline 
 \endlastfoot
-\multicolumn{3}{|c|}{Program State Macro Commands} \\
+\multicolumn{3}{|c|}{Program State Commands}\\
 \hline 
-    \macrolinenoquotes{Work In eV}&None&Change the state of 
-        the program so that the energy calibration parameter 
-        is inputted in units of electron volts. This is called
-        the $eV$ mode of the program. \\
-    \macrolinenoquotes{Work in Lambda}&None&Change the state of 
-        the program so that the energy calibration parameter
-        is inputted instead as a wavelength in units of 
-        angstroms. The conversion is done using the formula
-        $E=hc/\lambda$. This is called the $\lambda$ mode
-        of the program.\\
-    \macrolinenoquotes{Work in 2theta}&None&Change the state of
+    \macrolinenoquotes{Work In eV}&None&Changes the state of 
+        the program to work with the beam's energy.\\
+    \macrolinenoquotes{Work in Lambda}&None&Changes the state of 
+        the program so that the beam's wavelength.\\
+    \macrolinenoquotes{Work in 2theta}&None&Changes the state of
         the program so that caking and intensity integration
-        are done of the variable $2\theta$. \\
-    \macrolinenoquotes{Work in Q}&None&Change the state of
+        are done in $2\theta$ instead of $Q$.\\
+    \macrolinenoquotes{Work in Q}&None&Changes the state of
         the program so that caking and intensity integration
-        are done of the variable $Q$. \\
+        are done in $Q$ instead of $2\theta$.\\
     \hline
-    \multicolumn{3}{|c|}{Calibration Values} \\
+    \multicolumn{3}{|c|}{Calibration Commands} \\
     \hline
-    \macrolinenoquotes{Data File:}&Files \& Directories&Loops 
-        over loading in each file.\\
+    \macrolinenoquotes{Data File:}&Files \& Directories&Opens
+        a diffraction file and possibly loops over doing this.\\
     \macrolinenoquotes{Multiple Data Files"}&
-        Files \& Directories&Loops over
-        loading several diffraction files and adding
-        them together.\\
-    \macrolinenoquotes{Dark Current:}&Filename&Loads in the 
-        Dark Current.\\
-    \macrolinenoquotes{Q Data:}&Filename&Load in the $Q$ data.\\
-    \macrolinenoquotes{Standard Q}&q data&Loads in one of the
-    standard $Q$ files. This command should be followed by the
-    name of the standard Q file as it is displayed by the program
-    in the menu bar.\\
-    \macrolinenoquotes{Get From Header:}&None&Sets the calibration 
-        data to the value stored in the image header.\\
+        Files \& Directories&Loads several 
+        several diffraction files and adding
+        them together and possibly loops over doing this.\\
+    %\macrolinenoquotes{Dark Current:}&Filename&Loads in the 
+    %    Dark Current.\\
+    \macrolinenoquotes{Q Data:}&Filename&Load in a $Q$ data file.\\
+    \macrolinenoquotes{Standard Q}&$Q$ File&Loads in a
+    standard $Q$ files. This command is followed by the name 
+    in the standard $Q$ menu of one of the standards.\\
+    \macrolinenoquotes{Get From Header:}&None&Gets the calibration 
+        data from the image header.\\
     \macrolinenoquotes{Load From File:}&Filename&Loads a calibration 
         data file.\\
-    \macrolinenoquotes{Previous Values}&None&Loads the previously 
-        stored calibration values.\\
+    \macrolinenoquotes{Previous Values}&None&Loads the previous
+        calibration parameters.\\
     \macrolinenoquotes{Save To File}&Filename&Saves the calibration 
         data to a file.\\
     \macrolinenoquotes{xc:}&Number&Sets the $x$ center.\\
     \macrolinenoquotes{xc Fixed:} & \selectordeselect & Sets whether 
-        or not to fix the $x$ center while doing the fit.\\
+        or not to fix the $x$ center.\\
     \macrolinenoquotes{yc:}&Number&Set the $y$ center.\\
     \macrolinenoquotes{yc Fixed:}& \selectordeselect &Sets whether 
-        or not to fix the $y$ center while doing the fit.\\
-    \macrolinenoquotes{d:}&Number&Set the distance from the 
-    sample to the detector.\\
+        or not to fix the $y$ center.\\
+    \macrolinenoquotes{d:}&Number&Set the detector distance.\\
     \macrolinenoquotes{d Fixed:}& \selectordeselect &Sets whether 
-        or not to fix the distance while doing the fit.\\
-    \macrolinenoquotes{E:}&Number&Sets the energy. If this
-        command is run while the program is in $\lambda$ mode,
-        the program will switch to $eV$ mode.\\
+        or not to fix the distance.\\
+    \macrolinenoquotes{E:}&Number&Sets the energy. If the 
+        program is in $\lambda$ mode, it will switch to $eV$ mode.\\
     \macrolinenoquotes{E Fixed:}& \selectordeselect &Sets whether 
-        or not to fix the energy while doing the fit. If this
-        command is run while the program is in $\lambda$ mode,
-        the program will switch to $eV$ mode.\\
+        or not to fix the energy. If the program is in $\lambda$ mode,
+        it will switch to $eV$ mode.\\
     \macrolinenoquotes{lambda:}&Number&Sets the wavelength. If
-        this command is run while the program is in $eV$ mode,
-        the program will switch to $\lambda$ mode.\\
+        the program is in $eV$ mode, it will switch to $\lambda$ mode.\\
     \macrolinenoquotes{lambda Fixed:}& \selectordeselect &Sets 
-        whether or not to fix the wavelength while doing the 
-        fit. If this command is run while the program is in
-        $eV$ mode, the program will switch to $\lambda$ mode.\\
+        whether or not to fix the wavelength. 
+        If the program is in $eV$ mode, it will switch to $\lambda$ mode.\\
     \macrolinenoquotes{alpha:}&Number&Sets the $\alpha$ angle.\\
     \macrolinenoquotes{alpha Fixed:}& \selectordeselect &Sets whether 
-        or not to fix the $\alpha$ angle while doing the fit.\\
+        or not to fix the $\alpha$ angle.\\
     \macrolinenoquotes{beta:}&Number&Sets the $\beta$ angle.\\
     \macrolinenoquotes{beta Fixed:}& \selectordeselect &Sets whether 
-        or not to fix the $\beta$ angle while doing the fit.\\
+        or not to fix the $\beta$ angle.\\
     \macrolinenoquotes{R:}&Number&Sets the rotation angle.\\
     \macrolinenoquotes{R Fixed:}& \selectordeselect &Sets whether 
-        or not to fix the rotation angle while doing the fit.\\
-    \macrolinenoquotes{pl}&Number&The pixel length of the image.
-        This is the width of one pixel (in microns).\\
-    \macrolinenoquotes{ph}&Number&The pixel height of the image.
-        This is the height of one pixel (in microns).\\
+        or not to fix the rotation angle.\\
+    \macrolinenoquotes{pl}&Number&Sets the pixel length.\\
+    \macrolinenoquotes{ph}&Number&Sets the pixel height.\\
     \macrolinenoquotes{Draw Q Lines?}&\selectordeselect&Sets whether 
-        or not to draw constant $Q$ lines on the screen.\\
+        or not to draw constant $Q$ lines.\\
     \macrolinenoquotes{Draw Q Lines Color?}&color&Sets the color 
-        of the constant $Q$ lines that are displayed on 
-        top of the diffraction data and the caked data.\\
-    \macrolinenoquotes{Draw dQ Lines?}&\selectordeselect&Draw the 
-        delta $Q$ lines on the diffraction image.\\
-    \macrolinenoquotes{Draw dQ Lines Color?}&color&Change the 
-        color of the delta $Q$ lines that are displayed on
-        top of the diffraction data and the caked data.\\
+        of the constant $Q$ lines.\\
+    \macrolinenoquotes{Draw dQ Lines?}&\selectordeselect&Sets wheter
+        or not to draw constant $\Delta Q$ lines.\\
+    \macrolinenoquotes{Draw dQ Lines Color?}&color&Sets the 
+        color of the $\Delta Q$ lines.\\
     \macrolinenoquotes{Draw Peaks?}&\selectordeselect&
-        Display the fit peaks on the diffraction and 
-        cake image.\\
-    \macrolinenoquotes{Draw Peaks Color?}&color&Change the color of 
-        the peaks that are displayed on top of the diffraction
-        data and the caked data.\\
-    \macrolinenoquotes{Update}&None&Update the diffraction image.\\
+        Sets wheter or not to draw the fit peaks.\\
+    \macrolinenoquotes{Draw Peaks Color?}&color&Sets the color of 
+        the peaks.\\
+    \macrolinenoquotes{Update}&None&Refreshes the diffraction image.\\
     \macrolinenoquotes{Save Calibration}&Filename&Saves the
-        current calibration values in the GUI as plain text
-        ASCII to a file.\\
-    \macrolinenoquotes{Do Fit}&None&Fit the calibration values to 
-        a loaded diffraction image.\\
+        calibration parameters to a file.\\
+    \macrolinenoquotes{Do Fit}&None&Fits the calibration parameters.\\
     \macrolinenoquotes{Make/Save Peak List}&Filename&Creates a peak 
-        list just as happens when doing the fit, but instead of 
-        acutally doing the fit it saves the peaks as an ASCII file 
-        for later use.\\
+        list and saves it to a file.\\
     \macrolinenoquotes{Use Old Peak List (if possible)?}&
-        \selectordeselect&Uses the previously found peak list again 
-        when doing the fit.\\
-    \macrolinenoquotes{Fit Number of Chi?}&Number&The number of 
-        $\chi$ slices around the diffraction image to pick and use 
-        when doing the calibration.\\
-    \macrolinenoquotes{Stddev}&Number&The $\sigma$ threshold for 
-        allowing a peak.\\
+        \selectordeselect&Sets whether or not to use previous peak lists
+        when fitting.\\
+    \macrolinenoquotes{Fit Number of Chi?}&Number&Sets the number of 
+        $\chi$ slices around the diffraction image used
+        when calibrating.\\
+    \macrolinenoquotes{Stddev}&Number&The threshold for 
+        allowing peaks.\\
     \hline    
-    \multicolumn{3}{|c|}{Diffraction Display Options} \\
+    \multicolumn{3}{|c|}{Diffraction Display Commands} \\
     \hline
-    \macrolinenoquotes{Diffraction Data Colormaps}&A color map name&
-        Select the color map to use for the diffraction image.\\
+    \macrolinenoquotes{Diffraction Data Colormaps}&A colormap name&
+        Sets the colormap used to display the diffraction data.\\
     \macrolinenoquotes{Diffraction Data Invert?}&\selectordeselect&
-        Invert the color map that is being used to display
-        the diffraction data.\\
+        Inverts the colormap used to display the diffraction data.\\
     \macrolinenoquotes{Diffraction Data Log Scale?}&\selectordeselect&
-        Take the log of all the data points before displaying them.\\
-    \macrolinenoquotes{Diffraction Data Low?}&Number from 0 to 1&The 
-        normalized intensity value which will be scaled to \%0 of 
-        the image brightness when displaying the diffraction image.\\
-    \macrolinenoquotes{Diffraction Data Hi?}&Number from 0 to 1&The 
-    normalized intensity value which will be scaled to \%100 of the
-    image brightness when displaying the diffraction image.\\
-    \macrolinenoquotes{Save Diffraction Image}&Filename&Save the 
-    diffraction image to a file (possibly including $Q$ lines and 
-    peaks.\\
+        Sets whether or not to use a log of the colormap.\\
+    \macrolinenoquotes{Diffraction Data Low?}&Number from 0 to 1&Sets
+        the percentage of maximum intensity that is mapped to the 
+        lowest part of the colormap.\\
+    \macrolinenoquotes{Diffraction Data Hi?}&Number from 0 to 1&Sets
+        the percentage of maximum intensity that is mapped to the
+        highest part of the colormap.\\
+    \macrolinenoquotes{Save Diffraction Image}&Filename&Saves the 
+        diffraction image to a file.\\
     \hline    
-    \multicolumn{3}{|c|}{Masking Macro Commands}\\
+    \multicolumn{3}{|c|}{Masking Commands}\\
     \hline
     \macrolinenoquotes{Do Less Than Mask?}&\selectordeselect&
         Sets whether or not to apply a less than mask to the
@@ -539,200 +388,161 @@ and exactly what they do.
     \macrolinenoquotes{(Pixels Can't Be) Less Than Mask:}&Number&
         Sets the less than mask.\\
     \macrolinenoquotes{Less Than Mask Color?}&color&Sets the
-        color that all the less than masked pixels are
-        displayed as on the diffraction image and caked image.\\
+        color of the less than mask.\\
     \macrolinenoquotes{Do Greater Than Mask?}&\selectordeselect&
         Sets whether or not to apply a greater than mask to the
         diffraction data.\\
     \macrolinenoquotes{(Pixels Can't Be) Greater Than Mask:}&
         Number&Sets the greater than mask.\\
     \macrolinenoquotes{Greater Than Mask Color?}&color&Sets
-        the color that all the greater than masked pixels
-        are displayed as on the diffraction image and 
-        caked image.\\
+        the color of the greater than mask.\\
     \macrolinenoquotes{Do Polygon Mask?}&\selectordeselect&
-        Sets whether or not to apply polygon masks to the
-        diffraction data.\\
+        Sets whether or not to use polygon masks.\\
     \macrolinenoquotes{Polygon Mask Color?}&color&Sets
-        the color that all polygon masked pixels should be
-        displayed as on the diffraction image and the cake
-        image.\\
+        the color of the polygon masks.\\
     \macrolinenoquotes{Save Mask}&Filename&Saves all 
-        currently loaded or drawn polygons as plain text
-        ASCII to a file.\\
-    \macrolinenoquotes{Load Mask}&Filename&Loads into
-        the program from some file one or more polygons.\\
-    \macrolinenoquotes{Clear Mask}&None&Removes any
-        polygon masks that are in the program.\\
+        polygon masks to a file.\\
+    \macrolinenoquotes{Load Mask}&Filename&Loads all
+        polygon masks from a file.\\
+    \macrolinenoquotes{Clear Mask}&None&Removes ll
+        polygon masks.\\
     \hline
-    \multicolumn{3}{|c|}{Cake Macro Commands}\\
+    \multicolumn{3}{|c|}{Cake Commands}\\
     \hline
-    \macrolinenoquotes{AutoCake}&None&Make the computer pick a 
-        nice $Q$ and $\chi$ range and Cake the data.\\
-    \macrolinenoquotes{Cake Q Lower?}&Number&The lower $Q$ value 
-        in the range of $Q$ and $\chi$ to use when caking. If
-        this command is run while the program is in $2\theta$
-        mode, the program will switch to $Q$ mode.\\
-    \macrolinenoquotes{Cake Q Upper?}&Number&The upper $Q$ value 
-        in the range of $Q$ and $\chi$ to use when caking.
-        of the caked data. If this command is run while
-        the program is in $2\theta$ mode, the program will 
-        switch to $Q$ mode.\\
-    \macrolinenoquotes{Cake Number Of Q?}&Number&The number of 
-        $Q$ bins to use while caking the data. If this command
-        is run while the program is in $2\theta$ mode, the
-        program will switch to $Q$ mode.\\
-    \macrolinenoquotes{Cake 2theta Lower?}&Number&The lower 
-        $2\theta$ value in the range of $2\theta$ and $\chi$
-        to use when caking. If this command is run while
-        the program is in $Q$ mode, the program will 
-        switch to $2\theta$ mode.\\
-    \macrolinenoquotes{Cake 2theta Upper?}&Number&The upper
-        $2\theta$ value in the range of $2\theta$ and $\chi$
-        to use when caking. If this command is run while
-        the program is in $Q$ mode, the program will 
-        switch to $2\theta$ mode.\\
-    \macrolinenoquotes{Cake Number Of 2theta?}&Number&The
-        number of $2\theta$ bins to use while caking the
-        data. If this command is run while the program is
-        in $Q$ mode, the program will switch to $2\theta$
-        mode.\\
-    \macrolinenoquotes{Cake Chi Lower?}&Number&The lower $\chi$ 
-        value of the caked data.\\
-    \macrolinenoquotes{Cake Chi Upper?}&Number&The upper $\chi$ 
-        value of the caked data.\\
-    \macrolinenoquotes{Cake Number Of Chi?}&Number&The number of 
-        $\chi$ bins to use while caking the data.\\
-    \macrolinenoquotes{Do Cake}&None&Performs a cake of the
-        data and displays that caked data in the cake window.\\
-    \macrolinenoquotes{Last Cake}&None&Go back to the previous 
+    \macrolinenoquotes{AutoCake}&None&Picks a 
+        nice $Q$ and $\chi$ range and cakes.\\
+    \macrolinenoquotes{Cake Q Lower?}&Number&Sets the lower $Q$ value 
+        used when caking. If the program is in $2\theta$ mode, 
+        it will switch to $Q$ mode.\\
+    \macrolinenoquotes{Cake Q Upper?}&Number&Sets the upper $Q$ value 
+        used when caking. If the program is in $2\theta$ mode, 
+        it will switch to $Q$ mode.\\
+    \macrolinenoquotes{Cake Number Of Q?}&Number&Sets the number of 
+        $Q$ bins used when caking. If the program is 
+        in $2\theta$ mode, it will switch to $Q$ mode.\\
+    \macrolinenoquotes{Cake 2theta Lower?}&Number&Sets the lower 
+        $2\theta$ value used when caking. If the program is in 
+        $Q$ mode, it will switch to $2\theta$ mode.\\
+    \macrolinenoquotes{Cake 2theta Upper?}&Number&Sets the upper
+        $2\theta$ value used when caking. If the program is in 
+        $Q$ mode, it will switch to $2\theta$ mode.\\
+    \macrolinenoquotes{Cake Number Of 2theta?}&Number&Sets the
+        number of $2\theta$ bins used when caking. If the program 
+        is in $Q$ mode, it will switch to $2\theta$ mode.\\
+    \macrolinenoquotes{Cake Chi Lower?}&Number&Sets the lower $\chi$ 
+        value used when caking.\\
+    \macrolinenoquotes{Cake Chi Upper?}&Number&Sets the upper $\chi$ 
+        value used when caking.\\
+    \macrolinenoquotes{Cake Number Of Chi?}&Number&Sets the number of 
+        $\chi$ values used when caking.\\
+    \macrolinenoquotes{Do Cake}&None&Performs the cake and displays 
+        that caked data.\\
+    \macrolinenoquotes{Last Cake}&None&Goes back to the previous 
         cake values.\\
     \macrolinenoquotes{Save Caked Image}&Filename&Saves the
-        cake as a popular image format. The image
-        will be saved as the input filename and the extension
-        of the filename should tell the program what format
+        cake as a popular image format. The extension
+        of the file tells the program what format
         to save the image as.\\
     \macrolinenoquotes{Save Caked Data}&Filename&Saves
-        the cake as ASCII data with a verbose header.\\
+        the cake to a file.\\
     \macrolinenoquotes{Cake Do Polarization Correction?}&
-        \selectordeselect&Sets whether or not to use
-        a polarization correction when caking the data.\\
+        \selectordeselect&Sets whether or not to apply
+        a polarization correction when caking.\\
     \macrolinenoquotes{Cake P?}&Number from 0 to 1&Sets the 
-        value of the polarization correction to use when
-        caking the data.\\
+        value of the polarization used when
+        caking.\\
     \hline    
-    \multicolumn{3}{|c|}{Cake Display Options} \\
+    \multicolumn{3}{|c|}{Cake Display Commands} \\
     \hline
-    \macrolinenoquotes{Cake Data Colormaps:}&Color map&
-        Sets the color map to use when displaying the
-        caked data.\\
+    \macrolinenoquotes{Cake Data Colormaps:}&Colormap&
+        Sets the colormap used to display the caked data.\\
     \macrolinenoquotes{Cake Data Invert?}&\selectordeselect&
-        Sets whether or not to invert the color map when
-        displaying the caked data.\\
+        Sets whether or not to invert the colormap used to
+        display the caked data.\\
     \macrolinenoquotes{Cake Data Log Scale?}&\selectordeselect&
-        Sets whether or not to use a log scale when
-        applying the color map to the caked data.\\
-   \macrolinenoquotes{Cake Data Low?}&Number from 0 to 1&The 
-        normalized intensity value which will be scaled to \%0 of 
-        the image brightness when displaying the caked data.\\
-    \macrolinenoquotes{Cake Data Hi?}&Number from 0 to 1&The 
-    normalized intensity value which will be scaled to \%100 of the
-    image brightness when displaying the caked data.\\
+        Sets whether or not to use a log scale of the colormap.\\
+   \macrolinenoquotes{Cake Data Low?}&Number from 0 to 1&Sets
+        the percentage of maximum intensity that is mapped to the 
+        lowest part of the colormap.\\
+    \macrolinenoquotes{Cake Data Hi?}&Number from 0 to 1&Sets
+        the percentage of maximum intensity that is mapped to the
+        highest part of the colormap.\\
     \hline    
-    \multicolumn{3}{|c|}{Intensity Integration Macro Commands}\\
+    \multicolumn{3}{|c|}{Intensity Integration Commands}\\
     \hline
-    \macrolinenoquotes{Integrate Q Lower?}&Number&The lower
-    $Q$ value to use when performing an intensity integration.
-    If the command is run when program is in $2\theta$ mode,
-    the program will switch to $Q$ mode.\\
-    \macrolinenoquotes{Integrate Q Upper?}&Number&The upper
-    $Q$ value to use when performing an intensity integration.
-    If the command is run when program is in $2\theta$ mode,
-    the program will switch to $Q$ mode.\\
-    \macrolinenoquotes{Integrate Number Of Q?}&Number&The number of
-    $Q$ bins to use when performing an intensity integration.
-    If the command is run when program is in $2\theta$ mode,
-    the program will switch to $Q$ mode.\\
-    \macrolinenoquotes{Integrate 2theta Lower?}&Number&The lower
-    $2\theta$ value to use when performing an intensity integration.
-    If the command is run when program is in $Q$ mode,
-    the program will switch to $2\theta$ mode.\\
-    \macrolinenoquotes{Integrate 2theta Upper?}&Number&The upper
-    $2\theta$ value to use when performing an intensity integration.
-    If the command is run when program is in $Q$ mode,
-    the program will switch to $2\theta$ mode.\\
-    \macrolinenoquotes{Integrate Number Of 2theta?}&Number&The number of
-    $2\theta$ bins to use when performing an intensity integration.
-    If the command is run when program is in $Q$ mode,
-    the program will switch to $2\theta$ mode.\\
+    \macrolinenoquotes{Integrate Q Lower?}&Number&Sets the lower
+    $Q$ value used when integrating.
+    If the program is in $2\theta$ mode, it will switch to $Q$ mode.\\
+    \macrolinenoquotes{Integrate Q Upper?}&Number&Sets the upper
+    $Q$ value used when integrating.
+    If the program is in $2\theta$ mode, it will switch to $Q$ mode.\\
+    \macrolinenoquotes{Integrate Number Of Q?}&Number&Sets the number of
+    $Q$ bins used when integrating.
+    If the program is in $2\theta$ mode, it will switch to $Q$ mode.\\
+    \macrolinenoquotes{Integrate 2theta Lower?}&Number&Sets the lower
+    $2\theta$ value used when integrating.
+    If the program is in $Q$ mode, it will switch to $2\theta$ mode.\\
+    \macrolinenoquotes{Integrate 2theta Upper?}&Number&Sets the upper
+    $2\theta$ value used when integrating.
+    If the program is in $Q$ mode, it will switch to $2\theta$ mode.\\
+    \macrolinenoquotes{Integrate Number Of 2theta?}&Number&Sets the number of
+    $2\theta$ bins used when integrating.
+    If the program is in $Q$ mode, it will switch to $2\theta$ mode.\\
     \macrolinenoquotes{Integrate Chi Lower?}&Number&
-    The lower $\chi$ value to use when performing an 
-    intensity integration.\\
+    Sets the lower $\chi$ value used when integrating.\\
     \macrolinenoquotes{Integrate Chi Upper?}&Number&
-    The upper $\chi$ value to use when performing an 
-    intensity integration.\\
+    Sets the upper $\chi$ value used when integrating.\\
     \macrolinenoquotes{Integrate Number Of Chi?}&Number&
-    The number of $\chi$ bins to use when performing an 
-    intensity integration.\\
+    Sets the number of $\chi$ bins used when integrating.\\
     \macrolinenoquotes{Integrate Q-I}&None&Performs a 
-    $Q-I$ integration of the diffraction data. If the
-    command is run when the program is in $2\theta$
-    mode, the program will switch to $Q$ mode.\\
+    $Q$ integration. If the program is in $2\theta$ mode, it 
+    will switch to $Q$ mode.\\
     \macrolinenoquotes{AutoIntegrate Q-I}&None&Picks
-    a good range of $Q$ values and then does the same
-    thing as the \macrolinenoquotes{Integrate Q-I} 
-    command.\\
+    a good range of $Q$ values and does a $Q$ 
+    integration. If the program is in $Q$ mode, 
+    it will switch to $2\theta$ mode.\\
     \macrolinenoquotes{Integrate 2theta-I}&None&Performs
-    a $2\theta-I$ integration of the diffraction data. If
-    the command is run when the program is in $Q$ mode,
-    the program will switch to $2\theta$ mode.\\
+    a $2\theta$ integration. If the program is in $Q$ mode, 
+    it will switch to $2\theta$ mode.\\
     \macrolinenoquotes{AutoIntegrate 2theta-I}&None&
-    Picks a good range of $2\theta$ values and then does
-    the same thing as the \macrolinenoquotes{Integrate 2theta-I}
-    command.\\
+    Picks a good range of $2\theta$ values and does
+    a $2\theta$ integration. If the program is in $Q$ mode, 
+    it will switch to $2\theta$ mode.\\
     \macrolinenoquotes{Integrate chi-I}&None&Performs
-    a $\chi-I$ integration of the diffraction data.\\
+    a $\chi$ integration of the diffraction data.\\
     \macrolinenoquotes{AutoIntegrate chi-I}&None&Picks
-    a good range of $\chi$ values and then does
-    the same thing as the \macrolinenoquotes{Integrate chi-I}
-    command.\\
+    a good range of $\chi$ values and does
+    a $\chi$ integration.\\
     \macrolinenoquotes{Save Integration Data}&Filename&
-    Saves out the intensity integrated data as two column
-    plain text ASCII with the given filename.\\
+    Saves the integrated data to a file.\\
     \macrolinenoquotes{Constrain With Range On Right?}&
-    \selectordeselect&Sets whether or not to apply
-    a constraint to the $Q$ or $2\theta$ vs. $I$ integration 
-    so that the integration is only done of pixels who's 
-    $\chi$ value is within the $\chi$ integration range.\\
+    \selectordeselect&Sets whether or not to 
+    constrain the $Q$ or $2\theta$ integration 
+    with the $\chi$ range.\\
     \macrolinenoquotes{Constrain With Range On Left?}&
-    \selectordeselect&Sets whether or not to apply a constraint
-    to the $\chi$ vs $I$ integration so that the integration
-    is only done of pixels who's $Q$ (or $2\theta$) value
-    is within the $Q$ (or $2\theta$) integration range.\\
+    \selectordeselect&Sets whether or not to constraint
+    the $\chi$ integration with the $Q$ or $2\theta$ range.\\
     \macrolinenoquotes{Integrate Do Polarization Correction?}&
     \selectordeselect&Sets whether or not to use a polarization
-    correction when performing an intensity integration.\\
-    \macrolinenoquotes{Integrate P?}&Number form 0 to 1&sets
-    the value of the polarization correction to use when 
-    performing an intensity integration.\\
+    correction when integrating.\\
+    \macrolinenoquotes{Integrate P?}&Number form 0 to 1&Sets
+    the polarization use when integrating.\\
     \macrolinenoquotes{Integration Data Log Scale?}&
-    \selectordeselect&Sets whether or not to use a log 
-    scale when displaying the diffraction data.\\
+    \selectordeselect&Sets whether or not to display
+    integration data with a log scale.\\
 \end{longtable}
 \end{center}
 
-\section{What You Can't Do With Macros}
+\section{What Macros Can't Do}
 
-Just to be clear:
 \begin{itemize}
     \item There is no way with a macro to zoom into the diffraction
     data, the cake data, or the intensity integrated data
-    \item You can't draw individual polygon masks and you can't remove
-    individual polygon masks. All you can do is load in polygon's from
-    file and save all the current polygons to a file.
-    \item When you load in multiple images at once by giving a file 
-    name, it will only load in images from the file with known 
-    extensions (ie .mar2300, .mar3450, .mccd, .tiff). So give your 
-    files proper extensions before running macros.
+    \item polygon masks can not be drawn or individually removed
+    from the program. Polygons can be loaded from a file with the
+    \macroline{Load Mask} command and they can all be removed with the
+    \macroline{Clear Mask} command.
+    \item Diffraction data can only be loaded if it has a standard 
+    file extension. 
 \end{itemize}
 
