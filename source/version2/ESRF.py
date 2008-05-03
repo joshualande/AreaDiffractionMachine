@@ -45,7 +45,6 @@ with the file that you are trying to open""" % filename)
 file %s has an intensity larger then 2^31-1 which is too big for this \
 program to hold. Any of these large values were clipped to have a value 
 of 2^31-1.""" % filename
-        
 
         # clip any data that is too big
         mask1 =  data <= 2147483647

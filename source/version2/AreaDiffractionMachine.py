@@ -3433,6 +3433,7 @@ either Q or 2theta mode.")
                 ('Mar CCD Format','*.mccd'), 
                 ('ESRF Data Format','*.edf'),
                 ('TIFF','*.tif *.tiff'), 
+                ('Bruker','*.bruker'),
                 ("All files", "*"), ], title="Load Diffraction Image")
 
         if filenames in ['',()]: return 
@@ -3457,6 +3458,8 @@ either Q or 2theta mode.")
             self.extension = "edf"
         if result == "TIFF":
             self.extension = "tiff"
+        if result == "Bruker":
+            self.extension = "bruker"
         if result == "Cancel":
             self.extension = "return"
         self.dialog.deactivate()
@@ -3813,7 +3816,7 @@ before that file can be loaded.")
 
             self.dialog = Pmw.Dialog(self.xrdwin,
                 buttons = ('mar 3450','mar 2300','Mar CCD Format',
-                        'TIFF','Cancel'),
+                        'TIFF','Bruker','Cancel'),
                 defaultbutton = 'Cancel',
                 title = 'What Format is this File?',
                 command = self.setExtension)
@@ -3823,7 +3826,8 @@ before that file can be loaded.")
             # unless you get a good extension, give up and return
             if self.extension != "mar3450" and self.extension != 'mar2300' \
                     and self.extension != "mccd" and self.extension != 'tiff' \
-                    and self.extension != "edf": return 
+                    and self.extension != "edf" and \
+                    self.extension != "bruker": return 
 
             self.diffractionData = DiffractionData(filenames,
                     extension=self.extension)

@@ -25,6 +25,7 @@ import ColorMaps
 import MarXXXX
 import MarCCD
 import ESRF
+import Bruker
 from EdfFile import EdfFile
 import Tiff
 import Transform
@@ -33,7 +34,7 @@ from Exceptions import UnknownFiletypeException, UserInputException
 
 
 # This is here for other objects to refer to
-allExtensions = ['.mccd','.mar2300','.edf','.tiff','.tif','.mar3450']
+allExtensions = ['.mccd','.mar2300','.edf','.tiff','.tif','.mar3450','.bruker']
 
 
 class DiffractionData:
@@ -160,6 +161,8 @@ files because they do not have the same extension")
                     allData.append(ESRF.ESRF(file))
                 elif extension in ["tiff", "tif"]:
                     allData.append(Tiff.Tiff(file))
+                elif extension in ["bruker"]:
+                    allData.append(Bruker.Bruker(file))
                 else:
                     raise UnknownFiletypeException("%s is an unknown filetype" % file)
 
@@ -202,6 +205,8 @@ different size.")
                 self.theDiffractionData = ESRF.ESRF(filename)
             elif extension in ["tiff", "tif"]:
                 self.theDiffractionData = Tiff.Tiff(filename)
+            elif extension in ["bruker"]:
+                self.theDiffractionData = Bruker.Bruker(filename)
             else:
                 raise UnknownFiletypeException("%s is an unknown filetype" % filename)
 
