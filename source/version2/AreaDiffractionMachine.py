@@ -344,6 +344,9 @@ class GraphDisplay:
         self.main.userdeletefunc(func=self.main.withdraw)
         h=self.main.interior()
 
+        # make the window expand properly
+        h.grid_rowconfigure(0,weight=1)
+
         self.graph=LinePlot.LinePlot(h,plotbackground='white',
                 height=350,width=550)
         self.graph.bind(sequence="<ButtonPress>",   
@@ -355,8 +358,7 @@ class GraphDisplay:
         self.graph.bind(sequence="<Leave>", 
                 func=self.nocoordreport)
         self.graph.legend_configure(hide=1)
-        self.graph.pack(side=TOP,expand=1,
-                fill='both',padx=10,pady=10)
+        self.graph.grid(row=0,column=0,sticky=N+W+E+S,padx=10,pady=10)
 
         #zoom stack
         self.zoomstack=[]
@@ -375,7 +377,7 @@ class GraphDisplay:
                 command=self.changeLogScale)
         self.collog.pack(side=RIGHT,fill=X)
 
-        botfr.pack(side=TOP,fill=X)
+        botfr.grid(row=1,column=0,sticky=E,padx=10)
 
     def changeLogScale(self,event=None):
         # Change the logscaleness of the graph

@@ -60,7 +60,7 @@ class Bruker:
             temp.shape = nrow,ncol
         elif npixelb == 4:
             data = Numeric.fromstring(datastring, Numeric.UInt32)
-            data .shape = nrow,ncol
+            data.shape = nrow,ncol
 
             # clip any data that is too big to fit into a signed int.
             mask1 = data <= 2147483647
