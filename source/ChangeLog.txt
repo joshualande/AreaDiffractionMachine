@@ -4,8 +4,8 @@ Change Log for the Area Diffraction Machine
 
 Change log for Version 2 (version 2 has all the version 1 changes in it):
 
-Changes in progress
-    
+Changes in the Betas
+    - Adding support for Bruker data files.
     - Allow for caking in 2theta.
     - Ignores any peaks found inside of polygon masks. Also,
       these peaks are no longer displayed on top of the
@@ -13,6 +13,8 @@ Changes in progress
       top of a polygon mask.
 
 -------
+
+Change Log for version 1 of the Area Diffraction Machine
 
 Changes for version 1.0.4 - (The SVN revision for it is r139)
     -   Minor bug fix in the macro feature

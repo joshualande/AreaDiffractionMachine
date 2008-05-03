@@ -37,7 +37,7 @@ setup(name='Area Diffraction Machine',
       console=[{"script":r"..\source\version2\AreaDiffractionMachine.py",
       "icon_resources":[(1,"LandeBMWIcon.ico")]}],
       data_files = [('.',[r"..\source\version2\colormaps.txt",
-                          r"..\source\version2\ChangeLog.txt",
+                          r"..\source\ChangeLog.txt",
                          r"..\source\version2\tips_and_tricks.html"]),
                     ('xbms',allXBMS),
                     ('StandardQ',allStandardQ)])
