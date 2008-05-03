@@ -21,13 +21,13 @@ class Bruker:
     def __init__(self,filename):
 
         try:
-            file = open(filename,'r')
+            file = open(filename,'rb')
             file.close()
         except IOError:
             raise UserInputException('%s does not exist' % filename)
 
         self.filename = filename
-        file = open(filename,'r')
+        file = open(filename,'rb')
 
         header = {}
 
