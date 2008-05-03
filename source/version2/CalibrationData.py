@@ -535,19 +535,19 @@ class CalibrationData:
     def writeCommentString(self,file):
         """ Writes to a 'file' a comment string which contains the values of the diffraction data. """
         if self.centerX['val'] != None:
-            file.write('#   x center: %15.7f pixels\n' % self.centerX['val'])
+            file.write('#   x center:     %15.7f pixels\n' % self.centerX['val'])
         if self.centerY['val'] != None:
-            file.write('#   y center: %15.7f pixels\n' % self.centerY['val'])
+            file.write('#   y center:     %15.7f pixels\n' % self.centerY['val'])
         if self.distance['val'] != None:
-            file.write('#   distance: %15.7f mm\n' % self.distance['val'])
+            file.write('#   distance:     %15.7f mm\n' % self.distance['val'])
         if self.energy['val'] != None:
-            file.write('#   energy:   %15.7f eV\n' % self.energy['val'])
+            file.write('#   energy:       %15.7f eV\n' % self.energy['val'])
         if self.alpha['val'] != None:
-            file.write('#   alpha:    %15.7f degrees\n' % self.alpha['val'])
+            file.write('#   alpha:        %15.7f degrees\n' % self.alpha['val'])
         if self.beta['val'] != None:
-            file.write('#   beta:     %15.7f degrees\n' % self.beta['val'])
+            file.write('#   beta:         %15.7f degrees\n' % self.beta['val'])
         if self.rotation['val'] != None:
-            file.write('#   rotation: %15.7f degrees\n' % self.rotation['val'])
+            file.write('#   rotation:     %15.7f degrees\n' % self.rotation['val'])
         if self.pixelLength['val'] != None:
             file.write('#   pixel length: %15.7f microns\n' % self.pixelLength['val'])
         if self.pixelHeight['val'] != None:

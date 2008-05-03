@@ -15,7 +15,7 @@ import Fit
 
 # Note that I need to call functions from inside of Cake
 # so I can't do a from Cake import Cake because then
-# it will be ambigous whether I would be calling a 
+# it will be ambiguous whether I would be calling a 
 # function from the file Cake or a function that
 # the object Cake has
 import Cake
@@ -68,7 +68,7 @@ class DiffractionData:
             >>> print '%.10f' % object.getHeaderCenterY()
             1725.0000000000
           
-        A calibrationData object stores the parameters of an experment.
+        A calibrationData object stores the parameters of an experiment.
         calibrationDataFromHeader() will pull this data out of the header
         of the diffraction file and return an object with the data in it.
 
@@ -124,9 +124,9 @@ class DiffractionData:
         """ Does everything to initialize the object. 
             Either you can pass in the type of file that you are using
             by explicitly giving its extension, or the program can try
-            to figure this out for you. filenames must be a list of all of the
+            to figure this out for you. Filenames must be a list of all of the
             files that will be opened and added together. If the list 
-            only has one file in it, then only that one will be loaeded. """
+            only has one file in it, then only that one will be loaded. """
 
         if len(filenames) < 1:
             raise Exception("Cannot initialize a DiffractionData \
@@ -146,8 +146,8 @@ object without being given at least one file to load in.")
 
                 for extension in extensions:
                     if extension != extensions[0]:
-                        raise UnknownFiletypeException("Cannot read in multiple \
-files because they do not have the same extension")
+                        raise UnknownFiletypeException("Cannot \
+read in multiple files because they do not have the same extension")
 
                 extension = extensions[0] # Only one extension to store
 
@@ -164,19 +164,20 @@ files because they do not have the same extension")
                 elif extension in ["bruker"]:
                     allData.append(Bruker.Bruker(file))
                 else:
-                    raise UnknownFiletypeException("%s is an unknown filetype" % file)
+                    raise UnknownFiletypeException("%s is an unknown file \
+type" % file)
 
             for data in allData:
                 if data.size != allData[0].size:
-                    raise UserInputException("Cannot add files because they are of \
-different size.")
+                    raise UserInputException("Cannot add files because \
+they are of different size.")
 
             filename = ""
             # store all filenames in one string
             for index in range(len(allData)):
                 filename += allData[index].filename.strip() + " "
 
-            self.theDiffractionData = allData.pop() # store all iamges in one
+            self.theDiffractionData = allData.pop() # store all images in one
 
             # add all the data together
             for data in allData:
@@ -208,7 +209,8 @@ different size.")
             elif extension in ["bruker"]:
                 self.theDiffractionData = Bruker.Bruker(filename)
             else:
-                raise UnknownFiletypeException("%s is an unknown filetype" % filename)
+                raise UnknownFiletypeException("%s is an unknown file \
+type" % filename)
 
 
     def saveDiffractionImage(self,filename,colorMaps,colorMapName,
@@ -222,7 +224,7 @@ different size.")
         # save EDF data specially
         if getextension(filename) == ".edf":
             edf = EdfFile(filename)
-            #You can write any relevant information in the dictionnary.
+            #You can write any relevant information in the dictionary.
             edf.WriteImage({'Title':"Edf file converted by the Area Diffraction Machine"},
                     Numeric.transpose(self.theDiffractionData.data),
                     DataType= "SignedInteger",
@@ -240,7 +242,7 @@ different size.")
 
         if drawQLines or drawdQLines:
             if QData == None:
-                raise Exception("Cannot save the diffraction data until a q \
+                raise Exception("Cannot save the diffraction data until a Q \
 list is given.")
             if calibrationData == None:
                 raise Exception("Cannot save the diffraction data until the \
@@ -256,8 +258,8 @@ the q line color is set.')
 
             if drawdQLines:
                 if dQLinesColor == None:
-                    raise Exception('Cannot add delta q lines to the saved image \
-until the delta q line color is set.')
+                    raise Exception('Cannot add delta Q lines to the saved image \
+until the delta Q line color is set.')
                 for Q,dQ in QData.getAllQPairs():
                     MakeDiffractionImage.addConstantQLineDiffractionImage(
                             image,Q-dQ,calibrationData,dQLinesColor)
@@ -266,7 +268,7 @@ until the delta q line color is set.')
 
         if drawPeaks and peakList != None:
             if peakLinesColor == None:
-                raise Exception("Cannot add peaks to the saved iamge until \
+                raise Exception("Cannot add peaks to the saved image until \
 the peak color is set.")
 
             MakeDiffractionImage.addPeaksDiffractionImage(image,peakList,
@@ -333,7 +335,7 @@ file extension" % filename )
                 max(int(pixel1X),int(pixel2X)),
                 max(int(pixel1Y),int(pixel2Y))))
         if width != None and height != None:
-            temp = temp.resize( (width, height), Image.BILINEAR )
+            temp = temp.resize((width,height),Image.BILINEAR)
         return temp
 
 
@@ -382,9 +384,11 @@ file extension" % filename )
     def getPixelValueBilinearInterpolation(self,x,y):
         if x<0 or x>self.theDiffractionData.size or \
                 y<0 or y>self.theDiffractionData.size:
-            raise Exception("Cannot calculate the intensity outside of the image.\n")
+            raise Exception("Cannot calculate the intensity \
+outside of the image.\n")
 
-        return DiffractionAnalysisWrap.bilinearInterpolation(self.theDiffractionData.data,x,y)
+        return DiffractionAnalysisWrap.bilinearInterpolation(
+                self.theDiffractionData.data,x,y)
 
 
     def calibrationDataFromHeader(self):
@@ -428,9 +432,11 @@ file extension" % filename )
         return data
 
 
-    def fit(self,initialGuess,qData,maskedPixelInfo,numberOfChi=None,stddev=None,peakList=None):
+    def fit(self,initialGuess,qData,maskedPixelInfo,
+            numberOfChi=None,stddev=None,peakList=None):
         if (numberOfChi==None and peakList==None):
-            raise Exception("Cannot fit the calibration data unless either the number of chi values or a peak list are given.")
+            raise Exception("Cannot fit the calibration data \
+unless either the number of chi values or a peak list are given.")
 
         # make peak list
         if peakList == None:
@@ -442,28 +448,34 @@ file extension" % filename )
                 initialGuess,peakList,maskedPixelInfo)
 
 
-    def savePeakListToFile(self,filename,initialGuess,qData,numberOfChi,maskedPixelInfo,stddev):
+    def savePeakListToFile(self,filename,initialGuess,qData,
+            numberOfChi,maskedPixelInfo,stddev):
         peakList = Fit.getPeakList(self.theDiffractionData.data,qData,
                 initialGuess,numberOfChi,stddev)
 
         # now, save to file
         file = open(filename,'w')
-        file.write("# A list of peaks found in the diffraction image.\n")
+        file.write("# A list of diffraction peaks found.\n")
+        file.write("# Diffraction Data: %s\n" % self.theDiffractionData.filename)
         file.write("# Calculated on "+time.asctime()+"\n")
         file.write("# Calibration data used to find peaks:\n")
         initialGuess.writeCommentString(file)
+        file.write("# Q data used to find peaks:\n")
+        file.write("# Peaks:\n")
+        qData.writeCommentString(file)
 
         if maskedPixelInfo.doPolygonMask and maskedPixelInfo.numPolygons() > 0:
             file.write("# All peaks inside of polygon mask(s) were ignored.\n")
             file.write(maskedPixelInfo.writePolygonCommentString())
 
-        file.write("#\tx\ty\tRealQ\tFitQ\tchi\twidth\tintensity\t2theta\n")
+        file.write("#%16s%21s%21s%21s%21s%21s%21s%21s\n" % \
+                ('x','y','Real Q','Fit Q','chi','width','intensity','2theta'))
         for peak in peakList.getMaskedPeakList(maskedPixelInfo):
             x,y,realQ,fitQ,chi,width = peak
             
             intensity=self.getPixelValueBilinearInterpolation(x,y)
             twoTheta = Transform.convertQToTwoTheta(fitQ,initialGuess)
-            file.write("%f\t%f\t%f\t%f\t%f\t%f\t%f\t%f\n" % \
+            file.write("%17.10f    %17.10f    %17.10f    %17.10f    %17.10f    %17.10f    %17.10f    %17.10f\n" % \
                     (x,y,realQ,fitQ,chi,width,intensity,twoTheta) )
         file.close()
         return peakList

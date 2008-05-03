@@ -5,7 +5,7 @@ from Exceptions import UserInputException
 class QData:
     r"""This class provides the ability to store a list of Q and delta Q
         values. Each Q and delta Q value defines a Q range from Q-delta Q 
-        to Q+delta Q. The object inforces that none of the Q ranges overlap.
+        to Q+delta Q. The object enforces that none of the Q ranges overlap.
         This object provides several useful functions for
         dealing with this Q data. To input Q values, you can use the 
         function addQPair() where the 2 inputs are Q and delta Q.
@@ -157,8 +157,8 @@ class QData:
           File "QData.py", line 274, in addDPair
             self.addQPair(Q,dQ)
           File "QData.py", line 262, in addQPair
-            raise UserInputException("Error, cannot complete fucntion addQPair because the input pair (%f,%f) overlaps the pair (%f,%f)" % (Q,dQ,QLoop,dQLoop))
-        UserInputException: 'Error, cannot complete fucntion addQPair because the input pair (12.566371,251.327412) overlaps the pair (3.141593,0.314159)'
+            raise UserInputException("Error, cannot complete function addQPair because the input pair (%f,%f) overlaps the pair (%f,%f)" % (Q,dQ,QLoop,dQLoop))
+        UserInputException: 'Error, cannot complete function addQPair because the input pair (12.566371,251.327412) overlaps the pair (3.141593,0.314159)'
         """
 
     QList = []
@@ -169,6 +169,15 @@ class QData:
         if fileName!='':
             self.fromFile(fileName)
         current = ''
+
+        
+    def writeCommentString(self,file):
+        """ Writes to a 'file' a comment string which contains \
+the values of the diffraction data. """
+
+        file.write("#   %14s%18s\n" % ("Q","Delta Q"))
+        for Q,dQ in self.QList:
+            file.write("#   %14.10f    %14.10f\n" % (Q,dQ))
 
 
     def fromFile(self,filename):
@@ -195,11 +204,15 @@ class QData:
             words = [ words[0], words[1]+' '+words[2] ]
 
         if len(words) != 2:
-            raise UserInputException('%s is not a proper QData file. The first line of the file is "%s" but it should be of the form "Q dQ" or "D dD".' % (filename,originalLine) )
+            raise UserInputException('%s is not a proper QData file. \
+The first line of the file is "%s" but it should be of the form \
+"Q dQ" or "D dD".' % (filename,originalLine) )
 
         if words[0] == "q":
             if words[1] != "dq" and words[1] != "delta q":
-                raise UserInputException('%s is not a proper QData file. The first line of the file is "%s" but it should be of the form "Q    dQ" or "D   dD".' % (filename,originalLine) )
+                raise UserInputException('%s is not a proper QData file. \
+The first line of the file is "%s" but it should be of the form \
+"Q    dQ" or "D   dD".' % (filename,originalLine) )
 
             line = file.readline()
             while line:
@@ -210,7 +223,9 @@ class QData:
 
                 words = line.split()
                 if len(words)!=2:
-                    raise UserInputException('%s is not a proper QData file. One of the lines of data does not have exactly 2 numbers (one for the value, and one for the uncertainty).' % filename)
+                    raise UserInputException('%s is not a proper QData file. \
+One of the lines of data does not have exactly 2 numbers (one for the value, \
+and one for the uncertainty).' % filename)
 
                 self.addQPair(float(words[0]),float(words[1]) )
 
@@ -220,7 +235,9 @@ class QData:
 
         elif words[0] == "d":
             if words[1] != "dd" and words[1] != "delta d":
-                raise UserInputException('%s is not a proper QData file. The first line of the file is "%s" but it should be of the form "Q    dQ" or "D   dD".' % (filename,line) )
+                raise UserInputException('%s is not a proper QData file. The \
+first line of the file is "%s" but it should be of the form "Q    dQ" or \
+"D   dD".' % (filename,line) )
 
             line = file.readline()
             while line:
@@ -232,19 +249,25 @@ class QData:
 
                 words = line.split()
                 if len(words)!=2:
-                    raise UserInputException('%s is not a proper QData file. One of the lines of data does not have exactly 2 numbers (one for the value, and one for the uncertainty).' % filename)
+                    raise UserInputException('%s is not a proper QData file. \
+One of the lines of data does not have exactly 2 numbers (one for the value, \
+and one for the uncertainty).' % filename)
 
                 self.addDPair( float(words[0]),float(words[1]) )
                 line = file.readline()
 
         else:
-            raise UserInputException('%s is not a proper QData file. The first line of the file is "%s" but it should be of the form "Q    dQ" or "D   dD".' % (filename,line) )
+            raise UserInputException('%s is not a proper QData file. The first \
+line of the file is "%s" but it should be of the form "Q    dQ" or \
+"D   dD".' % (filename,line) )
 
 
     def next(self):
-        """ This function can be used for iterating through all the Q,dQ pairs. """
+        """ This function can be used for iterating through all 
+        the Q,dQ pairs. """
         if self.current == '':
-            raise UserInputException('Function next() cannot be called because no Q values have been entered into the array')
+            raise UserInputException('Function next() cannot be \
+called because no Q values have been entered into the array')
 
         if self.current >= len(self.QList):
             self.current = 0

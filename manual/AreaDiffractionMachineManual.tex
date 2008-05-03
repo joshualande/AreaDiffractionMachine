@@ -1,4 +1,4 @@
-\documentclass[12pt]{book}
+\documentclass[12pt]{report}
 \usepackage{fullpage,setspace}
 
 \usepackage{tocbibind}
@@ -36,16 +36,15 @@
 \newcommand{\macrolinenoquotes}[1]{{\tt #1}}
 \newcommand{\selectordeselect}[0]{\macrolinenoquotes{Select} or \macrolinenoquotes{Deselect} }
 
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
 
 % This is formatting for the source code and 
 % other files in my paper
 \lstset{numbers=left,columns=fixed}
-%\lstset{basicstyle=\ttfamily}
 \lstset{basicstyle=\ttfamily\small}
 \lstset{language=csh}
 \lstset{xleftmargin=3em,xrightmargin=3em}
 \lstset{frame=tb}
-%\lstset{commentstyle=\bfseries\color{black}\underbar}
 
 
 \begin{document}
@@ -60,7 +59,7 @@
 
 \setcounter{page}{1}
 
-\maketitle
+\include{title_page}
 
 \tableofcontents
 

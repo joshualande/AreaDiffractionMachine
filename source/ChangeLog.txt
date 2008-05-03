@@ -5,23 +5,38 @@ Change Log for the Area Diffraction Machine
 Change log for Version 2 (version 2 has all the version 1 changes in it):
 
 Changes in the Betas
-    - Adding support for Bruker data files.
-    - Allow for caking in 2theta.
-    - Ignores any peaks found inside of polygon masks. Also,
-      these peaks are no longer displayed on top of the
-      diffraction and cake displays when they are on 
-      top of a polygon mask.
+
+    Major
+    -   Adding support for Bruker data files.
+    -   Allow for caking in 2theta.
+    -   Ignores any peaks found inside of polygon masks. Also,
+        these peaks are no longer displayed on top of the
+        diffraction and cake displays when they are on 
+        top of a polygon mask.
+    -   Improved the formatting of saved peak list files.
+        They have a better structure (space separated instead
+        of tab separated) and a more verbose header.
+    Minor 
+    -   Fix a bug where the integration window wouldn't resize
+        properly and sometimes the labels and check box at
+        the bottom of the window would disappear
 
 -------
 
 Change Log for version 1 of the Area Diffraction Machine
 
+Changes for upcoming version
+
+    -   Fixed a minor bug where an error would be raised when you
+        tried to finish drawing adding a polygon before adding any
+        nodes to it.
+
 Changes for version 1.0.4 - (The SVN revision for it is r139)
-    -   Minor bug fix in the macro feature
-    - Fix a bug where when displaying the residual function,
-      the program would, even after fitting say something
-      like "Before fitting, the calculated residual is 
-      6.532131e-06". Now it says "After fitting" as it should.
+    -   Fixed Minor bug fix in the macro feature
+    -   Fix a bug where when displaying the residual function,
+        the program would, even after fitting say something
+        like "Before fitting, the calculated residual is 
+        6.532131e-06". Now it says "After fitting" as it should.
 
 Changes for version 1.0.3 - (The SVN revision for it is r114)
 
