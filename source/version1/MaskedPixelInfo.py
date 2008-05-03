@@ -323,6 +323,10 @@ class MaskedPixelInfo:
     def addPolygon(self,polygon):
         """ Adds a polygon to the objects. The polygon should be 
             a list of the form (x1,y1,x2,y2, ...) """
+
+        if type(polygon) != type([]):
+            return
+
         if len(polygon) % 2 != 0:
             raise Exception("Cannot add polygon because the number of x cordinates and y cordinates are not equal.")
 

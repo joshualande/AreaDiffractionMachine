@@ -2861,6 +2861,11 @@ class Main:
 
     
     def savePolygonsToFile(self,filename=''):
+
+        if self.maskedPixelInfo.numPolygons() < 1: 
+            raise UserInputException("Cannot save polygons to a \
+file until there are polygons to save.")
+
         if filename in ['',()]: 
             defaultextension = ".dat"
             filename = tkFileDialog.asksaveasfilename(

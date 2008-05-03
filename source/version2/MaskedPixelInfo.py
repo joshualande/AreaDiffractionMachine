@@ -90,7 +90,7 @@ class MaskedPixelInfo:
 
         By the way, the reason I did this was because I needed to 
         be able to pass these polygons into C code so that I could
-        quickly use them to do data analysis. And C dosen't allow for
+        quickly use them to do data analysis. And C doesn't allow for
         very flexible file formats, so I figured this was the easiest
         and most transparent way to do things. Also, I am using
         a particular C algorithm to test if a point is inside of 
@@ -335,9 +335,13 @@ class MaskedPixelInfo:
     def addPolygon(self,polygon):
         """ Adds a polygon to the objects. The polygon should be 
             a list of the form (x1,y1,x2,y2, ...) """
+
+        if type(polygon) != type([]):
+            return
+
         if len(polygon) % 2 != 0:
             raise Exception("Cannot add polygon because \
-the number of x cordinates and y cordinates are not equal.")
+the number of x coordinates and y coordinates are not equal.")
 
         # No reason to add a polygon with no area
         if len(polygon) <= 4:
