@@ -302,7 +302,7 @@ increases to the right\n")
 
         for chiLoop in range(self.numChi):
             for qOrTwoThetaLoop in range(self.numQOrTwoTheta):
-                val = '%17.8E' % \
+                val = '%17.10E    ' % \
                         self.cakeData[chiLoop][qOrTwoThetaLoop]
                 file.write(val)
             if chiLoop!= self.numChi-1:

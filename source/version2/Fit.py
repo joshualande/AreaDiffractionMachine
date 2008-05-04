@@ -6,7 +6,6 @@ from math import floor,ceil,pi,sqrt
 import tempfile
 import os
 import Numeric
-
 import copy
 from random import Random
 import CalibrationData
@@ -16,20 +15,18 @@ import FitWrap
 import PeakList
 from Exceptions import UserInputException
 
-
-
 def fit(data,initialGuess,peakList,maskedPixelInfo,verbose=1):
-
-    print 
-    print 'Performing the image calibration'
 
     # create nice Numeric data structures to store all of 
     # the peak stuff in. This lets us read our data easily 
     # once we get into C
     xValues,yValues,qReal,chi,width,intensity = peakList.getMaskedPeakArrays(maskedPixelInfo,data)
 
+
     # make C do the hard work :)
-    centerX,centerY,distance,energy,alpha,beta,rotation,covariance = FitWrap.fitCalibrationParameters(
+    centerX,centerY,distance,energy,alpha,beta,rotation, \
+            covariance,initialResidual,finalResidual, \
+            reasonForQuitting = FitWrap.fitCalibrationParameters(
             xValues,yValues,qReal,intensity,
             initialGuess.getCenterX()['val'],
             initialGuess.getCenterX()['fixed'],
@@ -48,32 +45,21 @@ def fit(data,initialGuess,peakList,maskedPixelInfo,verbose=1):
             initialGuess.getPixelLength()['val'],
             initialGuess.getPixelHeight()['val'])
 
-    print 'Covariance Matrix'
-    print Numeric.array2string(covariance,precision=2)
-    print 'Root of the diagonal of the covariance matrix (I think these are uncertainties)'
-    print 'xc: ',sqrt(covariance[0][0])
-    print 'yc: ',sqrt(covariance[1][1])
-    print 'd: ',sqrt(covariance[2][2])
-    print 'E: ',sqrt(covariance[3][3])
-    print 'alpha: ',sqrt(covariance[4][4])
-    print 'beta: ',sqrt(covariance[5][5])
-    print 'rotation: ',sqrt(covariance[6][6])
-
 
     # add the fit data to a new calibration file
-    ret = CalibrationData.CalibrationData() 
-    ret.setCenterX(centerX, fixed = initialGuess.getCenterX()['fixed'] )
-    ret.setCenterY(centerY, fixed = initialGuess.getCenterY()['fixed'] )
-    ret.setDistance(distance, fixed = initialGuess.getDistance()['fixed'] )
-    ret.setEnergy(energy, fixed = initialGuess.getEnergy()['fixed'] )
-    ret.setAlpha(alpha, fixed = initialGuess.getAlpha()['fixed'] )
-    ret.setBeta(beta, fixed = initialGuess.getBeta()['fixed'] )
-    ret.setRotation(rotation, fixed = initialGuess.getRotation()['fixed'] )
+    bestGuess = CalibrationData.CalibrationData() 
+    bestGuess.setCenterX(centerX, fixed = initialGuess.getCenterX()['fixed'] )
+    bestGuess.setCenterY(centerY, fixed = initialGuess.getCenterY()['fixed'] )
+    bestGuess.setDistance(distance, fixed = initialGuess.getDistance()['fixed'] )
+    bestGuess.setEnergy(energy, fixed = initialGuess.getEnergy()['fixed'] )
+    bestGuess.setAlpha(alpha, fixed = initialGuess.getAlpha()['fixed'] )
+    bestGuess.setBeta(beta, fixed = initialGuess.getBeta()['fixed'] )
+    bestGuess.setRotation(rotation, fixed = initialGuess.getRotation()['fixed'] )
     # pixel length & height don't change
-    ret.setPixelLength(initialGuess.getPixelLength()['val'])
-    ret.setPixelHeight(initialGuess.getPixelHeight()['val'])
+    bestGuess.setPixelLength(initialGuess.getPixelLength()['val'])
+    bestGuess.setPixelHeight(initialGuess.getPixelHeight()['val'])
 
-    return ret,peakList
+    return bestGuess,peakList,covariance,initialResidual,finalResidual,reasonForQuitting
 
 
 def getPeakList(data,qData,initialGuess,numberOfChi,stddev,verbose=1):
@@ -86,11 +72,8 @@ def getPeakList(data,qData,initialGuess,numberOfChi,stddev,verbose=1):
     chiStep = (chiUpper-chiLower)*1.0/(numberOfChi-1)
 
     peakList = PeakList.PeakList()
-    print 'len = ',len(peakList.peakList)
 
-    if verbose: print ' - %d total Q values. Calculating peaks for Q =' % (len(qData.getAllQPairs())),
     for Q,dQ in qData.getAllQPairs():
-        if verbose: print ' %f' % Q,
 
         for chi in frange(chiLower,chiUpper,chiStep):
             try:
@@ -105,6 +88,5 @@ def getPeakList(data,qData,initialGuess,numberOfChi,stddev,verbose=1):
             except ValueError: # this means no peak found
                 pass
 
-    print 
     return peakList
     

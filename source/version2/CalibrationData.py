@@ -17,23 +17,24 @@ class CalibrationData:
         will do the proper conversion so that you set whichever you
         want and get whatever you say. 
         * Alpha and Beta, the two tilts of the detector.
-        * pixellength and pixelheight are the width and height of
+        * pl and ph are the width and height of
         each pixel in microns.
 
         This object is smart enough to deal with files of calibration Data.
         The calibration data file format is easy to use. Here is an example
         calibration data file:
-        +-----------------------+
-        |# Calibration File     |         
-        |xc	1                   |
-        |yc	2                   |
-        |D	3                   |
-        |E	4                   |
-        |alpha	5               |
-        |beta   -10             |
-        |pixellength    100     |
-        |pixelheight    100     |
-        +-----------------------+
+        +-------------------+
+        |# Calibration File |         
+        |xc	      500       |
+        |yc	      800       |
+        |D	       81       |
+        |E	    30000       |
+        |alpha	    5       |
+        |beta     -10       |
+        |R        350       |
+        |pl       100       |
+        |ph       100       |
+        +-------------------+
         This is easy. You can have this object read in one of these files
         with the method fromFile() and write to the file with the method
         toFile().
@@ -474,84 +475,99 @@ class CalibrationData:
             raise UserInputException("Function toFile() cannot run because parameter energyOrWavelength must be set to either 'energy' or 'wavelength'.")
 
         file = open(filename,'w')
-        file.write("# Calibration File\n")
+        file.write("# Calibration Parameters\n")
 
         # write the fixed values to the file
         dict = self.getCenterX()
-        file.write('xc\t%f\t%d\n' % (dict['val'],dict['fixed']))
+        file.write('xc         %17.10f %d\n' % (dict['val'],dict['fixed']))
 
         dict = self.getCenterY()
-        file.write('yc\t%f\t%d\n' % (dict['val'],dict['fixed']))
+        file.write('yc         %17.10f %d\n' % (dict['val'],dict['fixed']))
 
         dict = self.getDistance()
-        file.write('D\t%f\t%d\n' % (dict['val'],dict['fixed']))
+        file.write('D          %17.10f %d\n' % (dict['val'],dict['fixed']))
 
         if energyOrWavelength == 'energy':
             dict = self.getEnergy()
-            file.write('E\t%f\t%d\n' % (dict['val'],dict['fixed']))
+            file.write('E          %17.10f %d\n' % (dict['val'],dict['fixed']))
         if energyOrWavelength == 'wavelength':
             dict = self.getWavelength()
-            file.write('wavelength\t%f\t%d\n' % (dict['val'],dict['fixed']))
+            file.write('wavelength %17.10f %d\n' % (dict['val'],dict['fixed']))
 
         dict = self.getAlpha()
-        file.write('alpha\t%f\t%d\n' % (dict['val'],dict['fixed']))
+        file.write('alpha      %17.10f %d\n' % (dict['val'],dict['fixed']))
 
         dict = self.getBeta()
-        file.write('beta\t%f\t%d\n' % (dict['val'],dict['fixed']))
+        file.write('beta       %17.10f %d\n' % (dict['val'],dict['fixed']))
         
         dict = self.getRotation()
-        file.write('rotation\t%f\t%d\n' % (dict['val'],dict['fixed']))
+        file.write('R          %17.10f %d\n' % (dict['val'],dict['fixed']))
 
         dict = self.getPixelLength()
-        file.write('pixelLength\t%f\n' % dict['val'])
+        file.write('pl         %17.10f\n' % dict['val'])
 
         dict = self.getPixelHeight()
-        file.write('pixelHeight\t%f\n' % dict['val'])
+        file.write('ph         %17.10f\n' % dict['val'])
 
 
     def __str__(self):
-        """ Stringify the object. Useful for debugging. """
         string = ''
         if self.centerX['val'] != None and self.centerX['fixed'] != None:
-            string+=' - x center:    %15.7f     fixed = %d\n' % (self.centerX['val'],self.centerX['fixed'])
+            string+='xc    %17.10f %d\n' % \
+                (self.centerX['val'],self.centerX['fixed'])
+
         if self.centerY['val'] != None and self.centerY['fixed'] != None:
-            string+=' - y center:    %15.7f     fixed = %d\n' % (self.centerY['val'],self.centerY['fixed'])
+            string+='yc    %17.10f %d\n' % \
+                (self.centerY['val'],self.centerY['fixed'])
+
         if self.distance['val'] != None and self.distance['fixed'] != None:
-            string+=' - distance:    %15.7f     fixed = %d\n' % (self.distance['val'],self.distance['fixed'])
+            string+='D     %17.10f %d\n' % \
+                (self.distance['val'],self.distance['fixed'])
+
         if self.energy['val'] != None and self.energy['fixed'] != None:
-            string+=' - energy:      %15.7f     fixed = %d\n' % (self.energy['val'],self.energy['fixed'])
+            string+='E     %17.10f %d\n' % \
+                (self.energy['val'],self.energy['fixed'])
+
         if self.alpha['val'] != None and self.alpha['fixed'] != None:
-            string+=' - alpha:       %15.7f     fixed = %d\n' % (self.alpha['val'],self.alpha['fixed'])
+            string+='alpha %17.10f %d\n' % \
+                (self.alpha['val'],self.alpha['fixed'])
+
         if self.beta['val'] != None and self.beta['fixed'] != None:
-            string+=' - beta:        %15.7f     fixed = %d\n' % (self.beta['val'],self.beta['fixed'])
+            string+='beta  %17.10f %d\n' % \
+                (self.beta['val'],self.beta['fixed'])
+
         if self.rotation['val'] != None and self.rotation['fixed'] != None:
-            string+=' - rotation:    %15.7f     fixed = %d\n' % (self.rotation['val'],self.rotation['fixed'])
+            string+='R     %17.10f %d\n' % \
+                (self.rotation['val'],self.rotation['fixed'])
+
         if self.pixelLength['val'] != None:
-            string+=' - pixelLength: %15.7f\n' % self.pixelLength['val']
+            string+='pl    %17.10f\n' % self.pixelLength['val']
+
         if self.pixelHeight['val'] != None:
-            string+=' - pixelHeight: %15.7f\n' % self.pixelHeight['val']
+            string+='ph    %17.10f\n' % self.pixelHeight['val']
+
         return string
 
     def writeCommentString(self,file):
         """ Writes to a 'file' a comment string which contains the values of the diffraction data. """
         if self.centerX['val'] != None:
-            file.write('#   x center:     %15.7f pixels\n' % self.centerX['val'])
+            file.write('#   xc    %17.10f pixels\n' % self.centerX['val'])
         if self.centerY['val'] != None:
-            file.write('#   y center:     %15.7f pixels\n' % self.centerY['val'])
+            file.write('#   yc    %17.10f pixels\n' % self.centerY['val'])
         if self.distance['val'] != None:
-            file.write('#   distance:     %15.7f mm\n' % self.distance['val'])
+            file.write('#   D     %17.10f mm\n' % self.distance['val'])
         if self.energy['val'] != None:
-            file.write('#   energy:       %15.7f eV\n' % self.energy['val'])
+            file.write('#   E     %17.10f eV\n' % self.energy['val'])
         if self.alpha['val'] != None:
-            file.write('#   alpha:        %15.7f degrees\n' % self.alpha['val'])
+            file.write('#   alpha %17.10f degrees\n' % self.alpha['val'])
         if self.beta['val'] != None:
-            file.write('#   beta:         %15.7f degrees\n' % self.beta['val'])
+            file.write('#   beta  %17.10f degrees\n' % self.beta['val'])
         if self.rotation['val'] != None:
-            file.write('#   rotation:     %15.7f degrees\n' % self.rotation['val'])
+            file.write('#   R     %17.10f degrees\n' % self.rotation['val'])
         if self.pixelLength['val'] != None:
-            file.write('#   pixel length: %15.7f microns\n' % self.pixelLength['val'])
+            file.write('#   pl     %17.10f microns\n' % self.pixelLength['val'])
         if self.pixelHeight['val'] != None:
-            file.write('#   pixel height: %15.7f microns\n' % self.pixelHeight['val'])
+            file.write('#   ph     %17.10f microns\n' % self.pixelHeight['val'])
          
 
     def setCenterX(self,val,fixed=0,lower=None,upper=None):

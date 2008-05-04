@@ -427,7 +427,7 @@ class GraphDisplay:
             self.graph.marker_configure("marking rectangle", 
                 coords = (x0,y0,x1,y0,x1,y1,x0,y1,x0,y0))
         except:
-            # it dosen't matter if this dose not work
+            # it doesn't matter if this dose not work
             pass
         self.coordreport(event)
     
@@ -577,22 +577,18 @@ class FieldBox:
     """ Entryfield-Checkbutton Classes """
 
     def __init__(self,master,name='',validate=None,noCheckBox=0):
-        w=10
+        w=15
         bf=Frame(master)
         bf.pack(side=TOP,padx=2,pady=0,anchor=W)
-        self.ef=Pmw.EntryField(bf,entry_width=10,labelpos='w',
+        self.ef=Pmw.EntryField(bf,entry_width=w,labelpos='w',
                 label_text=name+': ',validate=validate)
         self.ef.pack(side=LEFT,padx=5,pady=1)
         if not noCheckBox:
-            # put a checkbox unless explicily told not to
+            # put a check box unless explicitly told not to
             self.fixedvar=IntVar()
             self.cb=Checkbutton(bf,variable=self.fixedvar,text='')
             self.cb.pack(side=LEFT,padx=10,pady=1)
         else: 
-            # put somethere else there to fill up space
-            #temp = Label(bf,text='')
-            # pad it a lot so that everything fits
-            #temp.pack(side=LEFT,padx=20,pady=1)
             pass
 
     
@@ -1050,12 +1046,19 @@ class Main:
         ff.pack(side=TOP,padx=2,pady=2,fill='both')
         ffl=Frame(ff)
         ffl.pack(side=LEFT,padx=40,pady=2)
-        self.doFitButton=Button(ffl,text='Do Fit',width=w,
-                fg='snow',bg='darkgreen',command=self.doFit)
-        self.doFitButton.pack(side=TOP,padx=15,pady=10)
-        self.makeSavePeakListButton=Button(ffl,text='Make/Save Peak List',
-                width=w,fg='snow',bg='goldenrod4',command=self.savePeakList)
-        self.makeSavePeakListButton.pack(side=TOP,padx=15,pady=10)
+
+        b=Pmw.ButtonBox(ffl,labelpos='n',orient='vertical')
+        b.add('Do Fit',command=self.doFit,
+                bg='darkgreen',fg='snow',width=w)
+        self.doFitButton = b.component('Do Fit')
+        b.add('Save Last Fit',command=self.saveLastFit,
+                bg='royalblue3',fg='snow',width=w)
+        self.saveLastFitButton = b.component('Save Last Fit')
+        b.add('Make/Save Peak List',command=self.savePeakList,
+                bg='goldenrod4',fg='snow',width=w)
+        self.makeSavePeakListButton = b.component('Make/Save Peak List')
+        b.pack(side=LEFT,padx=15,pady=2,fill=X)
+
         #Peak list opts
         ffm=Frame(ff)
         ffm.pack(side=LEFT,padx=40,pady=2)
@@ -1169,7 +1172,7 @@ class Main:
         g=Pmw.Group(cakepage,tag_text='Cake Parameters')
         g.pack(side=TOP,padx=5,pady=10,fill='both')
 
-        width=10
+        width=15
 
         self.qOrTwoThetaLowerCake=Pmw.EntryField(g.interior(),
                 labelpos = 'w', label_text = "Q Lower?",
@@ -1265,19 +1268,19 @@ class Main:
 
         self.QOrTwoThetaLowerIntegrate=Pmw.EntryField(qg.interior(),
                 labelpos = 'w', label_text = "Q Lower?",
-                value = '', entry_width=10,
+                value = '', entry_width=width,
                 validate={'validator':'real','min':0,'max':999}) 
         self.QOrTwoThetaLowerIntegrate.pack(side=TOP,padx=2,pady=1)
 
         self.QOrTwoThetaUpperIntegrate=Pmw.EntryField(qg.interior(),
                 labelpos = 'w', label_text = "Q Upper?",
-                value = '', entry_width=10,
+                value = '', entry_width=width,
                 validate={'validator':'real','min':0,'max':999}) 
         self.QOrTwoThetaUpperIntegrate.pack(side=TOP,padx=2,pady=1)
 
         self.numQOrTwoThetaIntegrate=Pmw.EntryField(qg.interior(),
                 labelpos = 'w', label_text = "Number Of Q?",
-                value = '', entry_width=10,
+                value = '', entry_width=width,
                 validate={'validator':'numeric','min':0,'max':99999}) 
         self.numQOrTwoThetaIntegrate.pack(side=TOP,padx=2,pady=1)
 
@@ -1295,7 +1298,7 @@ class Main:
 
         self.integrateQOrTwoThetaIButton=Button(qg.interior(),
                 text='Integrate',fg='snow',bg='darkgreen',
-                width=w,command=self.integrateQOrTwoThetaI)        
+                width=width,command=self.integrateQOrTwoThetaI)        
         self.integrateQOrTwoThetaIButton.pack(side=TOP,padx=5,pady=5)
         
         #Chi-I side
@@ -1306,19 +1309,19 @@ class Main:
 
         self.chiLowerIntegrate=Pmw.EntryField(cg.interior(),
                 labelpos = 'w', label_text = "Chi Lower?",
-                value = '', entry_width=10,
+                value = '', entry_width=width,
                 validate={'validator':'real','min':-360,'max':360}) 
         self.chiLowerIntegrate.pack(side=TOP,padx=2,pady=1)
 
         self.chiUpperIntegrate=Pmw.EntryField(cg.interior(),
                 labelpos = 'w', label_text = "Chi Upper?",
-                value = '', entry_width=10,
+                value = '', entry_width=width,
                 validate={'validator':'real','min':-360,'max':360}) 
         self.chiUpperIntegrate.pack(side=TOP,padx=2,pady=1)
 
         self.numChiIntegrate=Pmw.EntryField(cg.interior(),
                 labelpos = 'w', label_text = "Number Of Chi?",
-                value = '', entry_width=10,
+                value = '', entry_width=width,
                 validate={'validator':'numeric','min':0,'max':99999}) 
         self.numChiIntegrate.pack(side=TOP,padx=2,pady=1)
 
@@ -1355,7 +1358,7 @@ class Main:
 
         self.saveIntegrationDataButton=Button(intpage,
                 text='Save Data',fg='snow',bg='firebrick4',
-                width=w,command=self.saveIntegratedIntensity)
+                width=15,command=self.saveIntegratedIntensity)
         self.saveIntegrationDataButton.pack(side=TOP,padx=5,pady=10)
     
         #clean up notebook sizing
@@ -2897,6 +2900,29 @@ of the parameters are allowed to vary.")
         setstatus(self.status,'Ready')
         self.updatebothNoComplain()
  
+    def saveLastFit(self,filename=''):
+        
+        if self.diffractionData == None or \
+                not self.diffractionData.canSaveLastFit():
+            raise UserInputException("No previous fit to save")
+             
+        if filename in ['',()]:
+            defaultextension = ".dat"
+            filename = tkFileDialog.asksaveasfilename(
+                    filetypes=[('Data File','*.dat'),('All Files','*')],
+                    defaultextension = defaultextension,
+                    title="Save Last Fit")
+
+            if filename in ['',()]: return 
+
+            # on the mac, it won't give a default extension if you 
+            # don't write it out explicitly, so do so automatically 
+            # otherwise
+            if os.path.splitext(filename)[1] == '':
+                filename += defaultextension
+
+        self.diffractionData.lastFitToFile(filename)
+
 
     def savePeakList(self,filename=''):
 

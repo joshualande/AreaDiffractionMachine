@@ -35,7 +35,7 @@ class Axis:
         if self.logscale:
             lowestNiceValue = roundDown(log10(lowestValue),1)
             highestNiceValue = roundUp(log10(highestValue),1)
-            return lowestNiceValue,highestNiceValue,niceStep
+            return lowestNiceValue,highestNiceValue,1
 
         interval = (highestValue - lowestValue)
         niceStep = pow(10,ceil(log10(interval/10.0)))

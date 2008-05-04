@@ -4,7 +4,7 @@ import Numeric
 import PIL
 import Image
 import string
-import math
+from math import sqrt
 import time
 
 # imports that I wrote below
@@ -34,7 +34,7 @@ from Exceptions import UnknownFiletypeException, UserInputException
 
 
 # This is here for other objects to refer to
-allExtensions = ['.mccd','.mar2300','.edf','.tiff','.tif','.mar3450','.bruker']
+allExtensions = [".mccd",".mar2300",".edf",".tiff",".tif",".mar3450",".bruker"]
 
 
 class DiffractionData:
@@ -59,13 +59,13 @@ class DiffractionData:
             100.0
             >>> object.getHeaderPixelHeight()
             100.0
-            >>> print '%.10f' % object.getHeaderWavelength()
+            >>> print "%.10f" % object.getHeaderWavelength()
             0.9735400000
-            >>> print '%.10f' % object.getHeaderDistance()
+            >>> print "%.10f" % object.getHeaderDistance()
             125.2960000000
-            >>> print '%.10f' % object.getHeaderCenterX()
+            >>> print "%.10f" % object.getHeaderCenterX()
             1725.0000000000
-            >>> print '%.10f' % object.getHeaderCenterY()
+            >>> print "%.10f" % object.getHeaderCenterY()
             1725.0000000000
           
         A calibrationData object stores the parameters of an experiment.
@@ -73,20 +73,20 @@ class DiffractionData:
         of the diffraction file and return an object with the data in it.
 
             >>> calibrationData = object.calibrationDataFromHeader()
-            >>> print "%.10f" % calibrationData.getCenterX()['val']
+            >>> print "%.10f" % calibrationData.getCenterX()["val"]
             1725.0000000000
-            >>> print "%.10f" % calibrationData.getCenterY()['val']
+            >>> print "%.10f" % calibrationData.getCenterY()["val"]
             1725.0000000000
-            >>> print "%.10f" % calibrationData.getDistance()['val']
+            >>> print "%.10f" % calibrationData.getDistance()["val"]
             125.2960000000
-            >>> print "%.10f" % calibrationData.getWavelength()['val']
+            >>> print "%.10f" % calibrationData.getWavelength()["val"]
             0.9735400000
 
         Alpha and beta are not set by calibrationDataFromHeader() usually
 
-            >>> print "%.10f" % calibrationData.getPixelLength()['val']
+            >>> print "%.10f" % calibrationData.getPixelLength()["val"]
             100.0000000000
-            >>> print "%.10f" % calibrationData.getPixelHeight()['val']
+            >>> print "%.10f" % calibrationData.getPixelHeight()["val"]
             100.0000000000
 
         getPixeLValue() will return the acutal value at a particular x,y pixel
@@ -94,12 +94,12 @@ class DiffractionData:
             >>> object.getPixelValue(1,1)
             0 
             >>> from ColorMaps import ColorMaps
-            >>> maps = ColorMaps('colormaps.txt')
-            >>> map = 'bone'
+            >>> maps = ColorMaps("colormaps.txt")
+            >>> map = "bone"
             >>> import tempfile
-            >>> filename = tempfile.mktemp() + '.jpg'
+            >>> filename = tempfile.mktemp() + ".jpg"
             >>> object.saveDiffractionImage(filename,maps,map)
-            >>> filename = tempfile.mktemp() + '.png'
+            >>> filename = tempfile.mktemp() + ".png"
             >>> object.saveDiffractionImage(filename,maps,map)
 
 
@@ -120,6 +120,8 @@ class DiffractionData:
 
     lastMaskedPixelInfo = None
 
+    lastFitString = None
+
     def __init__(self,filenames,extension = None):
         """ Does everything to initialize the object. 
             Either you can pass in the type of file that you are using
@@ -139,7 +141,7 @@ object without being given at least one file to load in.")
 
                 extensions = []
                 for file in filenames:
-                    split = os.path.basename(file).split('.')
+                    split = os.path.basename(file).split(".")
                     if len(split)>0:
                         extension = split[-1]
                     extensions.append(extension.lower())
@@ -192,7 +194,7 @@ they are of different size.")
             filename = filenames[0] # get out the only file
 
             if extension == None:
-                split = os.path.basename(filename).split('.')
+                split = os.path.basename(filename).split(".")
                 if len(split)>0:
                     extension = split[-1]
 
@@ -225,7 +227,7 @@ type" % filename)
         if getextension(filename) == ".edf":
             edf = EdfFile(filename)
             #You can write any relevant information in the dictionary.
-            edf.WriteImage({'Title':"Edf file converted by the Area Diffraction Machine"},
+            edf.WriteImage({"Title":"Edf file converted by the Area Diffraction Machine"},
                     Numeric.transpose(self.theDiffractionData.data),
                     DataType= "SignedInteger",
                     Append=0)
@@ -250,16 +252,16 @@ calibration Data is given.")
 
             if drawQLines:
                 if qLinesColor == None:
-                    raise Exception('Cannot add q lines to the saved image until \
-the q line color is set.')
+                    raise Exception("Cannot add q lines to the saved image until \
+the q line color is set.")
                 for Q,dQ in QData.getAllQPairs():
                     MakeDiffractionImage.addConstantQLineDiffractionImage(image,Q,
                             calibrationData,qLinesColor)
 
             if drawdQLines:
                 if dQLinesColor == None:
-                    raise Exception('Cannot add delta Q lines to the saved image \
-until the delta Q line color is set.')
+                    raise Exception("Cannot add delta Q lines to the saved image \
+until the delta Q line color is set.")
                 for Q,dQ in QData.getAllQPairs():
                     MakeDiffractionImage.addConstantQLineDiffractionImage(
                             image,Q-dQ,calibrationData,dQLinesColor)
@@ -439,14 +441,122 @@ outside of the image.\n")
 unless either the number of chi values or a peak list are given.")
 
         # make peak list
+        print 
+        print "Finding diffraction peaks..."
         if peakList == None:
             peakList = Fit.getPeakList(self.theDiffractionData.data,qData,
                     initialGuess,numberOfChi,stddev)
 
+        print 
+        print "Performing image calibration..."
         # do fitting
-        return Fit.fit(self.theDiffractionData.data,
+
+        bestGuess,peakList,covariance,initialResidual,finalResidual, \
+                reasonForQuitting = Fit.fit(self.theDiffractionData.data,
                 initialGuess,peakList,maskedPixelInfo)
 
+        print " - Before fitting, the calculated residual \
+per peak is ",initialResidual
+        print " - After fitting, the calculated residual \
+per peak is ",finalResidual
+        print " - Reason for quitting the fit: %d, " % reasonForQuitting,
+        if reasonForQuitting == 2:
+            print "stopped by small gradient J^T e\n"
+        elif reasonForQuitting == 2:
+            print "stopped by small Dp\n"
+        elif reasonForQuitting == 3:
+            print "stopped by itmax\n"
+        elif reasonForQuitting == 4:
+            print "singular matrix. Restart from current p with increased \\mu\n"
+        elif reasonForQuitting == 5:
+            print "no further error reduction is possible. Restart with increased mu\n"
+        elif reasonForQuitting == 6:
+            print "stopped by small ||e||_2\n"
+        else:
+            print "Reason for quitting unknown\n"
+        
+        print "Covariance Matrix:"
+        print Numeric.array2string(covariance,max_line_width=1000,precision=3)
+        print
+        print "Root of the diagonal of the covariance matrix (I think these are uncertainties)"
+        print " - xc    %17.10f" % sqrt(covariance[0][0])
+        print " - yc    %17.10f" % sqrt(covariance[1][1])
+        print " - d     %17.10f" % sqrt(covariance[2][2])
+        print " - E     %17.10f" % sqrt(covariance[3][3])
+        print " - alpha %17.10f" % sqrt(covariance[4][4])
+        print " - beta  %17.10f" % sqrt(covariance[5][5])
+        print " - R     %17.10f" % sqrt(covariance[6][6])
+
+        # create the string to save to a file (if requested)
+        self.lastFitString = ""
+        self.lastFitString += "Fit done of: %s\n" % self.theDiffractionData.filename
+        self.lastFitString += "\n"
+        self.lastFitString += "Initial Guess at calibration parameters:\n"
+        self.lastFitString += str(initialGuess)
+        self.lastFitString += "\n"
+        self.lastFitString += "Before fitting, the calculated residual \
+per peak is "+str(initialResidual)+"\n"
+        self.lastFitString += "\n"
+        self.lastFitString += "Refined calibration parameters:\n"
+        self.lastFitString += str(bestGuess)
+        self.lastFitString += "\n"
+        self.lastFitString += "After fitting, the calculated residual \
+per peak is "+str(finalResidual)+"\n"
+        self.lastFitString += "\n"
+
+        self.lastFitString += "Reason for quitting the fit: %d-" % reasonForQuitting
+        if reasonForQuitting == 2:
+            self.lastFitString += "stopped by small gradient J^T e\n"
+        elif reasonForQuitting == 2:
+            self.lastFitString += "stopped by small Dp\n"
+        elif reasonForQuitting == 3:
+            self.lastFitString += "stopped by itmax\n"
+        elif reasonForQuitting == 4:
+            self.lastFitString += "singular matrix. Restart from current p with increased \\mu\n"
+        elif reasonForQuitting == 5:
+            self.lastFitString += "no further error reduction is possible. Restart with increased mu\n"
+        elif reasonForQuitting == 6:
+            self.lastFitString += "stopped by small ||e||_2\n"
+        else:
+            self.lastFitString += "Reason for quitting unknown\n"
+        
+        self.lastFitString += "\n"
+
+        self.lastFitString += "Covariance Matrix:\n"
+        self.lastFitString += "%s\n" % Numeric.array2string(covariance,
+                max_line_width=1000,precision=10)
+        self.lastFitString += "\n"
+        self.lastFitString += "Root of the diagonal of the \
+covariance matrix (I think these are uncertainties)\n"
+        self.lastFitString += "xc    %17.10f\n" % sqrt(covariance[0][0])
+        self.lastFitString += "yc    %17.10f\n" % sqrt(covariance[1][1])
+        self.lastFitString += "d     %17.10f\n" % sqrt(covariance[2][2])
+        self.lastFitString += "E     %17.10f\n" % sqrt(covariance[3][3])
+        self.lastFitString += "alpha %17.10f\n" % sqrt(covariance[4][4])
+        self.lastFitString += "beta  %17.10f\n" % sqrt(covariance[5][5])
+        self.lastFitString += "R     %17.10f\n" % sqrt(covariance[6][6])
+
+        self.lastFitString += "\n"
+        self.lastFitString += "Q Data used when calibrating:\n"
+        self.lastFitString += str(qData)
+
+        return bestGuess,peakList
+
+
+    def canSaveLastFit(self):
+        if self.lastFitString == None:
+            return 0
+        return 1
+
+
+    def lastFitToFile(self,filename):
+        if not self.canSaveLastFit():
+            raise Exception("No previous fit was done.")
+
+        file = open(filename,"w")
+        file.write(self.lastFitString)
+        file.close()
+        
 
     def savePeakListToFile(self,filename,initialGuess,qData,
             numberOfChi,maskedPixelInfo,stddev):
@@ -454,7 +564,7 @@ unless either the number of chi values or a peak list are given.")
                 initialGuess,numberOfChi,stddev)
 
         # now, save to file
-        file = open(filename,'w')
+        file = open(filename,"w")
         file.write("# A list of diffraction peaks found.\n")
         file.write("# Diffraction Data: %s\n" % self.theDiffractionData.filename)
         file.write("# Calculated on "+time.asctime()+"\n")
@@ -469,7 +579,7 @@ unless either the number of chi values or a peak list are given.")
             file.write(maskedPixelInfo.writePolygonCommentString())
 
         file.write("#%16s%21s%21s%21s%21s%21s%21s%21s\n" % \
-                ('x','y','Real Q','Fit Q','chi','width','intensity','2theta'))
+                ("x","y","Real Q","Fit Q","chi","width","intensity","2theta"))
         for peak in peakList.getMaskedPeakList(maskedPixelInfo):
             x,y,realQ,fitQ,chi,width = peak
             
@@ -519,8 +629,8 @@ a Q list is given.")
 
             if drawQOrTwoThetaLines:
                 if qOrTwoThetaLinesColor == None:
-                    raise Exception('Cannot add Q lines to the \
-saved image until the Q line color is set.')
+                    raise Exception("Cannot add Q lines to the \
+saved image until the Q line color is set.")
                 for Q,dQ in QData.getAllQPairs():
                     Cake.addConstantQLineCakeImage(image,Q,qOrTwoThetaLower,
                             qOrTwoThetaUpper,numQOrTwoTheta,chiLower,chiUpper,numChi,
@@ -528,8 +638,8 @@ saved image until the Q line color is set.')
 
             if drawdQOrTwoThetaLines:
                 if dQOrTwoThetaLinesColor == None:
-                    raise Exception('Cannot add delta QOrTwoTheta lines to the saved \
-image until the delta QOrTwoTheta line color is set.')
+                    raise Exception("Cannot add delta QOrTwoTheta lines to the saved \
+image until the delta QOrTwoTheta line color is set.")
 
                 for Q,dQ in QData.getAllQPairs():
                     Cake.addConstantQLineCakeImage(image,Q-dQ,qOrTwoThetaLower,
@@ -549,10 +659,10 @@ until the peak color is set.")
             Cake.addPeaksCakeImage(image,qOrTwoThetaLower,qOrTwoThetaUpper,
                     numQOrTwoTheta,chiLower,chiUpper,numChi,
                     peakList,calibrationData,peakLinesColor,
-                    smallestRangeQOrTwoThetaLower = smallest['qOrTwoThetaLower'],
-                    smallestRangeQOrTwoThetaUpper = smallest['qOrTwoThetaUpper'],
-                    smallestRangeChiLower = smallest['chiLower'],
-                    smallestRangeChiUpper = smallest['chiUpper'],
+                    smallestRangeQOrTwoThetaLower = smallest["qOrTwoThetaLower"],
+                    smallestRangeQOrTwoThetaUpper = smallest["qOrTwoThetaUpper"],
+                    smallestRangeChiLower = smallest["chiLower"],
+                    smallestRangeChiUpper = smallest["chiUpper"],
                     maskedPixelInfo = maskedPixelInfo,
                     type = type)
         try:
@@ -624,7 +734,7 @@ unknown file extension" % filename )
                 doConstraint = doConstraint,
                 doPolarizationCorrection = doPolarizationCorrection,
                 P = P,
-                typeOfIntegration = 'Q',
+                typeOfIntegration = "Q",
                 typeOfConstraint = typeOfConstraint,
                 maskedPixelInfo = maskedPixelInfo)
 
@@ -642,7 +752,7 @@ unknown file extension" % filename )
                 doConstraint = doConstraint,
                 doPolarizationCorrection = doPolarizationCorrection,
                 P = P,
-                typeOfIntegration = '2theta',
+                typeOfIntegration = "2theta",
                 typeOfConstraint = typeOfConstraint,
                 maskedPixelInfo = maskedPixelInfo)
 
@@ -659,7 +769,7 @@ unknown file extension" % filename )
                 doConstraint = doConstraint,
                 doPolarizationCorrection = doPolarizationCorrection,
                 P = P,
-                typeOfIntegration = 'chi',
+                typeOfIntegration = "chi",
                 typeOfConstraint = typeOfConstraint,
                 maskedPixelInfo = maskedPixelInfo)
 
@@ -697,10 +807,10 @@ unknown file extension" % filename )
         self.lastCalibrationDataGetSmallsetRange = copy.deepcopy(calibrationData)
         self.lastTypeGetSmallestRange = type
             
-        if calibrationData.getCenterX()['val'] < 0 or \
-            calibrationData.getCenterX()['val']  > self.theDiffractionData.size-1 or \
-            calibrationData.getCenterY()['val'] < 0 or \
-            calibrationData.getCenterY()['val']  > self.theDiffractionData.size-1:
+        if calibrationData.getCenterX()["val"] < 0 or \
+            calibrationData.getCenterX()["val"]  > self.theDiffractionData.size-1 or \
+            calibrationData.getCenterY()["val"] < 0 or \
+            calibrationData.getCenterY()["val"]  > self.theDiffractionData.size-1:
 
             qLower = None
             qUpper = None
@@ -730,7 +840,7 @@ unknown file extension" % filename )
                 if chiLower==None or lowerChi < chiLower: chiLower = lowerChi
                 if chiUpper==None or higherChi > chiUpper: chiUpper = higherChi
 
-            tempRange = {'qLower':qLower,'qUpper':qUpper,'chiLower':chiLower,'chiUpper':chiUpper}
+            tempRange = {"qLower":qLower,"qUpper":qUpper,"chiLower":chiLower,"chiUpper":chiUpper}
             self.lastRangeGetSmallestRange = tempRange
             return tempRange
 
@@ -756,8 +866,8 @@ unknown file extension" % filename )
 This function must be passed for the parameter type either \
 'Q', or '2theta'")
 
-            tempRange = {'qOrTwoThetaLower':lower,'qOrTwoThetaUpper':upper,
-                    'chiLower':-180,'chiUpper':180}
+            tempRange = {"qOrTwoThetaLower":lower,"qOrTwoThetaUpper":upper,
+                    "chiLower":-180,"chiUpper":180}
 
             self.lastRangeGetSmallestRange = tempRange
             return tempRange

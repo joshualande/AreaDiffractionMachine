@@ -272,24 +272,24 @@ class IntegrateIntensity:
             file.write("#   Q Upper = %f\n" % self.upper)
             file.write("#   Number of Q = %f\n" % self.num)
             file.write("#   Q Step = %f\n" % step )
-            file.write('# Q\tAvg Intensity\n')
+            file.write('#               Q        Avg Intensity\n')
         if self.typeOfIntegration == 'chi':
             file.write("#   Chi Lower = %f\n" % self.lower)
             file.write("#   Chi Upper = %f\n" % self.upper)
             file.write("#   Number of Chi = %f\n" % self.num)
             file.write("#   Chi Step = %f\n" % step )
-            file.write('# Chi\tAvg Intensity\n')
+            file.write('#             Chi        Avg Intensity\n')
         if self.typeOfIntegration == '2theta':
             file.write("#   2theta Lower = %f\n" % self.lower)
             file.write("#   2theta Upper = %f\n" % self.upper)
             file.write("#   Number of 2theta = %f\n" % self.num)
             file.write("#   2theta Step = %f\n" % step )
             file.write("# Note: Average intensity values of -1 means that no data was put into the particular bin.\n")
-            file.write('# 2theta\tAvg Intensity\n')
+            file.write('#          2theta        Avg Intensity\n')
 
         for loop in range(self.num):
             # the current value is half way between the one lower bin value and the next lower bin value
-            file.write('%f\t%f' % ( self.values[loop],self.intensityData[loop]))
+            file.write('%17.10f    %17.10f' % ( self.values[loop],self.intensityData[loop]))
             if loop != self.num-1:
                 file.write('\n')
         file.close()

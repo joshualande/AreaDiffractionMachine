@@ -415,7 +415,7 @@ void residual(double *p, double *qFit, int m, int n, void *data) {
 }
 
 
-double getTotalResidual(double *p, double *qReal, int m, int n, void *data) {
+double getResidual(double *p, double *qReal, int m, int n, void *data) {
     double * qFit;
     int i;
     double total;
@@ -435,6 +435,22 @@ double getTotalResidual(double *p, double *qReal, int m, int n, void *data) {
 }
 
 
+/*
+ * Performs the image calibration. Requires Numeric arrays containing x values, 
+ * y values, Q values, and intensities for diffraction data. xValues[i], yValues[i]
+ * refer to the x,y pixel coordinate of a diffraction peak and qValues[i] and
+ * intensity[i] is the Q value (from the peak list) and intensity of the peak.
+ * Then requires an initial guess of the x center of the image, and whether or
+ * not to fix the parameter. The program requires the same pair for the y center,
+ * the detector distance, the energy, alpha, beta, rotation. It then requires 
+ * the value of the pixel length and pixel height.
+ *
+ * The program returns the refined value of the x center of the image, the y center
+ * of the image, the distance, energy, alpha, beta, and rotation. It returns 
+ * a numeric array containing the covariance matrix, a calculation of the initial
+ * residual, the final residual per peak, and the reason for quitting (told
+ * to the function by the fitting algorithm).
+ */
 static PyObject * FitWrap_fitCalibrationParameters(PyObject *self, PyObject *args) {
  
     PyArrayObject * xValues;
@@ -457,6 +473,9 @@ static PyObject * FitWrap_fitCalibrationParameters(PyObject *self, PyObject *arg
     int status;
     int length;
     double info[LM_INFO_SZ];
+
+    double initialResidual;
+    double finalResidual;
 
     PyArg_ParseTuple(args,"O!O!O!O!didididididididd",
             &PyArray_Type,&xValues,
@@ -577,35 +596,15 @@ static PyObject * FitWrap_fitCalibrationParameters(PyObject *self, PyObject *arg
         ub[6] = 360;
     }
 
-    printf(" - Before fitting, the calculated residual is %e\n",
-        getTotalResidual(p,(double *)qReal->data, 7, length, (void *)useful));
+    initialResidual = getResidual(p,(double *)qReal->data, 7, length, (void *)useful);
 
-    printf(" - Doing the fitting\n");
     status=dlevmar_bc_dif(residual, p, (double *)qReal->data, 7, length, lb, ub,  
             10000,NULL, info, NULL,(double *)covarianceMatrix->data,(void *)useful);
 
-    printf(" - After fitting, the calculated residual is %e\n",
-        getTotalResidual(p,(double *)qReal->data, 7, length, (void *)useful));
+    finalResidual = getResidual(p,(double *)qReal->data, 7, length, (void *)useful);
 
     // the fit gets stored in p, so we can get rid of useful
     free(useful);
-     
-    printf(" - Reason for quitting the fit: %d-",(int)info[6]);
-    if (info[6] == 2) {
-        printf("stopped by small gradient J^T e\n");
-    } else if (info[6] == 2) {
-        printf("stopped by small Dp\n");
-    } else if (info[6] == 3) {
-        printf("stopped by itmax\n");
-    } else if (info[6] == 4) {
-        printf("singular matrix. Restart from current p with increased \\mu\n");
-    } else if (info[6] == 5) {
-        printf("no further error reduction is possible. Restart with increased mu\n");
-    } else if (info[6] == 6) {
-        printf("stopped by small ||e||_2\n");
-    } else {
-        printf("\n");
-    }
 
     if (status <= 0) { 
         // When unsuccessful operation, return None
@@ -616,7 +615,8 @@ static PyObject * FitWrap_fitCalibrationParameters(PyObject *self, PyObject *arg
 
     // the reason I have to do the N is described at 
     // http://mail.python.org/pipermail/python-list/2002-October/167549.html
-    return Py_BuildValue("dddddddN",p[0],p[1],p[2],p[3],p[4],p[5],p[6],covarianceMatrix);
+    return Py_BuildValue("dddddddNddi",p[0],p[1],p[2],p[3],p[4],p[5],p[6],covarianceMatrix,
+            initialResidual,finalResidual,(int)info[6]);
     // return the data to the user
 }
  

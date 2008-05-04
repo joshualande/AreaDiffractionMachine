@@ -180,6 +180,13 @@ the values of the diffraction data. """
             file.write("#   %14.10f    %14.10f\n" % (Q,dQ))
 
 
+    def __str__(self):
+        string = "%14s%18s\n" % ("Q","Delta Q")
+        for Q,dQ in self.QList:
+            string += "%14.10f    %14.10f\n" % (Q,dQ)
+        return string
+
+
     def fromFile(self,filename):
         self.QList = []
         self.current = ''

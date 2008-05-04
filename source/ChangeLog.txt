@@ -16,10 +16,29 @@ Changes in the Betas
     -   Improved the formatting of saved peak list files.
         They have a better structure (space separated instead
         of tab separated) and a more verbose header.
+    -   New "Save Last Fit" button can be used to save all of the 
+        information about the previous calibration to a text file.
+    -   Minor tic marks for intensity integration's log Y axis.
+
     Minor 
+    -   The size of the inputs in the GUI has been increased 
+        to help view big numbers.
     -   Fix a bug where the integration window wouldn't resize
         properly and sometimes the labels and check box at
         the bottom of the window would disappear
+    -   Changed the formatting of calibration parameters saved
+        to a file. For brevity, the keywords R, pl, and ph are 
+        used instead of rotation, pixellength, and pixelheight.
+        Also, the precision of the output parameters has been
+        increased and the tabs in the output file are replaced
+        by spaces. The program can read in files which contain
+        any of the keywords.
+    -   Increased the precision of the numbers saved during 
+        caking.
+    -   Increased the precision of the numbers saved during
+        intensity integration. Also, the intensity data is 
+        now saved with spaces separating the numbers instead
+        of tabs.
 
 -------
 
