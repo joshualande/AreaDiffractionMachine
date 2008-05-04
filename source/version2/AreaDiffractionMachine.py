@@ -799,10 +799,14 @@ class Main:
         menubar.add_cascade(label="Calibration",
                 menu=calibrationmenu)
 
-        calibrationmenu.add_command(label='Load Calibration',
-                command=self.calibrationDataLoad)
-        calibrationmenu.add_command(label='Paramaters from Header',
+        calibrationmenu.add_command(label='Get From Header',
                 command=self.calibrationDataFromHeader)
+        calibrationmenu.add_command(label='Load From File',
+                command=self.calibrationDataLoad)
+        calibrationmenu.add_command(label='Previous Values',
+                command=self.calibrationDataUndo)
+        calibrationmenu.add_command(label='Save To File',
+                command=self.calibrationDataSave)
         calibrationmenu.add_separator()
 
         self.qmenu = Menu(calibrationmenu, tearoff=0)
@@ -823,12 +827,12 @@ class Main:
                 variable = self.eVorLambda)
 
         calibrationmenu.add_separator()
-        calibrationmenu.add_command(label='Save Calibration',
-                command=self.calibrationDataSave)
         calibrationmenu.add_command(label='Do Fit',
                 command=self.doFit)        
-        calibrationmenu.add_command(label='Previous Values',
-                command=self.calibrationDataUndo)
+        calibrationmenu.add_command(label='Save Last Fit',
+                command=self.saveLastFit)
+        calibrationmenu.add_command(label='Make/Save Peak List',
+                command=self.savePeakList)
 
         maskingmenu = Menu(menubar,tearoff=0)
         menubar.add_cascade(label="Masking",menu=maskingmenu)
@@ -2375,7 +2379,7 @@ run in either units of either eV or wavelength.")
         # Explicityly record macro. Only do so if in record macro mode
         if self.macroLines != None:
             self.macroMode.explicitMacroRecordTwoLines(
-                    'Save Calibration','\t %s' % filename)
+                    'Save To File','\t %s' % filename)
 
     def calibrationDataUndo(self):
         if len(self.calibrationData) < 2:
@@ -2922,6 +2926,11 @@ of the parameters are allowed to vary.")
                 filename += defaultextension
 
         self.diffractionData.lastFitToFile(filename)
+        
+        # Make sure to explicitly record this macro command
+        if self.macroLines != None:
+            self.macroMode.explicitMacroRecordTwoLines(
+                    'Save Last Fit','\t'+filename)
 
 
     def savePeakList(self,filename=''):
@@ -2982,7 +2991,7 @@ be greater then 0.")
                 numberOfChi,self.maskedPixelInfo,stddev=stddev)
 
 
-        # Make sure to explicitly record this macro thingy
+        # Make sure to explicitly record this macro command
         if self.macroLines != None:
             self.macroMode.explicitMacroRecordTwoLines(
                     'Make/Save Peak List','\t'+filename)
@@ -3329,7 +3338,7 @@ Q or 2theta mode.")
                 maskedPixelInfo = self.maskedPixelInfo,
                 type=type)
  
-        # Make sure to explicitly record this macro thingy
+        # Make sure to explicitly record this macro command
         if self.macroLines != None:
             self.macroMode.explicitMacroRecordTwoLines(
                     'Save Caked Data','\t %s' % filename)
@@ -3423,7 +3432,7 @@ either Q or 2theta mode.")
 
         setstatus(self.status,'Ready')
 
-        # Make sure to explicitly record this macro thingy
+        # Make sure to explicitly record this macro command
         if self.macroLines != None:
             self.macroMode.explicitMacroRecordTwoLines(
                     'Save Caked Image','\t'+filename)
@@ -3515,7 +3524,7 @@ either Q or 2theta mode.")
         
         self.updatebothNoComplain()
 
-        # Make sure to explicitly record this macro thingy
+        # Make sure to explicitly record this macro command
         if self.macroLines != None:
             self.macroMode.explicitMacroRecordTwoLines(
                     'Load Mask','\t %s' % filename)
@@ -3548,7 +3557,7 @@ file until there are polygons to save.")
 
         self.updatebothNoComplain()
 
-        # Make sure to explicitly record this macro thingy
+        # Make sure to explicitly record this macro command
         if self.macroLines != None:
             self.macroMode.explicitMacroRecordTwoLines(
                     'Save Mask','\t %s' % filename)
@@ -3874,7 +3883,7 @@ before that file can be loaded.")
         for file in filenames:
             self.openedfilesmenu.add_command(label=file,command=DISABLED)
 
-        # Make sure to explicitly record this macro thingy. 
+        # Make sure to explicitly record this macro command
         if self.macroLines != None:
             if len(filenames) > 1:
                 self.macroMode.explicitMacroRecordTwoLines(
@@ -3890,7 +3899,7 @@ before that file can be loaded.")
     def selectStandardQDataFile(self,basename,filename):
         self.qfileentry.setvalue(filename)
         self.loadQData(doStandardQ=1)
-        # Make sure to explicitly record this macro thingy
+        # Make sure to explicitly record this macro command
         if self.macroLines != None:
             self.macroMode.explicitMacroRecordTwoLines(
                     'Standard Q','\t %s' % basename)
@@ -3921,7 +3930,7 @@ file name before it is loaded.")
 
         self.updatebothNoComplain()
 
-        # Make sure to explicitly record this macro thingy (unless
+        # Make sure to explicitly record this macro command (unless
         # this is being called b/c standardQ was pushed by user
         if self.macroLines != None and not doStandardQ:
             self.macroMode.explicitMacroRecordTwoLines(
@@ -4451,7 +4460,7 @@ integrated data until the integration has been performed")
         self.integrate.toFile(filename,
                 self.diffractionData.theDiffractionData.filename)
 
-        # Make sure to explicitly record this macro thingy
+        # Make sure to explicitly record this macro command
         if self.macroLines != None:
             self.macroMode.explicitMacroRecordTwoLines(
                     'Save Integration Data','\t %s' % filename)

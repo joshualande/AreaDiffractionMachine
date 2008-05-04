@@ -273,9 +273,13 @@ class MacroMode:
 
 
         self.allSaveButtonsRequiringFilename = [
-            {'name':'Save Calibration',
+            {'name':'Save To File',
                     'widget':self.GUI.saveCalibrationButton,
                     'function':self.GUI.calibrationDataSave,
+                    'move to page':moveToCalibration},
+            {'name':'Save Last Fit',
+                    'widget':self.GUI.saveLastFitButton,
+                    'function':self.GUI.saveLastFit,
                     'move to page':moveToCalibration},
             {'name':'Make/Save Peak List',
                     'widget':self.GUI.makeSavePeakListButton,
@@ -670,7 +674,8 @@ class MacroMode:
                 * Data File:
                 * Q Data:
                 * Load From File:
-                * Save Calibration
+                * Save To File
+                * Save Last Fit
                 * Make/Save Peak List
                 * Save Mask
                 * Load Mask
