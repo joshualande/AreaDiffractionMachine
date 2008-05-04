@@ -13,9 +13,10 @@ def setstatus(n,format):
 class LinePlot:
     """ Plot creates a pretty rudimentary scatter plot which is good 
         enough for my use. I am kind of ripping of the API 
-        to Pmw's Blt - http://heim.ifi.uio.no/~hpl/Pmw.Blt/doc/reference.html
+        to Pmw's Blt - http://heim.ifi.uio.no/~hpl/Pmw.Blt/doc/reference.html.
+        But this does not nearly have all the features Pmw:Blt has.
         I was originally using Pmw's BLT but found it incompatible
-        with mac. So this is a rewrite in pure tkinter which should
+        with the mac. So this is a rewrite in pure Tkinter which should
         run anywhere that Tk is installed. I am basically just
         using the Blt interface so I don't have to change any other
         code. 
@@ -137,7 +138,8 @@ class LinePlot:
     def marker_create(self,type, name, dashes,coords=""):
         """ Put the marker outside of the frame, for now. """
         if type != "line":
-            raise Exception("The only type of marker that can be created is a line")
+            raise Exception("The only type of marker that \
+can be created is a line")
         self.markers[name] = self.graph.create_rectangle(-1,-1,-1,-1,
             dash=dashes,outline="black")
         
@@ -164,7 +166,7 @@ class LinePlot:
 
 
     def transform(self,x,y):
-        """ takes in real coodinates as they are plotted and returns 
+        """ takes in real coordinates as they are plotted and returns 
             the corresponding coordinates on the graph canvas. """
 
         if self.usedXmin == None or self.usedXmax == None or \
@@ -172,7 +174,8 @@ class LinePlot:
             
             if self.inputXmin == None or self.inputXmax == None or \
                     self.inputYmin == None or self.inputYmax == None:
-                raise Exception("Cannot perform the inverse transform until a range for the plot is set.")
+                raise Exception("Cannot perform the inverse \
+transform until a range for the plot is set.")
                 
             xmin = self.inputXmin    
             xmax = self.inputXmax
@@ -194,12 +197,15 @@ class LinePlot:
                 # our too small pixels very large values
                 transY = 1000 
             else: 
-                transY = (self.graphheight-1.0)*(log10(y)-log10(ymin))/(log10(ymax)-log10(ymin))
-                # coordiantes are weird b/c they go down not up, so we have to invert them
+                transY = (self.graphheight-1.0)*(log10(y)- \
+                        log10(ymin))/(log10(ymax)-log10(ymin))
+                # coordinates are weird because they go down not up, 
+                # so we have to invert them
                 transY = self.graphheight-1.0-transY
         else:
             transY = (y-ymin)*(self.graphheight-1.0)/(ymax-ymin)
-            # coordiantes are weird b/c they go down not up, so we have to invert them
+            # coordinates are weird b/c they go down not up, so we 
+            # have to invert them
             transY = self.graphheight-1-transY
 
         return transX,transY
@@ -214,7 +220,8 @@ class LinePlot:
             
             if self.inputXmin == None or self.inputXmax == None or \
                     self.inputYmin == None or self.inputYmax == None:
-                raise Exception("Cannot perform the inverse transform until a range for the plot is set.")
+                raise Exception("Cannot perform the inverse \
+transform until a range for the plot is set.")
 
             xmin = self.inputXmin    
             xmax = self.inputXmax
@@ -226,11 +233,15 @@ class LinePlot:
             ymin = self.usedYmin    
             ymax = self.usedYmax
                            
-        transX = self.usedXmin+x*(self.usedXmax-self.usedXmin)/(self.graphwidth-1.0)
+        transX = self.usedXmin+x*(self.usedXmax- \
+                self.usedXmin)/(self.graphwidth-1.0)
         if self.ylogscale:
-            transY = pow(10,((self.graphheight-1.0-y)/(self.graphheight-1.0))*(log10(self.usedYmax)-log10(self.usedYmin))+log10(self.usedYmin))
+            transY = pow(10,((self.graphheight-1.0-y)/ \
+            (self.graphheight-1.0))*(log10(self.usedYmax)- \
+            log10(self.usedYmin))+log10(self.usedYmin))
         else:        
-            transY = self.usedYmin+(self.graphheight-1.0-y)*(self.usedYmax-self.usedYmin)/(self.graphheight-1.0)
+            transY = self.usedYmin+(self.graphheight-1.0-y)* \
+            (self.usedYmax-self.usedYmin)/(self.graphheight-1.0)
         return transX,transY
                      
 
@@ -239,11 +250,13 @@ class LinePlot:
         if title != None: 
             self.xaxis.config(title=title)
 
-        # when min & max aren't passed in, then don't change the ranges
+        # when min & max aren't passed in, then 
+        # don't change the ranges
         if min != None and max != None:
             if min == '':
                 if max != '':
-                    raise Exception("You can not fix part but not all of one of the ranges.")
+                    raise Exception("You can not fix part \
+but not all of one of the ranges.")
                 self.inputXmin = None
                 self.inputXmax = None
                 self.usedXmin = None
@@ -258,18 +271,23 @@ class LinePlot:
         self.update()
 
 
-    def yaxis_configure(self,title=None,min=None,max=None,logscale=None):
-        """ If min == '' and max == '', then auto scale the graph """
+    def yaxis_configure(self,title=None,min=None,
+            max=None,logscale=None):
+        """ If min == '' and max == '', then auto 
+            scale the graph """
 
         if title != None: 
             self.yaxis.config(title=title)
 
-        # when min & max aren't passed in, then don't change the ranges
+        # when min & max aren't passed in, then 
+        # don't change the ranges
         if min != None and max != None:
-            # if they are both set to '', reset the axis
+            # if they are both set to '', reset 
+            # the axis
             if min == '':
                 if max != '':
-                    raise Exception("You can not fix part but not all of one of the ranges.")
+                    raise Exception("You can not \
+fix part but not all of one of the ranges.")
                 self.inputYmin = None
                 self.inputYmax = None
                 self.usedYmin = None
@@ -311,20 +329,26 @@ class LinePlot:
         self.update()
 
 
-    def line_create(self,name,xdata=None,ydata=None,symbol='',color='red'):
+    def line_create(self,name,xdata=None,ydata=None,
+            symbol='',color='red'):
         if symbol != '': 
-            raise Exception("Currently, no symbols can be used when drawing graphs.")
+            raise Exception("Currently, no symbols can \
+be used when drawing graphs.")
         
         if len(xdata) != len(ydata):
-            raise Exception("The number of x and y values of the line to plot must be equal")
+            raise Exception("The number of x and y values \
+of the line to plot must be equal")
     
         if len(xdata) < 1:
-            raise Exception("There must be at least one point to plot on the current line") 
+            raise Exception("There must be at least one \
+point to plot on the current line") 
 
         if name in self.lines.keys():
-            raise Exception("Cannot add this line because another line with the same name already exists.")
+            raise Exception("Cannot add this line because \
+another line with the same name already exists.")
                     
-        self.lines[name]={'x':xdata,'y':ydata,'color':color,'ID':[]}
+        self.lines[name]={'x':xdata,'y':ydata,
+                'color':color,'ID':[]}
         self.update()
     
 
@@ -332,7 +356,8 @@ class LinePlot:
         """ Deletes one of the lines by its name. """
 
         if not g in self.lines.keys():
-            raise Exception("Cannot delete element that dose not exist.")
+            raise Exception("Cannot delete element that \
+dose not exist.")
 
         # remove everything from the graph
         for id in self.lines[g]['ID']:
@@ -371,17 +396,19 @@ class LinePlot:
 
 
     def grid(self,**args):
-        """ Allow the Frame that the plot gets put on to be gridded into the GUI. """
+        """ Allow the Frame that the plot gets put on to 
+            be gridded into the GUI. """
         self.graphframe.grid(args)
         
 
     def pack(self,**args):
-        """ Allow the Frame that the plot gets put on to be gridded into the GUI. """
+        """ Allow the Frame that the plot gets put on to 
+            be gridded into the GUI. """
         self.graphframe.pack(args)
 
 
     def legend_configure(self,hide=1):
-        """ This is just for compatability."""
+        """ This is just for compatibility."""
         if hide != 1:
             raise Exception("The legend in this program can only be hidden.")
         pass
@@ -430,7 +457,8 @@ class LinePlot:
 
 
 if __name__ == "__main__":
-    """ Here is a silly program just to test out if the plot is being drawn properly. """
+    """ Here is a silly program just to test out if 
+        the plot is being drawn properly. """
 
     import Pmw
 
@@ -456,20 +484,24 @@ if __name__ == "__main__":
             #coordinates
             botfr=Frame(h)        
             self.xcoord=Label(botfr,text="%s=      " % \
-                    self.xUpdateName,width=15,bd=2,relief=RIDGE,anchor=W,fg='red')
+                    self.xUpdateName,width=15,bd=2,
+                            relief=RIDGE,anchor=W,fg='red')
             self.ycoord=Label(botfr,text="%s=      " % \
-                    self.yUpdateName,width=15,bd=2,relief=RIDGE,anchor=W,fg='red')
+                    self.yUpdateName,width=15,bd=2,relief=RIDGE,
+                            anchor=W,fg='red')
             self.ycoord.pack(side=RIGHT,fill=X)
             self.xcoord.pack(side=RIGHT,fill=X)
 
             self.collog = Checkbutton(botfr,text="Log Scale? ", 
-                    variable=self.logscale,command=self.changeLogScale)
+                    variable=self.logscale,
+                    command=self.changeLogScale)
             self.collog.pack(side=RIGHT,fill=X)
 
             botfr.grid(row=1,column=0)
 
             import LinePlot
-            self.plot = LinePlot.LinePlot(h,plotbackground='white',height=height,width=width)
+            self.plot = LinePlot.LinePlot(h,plotbackground='white',
+                    height=height,width=width)
             self.plot.grid(row=0,column=0,sticky=N+W+E+S)
 
             from math import exp
@@ -479,17 +511,24 @@ if __name__ == "__main__":
                 xdata.append(index/100.)
                 ydata.append(exp(index/100.))
 
-            self.plot.line_create('1',xdata=xdata,ydata=ydata,symbol='',color='red')
-            self.plot.line_create('2',xdata=[0,10],ydata=[10,10],symbol='',color='red')
-            self.plot.line_create('3',xdata=[0,10],ydata=[100,100],symbol='',color='red')
-            self.plot.line_create('4',xdata=[0,10],ydata=[1000,1000],symbol='',color='red')
-            self.plot.line_create('5',xdata=[0,10],ydata=[10000,10000],symbol='',color='red')
+            self.plot.line_create('1',xdata=xdata,
+                    ydata=ydata,symbol='',color='red')
+            self.plot.line_create('2',xdata=[0,10],
+                    ydata=[10,10],symbol='',color='red')
+            self.plot.line_create('3',xdata=[0,10],
+                    ydata=[100,100],symbol='',color='red')
+            self.plot.line_create('4',xdata=[0,10],
+                    ydata=[1000,1000],symbol='',color='red')
+            self.plot.line_create('5',xdata=[0,10],
+                    ydata=[10000,10000],symbol='',color='red')
 
             root.grid_rowconfigure(0,weight=1)
             root.grid_columnconfigure(0,weight=1)
 
-            self.plot.bind(sequence="<Motion>", func=self.coordreport)
-            self.plot.bind(sequence="<Leave>", func=self.nocoordreport)
+            self.plot.bind(sequence="<Motion>", 
+                    func=self.coordreport)
+            self.plot.bind(sequence="<Leave>", 
+                    func=self.nocoordreport)
 
 
         def changeLogScale(self):

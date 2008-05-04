@@ -346,6 +346,7 @@ class GraphDisplay:
 
         # make the window expand properly
         h.grid_rowconfigure(0,weight=1)
+        h.grid_columnconfigure(0,weight=1)
 
         self.graph=LinePlot.LinePlot(h,plotbackground='white',
                 height=350,width=550)

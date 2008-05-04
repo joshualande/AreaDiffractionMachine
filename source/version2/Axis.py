@@ -33,9 +33,8 @@ class Axis:
     def getNiceRange(self,lowestValue,highestValue):
 
         if self.logscale:
-            niceStep = 1
-            lowestNiceValue = roundUp(log10(lowestValue),niceStep)
-            highestNiceValue = roundDown(log10(highestValue),niceStep)
+            lowestNiceValue = roundDown(log10(lowestValue),1)
+            highestNiceValue = roundUp(log10(highestValue),1)
             return lowestNiceValue,highestNiceValue,niceStep
 
         interval = (highestValue - lowestValue)
@@ -55,6 +54,40 @@ class Axis:
             highestNiceValue = roundDown(highestValue,niceStep)
 
         return lowestNiceValue,highestNiceValue,niceStep
+
+
+    def addVerticleLine(self,canvasValue,currentValueToDisplay=None):
+
+        if self.flip:
+            # possibly flip the numbers
+            canvasValue = self.height-1 - canvasValue
+
+        # don't display numbers too close to the edge
+        if canvasValue < 10 or \
+                canvasValue > (self.height-1) - 10: 
+            return
+
+        if self.side == "left": 
+            self.allIDs.append(self.axis.create_line(
+                    self.width*5.0/6.0,
+                    canvasValue,self.width,canvasValue) )
+        else: 
+            self.allIDs.append(self.axis.create_line(
+                    0,canvasValue,self.width/6.0,canvasValue) )
+
+        if currentValueToDisplay != None:
+            if self.side == "left":
+                anchor = 'e'
+                self.allIDs.append(
+                        self.axis.create_text(self.width*(3.0/4),
+                        canvasValue,fill="black",
+                        anchor=anchor,text="%g" % currentValueToDisplay) )
+            else:
+                anchor = 'w'
+                self.allIDs.append(
+                        self.axis.create_text(self.width*(1.0/4),
+                        canvasValue,fill="black",
+                        anchor=anchor,text="%g" % currentValueToDisplay) )
 
 
     def makeVerticleAxis(self):
@@ -82,52 +115,40 @@ class Axis:
                         (log10(self.highestValue)-\
                         log10(self.lowestValue))*(self.height-1)
                 currentValueToDisplay = pow(10,currentValueToDisplay)
+
+                self.addVerticleLine(canvasValue,currentValueToDisplay)
+
+                for loop in range(2,10):
+                    # minor tic marks, don't add numbers!
+                    # going into loop, remember that current val is now
+                    # the acutal value to display
+                    logMinorValue = log10(loop*currentValueToDisplay)
+
+                    canvasValue=(logMinorValue-log10(self.lowestValue))/\
+                            (log10(self.highestValue)-\
+                            log10(self.lowestValue))*(self.height-1)
+
+                    self.addVerticleLine(canvasValue)
+
             else:
                 # otherwise, calculate the canvasValue regularly
                 canvasValue = (currentValueToDisplay-self.lowestValue)/\
                         (self.highestValue-self.lowestValue)*(self.height-1)
 
-            if self.flip:
-                # possibly flip the numbers
-                canvasValue = self.height-1 - canvasValue
+                self.addVerticleLine(canvasValue,currentValueToDisplay)
+                        
 
-            # don't display numbers too close to the edge
-            if canvasValue < 10 or \
-                    canvasValue > (self.height-1) - 10: 
-                continue
 
-            #if canvasValue < 2: canvasValue = 2 # tk bug 
 
-            if self.side == "left": 
-                self.allIDs.append(self.axis.create_line(
-                        self.width*5.0/6.0,
-                        canvasValue,self.width,canvasValue) )
-            else: 
-                self.allIDs.append(self.axis.create_line(
-                        0,canvasValue,self.width/6.0,canvasValue) )
-
+        if self.title != None:
             if self.side == "left":
-                anchor = 'e'
-                self.allIDs.append(
-                        self.axis.create_text(self.width*(3.0/4),
-                        canvasValue,fill="black",
-                        anchor=anchor,text="%g" % currentValueToDisplay) )
+                self.allIDs.append(self.axis.create_text(
+                        0,self.height/2.0,fill="black",
+                        anchor="w",text=self.title))
             else:
-                anchor = 'w'
-                self.allIDs.append(
-                        self.axis.create_text(self.width*(1.0/4),
-                        canvasValue,fill="black",
-                        anchor=anchor,text="%g" % currentValueToDisplay) )
-            
-            if self.title != None:
-                if self.side == "left":
-                    self.allIDs.append(self.axis.create_text(
-                            0,self.height/2.0,fill="black",
-                            anchor="w",text=self.title))
-                else:
-                    self.allIDs.append(self.axis.create_text(
-                            self.width,self.height/2.0,
-                            fill="black",anchor="e",text=self.title))
+                self.allIDs.append(self.axis.create_text(
+                        self.width,self.height/2.0,
+                        fill="black",anchor="e",text=self.title))
 
 
     def makeHorizontalAxis(self):
@@ -160,7 +181,7 @@ class Axis:
             if canvasValue<10 or canvasValue>(self.width-1)-10: 
                 continue
 
-            #if canvasValue < 2: canvasValue = 2 # tk bug 
+            if canvasValue < 2: canvasValue = 2 # tk bug (I think)
 
             if self.side == "bottom": 
                 self.allIDs.append( self.axis.create_line(
@@ -206,7 +227,7 @@ class Axis:
 
         if logscale and side in ("top","bottom"):
             raise Exception("Can only apply the log scale to the \
-verticle axis.")
+vertical axis.")
 
         self.allIDs = []
         self.lowestValue = lowestValue
