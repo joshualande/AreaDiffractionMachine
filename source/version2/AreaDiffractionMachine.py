@@ -176,6 +176,7 @@ web: areadiffractionmachine.googlecode.com""")
 class PreferencesDisplay:
     """ Creates a window that allows the user to specify some
         customization for the program. """
+
     def __init__(self,master,defaultDir,selectDefaultFolder,setDefaultFolder):
         self.main=Pmw.MegaToplevel(master)
         self.main.title("Preferences")
@@ -1528,8 +1529,9 @@ because it does not exist.")
         # run the initialization macro if it is a file
         if os.path.isfile('Preferences/InitializationMacro.dat'):
             try:
-                self.macroMode.runMacroFromFilename('Preferences/InitializationMacro.dat',
-                        moveAround=0,VERBOSE=0)
+                self.macroMode.runMacroFromFilename(
+                        'Preferences/InitializationMacro.dat',
+                        moveAround=0,VERBOSE=0,ALLOWABORT=0)
             except Exception, e:
                 # just print out the error b/c we are not in 
                 # the mainloop where errors can be handled

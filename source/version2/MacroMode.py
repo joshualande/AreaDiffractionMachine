@@ -1,9 +1,11 @@
 from Tkinter import *
+import tkFont
 import tkFileDialog
 from Exceptions import UserInputException
 import os
 import time
 import re
+import Pmw
 
 import General
 from DiffractionData import allExtensions
@@ -32,7 +34,26 @@ def valueInListOfDict(list,key,value):
     return 0
 
 
+class AbortDisplay:
+    def __init__(self,master,abortFunc):
+        self.main=Pmw.MegaToplevel(master)
+        self.main.userdeletefunc(func=self.main.withdraw)
+        self.main.title("ABORT")
+        frame=Frame(self.main.interior(),width=50,height=50)
+        frame.grid(row=1,column=1,padx=15,pady=15,sticky=N+E+S+W)
+
+        self.button=Button(frame,text='ABORT', bg='red',fg='snow',
+                width=6,height=3,font=tkFont.Font(size=40),command=abortFunc)
+        self.button.grid(row=1,column=1,sticky=N+E+S+W)
+        
+
 class MacroMode:
+
+    def abort(self):
+        # sent a message to the running macro to abort
+        self.CANCEL_FLAG = 1
+        print 'ABORTING MACRO'
+
 
     def __init__(self,GUI,setstatus):
         """ Object to perform the macro recording/writing. 
@@ -461,7 +482,12 @@ class MacroMode:
         ]
         for widget in self.allCheckBoxMenuItems:
             widget['clean name'] = cleanstring(widget['name'])
+        
+        # create the abort display
+        self.abortDisplay = AbortDisplay(self.GUI.xrdwin,self.abort)
+        self.abortDisplay.main.withdraw()
 
+        self.CANCEL_FLAG = None
 
 
     def runMacro(self):
@@ -474,17 +500,21 @@ class MacroMode:
         if filename in ['',()]: return 
    
         self.runMacroFromFilename(filename,moveAround=1,
-            VERBOSE=1)
+            VERBOSE=1,ALLOWABORT=1)
 		
     def runMacroFromFilename(self,filename,
-            moveAround,VERBOSE):
+            moveAround,VERBOSE,ALLOWABORT):
         """ moveAround = whether to move around in the GUI while
             running through macro commands. """
-             
+
         if VERBOSE: print 'Testing the validity of the macro file'
         self.testMacroValidity(filename)
         # an error is raised of the file is bad
         if VERBOSE: print 'Macro File is Good!'
+
+        if ALLOWABORT: self.abortDisplay.main.show()
+        else: self.abortDisplay.main.withdraw()
+        if ALLOWABORT: self.abortDisplay.button.update()
 
         self.setstatus(self.GUI.macrostatus,'Running Macro')
         self.GUI.macrostatus.pack(side=RIGHT)
@@ -494,8 +524,13 @@ class MacroMode:
 
         line = macro.next()
 
+        self.CANCEL_FLAG = None
+
         # make it do all the right things
-        while line != None:
+        # if not ALLOWABORT, CANCEL_FLAG can never
+        # change from equaling NONE
+        while line != None and self.CANCEL_FLAG == None:
+
             cleanline = cleanstring(line)
 
             if VERBOSE: print ' - current: ',line 
@@ -503,6 +538,8 @@ class MacroMode:
             for widget in self.multipleDataFilesCommand:
                 if cleanline == widget['clean name']:
                     if moveAround: widget['move to page']()
+                    if ALLOWABORT: self.abortDisplay.main.show()
+                    if ALLOWABORT: self.abortDisplay.button.update()
                     list = macro.next()
 
                     # the macro line is of the form:
@@ -522,6 +559,8 @@ class MacroMode:
                     self.dataFileCommand:
                 if cleanline == widget['clean name']:
                     if moveAround: widget['move to page']()
+                    if ALLOWABORT: self.abortDisplay.main.show()
+                    if ALLOWABORT: self.abortDisplay.button.update()
                     filename = macro.next()
                     if VERBOSE: print ' - current: ',filename 
                     # Set the filename
@@ -531,6 +570,8 @@ class MacroMode:
                     self.allSaveButtonsRequiringFilename:
                 if cleanline == widget['clean name']:
                     if moveAround: widget['move to page']()
+                    if ALLOWABORT: self.abortDisplay.main.show()
+                    if ALLOWABORT: self.abortDisplay.button.update()
                     # get the filename
                     filename = macro.next()
                     if VERBOSE: print ' - current: ',filename 
@@ -540,6 +581,8 @@ class MacroMode:
             for widget in self.allOtherButtons:
                 if cleanline == widget['clean name']:
                     if moveAround: widget['move to page']()
+                    if ALLOWABORT: self.abortDisplay.main.show()
+                    if ALLOWABORT: self.abortDisplay.button.update()
 
                     if widget['name'] in ['AutoIntegrate Q-I','Integrate Q-I']:
                         self.GUI.changeQor2Theta('Work in Q')
@@ -552,6 +595,8 @@ class MacroMode:
             for widget in self.allCheckBoxes:
                 if cleanline == widget['clean name']:
                     if moveAround: widget['move to page']()
+                    if ALLOWABORT: self.abortDisplay.main.show()
+                    if ALLOWABORT: self.abortDisplay.button.update()
 
                     if widget['name']=='E Fixed:':
                         self.GUI.changeEVorLambda('Work in eV')
@@ -571,6 +616,8 @@ class MacroMode:
                     self.allEntryFieldsRequiringInt:
                 if cleanline == widget['clean name']:
                     if moveAround: widget['move to page']()
+                    if ALLOWABORT: self.abortDisplay.main.show()
+                    if ALLOWABORT: self.abortDisplay.button.update()
 
                     if widget['name']=='E:':
                         self.GUI.changeEVorLambda('Work in eV')
@@ -604,6 +651,8 @@ class MacroMode:
             for widget in self.allScales:
                 if cleanline == widget['clean name']:
                     if moveAround: widget['move to page']()
+                    if ALLOWABORT: self.abortDisplay.main.show()
+                    if ALLOWABORT: self.abortDisplay.button.update()
                     value = macro.next()
                     if VERBOSE: print ' - current: ',value 
                     # Set the scale
@@ -612,6 +661,8 @@ class MacroMode:
             for widget in self.allColorMaps:
                 if cleanline == widget['clean name']:
                     if moveAround: widget['move to page']()
+                    if ALLOWABORT: self.abortDisplay.main.show()
+                    if ALLOWABORT: self.abortDisplay.button.update()
                     colormap = macro.next()
                     if VERBOSE: print ' - current: ',colormap
 
@@ -623,6 +674,8 @@ class MacroMode:
             for widget in self.allColorInputs:
                 if cleanline == widget['clean name']:
                     if moveAround: widget['move to page']()
+                    if ALLOWABORT: self.abortDisplay.main.show()
+                    if ALLOWABORT: self.abortDisplay.button.update()
                     color = macro.next().lower() 
                     if VERBOSE: print ' - current: ',color
                     # set the color
@@ -645,6 +698,8 @@ class MacroMode:
             for widget in self.standardQMenuItem:
                 if cleanline == widget['clean name']:
                     if moveAround: widget['move to page']()
+                    if ALLOWABORT: self.abortDisplay.main.show()
+                    if ALLOWABORT: self.abortDisplay.button.update()
                     standard = macro.next()
                     if VERBOSE: print ' - current: ',standard
                     widget['function'](standard.strip())
@@ -659,7 +714,12 @@ class MacroMode:
             # is called as part of a call back. If any trouble arises, this
             # line can simply be commented out. More information on this at
             # http://www.pythonware.com/library/tkinter/introduction/x9374-event-processing.htm
+            if ALLOWABORT: self.abortDisplay.main.show()
+            if ALLOWABORT: self.abortDisplay.button.update()
             self.GUI.xrdwin.update()
+
+        self.CANCEL_FLAG  = None
+        self.abortDisplay.main.withdraw()
         
         # remove the macro notice from the screen
         self.GUI.macrostatus.pack_forget() 
