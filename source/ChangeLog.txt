@@ -19,6 +19,12 @@ Changes in the Betas
     -   New "Save Last Fit" button can be used to save all of the 
         information about the previous calibration to a text file.
     -   Minor tic marks for intensity integration's log Y axis.
+    -   New "Preferences" menu opened form the "File" menu can be 
+        used to specify the default folder to select files form.
+    -   New "Set As Initialization" option can be used to save
+        a recorded macro to be run each time the program opens.
+        This can be used to set various check boxes, colors, and
+        user inputs to nice default values.
 
     Minor 
     -   The size of the inputs in the GUI has been increased 
@@ -39,6 +45,11 @@ Changes in the Betas
         intensity integration. Also, the intensity data is 
         now saved with spaces separating the numbers instead
         of tabs.
+    -   Changed the default extension of diffraction data
+        that is loaded in from mar3450 to "All Files" so that
+    -   Removed the Dark Current display from the "Calibration"
+        tab since it wasn't doing anything.
+
 
 -------
 

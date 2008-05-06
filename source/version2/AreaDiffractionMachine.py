@@ -94,7 +94,7 @@ def setstatus(n,format):
     n.config(text=format)
     n.update_idletasks()
 
-# Another lame function to set the checkbox to a string value
+# Another lame function to set the check box to a string value
 def setcheckbox(checkbox,value):
     if value=='select':
         checkbox.select()
@@ -106,7 +106,7 @@ class FancyErrors:
     VERBOSE = 0
 
     def __init__(self,status):
-        # I think this is how linux/windows exceptions are formatted
+        # I think this is how Linux/Windows exceptions are formatted
         patternstring = r"""UserInputException: ['"](.*)['"]"""
         self.pattern = re.compile(patternstring, re.DOTALL)
 
@@ -173,7 +173,34 @@ web: areadiffractionmachine.googlecode.com""")
             applicationname='The Area Diffraction Program')#,icon_image=logo)
     # about.component('icon').image=logo
 
+class PreferencesDisplay:
+    """ Creates a window that allows the user to specify some
+        customization for the program. """
+    def __init__(self,master,defaultDir,selectDefaultFolder,setDefaultFolder):
+        self.main=Pmw.MegaToplevel(master)
+        self.main.title("Preferences")
+        self.main.userdeletefunc(func=self.main.withdraw)
 
+        filebar = Frame(self.main.interior(), relief=SUNKEN,bd=2)
+
+        self.defaultFolderEntry=Pmw.EntryField(filebar,
+                entry_width=68,labelpos=W,
+                label_text="Default Folder:")
+        self.defaultFolderEntry.pack(side=LEFT,padx=5,pady=1,fill=X)
+
+        #get file name from directory
+        b=Button(filebar,
+                bitmap="@"+filepath+"xbms"+os.sep+"openfolder.xbm",
+                height=21,width=50,command=selectDefaultFolder,
+                bg='lightyellow') 
+        b.pack(side=LEFT,padx=2,pady=2)
+
+        #load data file and display
+        b=Button(filebar,text="Set",bg='darkgreen',fg='snow',
+                command=setDefaultFolder) 
+        b.pack(side=LEFT,padx=2,pady=2)
+        filebar.pack(side=TOP,padx=2,pady=2,fill=X)       
+   
 class Display:
     """ XRD Display Class. """
     def __init__(self,master,imageWidth,imageHeight,
@@ -184,7 +211,6 @@ class Display:
         self.imageHeight = imageHeight
         self.axisSize=axisSize
 
-        self.master=master
         self.ufunc=ufunc
         self.main=Pmw.MegaToplevel(master)
         self.main.title(title)
@@ -338,7 +364,6 @@ class GraphDisplay:
     def __init__(self,master,title,logScaleVar):
         self.logScaleVar = logScaleVar
 
-        self.master=master
         self.main=Pmw.MegaToplevel(master)
         self.main.title(title)
         self.main.userdeletefunc(func=self.main.withdraw)
@@ -734,6 +759,8 @@ class Main:
     currentPolygon = None
     currentPolygonID = None
 
+    defaultDir = None 
+
     def __init__(self,master):
         self.colorMaps = ColorMaps.ColorMaps('colormaps.txt')
         self.xrdwin=xrdwin=master
@@ -765,6 +792,14 @@ class Main:
                 logScaleVar=self.logVarIntegration)
         self.integratedisp.main.withdraw()
 
+        self.preferencesdisplay=PreferencesDisplay(self.xrdwin,
+                self.defaultDir,self.selectDefaultFolder,
+                self.setDefaultFolder)
+        self.preferencesdisplay.main.withdraw()
+
+        # set the default from the folder.
+        self.defaultFolderFromFile()
+
 
         #The Menu bar
         menubar= Menu(xrdwin)
@@ -784,6 +819,11 @@ class Main:
                 menu=self.openedfilesmenu)
         self.openedfilesmenu.add_command(label='None',
                 command=DISABLED)
+
+        filemenu.add_separator()
+
+        filemenu.add_command(label='Preferences',
+                command=self.preferencesdisplay.main.show)
 
         filemenu.add_separator()
         self.saveDiffractionImageMenuItem=filemenu.add_command(
@@ -887,9 +927,14 @@ class Main:
                 command=self.startRecordMacro)
         self.macromenu.add_command(label='Stop Record Macro',
                 command=self.stopRecordMacro,state=DISABLED)
+
         self.macromenu.add_separator()
         self.macromenu.add_command(label='Run Saved Macro',
                 command=self.runMacro)
+
+        self.macromenu.add_separator()
+        self.macromenu.add_command(label='Set As Initialization',
+                command=self.setAsInitializationMacro,state=DISABLED)
 
         # this name="help" syntax makes the help menu 
         # show up in the right place on the mac, where 
@@ -915,7 +960,7 @@ class Main:
         filebar = Frame(calpage, relief=SUNKEN,bd=2)
 
         #load data file and display
-        self.fileentry=Pmw.EntryField(filebar, label_text="Data File:",
+        self.fileentry=Pmw.EntryField(filebar,label_text="Data File:",
                 labelpos=W,validate=None,entry_width=68,command=DISABLED) 
         self.fileentry.pack(side=LEFT,padx=5,pady=2,fill=X)
 
@@ -958,7 +1003,11 @@ class Main:
                 command=DISABLED,state=DISABLED) 
         b.pack(side=LEFT,padx=2,pady=2)
 
-        filebar.pack(side=TOP,padx=2,pady=2,fill=X)
+        # DO NOT DISPLAY THE DARK CURRENT: INPUTS,
+        # THIS SHOULD BE CHANGED AT SOME POINT
+        # filebar.pack(side=TOP,padx=2,pady=2,fill=X)
+
+
         #Qdata
         filebar=Frame(calpage, relief=SUNKEN,bd=2)
         self.qfileentry=Pmw.EntryField(filebar, label_text="Q Data:",
@@ -1398,7 +1447,69 @@ class Main:
 
         Pmw.reporterrorstofile(FancyErrors(self.status))
 
+        # try to run the program initialization macro
+        self.runInitializationMacro()
+        
+ 
+    def selectDefaultFolder(self):
 
+        defaultDir = tkFileDialog.askdirectory(title='Pick a directory',
+                initialdir=self.defaultDir)
+
+        if defaultDir in ['',()]: return 
+
+        # put the filename(s) into the input 
+        self.preferencesdisplay.defaultFolderEntry.setvalue(defaultDir)
+
+        # set the default folder
+        self.setDefaultFolder()
+
+
+    def setDefaultFolder(self):
+
+        defaultDir = self.preferencesdisplay.defaultFolderEntry.getvalue()
+
+        # allow empty strings to signify that there is no default folder
+        if not os.path.isdir(defaultDir) and defaultDir != '':
+            raise UserInputException("Cannot set as the default directory \
+because it does not exist.")
+
+        self.defaultDir = defaultDir
+
+
+        if not os.path.isdir('Preferences'):
+            os.mkdir('Preferences')
+
+        # setting to blank = getting rid of the default directory
+        if defaultDir == '':
+            if os.path.isfile('Preferences/DefaultDirectory.dat'):
+                os.remove('Preferences/DefaultDirectory.dat')
+            return
+
+        # save this to a file to preserve state
+        file = open('Preferences/DefaultDirectory.dat','w')
+        file.write(self.defaultDir)
+        file.close()
+
+        # Make sure to explicitly record this macro command
+        if self.macroLines != None:
+            self.macroMode.explicitMacroRecordTwoLines(
+                    'Default Folder:',
+                    '\t %s' % filename)
+
+
+    def defaultFolderFromFile(self):
+        
+        if os.path.isfile('Preferences/DefaultDirectory.dat'):
+            file = open('Preferences/DefaultDirectory.dat')
+            defaultDir = file.readline()
+            file.close()
+
+            if os.path.isdir(defaultDir):
+                self.preferencesdisplay.defaultFolderEntry.setvalue(defaultDir)
+                self.setDefaultFolder()
+
+ 
     def addStandardQ(self,qmenu):
         files = os.listdir(self.standardQFolder) 
         for file in files:
@@ -1412,16 +1523,30 @@ class Main:
                         basename,standardQFolder+os.sep+file))
                 qmenu.add_command(label=basename,command=load)
         
+        
+    def runInitializationMacro(self):
+        # run the initialization macro if it is a file
+        if os.path.isfile('Preferences/InitializationMacro.dat'):
+            try:
+                self.macroMode.runMacroFromFilename('Preferences/InitializationMacro.dat',
+                        moveAround=0,VERBOSE=0)
+            except Exception, e:
+                # just print out the error b/c we are not in 
+                # the mainloop where errors can be handled
+                # gracefully.
+                print "Error running the initialization macro \
+Preferences/InitializationMacro.dat: "+str(e)+"\n"
+
 
     def resetGui(self):
         """ Reset the Gui to its initial settings, at least mostly.
             
             Here is what should stay after you reset:
             * The calibration data
-            * The checkboxes should stay however they are pushed
-            * Any of the q or chi range inputs
-            * However much the display windows have been streched
-            * The stddev and number of chi values
+            * The check boxes should stay however they are pushed
+            * Any of the Q or chi range inputs
+            * However much the display windows have been stretched
+            * The Stddev and number of chi values
 
             Here is what should be reset:
             * The diffraction file
@@ -1488,6 +1613,7 @@ class Main:
         removeAllItemsFromMenu(self.openedfilesmenu)
         self.openedfilesmenu.add_command(label='None',command=DISABLED)
 
+
     def changeEVorLambda(self,to=None):
         if to != None:
             self.eVorLambda.set(to)
@@ -1522,10 +1648,12 @@ run in either units of either eV or wavelength.")
         if self.macroLines != None:
             self.macroMode.explicitMacroRecordOneLine(self.eVorLambda.get())
 
+
     def resetIntegrationDisplay(self):
         self.integrate = None         
         self.integratedisp.main.withdraw()
         self.integratedisp.reset()
+
 
     def changeQor2Theta(self,to=None):
         if to != None:
@@ -1650,6 +1778,7 @@ work in either Q or 2theta mode.")
         if self.macroLines != None:
             self.macroMode.explicitMacroRecordOneLine(self.Qor2Theta.get())
 
+
     def callprogramabout(self):
         programabout(self.xrdwin)
 
@@ -1660,8 +1789,6 @@ work in either Q or 2theta mode.")
         # crashes, but this seems to do the right thing.
         webbrowser.open(os.path.abspath('tips_and_tricks.html'))
 
-
-    # utility Functions
 
     def getQColor(self,color=None):
         if color==None:
@@ -2356,6 +2483,7 @@ either units of either eV or wavelength.")
             filename = tkFileDialog.asksaveasfilename(
                     filetypes=[('Data File','*.dat'),('All Files','*')],
                     defaultextension = defaultextension,
+                    initialdir=self.defaultDir,
                     title="Save Calibration Data")
 
             if filename in ['',()]: return 
@@ -2398,7 +2526,8 @@ to be called in a macro mode. """
         if filename == '':
             filename = tkFileDialog.askopenfilename(
                     filetypes=[('Data File','*.dat'),('All Files','*')],
-                    defaultextension = ".dat",title="Load Calibration Data")
+                    initialdir=self.defaultDir,
+                    title="Load Calibration Data")
 
         if filename in ['',()]: return 
 
@@ -2777,6 +2906,7 @@ to the image until the calibration parameters are set.")
                         ('EPS','*.eps'),('PDF','*.pdf'),('BMP','*.bmp'),('PNG','*.png'),
                         ('TIFF','*.tiff'), ('All Files','*')],
                     defaultextension = defaultextension,
+                    initialdir=self.defaultDir,
                     title="Save Diffraction Image")
 
             if filename in ['',()]: 
@@ -2915,6 +3045,7 @@ of the parameters are allowed to vary.")
             filename = tkFileDialog.asksaveasfilename(
                     filetypes=[('Data File','*.dat'),('All Files','*')],
                     defaultextension = defaultextension,
+                    initialdir=self.defaultDir,
                     title="Save Last Fit")
 
             if filename in ['',()]: return 
@@ -2952,6 +3083,7 @@ until the Q data is set.")
             filename = tkFileDialog.asksaveasfilename(
                     filetypes=[('Data File','*.dat'),('All Files','*')],
                     defaultextension = defaultextension,
+                    initialdir=self.defaultDir,
                     title="Save Peak List")
 
             if filename in ['',()]: return 
@@ -3285,6 +3417,7 @@ must be less then the largest possible 2theta value.")
             filename = tkFileDialog.asksaveasfilename(
                     filetypes=[('data','*.dat')],
                     defaultextension = defaultextension,
+                    initialdir=self.defaultDir,
                     title="Save Caked Data")
 
             if filename in ['',()]: return 
@@ -3355,6 +3488,7 @@ Q or 2theta mode.")
                         ('BMP','*.bmp'),('PNG','*.png'),
                         ('TIFF','*.tiff'),('All Files','*')],
                     defaultextension = defaultextension,
+                    initialdir=self.defaultDir,
                     title="Save Caked Image")
 
             if filename in ['',()]: return 
@@ -3467,12 +3601,15 @@ either Q or 2theta mode.")
 
     def selectDiffractionFiles(self):
         filenames = tkFileDialog.askopenfilenames(
-            filetypes=[ ('Mar PCK Format','*.mar2300 *.mar3450'), 
+            filetypes=[ 
+                ("All Files", "*"), 
+                ('Mar PCK Format','*.mar2300 *.mar3450'), 
                 ('Mar CCD Format','*.mccd'), 
                 ('ESRF Data Format','*.edf'),
                 ('TIFF','*.tif *.tiff'), 
-                ('Bruker','*.bruker'),
-                ("All files", "*"), ], title="Load Diffraction Image")
+                ('Bruker','*.bruker') ], 
+                initialdir=self.defaultDir,
+                title="Load Diffraction Image")
 
         if filenames in ['',()]: return 
 
@@ -3514,7 +3651,8 @@ either Q or 2theta mode.")
         if filename == '':
             filename = tkFileDialog.askopenfilename(
                     filetypes=[('Data File','*.dat'),('All Files','*')],
-                    defaultextension = ".dat",title="Load Polygon File")
+                    initialdir=self.defaultDir,
+                    title="Load Polygon File")
 
         if filename == '': return
 
@@ -3541,6 +3679,7 @@ file until there are polygons to save.")
             filename = tkFileDialog.asksaveasfilename(
                     filetypes=[('Data File','*.dat'),('All Files','*')],
                     defaultextension = defaultextension,
+                    initialdir=self.defaultDir,
                     title="Load Polygon File")
 
             if filename in ['',()]: return
@@ -3819,7 +3958,7 @@ are not equal.")
 
     def loadDiffractionFile(self,filenames=None):
         """ Optionally takes in a string with filenames 
-            seperated by spaces. """
+            separated by spaces. """
 
         self.extension = None
 
@@ -3827,7 +3966,7 @@ are not equal.")
             # if no filename(s) given, read filename(s) form user input
             filenames=(General.splitPaths(self.fileentry.getvalue()))
         else:
-            # if a single filename (or mulitple filenames 
+            # if a single filename (or multiple filenames 
             # all in one long string) were passed, make 
             #it into a list
             filenames=General.splitPaths(filenames)
@@ -3842,12 +3981,12 @@ before that file can be loaded.")
         self.resetGui()
 
         # put possibly all the filenames into the user input
-        # with each filename seperated by a comma
-        # seperation
+        # with each filename separated by a comma
+        # separation
         self.fileentry.setvalue(General.joinPaths(filenames))
 
         try:
-            # if this dosen't work, we dont want to loose our old object
+            # if this doesn't work, we don't want to loose our old object
 
             # load in the file(s)
             temp = DiffractionData(filenames)
@@ -3855,7 +3994,7 @@ before that file can be loaded.")
         except UnknownFiletypeException,e:
 
             # if the DiffractionData object can't open file, 
-            # ask explicitly for the filetype and tell it to object
+            # ask explicitly for the file type and tell it to object
 
             self.dialog = Pmw.Dialog(self.xrdwin,
                 buttons = ('mar 3450','mar 2300','Mar CCD Format',
@@ -3910,7 +4049,8 @@ before that file can be loaded.")
             filename = tkFileDialog.askopenfilename(
                     filetypes=[('Data File','*.dat'),
                     ('All Files','*')],
-                    defaultextension = ".dat",title="Load Q Data")
+                    initialdir=self.defaultDir,
+                    title="Load Q Data")
 
         if filename in ['',()]: return 
         self.qfileentry.setvalue(filename)
@@ -4446,6 +4586,7 @@ integrated data until the integration has been performed")
             filename = tkFileDialog.asksaveasfilename(
                     filetypes=[('Data File','*.dat'),('All Files','*')],
                     defaultextension = defaultextension,
+                    initialdir=self.defaultDir,
                     title="Save Integrated Intensity")
 
             if filename in ['',()]: return 
@@ -4889,6 +5030,12 @@ has not been set.")
         # make the macro object stop the macro from 
         # recording
         self.macroMode.stopRecordMacro()
+
+    def setAsInitializationMacro(self):
+        # make the macro object stop the macro from 
+        # recording and set the recorded macro as
+        # the macro run ever time the program opens
+        self.macroMode.setAsInitializationMacro()
 
 
 """ Start the Loop if this program is begin called explicitly. """

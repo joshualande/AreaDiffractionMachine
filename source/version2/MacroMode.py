@@ -19,7 +19,7 @@ def cleanstring(string):
     # remove beginning and ending newlines (and I think tabs and spaces)
     temp = string.strip()
 
-    # remvove any trailing colons or question marks
+    # remove any trailing colons or question marks
     temp = removeTrailingCharacters(temp,[':','?'])
     temp = temp.lower()
     return temp
@@ -154,6 +154,9 @@ class MacroMode:
             {'name':'Q Data:','widget':self.GUI.qfileentry,
                     'move to page':moveToCalibration,
                     'function':self.GUI.selectQDataFile},
+            {'name':'Default Folder:',
+                    'widget':self.GUI.preferencesdisplay.defaultFolderEntry,
+                    'function':self.GUI.setDefaultFolder},
         ]
         for widget in self.allLoadEntryFieldsRequiringFilename:
             widget['clean name'] = cleanstring(widget['name'])
@@ -459,19 +462,28 @@ class MacroMode:
         for widget in self.allCheckBoxMenuItems:
             widget['clean name'] = cleanstring(widget['name'])
 
-		
-    def runMacro(self):
-        VERBOSE = 1
 
+
+    def runMacro(self):
+    
         filename = tkFileDialog.askopenfilename(
                 filetypes=[ ('dat file','*.dat'), ("All files", "*"), ], 
+                initialdir=self.GUI.defaultDir,
                 title="Load Macro")
 
         if filename in ['',()]: return 
-
+   
+        self.runMacroFromFilename(filename,moveAround=1,
+            VERBOSE=1)
+		
+    def runMacroFromFilename(self,filename,
+            moveAround,VERBOSE):
+        """ moveAround = whether to move around in the GUI while
+            running through macro commands. """
+             
         if VERBOSE: print 'Testing the validity of the macro file'
         self.testMacroValidity(filename)
-        # an error is rasied of the file is bad
+        # an error is raised of the file is bad
         if VERBOSE: print 'Macro File is Good!'
 
         self.setstatus(self.GUI.macrostatus,'Running Macro')
@@ -490,7 +502,7 @@ class MacroMode:
 
             for widget in self.multipleDataFilesCommand:
                 if cleanline == widget['clean name']:
-                    widget['move to page']()
+                    if moveAround: widget['move to page']()
                     list = macro.next()
 
                     # the macro line is of the form:
@@ -509,7 +521,7 @@ class MacroMode:
             for widget in self.allLoadEntryFieldsRequiringFilename+\
                     self.dataFileCommand:
                 if cleanline == widget['clean name']:
-                    widget['move to page']()
+                    if moveAround: widget['move to page']()
                     filename = macro.next()
                     if VERBOSE: print ' - current: ',filename 
                     # Set the filename
@@ -518,7 +530,7 @@ class MacroMode:
             for widget in self.allLoadButtonsRequiringFilename+\
                     self.allSaveButtonsRequiringFilename:
                 if cleanline == widget['clean name']:
-                    widget['move to page']()
+                    if moveAround: widget['move to page']()
                     # get the filename
                     filename = macro.next()
                     if VERBOSE: print ' - current: ',filename 
@@ -527,7 +539,7 @@ class MacroMode:
 
             for widget in self.allOtherButtons:
                 if cleanline == widget['clean name']:
-                    widget['move to page']()
+                    if moveAround: widget['move to page']()
 
                     if widget['name'] in ['AutoIntegrate Q-I','Integrate Q-I']:
                         self.GUI.changeQor2Theta('Work in Q')
@@ -539,7 +551,7 @@ class MacroMode:
 
             for widget in self.allCheckBoxes:
                 if cleanline == widget['clean name']:
-                    widget['move to page']()
+                    if moveAround: widget['move to page']()
 
                     if widget['name']=='E Fixed:':
                         self.GUI.changeEVorLambda('Work in eV')
@@ -558,7 +570,7 @@ class MacroMode:
             for widget in self.allEntryFieldsRequiringFloat+\
                     self.allEntryFieldsRequiringInt:
                 if cleanline == widget['clean name']:
-                    widget['move to page']()
+                    if moveAround: widget['move to page']()
 
                     if widget['name']=='E:':
                         self.GUI.changeEVorLambda('Work in eV')
@@ -576,14 +588,14 @@ class MacroMode:
                     if widget['name'] in ['Cake Q Lower?','Cake Q Upper?',
                             'Cake Number Of Q?']:
                         self.GUI.changeQor2Theta('Work in Q')
-                    if widget['name'] in ['Ckae 2theta Lower?',
+                    if widget['name'] in ['Cake 2theta Lower?',
                             'Cake 2theta Upper?','Cake Number Of 2theta?']:
                         self.GUI.changeQor2Theta('Work in 2theta')
 
 
                     value = macro.next()
                     if VERBOSE: print ' - current: ',value 
-                    # Put the number in the entryfield
+                    # Put the number in the entry field
                     if widget in self.allEntryFieldsRequiringFloat:
                         widget['widget'].setentry(float(value))
                     if widget in self.allEntryFieldsRequiringInt:
@@ -591,7 +603,7 @@ class MacroMode:
 
             for widget in self.allScales:
                 if cleanline == widget['clean name']:
-                    widget['move to page']()
+                    if moveAround: widget['move to page']()
                     value = macro.next()
                     if VERBOSE: print ' - current: ',value 
                     # Set the scale
@@ -599,18 +611,18 @@ class MacroMode:
 
             for widget in self.allColorMaps:
                 if cleanline == widget['clean name']:
-                    widget['move to page']()
+                    if moveAround: widget['move to page']()
                     colormap = macro.next()
                     if VERBOSE: print ' - current: ',colormap
 
-                    # do the stripping b/c we don't want color 
+                    # do the stripping because we don't want color 
                     # maps that look like "   copper"
                     # to be rejected.
                     widget['widget'].setvalue(colormap.strip())
 
             for widget in self.allColorInputs:
                 if cleanline == widget['clean name']:
-                    widget['move to page']()
+                    if moveAround: widget['move to page']()
                     color = macro.next().lower() 
                     if VERBOSE: print ' - current: ',color
                     # set the color
@@ -632,7 +644,7 @@ class MacroMode:
             # but I want to keep the notation the same
             for widget in self.standardQMenuItem:
                 if cleanline == widget['clean name']:
-                    widget['move to page']()
+                    if moveAround: widget['move to page']()
                     standard = macro.next()
                     if VERBOSE: print ' - current: ',standard
                     widget['function'](standard.strip())
@@ -641,8 +653,8 @@ class MacroMode:
 
             line = macro.next()
 
-            # refresh the gui so it looks like the gui is doing things
-            # Otherwise the gui gets unresponsive while the macro is running.
+            # refresh the GUI so it looks like the GUI is doing things
+            # Otherwise the GUI gets unresponsive while the macro is running.
             # This function could cause trouble, especially if the macro
             # is called as part of a call back. If any trouble arises, this
             # line can simply be commented out. More information on this at
@@ -659,7 +671,7 @@ class MacroMode:
 
             This function does not deal with the macro 
             lines since I can't figure out how to 
-            bind to pushing of the menubar:
+            bind to pushing of the menu bar:
                 * Work in eV
                 * Work in Lambda
                 * Work in 2theta
@@ -758,7 +770,7 @@ class MacroMode:
 
         for colorMap in self.allColorMaps:
             # you need to compare to the part of the Pmw object 
-            # that is acutally pushed since a Pmw object is really 
+            # that is actually pushed since a Pmw object is really 
             # made up out of several smaler Tkinter things.
             if widget == colorMap['widget'].component('listbox'):
 
@@ -935,7 +947,7 @@ file name""" % (filename,linenumber,currentline) )
 
             elif valueInListOfDict(self.dataFileCommand,'clean name',cleanline):
                 # Test if it is a valid "Data File:" line
-                # This can be any number of file or folder names all seperated
+                # This can be any number of file or folder names all separated
                 # by some sort of whitespace.
                 nextline = file.readline().strip()
                 if not nextline: 
@@ -1044,7 +1056,46 @@ line.""" % (filename,linenumber,currentline) )
         self.GUI.macromenu.entryconfig(
             self.GUI.macromenu.index('Stop Record Macro'),state=NORMAL)
         self.GUI.macromenu.entryconfig(
+            self.GUI.macromenu.index('Set As Initialization'),state=NORMAL)
+        self.GUI.macromenu.entryconfig(
             self.GUI.macromenu.index('Run Saved Macro'),state=DISABLED)
+
+
+    def setAsInitializationMacro(self):
+        self.GUI.macrostatus.pack_forget() # remove from screen
+        self.setstatus(self.GUI.macrostatus,'')
+
+        self.GUI.xrdwin.unbind_all(sequence='<ButtonRelease>')
+        self.GUI.xrdwin.unbind_all(sequence='<KeyRelease>')
+
+        self.GUI.macromenu.entryconfig(
+            self.GUI.macromenu.index('Start Record Macro'),state=NORMAL)
+        self.GUI.macromenu.entryconfig(
+            self.GUI.macromenu.index('Stop Record Macro'),state=DISABLED)
+        self.GUI.macromenu.entryconfig(
+            self.GUI.macromenu.index('Set As Initialization'),state=DISABLED)
+        self.GUI.macromenu.entryconfig(
+            self.GUI.macromenu.index('Run Saved Macro'),state=NORMAL)
+
+        if not os.path.isdir('Preferences'):
+            os.mkdir('Preferences')
+
+        if self.GUI.macroLines == None or len(self.GUI.macroLines) < 1:
+            # no macro commands, so delete the file with macro lines in it
+
+            if os.path.isfile('Preferences/InitializationMacro.dat'):
+                os.remove('Preferences/InitializationMacro.dat')
+            return
+            
+        # save this to a file to preserve state
+        file = open('Preferences/InitializationMacro.dat','w')
+        file.write("# Initialization Macro File recorded on "+time.asctime()+"\n")
+        for line in self.GUI.macroLines:
+            file.write(line+"\n")
+        file.close()
+
+        # no more being in a macro
+        self.GUI.macroLines = None
 
 
     def stopRecordMacro(self):
@@ -1059,6 +1110,8 @@ line.""" % (filename,linenumber,currentline) )
         self.GUI.macromenu.entryconfig(
             self.GUI.macromenu.index('Stop Record Macro'),state=DISABLED)
         self.GUI.macromenu.entryconfig(
+            self.GUI.macromenu.index('Set As Initialization'),state=DISABLED)
+        self.GUI.macromenu.entryconfig(
             self.GUI.macromenu.index('Run Saved Macro'),state=NORMAL)
 
         if self.GUI.macroLines == None or len(self.GUI.macroLines) < 1:
@@ -1070,6 +1123,7 @@ line.""" % (filename,linenumber,currentline) )
         filename = tkFileDialog.asksaveasfilename(
                 filetypes=[ ('dat file','*.dat'), ("All files", "*"), ], 
                 defaultextension = defaultextension,
+                initialdir=self.GUI.defaultDir,
                 title="Save Macro")
 
         if filename in ['',()]: 
