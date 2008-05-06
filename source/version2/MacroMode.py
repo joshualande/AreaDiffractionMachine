@@ -1,32 +1,12 @@
 from Tkinter import *
-import Pmw
 import tkFileDialog
 from Exceptions import UserInputException
 import os
 import time
 import re
-import thread
 
 import General
 from DiffractionData import allExtensions
-
-# Flag told to the thread running the macro to quit.
-# Idea from: http://mail.python.org/pipermail/python-list/2002-December/175042.html
-CANCEL_FLAG = None
-
-
-class AbortDisplay:
-    def __init__(self,master):
-        self.main=Pmw.MegaToplevel(master)
-        self.main.title("ABORT")
-        h=self.main.interior()
-        self.button=Button(h,text='ABORT',command=self.abort)
-        self.button.pack(side=RIGHT,padx=10,pady=10)
-
-    def abort(self):
-        # sent a message to the running macro to abort
-        global CANCEL_FLAG
-        CANCEL_FLAG = 1
 
 
 def removeTrailingCharacters(string,characterList):
@@ -500,20 +480,11 @@ class MacroMode:
             moveAround,VERBOSE):
         """ moveAround = whether to move around in the GUI while
             running through macro commands. """
-
-        thread.start_new_thread(self.runMacroAsThread, (filename,moveAround,VERBOSE))
-
-    def runMacroAsThread(self,filename,moveAround,VERBOSE):
-        global CANCEL_FLAG
-    
              
         if VERBOSE: print 'Testing the validity of the macro file'
         self.testMacroValidity(filename)
         # an error is raised of the file is bad
         if VERBOSE: print 'Macro File is Good!'
-
-        abortDisplay = AbortDisplay(self.GUI.xrdwin)
-        abortDisplay.main.show()
 
         self.setstatus(self.GUI.macrostatus,'Running Macro')
         self.GUI.macrostatus.pack(side=RIGHT)
@@ -523,10 +494,8 @@ class MacroMode:
 
         line = macro.next()
 
-        CANCEL_FLAG  = None
-
         # make it do all the right things
-        while line != None and CANCEL_FLAG is None:
+        while line != None:
             cleanline = cleanstring(line)
 
             if VERBOSE: print ' - current: ',line 
@@ -534,7 +503,6 @@ class MacroMode:
             for widget in self.multipleDataFilesCommand:
                 if cleanline == widget['clean name']:
                     if moveAround: widget['move to page']()
-                    abortDisplay.main.show()
                     list = macro.next()
 
                     # the macro line is of the form:
@@ -554,7 +522,6 @@ class MacroMode:
                     self.dataFileCommand:
                 if cleanline == widget['clean name']:
                     if moveAround: widget['move to page']()
-                    abortDisplay.main.show()
                     filename = macro.next()
                     if VERBOSE: print ' - current: ',filename 
                     # Set the filename
@@ -564,7 +531,6 @@ class MacroMode:
                     self.allSaveButtonsRequiringFilename:
                 if cleanline == widget['clean name']:
                     if moveAround: widget['move to page']()
-                    abortDisplay.main.show()
                     # get the filename
                     filename = macro.next()
                     if VERBOSE: print ' - current: ',filename 
@@ -574,7 +540,6 @@ class MacroMode:
             for widget in self.allOtherButtons:
                 if cleanline == widget['clean name']:
                     if moveAround: widget['move to page']()
-                    abortDisplay.main.show()
 
                     if widget['name'] in ['AutoIntegrate Q-I','Integrate Q-I']:
                         self.GUI.changeQor2Theta('Work in Q')
@@ -587,7 +552,6 @@ class MacroMode:
             for widget in self.allCheckBoxes:
                 if cleanline == widget['clean name']:
                     if moveAround: widget['move to page']()
-                    abortDisplay.main.show()
 
                     if widget['name']=='E Fixed:':
                         self.GUI.changeEVorLambda('Work in eV')
@@ -607,7 +571,6 @@ class MacroMode:
                     self.allEntryFieldsRequiringInt:
                 if cleanline == widget['clean name']:
                     if moveAround: widget['move to page']()
-                    abortDisplay.main.show()
 
                     if widget['name']=='E:':
                         self.GUI.changeEVorLambda('Work in eV')
@@ -641,7 +604,6 @@ class MacroMode:
             for widget in self.allScales:
                 if cleanline == widget['clean name']:
                     if moveAround: widget['move to page']()
-                    abortDisplay.main.show()
                     value = macro.next()
                     if VERBOSE: print ' - current: ',value 
                     # Set the scale
@@ -650,7 +612,6 @@ class MacroMode:
             for widget in self.allColorMaps:
                 if cleanline == widget['clean name']:
                     if moveAround: widget['move to page']()
-                    abortDisplay.main.show()
                     colormap = macro.next()
                     if VERBOSE: print ' - current: ',colormap
 
@@ -662,7 +623,6 @@ class MacroMode:
             for widget in self.allColorInputs:
                 if cleanline == widget['clean name']:
                     if moveAround: widget['move to page']()
-                    abortDisplay.main.show()
                     color = macro.next().lower() 
                     if VERBOSE: print ' - current: ',color
                     # set the color
@@ -685,7 +645,6 @@ class MacroMode:
             for widget in self.standardQMenuItem:
                 if cleanline == widget['clean name']:
                     if moveAround: widget['move to page']()
-                    abortDisplay.main.show()
                     standard = macro.next()
                     if VERBOSE: print ' - current: ',standard
                     widget['function'](standard.strip())
@@ -701,14 +660,10 @@ class MacroMode:
             # line can simply be commented out. More information on this at
             # http://www.pythonware.com/library/tkinter/introduction/x9374-event-processing.htm
             self.GUI.xrdwin.update()
-
-        CANCEL_FLAG  = None
-        abortDisplay.main.withdraw()
         
         # remove the macro notice from the screen
         self.GUI.macrostatus.pack_forget() 
         self.setstatus(self.GUI.macrostatus,'')
-
  
     def macroRecord(self,event,typeOfEvent):
         """
