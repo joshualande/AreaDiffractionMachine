@@ -94,6 +94,7 @@ def setstatus(n,format):
     n.config(text=format)
     n.update_idletasks()
 
+
 # Another lame function to set the check box to a string value
 def setcheckbox(checkbox,value):
     if value=='select':
@@ -101,8 +102,8 @@ def setcheckbox(checkbox,value):
     if value=='deselect':
         checkbox.deselect()
 
-class FancyErrors:
 
+class FancyErrors:
     VERBOSE = 0
 
     def __init__(self,status):
@@ -176,6 +177,7 @@ web: areadiffractionmachine.googlecode.com""")
 class PreferencesDisplay:
     """ Creates a window that allows the user to specify some
         customization for the program. """
+
     def __init__(self,master,defaultDir,selectDefaultFolder,setDefaultFolder):
         self.main=Pmw.MegaToplevel(master)
         self.main.title("Preferences")
@@ -203,6 +205,7 @@ class PreferencesDisplay:
    
 class Display:
     """ XRD Display Class. """
+
     def __init__(self,master,imageWidth,imageHeight,
             axisSize,ufunc,colorMaps,title,invertVar,
             logScaleVar):
