@@ -10,8 +10,8 @@ import thread
 import General
 from DiffractionData import allExtensions
 
-# These variables contains the status of the
-# calculations thread, and is checked by it.
+# Flag told to the thread running the macro to quit.
+# Idea from: http://mail.python.org/pipermail/python-list/2002-December/175042.html
 CANCEL_FLAG = None
 
 
