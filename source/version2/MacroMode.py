@@ -43,7 +43,7 @@ class AbortDisplay:
         frame.grid(row=1,column=1,padx=15,pady=15,sticky=N+E+S+W)
 
         self.button=Button(frame,text='ABORT', bg='red',fg='snow',
-                width=6,height=3,font=tkFont.Font(size=40),command=abortFunc)
+                width=6,height=2,font=tkFont.Font(size=40),command=abortFunc)
         self.button.grid(row=1,column=1,sticky=N+E+S+W)
         
 
@@ -502,6 +502,7 @@ class MacroMode:
         self.runMacroFromFilename(filename,moveAround=1,
             VERBOSE=1,ALLOWABORT=1)
 		
+
     def runMacroFromFilename(self,filename,
             moveAround,VERBOSE,ALLOWABORT):
         """ moveAround = whether to move around in the GUI while
@@ -1108,7 +1109,7 @@ line.""" % (filename,linenumber,currentline) )
         self.GUI.xrdwin.bind_all(sequence='<KeyRelease>',
                 func=lambda event,self=self:self.macroRecord(event,'key') )
 
-        # Change the enabled/disabled status of a menuitem so you can't try to
+        # Change the enabled/disabled status of a menu item so you can't try to
         # run a macro while recording a macro. Code inspired by:
         # http://mail.python.org/pipermail/tkinter-discuss/2004-September/000204.html
         self.GUI.macromenu.entryconfig(
@@ -1119,23 +1120,35 @@ line.""" % (filename,linenumber,currentline) )
             self.GUI.macromenu.index('Set As Initialization'),state=NORMAL)
         self.GUI.macromenu.entryconfig(
             self.GUI.macromenu.index('Run Saved Macro'),state=DISABLED)
+        self.GUI.macromenu.entryconfig(
+            self.GUI.macromenu.index('Clear Initialization'),state=DISABLED)
 
 
-    def setAsInitializationMacro(self):
+    def makeClearInitializationOptionRight(self):
+
+        if os.path.isfile('Preferences/InitializationMacro.dat'):
+            self.GUI.macromenu.entryconfig(
+                self.GUI.macromenu.index('Clear Initialization'),state=NORMAL)
+        else:
+            self.GUI.macromenu.entryconfig(
+                self.GUI.macromenu.index('Clear Initialization'),state=DISABLED)
+         
+
+    def clearInitialization(self):
+
+        if os.path.isfile('Preferences/InitializationMacro.dat'):
+            os.remove('Preferences/InitializationMacro.dat')
+
+        self.makeClearInitializationOptionRight()
+            
+
+    def setAsInitialization(self):
+
         self.GUI.macrostatus.pack_forget() # remove from screen
         self.setstatus(self.GUI.macrostatus,'')
 
         self.GUI.xrdwin.unbind_all(sequence='<ButtonRelease>')
         self.GUI.xrdwin.unbind_all(sequence='<KeyRelease>')
-
-        self.GUI.macromenu.entryconfig(
-            self.GUI.macromenu.index('Start Record Macro'),state=NORMAL)
-        self.GUI.macromenu.entryconfig(
-            self.GUI.macromenu.index('Stop Record Macro'),state=DISABLED)
-        self.GUI.macromenu.entryconfig(
-            self.GUI.macromenu.index('Set As Initialization'),state=DISABLED)
-        self.GUI.macromenu.entryconfig(
-            self.GUI.macromenu.index('Run Saved Macro'),state=NORMAL)
 
         if not os.path.isdir('Preferences'):
             os.mkdir('Preferences')
@@ -1156,9 +1169,20 @@ line.""" % (filename,linenumber,currentline) )
 
         # no more being in a macro
         self.GUI.macroLines = None
+        
+        self.GUI.macromenu.entryconfig(
+            self.GUI.macromenu.index('Start Record Macro'),state=NORMAL)
+        self.GUI.macromenu.entryconfig(
+            self.GUI.macromenu.index('Stop Record Macro'),state=DISABLED)
+        self.GUI.macromenu.entryconfig(
+            self.GUI.macromenu.index('Set As Initialization'),state=DISABLED)
+        self.GUI.macromenu.entryconfig(
+            self.GUI.macromenu.index('Run Saved Macro'),state=NORMAL)
+        self.makeClearInitializationOptionRight()
 
 
     def stopRecordMacro(self):
+
         self.GUI.macrostatus.pack_forget() # remove from screen
         self.setstatus(self.GUI.macrostatus,'')
 
@@ -1173,6 +1197,7 @@ line.""" % (filename,linenumber,currentline) )
             self.GUI.macromenu.index('Set As Initialization'),state=DISABLED)
         self.GUI.macromenu.entryconfig(
             self.GUI.macromenu.index('Run Saved Macro'),state=NORMAL)
+        self.makeClearInitializationOptionRight()
 
         if self.GUI.macroLines == None or len(self.GUI.macroLines) < 1:
             # no macro commands, nothing to do

@@ -308,15 +308,18 @@ static PyObject * DiffractionAnalysisWrap_cake(PyObject *self, PyObject *args) {
 
                     intensity = polarizationCorrection(intensity,P,twoTheta,chi);
                 }
-                
-                    if (doPolygonMask && isInPolygons(polygonsX,polygonsY,
-                            polygonBeginningsIndex,polygonNumberOfItems,x,y)) {
 
-                    // if we are doing a polygon mask and our pixel is 
-                    // in one of the polygons, then we should assign its 
-                    // value to be -4 (by convention)
-                    *(double *)(cake->data + chiBin*cake->strides[0] + 
-                            qOrTwoThetaBin*cake->strides[1]) = -4;
+                // clip all intensity values to be at least 0.
+                if (intensity < 0) intensity = 0;
+                
+                if (doPolygonMask && isInPolygons(polygonsX,polygonsY,
+                        polygonBeginningsIndex,polygonNumberOfItems,x,y)) {
+
+                // if we are doing a polygon mask and our pixel is 
+                // in one of the polygons, then we should assign its 
+                // value to be -4 (by convention)
+                *(double *)(cake->data + chiBin*cake->strides[0] + 
+                        qOrTwoThetaBin*cake->strides[1]) = -4;
 
                 } else if (doGreaterThanMask && intensity > greaterThanMask) {
                     // if we are doing the greater than mask, if the 
@@ -601,7 +604,7 @@ static PyObject * DiffractionAnalysisWrap_integrate(PyObject *self, PyObject *ar
                     if (doPolarizationCorrection) 
                         intensity = polarizationCorrection(intensity,P,twoTheta,chi);
 
-                    // if we are doing maskinging, make sure the intensity has the 
+                    // if we are doing masking, make sure the intensity has the 
                     // right bounds and is not in a polygon mask. Otherwise, ignore 
                     // the current pixel
                     if ( (doGreaterThanMask && intensity > greaterThanMask) ||
@@ -622,9 +625,13 @@ static PyObject * DiffractionAnalysisWrap_integrate(PyObject *self, PyObject *ar
         // set the values values
         *(double *)(values->data + i*values->strides[0]) = (lower + (i+0.5)*step);
 
-        // You only need to acutally do the average if there is more then 1 value
-        if (total[i]>1) {
+        if (total[i]>=1) {
             *(double *)(integratedIntensity->data + i*integratedIntensity->strides[0]) /= total[i];
+
+            // clip all intensity values to be at least 0.
+            if (*(double *)(integratedIntensity->data + i*integratedIntensity->strides[0]) < 0)
+                *(double *)(integratedIntensity->data + i*integratedIntensity->strides[0]) = 0;
+                
         } else {
             // -1 means nothing was put into the bin
             *(double *)(integratedIntensity->data + i*integratedIntensity->strides[0]) = -1;

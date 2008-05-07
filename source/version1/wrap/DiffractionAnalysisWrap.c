@@ -584,7 +584,7 @@ static PyObject * DiffractionAnalysisWrap_integrate(PyObject *self, PyObject *ar
         *(double *)(values->data + i*values->strides[0]) = (lower + (i+0.5)*step);
 
         // You only need to acutally do the average if there is more then 1 value
-        if (total[i]>1) {
+        if (total[i]>=1) {
             *(double *)(integratedIntensity->data + i*integratedIntensity->strides[0]) /= total[i];
         } else {
             // -1 means nothing was put into the bin

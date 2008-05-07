@@ -7,6 +7,12 @@ Change log for Version 2 (version 2 has all the version 1 changes in it):
 Changes in the Betas
 
     Major
+    -   Migrated the over from using Abhik's formulas for the
+        geometric transform to Josh's formulas derived in
+        the software manual. See the manual for a discussion
+        of these equations.
+    -   Modified the caking and integrating algorithm so that
+        they will truncate all
     -   Adding support for Bruker data files.
     -   Allow for caking in 2theta.
     -   Ignores any peaks found inside of polygon masks. Also,
@@ -25,6 +31,7 @@ Changes in the Betas
         a recorded macro to be run each time the program opens.
         This can be used to set various check boxes, colors, and
         user inputs to nice default values.
+    -   New Abort Button to stop a macro.
 
     Minor 
     -   The size of the inputs in the GUI has been increased 
@@ -60,6 +67,13 @@ Changes for upcoming version
     -   Fixed a minor bug where an error would be raised when you
         tried to finish drawing adding a polygon before adding any
         nodes to it.
+    
+    Minor
+
+    -   Fix a very minor bug in the intensity integration where
+        the value of the bin would be set to -1 (the value when
+        no pixels were in the bin) if only one pixel was in the 
+        bin.
 
 Changes for version 1.0.4 - (The SVN revision for it is r139)
     -   Fixed Minor bug fix in the macro feature

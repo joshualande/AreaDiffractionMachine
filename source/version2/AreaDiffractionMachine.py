@@ -935,7 +935,10 @@ class Main:
 
         self.macromenu.add_separator()
         self.macromenu.add_command(label='Set As Initialization',
-                command=self.setAsInitializationMacro,state=DISABLED)
+                command=self.setAsInitialization,state=DISABLED)
+
+        self.macromenu.add_command(label='Clear Initialization',
+                command=self.clearInitialization,state=DISABLED)
 
         # this name="help" syntax makes the help menu 
         # show up in the right place on the mac, where 
@@ -1437,6 +1440,7 @@ class Main:
         # this must be called before the calls to the 
         # change functions. Give it this object to work on
         self.macroMode = MacroMode(self,setstatus) 
+        self.macroMode.makeClearInitializationOptionRight()
 
         # have the titles of self.energyOrWavelength set 
         # to the right thing
@@ -5033,11 +5037,14 @@ has not been set.")
         # recording
         self.macroMode.stopRecordMacro()
 
-    def setAsInitializationMacro(self):
+    def setAsInitialization(self):
         # make the macro object stop the macro from 
         # recording and set the recorded macro as
         # the macro run ever time the program opens
-        self.macroMode.setAsInitializationMacro()
+        self.macroMode.setAsInitialization()
+
+    def clearInitialization(self):
+        self.macroMode.clearInitialization()
 
 
 """ Start the Loop if this program is begin called explicitly. """

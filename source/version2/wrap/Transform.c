@@ -53,6 +53,14 @@ double convertQToTwoTheta(double Q, double wavelength) {
 }
 
 
+/*
+ * This transformation is done using Josh's equations derived in
+ * the software manual.
+ *   xMeasured = x'''
+ *   yMeasured = y'''
+ *   xPhysical = x
+ *   yPhysical = y
+ */
 void getTwoThetaChi(double xCenter,double yCenter,double distance,
         double xPixel,double yPixel,
         double pixelLength,double pixelHeight,double rotation,
@@ -74,12 +82,14 @@ void getTwoThetaChi(double xCenter,double yCenter,double distance,
     xMeasured = (xPixel-xCenter)*pixelLength_mm;
     yMeasured = (yPixel-yCenter)*pixelHeight_mm;
 
-    bottom = distance+(yMeasured*cos_rotation-xMeasured*sin_rotation)*sin_alpha+
-            (xMeasured*cos_rotation+yMeasured*sin_rotation)*sin_beta;
-        
-    // calculate the x y cordinates on the imaginary detector using fancy math
-    xPhysical = distance*(xMeasured*cos_rotation+yMeasured*sin_rotation)*cos_beta/bottom;
-    yPhysical = distance*(yMeasured*cos_rotation-xMeasured*sin_rotation)*cos_alpha/bottom;
+    bottom = distance + (xMeasured*cos_rotation+yMeasured*sin_rotation)*sin_beta+
+            (-xMeasured*sin_rotation+yMeasured*cos_rotation)*sin_alpha*cos_beta;
+    
+    // calculate the x y coordinates on the imaginary detector using fancy math
+    xPhysical = distance*((xMeasured*cos_rotation+yMeasured*sin_rotation)*cos_beta
+            -(-xMeasured*sin_rotation+yMeasured*cos_rotation)*sin_alpha)/bottom;
+
+    yPhysical = distance*(-xMeasured*sin_rotation+yMeasured*cos_rotation)*cos_alpha/bottom;
 
     *twoTheta = atan2(sqrt(xPhysical*xPhysical+yPhysical*yPhysical),distance);
     // Convert to radians
@@ -120,6 +130,15 @@ void getQChi(double xCenter,double yCenter,double distance,
 }
 
 
+/*
+ * This transformation is done using Josh's equations derived in
+ * the software manual. The notation in the manual corresponds
+ * to the variable names by:
+ *   xMeasured = x'''
+ *   yMeasured = y'''
+ *   xPhysical = x
+ *   yPhysical = y
+ */
 void getXY(double xCenter,double yCenter,double distance,double energy,
         double q,double chi,double pixelLength,double pixelHeight,
         double rotation,
@@ -162,10 +181,14 @@ void getXY(double xCenter,double yCenter,double distance,double energy,
         yPhysical = -1.0*fabs(yPhysical);
 
     // I should worry about cos_alpha being 0
-    bottom = distance*cos_beta-xPhysical*sin_beta-yPhysical*cos_beta*sin_alpha/cos_alpha;
+    bottom = distance*cos_beta-xPhysical*sin_beta-
+            cos_beta*(xPhysical*cos_beta+distance)/( (xPhysical*cos_alpha)/(yPhysical*sin_alpha)+1);
 
-    xMeasured = (xPhysical*distance*cos_rotation-yPhysical*distance*(cos_beta/cos_alpha)*sin_rotation)/bottom;
-    yMeasured =  (xPhysical*distance*sin_rotation+yPhysical*distance*(cos_beta/cos_alpha)*cos_rotation)/bottom;
+    xMeasured = (distance*xPhysical*cos_rotation-
+            distance*xPhysical*cos_beta*sin_rotation/(xPhysical*cos_alpha/yPhysical+sin_alpha))/bottom;
+
+    yMeasured = (distance*xPhysical*sin_rotation + 
+            distance*xPhysical*cos_beta*cos_rotation/(xPhysical*cos_alpha/yPhysical+sin_alpha))/bottom;
 
     // convert pixelLength & pixelHeight into mm units so that
     // they are comparable with distance (in units of mm)
