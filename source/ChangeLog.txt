@@ -7,13 +7,14 @@ Change log for Version 2 (version 2 has all the version 1 changes in it):
 Changes in the Betas
 
     Major
+    -   Adding support for Bruker data files.
+
     -   Migrated the over from using Abhik's formulas for the
         geometric transform to Josh's formulas derived in
         the software manual. See the manual for a discussion
         of these equations.
     -   Modified the caking and integrating algorithm so that
         they will truncate all
-    -   Adding support for Bruker data files.
     -   Allow for caking in 2theta.
     -   Ignores any peaks found inside of polygon masks. Also,
         these peaks are no longer displayed on top of the
@@ -32,6 +33,9 @@ Changes in the Betas
         This can be used to set various check boxes, colors, and
         user inputs to nice default values.
     -   New Abort Button to stop a macro.
+    -   Macros will now create folders if necessary in order to
+        save files specified to go into folders that don't yet 
+        exist.
 
     Minor 
     -   The size of the inputs in the GUI has been increased 

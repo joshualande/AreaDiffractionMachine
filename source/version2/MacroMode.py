@@ -555,7 +555,7 @@ class MacroMode:
 
                     widget['function'](filenames.strip())
 
-            # deal w/ each type of GUI item seperately
+            # deal w/ each type of GUI item separately
             for widget in self.allLoadEntryFieldsRequiringFilename+\
                     self.dataFileCommand:
                 if cleanline == widget['clean name']:
@@ -567,14 +567,29 @@ class MacroMode:
                     # Set the filename
                     widget['function'](filename.strip())
 
-            for widget in self.allLoadButtonsRequiringFilename+\
-                    self.allSaveButtonsRequiringFilename:
+            for widget in self.allLoadButtonsRequiringFilename:
                 if cleanline == widget['clean name']:
                     if moveAround: widget['move to page']()
                     if ALLOWABORT: self.abortDisplay.main.show()
                     if ALLOWABORT: self.abortDisplay.button.update()
                     # get the filename
                     filename = macro.next()
+                    if VERBOSE: print ' - current: ',filename 
+                    # Call the associated function requiring the filename
+                    widget['function'](filename.strip())
+
+            for widget in self.allSaveButtonsRequiringFilename:
+                if cleanline == widget['clean name']:
+                    if moveAround: widget['move to page']()
+                    if ALLOWABORT: self.abortDisplay.main.show()
+                    if ALLOWABORT: self.abortDisplay.button.update()
+                    # get the filename
+
+                    filename = macro.next()
+
+                    # create the folder the file is in (if it 
+                    # doesn't exit).
+                    General.createFolderForFile(filename.strip())
                     if VERBOSE: print ' - current: ',filename 
                     # Call the associated function requiring the filename
                     widget['function'](filename.strip())
@@ -587,7 +602,8 @@ class MacroMode:
 
                     if widget['name'] in ['AutoIntegrate Q-I','Integrate Q-I']:
                         self.GUI.changeQor2Theta('Work in Q')
-                    if widget['name'] in ['AutoIntegrate 2theta-I','Integrate 2theta-I']:
+                    if widget['name'] in ['AutoIntegrate 2theta-I',
+                            'Integrate 2theta-I']:
                         self.GUI.changeQor2Theta('Work in 2theta')
 
                     # Call the associated function
@@ -606,7 +622,7 @@ class MacroMode:
 
                     value = macro.next()
                     if VERBOSE: print ' - current: ',value 
-                    # Set the checkbox
+                    # Set the check box
                     clean = cleanstring(value.lower())
                     if clean=='select':
                         widget['widget'].select()
@@ -684,7 +700,12 @@ class MacroMode:
 
             for widget in self.allSaveMenuItemsRequiringFilename: 
                 if cleanline == widget['clean name']:
+
                     filename = macro.next()
+                    # create the folder the file is in (if it 
+                    # doesn't exit).
+                    General.createFolderForFile(filename.strip())
+
                     if VERBOSE: print ' - current: ',filename
                     # Set the filename
                     widget['function'](filename.strip())
@@ -756,7 +777,6 @@ class MacroMode:
                 * Save Caked Data
                 * Save Integration Data
         """
-
         widget = event.widget
 
         for checkbutton in self.allCheckBoxes:
@@ -870,11 +890,13 @@ class MacroMode:
                 if button['name'] in ['AutoIntegrate Q-I','Integrate Q-I'] and \
                         self.GUI.Qor2Theta.get() == 'Work in 2theta':
                     continue
-                if button['name'] in ['AutoIntegrate 2theta-I','Integrate 2theta-I'] and \
+                if button['name'] in ['AutoIntegrate 2theta-I',
+                        'Integrate 2theta-I'] and \
                         self.GUI.Qor2Theta.get() == 'Work in Q':
                     continue
 
-                if len(self.GUI.macroLines)>0 and self.GUI.macroLines[-1]==button['name']:
+                if len(self.GUI.macroLines)>0 and \
+                        self.GUI.macroLines[-1]==button['name']:
                     self.GUI.macroLines.pop()
 
                 self.GUI.macroLines.append(button['name'])
@@ -939,7 +961,8 @@ macro file because line %d ("%s") must be followed by a valid \
 number""" % (filename,linenumber,currentline) )
                 linenumber += 1
 
-            elif valueInListOfDict(self.allEntryFieldsRequiringInt,'clean name',cleanline):
+            elif valueInListOfDict(self.allEntryFieldsRequiringInt,
+                    'clean name',cleanline):
                 nextline = file.readline().strip()
                 if not nextline:
                     file.close()
@@ -990,7 +1013,8 @@ macro file because line %d ("%s") must be followed by the line \
 
             elif valueInListOfDict(self.allColorMaps,'clean name',cleanline):
                 nextline = cleanstring(file.readline())
-                if not nextline or not nextline in self.GUI.colorMaps.getColorMapNames():
+                if not nextline or not \
+                        nextline in self.GUI.colorMaps.getColorMapNames():
                     file.close()
                     raise UserInputException("""%s is not a valid \
 macro file because line %d ("%s") must be followed by a line with \
@@ -1022,10 +1046,11 @@ and foldernames""" % (filename,linenumber,currentline) )
                 expandDataFile(nextline,filename,linenumber,currentline)
                 linenumber += 1
 
-            elif valueInListOfDict(self.multipleDataFilesCommand,'clean name',cleanline):
+            elif valueInListOfDict(self.multipleDataFilesCommand,
+                    'clean name',cleanline):
                 # Test if it is a valid "Multiple Data Files:".
                 # This can be a list of folder names and of lists enclosed by [ ] 
-                # Inside of the [ ] can be a list of file names all seperated
+                # Inside of the [ ] can be a list of file names all separated
                 # by some sort of white space
 
                 nextline = file.readline().strip()

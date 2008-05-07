@@ -8,6 +8,18 @@ import string
 from Exceptions import UserInputException
 
 
+def createFolderForFile(filename):
+    path = os.path.split(filename)[0]
+    if path == '':
+        raise Exception("Unable to create \
+folder for the file %s to live in because \
+the file is not valid." % filename)
+
+    if not os.path.isdir(path):
+        createFolderForFile(path)
+        os.mkdir(path)
+
+
 def getextension(filename):
     """ Returns the extension of a file. """
     return os.path.splitext(filename)[1]
