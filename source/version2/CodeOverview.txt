@@ -19,25 +19,26 @@ Called by DiffractionData:
 * IntegrateIntensity.py
 * Cake.py
 * Fit.py
+* MakeDiffractionImage.py
 * Reading Diffraction Data:
   * MarCCD.py
   * ESRF.py
   * Bruker.py
   * EdfFile.py
+  * Tiff.py
 
-Helper
-* General.py
+Helper (more specific for diffraction)
 * QData.py
+* CalibrationData.py
+* PeakList.py
+* Transform.py
+
+Helper (more general)
+* General.py
 * Axis.py
 * LinePlot.py
-* PeakList.py
 * Exceptions.py
 
-Thumbs.db
-CalibrationData.py
-MakeDiffractionImage.py
-Tiff.py
-Transform.py
 ColorMaps.py
 MarXXXX.py
 colormaps.txt
