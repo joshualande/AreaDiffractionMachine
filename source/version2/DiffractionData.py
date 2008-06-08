@@ -55,18 +55,6 @@ class DiffractionData:
 
             >>> object.getSize()
             3450
-            >>> object.getHeaderPixelLength()
-            100.0
-            >>> object.getHeaderPixelHeight()
-            100.0
-            >>> print "%.10f" % object.getHeaderWavelength()
-            0.9735400000
-            >>> print "%.10f" % object.getHeaderDistance()
-            125.2960000000
-            >>> print "%.10f" % object.getHeaderCenterX()
-            1725.0000000000
-            >>> print "%.10f" % object.getHeaderCenterY()
-            1725.0000000000
           
         A calibrationData object stores the parameters of an experiment.
         calibrationDataFromHeader() will pull this data out of the header
@@ -346,42 +334,9 @@ file extension" % filename )
         return self.theDiffractionData.size
 
 
-    def getHeaderPixelLength(self): 
-        """ Returns the PIXEL LENGTH value read from the 
-            diffraction file. PIXEL LENGTH is the size 
-            of one pixel in micron units. """
-        return self.theDiffractionData.headerPixelLength
-
-
-    def getHeaderPixelHeight(self): 
-        """ Returns the PIXEL HEIGHT value read from the 
-            diffraction file. PIXEL HEIGHT is the size 
-            of one pixel in micron units. """
-        return self.theDiffractionData.headerPixelHeight
-
-
-    def getHeaderWavelength(self): 
-        """ Returns the WAVELENGTH value read from the 
-            diffraction file. WAVELENGTH is the wavelength
-            used during the experiment as measured in 
-            Angstroems. """
-        return self.theDiffractionData.headerWavelength
-
-
-    def getHeaderDistance(self): 
-        return self.theDiffractionData.headerDistance
-
-
-    def getHeaderCenterX(self): 
-        return self.theDiffractionData.headerCenterX
-
-
-    def getHeaderCenterY(self): 
-        return self.theDiffractionData.headerCenterY
-
-
     def getPixelValue(self,x,y):
         return self.theDiffractionData.data[x][y]
+
 
     def getPixelValueBilinearInterpolation(self,x,y):
         if x<0 or x>self.theDiffractionData.size or \
@@ -408,25 +363,25 @@ outside of the image.\n")
             rotation angle because that data is not stored in 
             any header data. """
         data = CalibrationData.CalibrationData()
-        if self.getHeaderCenterX() != None:
-            data.setCenterX(self.getHeaderCenterX())
-        if self.getHeaderCenterY() != None:
-            data.setCenterY(self.getHeaderCenterY())
-        if self.getHeaderDistance() != None:
-            data.setDistance(self.getHeaderDistance())
-        if self.getHeaderWavelength() != None:
-            data.setWavelength(self.getHeaderWavelength())
-        if self.getHeaderPixelLength() != None:
-            data.setPixelLength(self.getHeaderPixelLength())
-        if self.getHeaderPixelHeight() != None:
-            data.setPixelHeight(self.getHeaderPixelHeight())
+        if self.theDiffractionData.headerCenterX != None:
+            data.setCenterX(self.theDiffractionData.headerCenterX)
+        if self.theDiffractionData.headerCenterY != None:
+            data.setCenterY(self.theDiffractionData.headerCenterY)
+        if self.theDiffractionData.headerDistance != None:
+            data.setDistance(self.theDiffractionData.headerDistance)
+        if self.theDiffractionData.headerWavelength != None:
+            data.setWavelength(self.theDiffractionData.headerWavelength)
+        if self.theDiffractionData.headerPixelLength != None:
+            data.setPixelLength(self.theDiffractionData.headerPixelLength)
+        if self.theDiffractionData.headerPixelHeight != None:
+            data.setPixelHeight(self.theDiffractionData.headerPixelHeight)
 
-        if self.getHeaderCenterX() != None and \
-                self.getHeaderCenterY() != None and \
-                self.getHeaderDistance() != None and \
-                self.getHeaderWavelength() != None and \
-                self.getHeaderPixelLength() != None and \
-                self.getHeaderPixelHeight() != None:
+        if self.theDiffractionData.headerCenterX != None and \
+            self.theDiffractionData.headerCenterY != None and \
+                self.theDiffractionData.headerDistance != None and \
+                self.theDiffractionData.headerWavelength != None and \
+                self.theDiffractionData.headerPixelLength != None and \
+                self.theDiffractionData.headerPixelHeight != None:
             data.setAlpha(0)
             data.setBeta(0)
             data.setRotation(0)

@@ -1,0 +1,67 @@
+The Area Diffraction Machine is spread out across many different files
+and many different objects. The Tkinter GUI is created and all of the
+event handling is done by AreaDiffractionMachine.py. So this file
+is really the meat of the program, controlling the operation of the
+program.
+
+Called by AreaDiffractionMachine:
+* MacroMode.py
+
+There is one large object called DiffractionData inside the file
+DiffractionData.py which handles basically all the diffraction
+analysis (often by calling other files). You can use it to load
+in diffraction data, to get header data out of it, to save the 
+diffraction image as a popular image format, perform diffraction
+image calibration, create and save peak lists to a file, cake
+diffraction data and save cakes 
+
+Called by DiffractionData:
+* IntegrateIntensity.py
+* Cake.py
+* Fit.py
+* Reading Diffraction Data:
+  * MarCCD.py
+  * ESRF.py
+  * Bruker.py
+  * EdfFile.py
+
+Helper
+* General.py
+* QData.py
+* Axis.py
+* LinePlot.py
+* PeakList.py
+* Exceptions.py
+
+Thumbs.db
+CalibrationData.py
+MakeDiffractionImage.py
+Tiff.py
+Transform.py
+ColorMaps.py
+MarXXXX.py
+colormaps.txt
+MaskedPixelInfo.py
+PmwBlt.py
+xbms
+PmwColor.py
+PmwFreeze.py
+
+StandardQ
+
+
+DiffractionAnalysisWrap.c
+DrawWrap.c
+FitWrap.c
+MarCCDWrap.c
+PolygonWrap.c
+Transform.c
+UncompressWrap.c
+levmar
+marccd_header.h
+pck.c
+pnpoly.c
+polygon.c
+run.bat.txt
+setup.py
+
