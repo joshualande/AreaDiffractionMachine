@@ -8,38 +8,45 @@ Changes in the Betas
 
     Major
     -   Adding support for Bruker data files.
-
-    -   Migrated the over from using Abhik's formulas for the
-        geometric transform to Josh's formulas derived in
-        the software manual. See the manual for a discussion
+    -   The program now uses Josh's formuals for the geometric
+    	transform derived in the software manual instead of
+	Abhik's formulas. See the manual for a discussion
         of these equations.
-    -   Modified the caking and integrating algorithm so that
-        they will truncate all
+    -   Modified the caking and integrating algorithm so that 
+    	they would set all intensity integration data or cake 
+        data values that are less than 0 to equal exactly 0. This 
+        was done so that there wouldn't be any ambiguity since cake 
+        and intensity values are sometimes given negative values to 
+        signify other things happening in the data (like pixel masks 
+	or no values put into a bin). 
     -   Allow for caking in 2theta.
-    -   Ignores any peaks found inside of polygon masks. Also,
-        these peaks are no longer displayed on top of the
-        diffraction and cake displays when they are on 
-        top of a polygon mask.
-    -   Improved the formatting of saved peak list files.
-        They have a better structure (space separated instead
-        of tab separated) and a more verbose header.
+    -   The program now ignores any peaks found inside polygon masks. 
+        Also, peaks are no longer displayed on top of polygon masks in 
+	the diffraction and cake displays. 
+    -   Improved the formatting of peak list files. The peak list 
+        files are now space separated instead of tab separated which 
+	makes the output look nicer. The header is also more verbose. 
     -   New "Save Last Fit" button can be used to save all of the 
         information about the previous calibration to a text file.
-    -   Minor tic marks for intensity integration's log Y axis.
+    -   The intensity integration will display minor tic marks on the 
+        y axis when displaying a log scale. 
     -   New "Preferences" menu opened form the "File" menu can be 
         used to specify the default folder to select files form.
-    -   New "Set As Initialization" option can be used to save
-        a recorded macro to be run each time the program opens.
-        This can be used to set various check boxes, colors, and
-        user inputs to nice default values.
+    -   There is a new option called "Set As Initialization" which can 
+        be used to save a recorded macro so that it is run each time the 
+	program opens. You set this by recording a macro like usual, but 
+	then pushing the "Set As Initialization" option instead of the 
+	"Stop Record Macro". The saved macro file will be run whenever the 
+	program opens. This can be used to set various check boxes, colors, 
+	and user inputs to nice default values. 
     -   New Abort Button to stop a macro.
     -   Macros will now create folders if necessary in order to
         save files specified to go into folders that don't yet 
         exist.
 
     Minor 
-    -   The size of the inputs in the GUI has been increased 
-        to help view big numbers.
+    -   The size of the inputs in the GUI have been increased so 
+        that longer numbers can be read easier. 
     -   Fix a bug where the integration window wouldn't resize
         properly and sometimes the labels and check box at
         the bottom of the window would disappear
@@ -53,14 +60,13 @@ Changes in the Betas
     -   Increased the precision of the numbers saved during 
         caking.
     -   Increased the precision of the numbers saved during
-        intensity integration. Also, the intensity data is 
-        now saved with spaces separating the numbers instead
-        of tabs.
+        intensity integration. 
+    -   Also, the intensity data is now saved with spaces 
+    	separating the numbers instead of tabs.
     -   Changed the default extension of diffraction data
         that is loaded in from mar3450 to "All Files" so that
     -   Removed the Dark Current display from the "Calibration"
         tab since it wasn't doing anything.
-
 
 -------
 
