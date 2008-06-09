@@ -3671,7 +3671,7 @@ either Q or 2theta mode.")
                 ('Mar CCD Format','*.mccd'), 
                 ('ESRF Data Format','*.edf'),
                 ('TIFF','*.tif *.tiff'), 
-                ('Bruker','*.bruker') ], 
+                ('Bruker','*.gfrm') ], 
                 initialdir=self.defaultDir,
                 title="Load Diffraction Image")
 
