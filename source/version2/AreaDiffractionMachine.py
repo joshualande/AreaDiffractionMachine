@@ -51,8 +51,6 @@ Image.EXTENSION[".eps"]="EPS"
 Image.SAVE["PDF"]=PdfImagePlugin._save
 Image.EXTENSION[".pdf"]="PDF"
 
-
-# Below are packages special to this program
 import QData
 import ColorMaps
 from Exceptions import UserInputException,UnknownFiletypeException
@@ -64,17 +62,15 @@ from MacroMode import MacroMode
 from Axis import Axis
 import LinePlot
 
-
 root=Tkinter.Tk()
 
-# This is here to fix a bug in py2app. You can read about it here:
+# This is here to fix a bug in py2app. You can read about it at:
 # http://www.thescripts.com/forum/thread543994.html
 try:
     if (sys.platform != "win32") and hasattr(sys, 'frozen'):
         root.tk.call('console', 'hide')
 except:
     # if this dose not work for some reason, don't worry about it
-    # and run the program anyway
     pass
 
 Pmw.initialise(root)
@@ -89,23 +85,35 @@ def removeAllItemsFromMenu(menu):
         menu.delete(0,menu.index("last"))
 
 
-# lame function for updating status bars
 def setstatus(n,format):
+    """ lame function for updating status bars. """
+
     n.config(text=format)
     n.update_idletasks()
 
-# Another lame function to set the check box to a string value
+
 def setcheckbox(checkbox,value):
+    """ Another lame function to set the check box to a string value. """
     if value=='select':
         checkbox.select()
     if value=='deselect':
         checkbox.deselect()
 
 class FancyErrors:
+    """ This class implements a 'write' function which takes in
+        an error message and raises an error box with the
+        error string as the message. The program utilizes the
+        Pmw function reporterrorstofile so that an error is always
+        'written' with FancyErrors instead of the default Tkinter
+        way. This makes the error messages have a nice format. """
 
     VERBOSE = 0
 
     def __init__(self,status):
+        """ The initialization compiles a few regexps to pull the real 
+            error message out of the larger string that is passed to the 
+            function. """
+        
         # I think this is how Linux/Windows exceptions are formatted
         patternstring = r"""UserInputException: ['"](.*)['"]"""
         self.pattern = re.compile(patternstring, re.DOTALL)
@@ -117,11 +125,20 @@ class FancyErrors:
 
         self.status=status
 
+
     def write(self,string):
+        """ Takes in a string with an error message passed into it.
+            If the error was a UserInputException, the program uses a 
+            regexp to pull out the text of the error message and leaves 
+            the formatting. It displays the error using an error box. 
+            Otherwise, the program displays the whole ugly error message 
+            with all the excess formatting using an error message. This 
+            function also prints out the error to the command line for 
+            good measure. """
         setstatus(self.status,'Error...')
         # Try to remove the recording macro text box, 
         # this will only work if an error was thrown when
-        # recording a macro. If that dosen't happen, then
+        # recording a macro. If that doesn't happen, then
         # simply ignore any errors raised
         try:
             self.macrostatus.pack_forget() # remove from screen
@@ -173,9 +190,14 @@ web: areadiffractionmachine.googlecode.com""")
             applicationname='The Area Diffraction Program')#,icon_image=logo)
     # about.component('icon').image=logo
 
+
 class PreferencesDisplay:
     """ Creates a window that allows the user to specify some
-        customization for the program. """
+        customization for the program. 
+        
+        It has an option "Default Folder:" which allows the user to
+        specify a default place to look when selecting files or 
+        folders. """
 
     def __init__(self,master,defaultDir,selectDefaultFolder,setDefaultFolder):
         self.main=Pmw.MegaToplevel(master)
@@ -203,11 +225,36 @@ class PreferencesDisplay:
         filebar.pack(side=TOP,padx=2,pady=2,fill=X)       
    
 class Display:
-    """ XRD Display Class. """
+    """ Creates a window for displaying either diffraction data
+        or caked data. On the left is a canvas self.imframe to 
+        display the data. There is also an axis self.bottomAxis 
+        on the bottom of the data and an axis self.rightAxis to
+        the right of the axis. To the right of the data are also
+        two intensity sliders self.intensitylo and self.intensityhi.
+        Below the data is an "Update Image" button. Below that are
+        displays for the selected value of X, Y, Q, D, chi, and I.
+        """
     def __init__(self,master,imageWidth,imageHeight,
             axisSize,ufunc,colorMaps,title,invertVar,
             logScaleVar):
+        """
+            Initializes the Display object.
 
+            Parameters:
+                master - the main Tk object
+                imageWidth - the width of the data in pixels
+                imageHeight - the height of the data in pixels
+                axisSize - the width of the right axis and the height
+                    of the top axis in pixels.
+                ufunc - A function that will update the window to display
+                    the latest data.
+                colorMaps - a ColorMaps object
+                title - the title of the window
+                invertVar - a IntVar() object describing whether or not the
+                    invert check box should be selected.
+                logScaleVar - a IntVar() object describing whether or not the
+                    log scale check box should be selected.
+        """
         self.imageWidth = imageWidth
         self.imageHeight = imageHeight
         self.axisSize=axisSize
@@ -321,8 +368,8 @@ class Display:
 
 
     def updateimageNoComplainNoShow(self,*args):
-        """ Calls the supplied update function without 
-            rasing an error if anything bad happends.
+        """ Calls the update function without 
+            raising an error if anything bad happens.
             This is useful when you want to try to redraw the window
             without throwing any obnoxious errors. Also, this
             function will not show the current window but
@@ -333,8 +380,12 @@ class Display:
         except:
             setstatus(self.status,'Ready')
 
+
     def updateimageNoComplain(self,*args):
-        # don't raise an error message if anything goes wrong. 
+        """ Calls the update function without
+            raising an error if anything bad happens. It
+            then makes the window visible if no
+            errors were raised. """
         try:
             self.ufunc()
             self.main.show()
@@ -343,7 +394,11 @@ class Display:
 
 
     def updateimageNoComplainWithdrawIfError(self,*args):
-        # don't raise an error message if anything goes wrong. 
+        """ Calls the update function without
+            raising an error if anything bad happens. It
+            then makes the window visible if no 
+            errors were raised. If an error was raised, the
+            window is withdrawn. """
         try:
             self.ufunc()
             self.main.show()
@@ -351,7 +406,10 @@ class Display:
             self.main.withdraw()
             setstatus(self.status,'Ready')
 
+
     def updateimage(self,*args):
+        """ Calls the update function and then makes the
+            window visible.""" 
         self.ufunc()
         self.main.show()
 
@@ -641,7 +699,7 @@ class Main:
     peakList = None
     calibrationData = []
 
-    # The color of the Q lins that get drawn on the 
+    # The color of the Q lines that get drawn on the 
     # diffraction data
     qLinesColor = StringVar()
     qLinesColor.set("red")
