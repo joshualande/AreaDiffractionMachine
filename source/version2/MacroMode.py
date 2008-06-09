@@ -5,7 +5,8 @@ from Exceptions import UserInputException
 import os
 import time
 import re
-import Pmw
+import PmwFreeze as Pmw
+
 
 import General
 from DiffractionData import allExtensions
