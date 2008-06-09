@@ -1,68 +1,119 @@
+The Area Diffraction Machine Code Overview
+
+The Area Diffraction Machine is mainly written in Python. It uses a Tk GUI
+and the python package Tkinter to interface with Tk. The python package Pmw 
+is used to add more advanced GUI elements to the program. The Python package
+Numeric is used to deal with numeric arrays inside of the program and the
+python package PIL, the Python Imaging Library, is used to display images in
+the GUI. Finally, most of the numerically intensive parts of this program
+were written in C and wrapped into Python libraries as what are called C 
+extensions. A familiarity with Python, C, writing C extensions, and these 
+python packages is recommended before modifying this program. It is also
+strongly recommended to read the software manual for this program before
+looking too much into the code itself.
+
 The Area Diffraction Machine is spread out across many different files
 and many different objects. The Tkinter GUI is created and all of the
-event handling is done by AreaDiffractionMachine.py. So this file
-is really the meat of the program, controlling the operation of the
-program.
+event handling is done by AreaDiffractionMachine.py. So this file is 
+really the meat of the program, controlling the operation of the program.
 
-Called by AreaDiffractionMachine:
-* MacroMode.py
+MacroMode.py contains several functions which run and record macros when 
+the option is selected by the program. 
 
 There is one large object called DiffractionData inside the file
-DiffractionData.py which handles basically all the diffraction
-analysis (often by calling other files). You can use it to load
-in diffraction data, to get header data out of it, to save the 
-diffraction image as a popular image format, perform diffraction
-image calibration, create and save peak lists to a file, cake
-diffraction data and save cakes 
+DiffractionData.py which handles basically all the diffraction analysis 
+(often by calling other files). It is called frequently by 
+AreaDiffractionMachine.py to do the diffraction analysis. This object can 
+be use it to load in diffraction data, get header data out of it, save the 
+diffraction image as a popular image format, perform diffraction image 
+calibration, create and save peak lists to a file, cake diffraction data, 
+and perform intensity integration of diffraction data, 
 
-Called by DiffractionData:
-* IntegrateIntensity.py
-* Cake.py
-* Fit.py
-* MakeDiffractionImage.py
-* Reading Diffraction Data:
+DiffractionImage.py calls several other files to do parts of the diffraction
+analysis. And many of these files also call wrapped C code to do the actual 
+analysis. First, in order to read in different types of diffraction data,
+the program can call one of several files: 
+  * MarXXXX.py
   * MarCCD.py
   * ESRF.py
   * Bruker.py
-  * EdfFile.py
   * Tiff.py
+These files all have the same API so that it is easy for DiffractionData.py
+to read in different types of files. ESRF.py is really just a wrapper which
+calls the file EdfFile.py to to the hard work of reading in the ESRF Data
+Format EDF. MarXXXX.py uses the wrapped C file wrap/UncompressWrap.c to 
+uncompress Mar data. wrap/UncompressWrap.c is really just a wrapper that 
+calls the file wrap/pck.c which does the real uncompressing. MarCCD.py calls 
+the wrapped C file wrap/MarCCDWrap.c to read out of the diffraction data the 
+mar header and wrap/MarCCDWrap.c uses the C file wrap/marccd_header.h to 
+specify the header format of a MarCCD file.
 
-Helper (more specific for diffraction)
-* QData.py
-* CalibrationData.py
-* PeakList.py
-* Transform.py
+DiffractionData.py calls MakeDiffractionImage.py to create a PIL image of
+the diffraction data with the right color map applied to it. 
+MakeDiffractionImage.py calls the wrapped C file wrap/DrawWrap.c which 
+applies the colormap.
 
-Helper (more general)
-* General.py
-* Axis.py
-* LinePlot.py
-* Exceptions.py
+DiffractionData.py also calls IntegrateIntensity.py to perform an intensity
+integration of the diffraction data. IntegrateIntensity.py calls the wrapped
+C file wrap/DiffractionAnalysisWrap.c to do the actual intensity integration.
 
-ColorMaps.py
-MarXXXX.py
-colormaps.txt
-MaskedPixelInfo.py
-PmwBlt.py
-xbms
-PmwColor.py
-PmwFreeze.py
+DiffractionData.py also calls Cake.py to cake the diffraction data. Cake.py 
+calls wrap/DiffractionAnalysisWrap.c to perform the actual caking and 
+wrap/DrawWrap.c to convert the caked data into a PIL image of the caked data 
+with the right color map applied to it.
 
-StandardQ
+Finally, DiffractionData.py calls Fit.py to do the Diffraction image
+calibration. Fit.py calls wrap/FitWrap.c
 
+There are several helper objects which are called by the above python files 
+to do the analysis. QData.py holds the object QData that holds lists of Q 
+data. CalibrationData.py holds the object CalibrationData that is
+the calibration parameters that characterize a diffraction experiment.
+PeakList.py holds the object PeakList which is the list of diffraction peaks 
+found in the diffraction image. MaskedPixelInfo.py holds the object 
+MaskedPixelInfo which is the threshold and polygon masks that the program
+applys to the diffraction data. It has several convenient methods like one
+that decides if some particular point in the image is in any polygon
+mask. This object uses the wrapped C file wrap/PolygonWrap.c to do some of 
+its calculations about polygon masks. wrap/PolygonWrap.c is really just a 
+wrapper around polygon.c which calls wrap/pnpoly.c to do the real 
+calculations. ColorMaps.py has the object ColorMaps which is the particular 
+color map to apply to the diffraction image. colormaps.txt is a text file 
+with all of the color maps in it. It is read in by the ColorMaps object
+when ColorMaps is first initialized.
 
-DiffractionAnalysisWrap.c
-DrawWrap.c
-FitWrap.c
-MarCCDWrap.c
-PolygonWrap.c
-Transform.c
-UncompressWrap.c
-levmar
-marccd_header.h
-pck.c
-pnpoly.c
-polygon.c
-run.bat.txt
-setup.py
+AreaDiffractionMachine.py also at several points calls functions in the 
+file Transform.py which are used to convert points on a tilted detector
+to points on an imagined untitled detector and back again. These 
+transformations are all described in the software manual. Transform.py
+calls wrapped C code in the file wrap/Transform.c to do the transformations.
+Functions in wrap/Transform.c are also frequently called by the file
+wrap/DiffractionAnalysisWrap.c.
 
+Along with the source code, there is a folder StandardQ/ that contains
+several Q data files for standard crystals. xbms/ is another folder which
+contains a little folder icon which shows up on a few buttons in the GUI.
+
+Also inside of the folder wrap/ is the folder wrap/levmar/ and the file 
+wrap/setup.py. wrap/levmar/ contains the C library levmar which is used
+to do the Levenberg-Marquardt nonlinear least squares algorithms. This
+library is called by wrap/FitWrap.c to do the calibration. wrap/setup.py
+is used to build the C extensions so that they can be called by python.
+
+There are a few other files that do more general things not related to
+diffraction which are needed by the program. General.py contains a large
+assortment of pretty general functions that I needed at various points in 
+the program. For example, one of them sums all the numbers in a list and
+another splits a list of file contained in a string to a list of files.
+These functions are used all over the place. Axis.py contains a Tkinter
+object called Axis which is either a horizontal or vertical axis to a graph.
+It is used by AreaDiffractionMachine.py when displaying diffraction data,
+caked data to the user. Finally, LinePlot.py contains a Tkinter object
+called LinePlot which creates line plots. The API is modeled after the
+Pmw:BLT plotting library but is nice because it requires no added
+dependencies. It was written in place of Pmw:Blt because of difficulties
+installing Pmw:Blt on the Mac when creating a Mac port of the program.
+LinePlot.py also uses the Axis object to create the axes of the line plot.
+Finally, Exceptions.py implements the new exceptions 
+UnknownFiletypeException and UserInputException which are used throughout
+the program.

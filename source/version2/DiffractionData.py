@@ -752,7 +752,6 @@ unknown file extension" % filename )
         """
 
         # check if it has already been calculated
-
         if self.lastCalibrationDataGetSmallsetRange != None and \
                 calibrationData == self.lastCalibrationDataGetSmallsetRange and \
                 self.lastTypeGetSmallestRange == type:
