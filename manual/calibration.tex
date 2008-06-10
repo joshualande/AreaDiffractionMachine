@@ -203,14 +203,14 @@ it calculates while fitting. I do now know how it calculates this
 and I do not know what it means physically. 
 The program print it out after the fitting. 
 \begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
-Covariance Matrix
-[[  9.43e-04 -1.53e-04  5.36e-05  3.27e-03 -1.77e-03  3.64e-03  2.10e+00]
- [ -1.53e-04  1.17e-03 -1.40e-04 -8.58e-03  3.91e-05 -2.02e-04 -1.25e-01]
- [  5.36e-05 -1.40e-04  2.07e-04  1.38e-02 -1.45e-04  3.12e-04  1.78e-01]
- [  3.27e-03 -8.58e-03  1.38e-02  9.49e-01 -6.44e-03  1.40e-02  8.02e+00]
- [ -1.77e-03  3.91e-05 -1.45e-04 -6.44e-03  4.01e-01 -8.42e-01 -4.76e+02]
- [  3.64e-03 -2.02e-04  3.12e-04  1.40e-02 -8.42e-01  1.77e+00  9.99e+02]
- [  2.10e+00 -1.25e-01  1.78e-01  8.02e+00 -4.76e+02  9.99e+02  5.65e+05]]
+Covariance Matrix:
+[[ 9.47e-04 -1.76e-04  6.11e-05  3.75e-03  6.37e-06 -3.01e-05  2.45e-02]
+ [-1.76e-04  1.24e-03 -1.66e-04 -1.02e-02 -2.58e-05 -5.24e-05 -1.24e-02]
+ [ 6.11e-05 -1.66e-04  2.15e-04  1.44e-02  9.19e-06  3.28e-06 -1.52e-03]
+ [ 3.75e-03 -1.02e-02  1.44e-02  9.85e-01  5.90e-04  2.10e-04 -1.03e-01]
+ [ 6.37e-06 -2.58e-05  9.19e-06  5.90e-04  9.44e-06  1.85e-07 -4.43e-03]
+ [-3.01e-05 -5.24e-05  3.28e-06  2.10e-04  1.85e-07  6.70e-06  6.77e-05]
+ [ 2.45e-02 -1.24e-02 -1.52e-03 -1.03e-01 -4.43e-03  6.77e-05  4.00e+00]]
 \end{lstlisting}
 The rows (from top to bottom and from left to right) correspond 
 to \gui{xc}, \gui{yc}, \gui{d}
@@ -220,18 +220,91 @@ matrix are supposed to correspond to uncertainties, but I do not know
 enough about the minimization algorithm to really be comfortable saying 
 that these values are meaningful. The program print out the square root of 
 the diagonals. 
-\begin{lstlisting}
-Root of the diagonal of the covariance matrix ... 
-xc:  0.0307145820046
-yc:  0.0341970790239
-d:  0.0143735880013
-E:  0.97393322373
-alpha:  0.633295666676
-beta:  1.32940880588
-rotation:  751.595873785
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+Root of the diagonal of the covariance matrix (I think these are uncertainties)
+ - xc         0.0307807389
+ - yc         0.0352730417
+ - d          0.0146853032
+ - E          0.9928960497
+ - alpha      0.0030735910
+ - beta       0.0025888303
+ - R          2.0017867847
 \end{lstlisting}
 The program can undo to the previous calibration
 parameters using the \gui{Previous Values} input.
+
+\section{\texorpdfstring{The \gui{Save Last Fit} 
+        Button}{The ``Save Last Fit'' Button}}
+
+Often times, it is desirable to save to a file 
+all of the information about a particular calibration
+that has been done. Version 2 of the program introduces
+a convenient button called \gui{Save Last Fit} that
+does just that. After calibrating, pushing this button
+and then selecting an output file name will save all of the
+information about the previous calibration to a file.
+This includes the residual before and after, and the 
+covariance matrix, the initial and final calibration
+parameters, and the Q list used when calibrating. 
+An example is:
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+Fit done of: C:/work/LaB6_14_02_56.mar3450
+
+Initial Guess at calibration parameters:
+xc      1725.0000000000 0
+yc      1725.0000000000 0
+D        125.2960000000 0
+E      12735.3957721000 0
+alpha      0.0000000000 0
+beta       0.0000000000 0
+R          0.0000000000 0
+pl       100.0000000000
+ph       100.0000000000
+
+Before fitting, the calculated residual per peak is 0.000533613563184
+
+Refined calibration parameters:
+xc      1723.2670576589 0
+yc      1729.0275947978 0
+D        123.9263391635 0
+E      12712.8416444082 0
+alpha      0.0043942864 0
+beta       0.1124327684 0
+R         52.4701069289 0
+pl       100.0000000000
+ph       100.0000000000
+
+After fitting, the calculated residual per peak is 6.52739855241e-006
+
+Reason for quitting the fit: 2-stopped by small gradient J^T e
+
+Covariance Matrix:
+[[ 9.47e-04 -1.76e-04  6.11e-05  3.75e-03  6.37e-06 -3.01e-05  2.45e-02]
+ [-1.76e-04  1.24e-03 -1.66e-04 -1.02e-02 -2.58e-05 -5.24e-05 -1.24e-02]
+ [ 6.11e-05 -1.66e-04  2.15e-04  1.44e-02  9.19e-06  3.28e-06 -1.52e-03]
+ [ 3.75e-03 -1.02e-02  1.44e-02  9.85e-01  5.90e-04  2.10e-04 -1.03e-01]
+ [ 6.37e-06 -2.58e-05  9.19e-06  5.90e-04  9.44e-06  1.85e-07 -4.43e-03]
+ [-3.01e-05 -5.24e-05  3.28e-06  2.10e-04  1.85e-07  6.70e-06  6.77e-05]
+ [ 2.45e-02 -1.24e-02 -1.52e-03 -1.03e-01 -4.43e-03  6.77e-05  4.00e+00]]
+
+Root of the diagonal of the covariance matrix (I think these are uncertainties)
+xc         0.0307807389
+yc         0.0352730417
+d          0.0146853032
+E          0.9928960497
+alpha      0.0030735910
+beta       0.0025888303
+R          2.0017867847
+
+Q Data used when calibrating:
+             Q           Delta Q
+  1.5115438090      0.0500000000
+  2.1376468230      0.0500000000
+  2.6181029660      0.0500000000
+  3.0230876190      0.0500000000
+  3.3798737530      0.0500000000
+  3.7025252250      0.0500000000
+\end{lstlisting}
 
 \section{\texorpdfstring{\gui{Number of Chi?} 
         and \gui{Stddev?}}{``Number of 
@@ -407,30 +480,46 @@ save them to a file. If a diffraction image, a list of
 standard $Q$ values, and calibration parameters are loaded
 in the program, the \gui{Make/Save Peak List} button can
 be used to save out the peak list. 
-A typical peak list file looks like\footnote{The file
-has been modified a bit. The numbers should be tab 
-separated but are displayed as space separated for brevity.}
-\begin{lstlisting}[basicstyle=\ttfamily\tiny]
-# A list of peaks found in the diffraction image.
-# Calculated on Sun Apr  6 18:06:56 2008
+A typical peak list file looks like
+\begin{lstlisting}[basicstyle=\ttfamily\footnotesize]
+# Diffraction Data: C:/data/LaB6_14_02_56.mar3450
+# Calculated on Mon Jun 09 23:41:58 2008
 # Calibration data used to find peaks:
-#   x center:    1725.0000000 pixels
-#   y center:    1725.0000000 pixels
-#   distance:     122.5040000 mm
-#   energy:     12714.2388941 eV
-#   alpha:          0.0000000 degrees
-#   beta:           0.0000000 degrees
-#   rotation:       0.0000000 degrees
-#   pixel length:     100.0000000 microns
-#   pixel height:     100.0000000 microns
-#   x  y  RealQ  FitQ  chi  width  intensity  2theta
-2016.15  1724.44  1.511  1.50  0.11  0.0075 5564.32  13.36
-2016.68  1719.33  1.51   1.50  1.11  0.0093 1662.72  13.39
+#   xc      1723.2670576600 pixels
+#   yc      1729.0275948000 pixels
+#   D        123.9263391640 mm
+#   E      12712.8416444000 eV
+#   alpha      0.0043942864 degrees
+#   beta       0.1124327684 degrees
+#   R         52.4701069289 degrees
+#   pl        100.0000000000 microns
+#   ph        100.0000000000 microns
+# Q data used to find peaks:
+# Peaks:
+#                Q           Delta Q
+#     1.5115438090      0.0500000000
+#     2.1376468230      0.0500000000
+#     2.6181029660      0.0500000000
+#     3.0230876190      0.0500000000
+#     3.3798737530      0.0500000000
+#     3.7025252250      0.0500000000
+#     4.2751481980      0.0500000000
+#     4.5346314280      0.0500000000
+#     4.7799051400      0.0500000000
+#     5.0133130990      0.0500000000
+#     5.2360313900      0.0500000000
+#     5.4498961800      0.0500000000
+#               x                    y               Real Q     ...
+  2019.7834513826      1728.4442537319         1.5115438090     ...
+  2019.9785942029      1707.6396996094         1.5115438090     ...
 \end{lstlisting}
 The file contains the calibration parameters
-used to generate the peaks. Each peak gets its
+used to generate the peaks and the Q list used
+to generate the peaks. Each peak gets its
 own line in the file. Each peak is a list of 
-tab separated numbers. The first two numbers are
+space separated numbers.\footnote{In version 1 
+of the program, the numbers were tab separated, but
+this changed with version 2.} The first two numbers are
 the $x$ and $y$ pixel coordinate corresponding of
 the peak. The next number is the $Q$ value found in the 
 $Q$ list. The next number is the $Q$ value calculated 
@@ -459,16 +548,16 @@ using the inputs or they can be loaded and saved
 using the \gui{Load From File} and \gui{Save To File} 
 buttons. The format for a calibration data file is 
 \begin{lstlisting}
-# Calibration File
-xc	1725.000000	0
-yc	1725.000000	0
-D	125.296000	0
-E	12735.395772	0
-alpha	0.000000	0
-beta	0.000000	0
-rotation	0.000000	0
-pixelLength	100.000000
-pixelHeight	100.000000
+# Calibration Parameters
+xc           1725.0000000000 0
+yc           1725.0000000000 0
+D             125.2960000000 0
+E           12735.3957721000 0
+alpha           0.0000000000 0
+beta            0.0000000000 0
+R               0.0000000000 0
+pl            100.0000000000
+ph            100.0000000000
 \end{lstlisting}
 Comment lines beginning with
 a \# and are ignored. Each of the parameters
@@ -477,8 +566,10 @@ name followed by spaces or tabs and the
 value. The value can be followed by an optional
 second number that is whether that parameter
 should be fixed or not. 1 means fix the parameter and 0 
-means to let it very. if there is no number, the parameter will
-not be fixed. Instead of energy, the wavelength of the incoming
+means to let it very. If there is no number, the parameter will
+not be fixed. $pl$ and $ph$ can not be followed by their fixed value
+since they can not be varied.
+Instead of energy, the wavelength of the incoming
 beam can be stored in a calibration file.
 The wavelength line looks like 
 \macroline{wavelength	0.973540}.
@@ -519,7 +610,7 @@ the file will be taken to be $D$ and $\Delta D$ values.
 The values will be convert using equation~\ref{DtermsQ}. 
 
 \section{\texorpdfstring{The \gui{Get From Header?} Input}
-    {The ''Get From Header Input''}}
+    {The ''Get From Header'' Input}}
 
 Sometimes calibration parameters are stored in the header of
 a diffraction file.  The \gui{Get From Header} button will 
