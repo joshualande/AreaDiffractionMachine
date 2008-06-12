@@ -34,7 +34,7 @@ from Exceptions import UnknownFiletypeException, UserInputException
 
 
 # This is here for other objects to refer to
-allExtensions = [".mccd",".mar2300",".edf",".tiff",".tif",".mar3450",".bruker"]
+allExtensions = [".mccd",".mar2300",".edf",".tiff",".tif",".mar3450",".sfrm",".gfrm"]
 
 
 class DiffractionData:
@@ -151,7 +151,7 @@ read in multiple files because they do not have the same extension")
                     allData.append(ESRF.ESRF(file))
                 elif extension in ["tiff", "tif"]:
                     allData.append(Tiff.Tiff(file))
-                elif extension in ["bruker"]:
+                elif extension in ["sfrm","gfrm"]:
                     allData.append(Bruker.Bruker(file))
                 else:
                     raise UnknownFiletypeException("%s is an unknown file \
@@ -196,7 +196,7 @@ they are of different size.")
                 self.theDiffractionData = ESRF.ESRF(filename)
             elif extension in ["tiff", "tif"]:
                 self.theDiffractionData = Tiff.Tiff(filename)
-            elif extension in ["bruker"]:
+            elif extension in ["sfrm","gfrm"]:
                 self.theDiffractionData = Bruker.Bruker(filename)
             else:
                 raise UnknownFiletypeException("%s is an unknown file \

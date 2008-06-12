@@ -3671,7 +3671,7 @@ either Q or 2theta mode.")
                 ('Mar CCD Format','*.mccd'), 
                 ('ESRF Data Format','*.edf'),
                 ('TIFF','*.tif *.tiff'), 
-                ('Bruker','*.gfrm') ], 
+                ('Bruker','*.gfrm *.sfrm') ], 
                 initialdir=self.defaultDir,
                 title="Load Diffraction Image")
 
@@ -3698,7 +3698,7 @@ either Q or 2theta mode.")
         if result == "TIFF":
             self.extension = "tiff"
         if result == "Bruker":
-            self.extension = "bruker"
+            self.extension = "gfrm"
         if result == "Cancel":
             self.extension = "return"
         self.dialog.deactivate()
@@ -4073,7 +4073,7 @@ before that file can be loaded.")
             if self.extension != "mar3450" and self.extension != 'mar2300' \
                     and self.extension != "mccd" and self.extension != 'tiff' \
                     and self.extension != "edf" and \
-                    self.extension != "bruker": return 
+                    self.extension != "gfrm": return 
 
             self.diffractionData = DiffractionData(filenames,
                     extension=self.extension)

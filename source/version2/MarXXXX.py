@@ -103,13 +103,15 @@ class MarXXXX:
 
 
     def getHighValues(self):
-        """ data must be an array of integers so that the high values can inserted 
-            High values are read from the mar345 file and inserted into the array.
-            The values are changed in place. The format of these high values is 
-            described at: http://www.mar-usa.com/support/downloads/mar345_formats.pdf """
+        """ Reads the overloaded pixel from the bottom of the mar data.
+            Data must be an array of integers so that the high values 
+            can inserted. High values are read from the mar345 file and 
+            inserted into the array. The values are changed in place. The 
+            format of these high values is described at: 
+            http://www.mar-usa.com/support/downloads/mar345_formats.pdf """
 
         # The first thing that has to be done is to pass through the header data.
-        # Do do this, ignore everythign until the "END OF HEADER" line
+        # Do do this, ignore everything until the "END OF HEADER" line
         file = open(self.filename,'rb')
         line = file.readline()
         while line != "END OF HEADER\n":
@@ -118,9 +120,9 @@ class MarXXXX:
         # Next, there is a bunch of white space and new lines before we get to 
         # the packed high data. We need to ignore all the garbage and loop 
         # until we get to real data. This part is particularly klugey because 
-        # the high data can apperently begin with the newline character even though
+        # the high data can apparently begin with the newline character even though
         # the newline character is also used as part of the garbage. So we have to
-        # know when we find a new line wether it is followed by a space (and to keep
+        # know when we find a new line whether it is followed by a space (and to keep
         # looking for garbage) or other stuff (in which case it is part of the packed data
         # and we need to make sure to read the newline as part of the high values.)
         # I don't get why they would design the file format like this. It seems particularly
@@ -161,19 +163,19 @@ class MarXXXX:
         next = file.read(nBytesPerRecord*nRecords)
         
         # unpack it. The 2 is because there are 2 value for each pair
-	# The '<' charcter tells python whether to read in as big or little endian.
-	# I am not exactly sure which one I am using but it is the only one that
-	# will read the data in properly. Hopefully, no mar data I am fed will use
-	# the old convention because my could would break. Nevertheless, I am pretty
-	# sure that my error handling will mean that it crashes which is better 
-	# then doing the wrong thing.
+        # The '<' character tells python whether to read in as big or 
+        # little endian. I am not exactly sure which one I am using but 
+        # it is the only one that will read the data in properly. Hopefully, 
+        # no Mar data I am fed will use the old convention because my could 
+        # would break. Nevertheless, I am pretty sure that my error handling 
+        # will mean that it crashes which is better then doing the wrong thing.
         highVals = struct.unpack('<'+str(nRecords*nPairsPerRecord*2)+'i',next)
 
         if file.readline() !='\n': # we should have read to the end of the line
             raise Exception('Error: the program was unable to read the high pixels from the mar345 image because after reading all the high pixels, it did not find a newline character.')
 
         if file.readline()!='CCP4 packed image, X: %04d, Y: %04d\n' % (self.size,self.size):
-            raise Exception('Error: the program was unable to read the high pixels from the mar345 image because it did not find teh "CCCP4 packed iamge X: XXXX, Y: XXXX" line directly after the high data.')
+            raise Exception('Error: the program was unable to read the high pixels from the mar345 image because it did not find the "CCCP4 packed image X: XXXX, Y: XXXX" line directly after the high data.')
 
         file.close()
 
