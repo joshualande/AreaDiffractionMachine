@@ -4392,7 +4392,7 @@ in either Q or 2theta mode.")
         
         val = float(str(qOrTwoThetaUpper-qOrTwoThetaDiff)[:8])
         self.cakeRange[-1]['qOrTwoThetaUpper'] = val
-        self.qOrTwoThetaOrTwoThetaUpperCake.setvalue(val)
+        self.qOrTwoThetaUpperCake.setvalue(val)
 
         val = float(str(chiLower-chiDiff)[:8])
         self.cakeRange[-1]['chiLower'] = val
