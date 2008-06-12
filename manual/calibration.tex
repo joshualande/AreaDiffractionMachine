@@ -609,6 +609,27 @@ If the first line is instead \macroline{D dD} or \macroline{D delta D} the rest 
 the file will be taken to be $D$ and $\Delta D$ values.
 The values will be convert using equation~\ref{DtermsQ}. 
 
+\section{\texorpdfstring{The \gui{Standard Q} Menu}{The Standard Q Menu}}
+
+This program stores several common standard $Q$ files as defaults. 
+They can be selected through the \gui{Standard Q} option of the 
+\gui{Calibration} menu. Selecting one of them will simply put the path
+of the $Q$ file into the \gui{Q Data:} input and hit the load for you.
+This menu shown on figure~\ref{standard_q_example} on
+page \pageref{standard_q_example}. 
+
+You can actually add your own $Q$ data files to this menu by
+going into the \gui{StandardQ/} folder inside of the Area
+Diffraction Machine's folder and moving your $Q$ data file.
+It will show up in the menu the next time you run the program.
+It is a little more complicated to do with the Mac distribution
+because the whole program is bundled up into one \gui{.app} file.
+To do so, you have to right click on the \gui{.app} file, which
+is probably in your \gui{Applications/} folder, and select
+the \gui{Show Package Contents} option. In the \gui{Contents/}
+folder, there is a \gui{Resources/} folder, which contains 
+the \gui{StandardQ/} folder where you can put the $Q$ data files.
+
 \section{\texorpdfstring{The \gui{Get From Header?} Input}
     {The ''Get From Header'' Input}}
 
