@@ -86,7 +86,7 @@ until the data is square.
 \section{Clipping High Pixels}
 
 The program stores the diffraction data inside the program as 4 byte integers and 
-the largest value that can be stored as an integer is $2^31-1 = 2147483647$.
+the largest value that can be stored as an integer is $2^{31}-1 = 2147483647$.
 Any intensity values read from diffraction data with value larger then 
 this number will be set to this number when stored in the program. In practice, 
 this should never be a problem because intensities never range this high.

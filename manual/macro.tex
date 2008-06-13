@@ -24,6 +24,26 @@ the \gui{Stop Record Macro} option will save the macro to
 a file. The \gui{Run Saved Macro} option in the \gui{Macro}
 menu will run all the commands in a saved macro. 
 
+\section{The \gui{Abort} Button}
+
+Version 2 of the program introduces an abort button which
+can be used to abort out of running a macro in the middle
+of running it. Figure~\ref{macro_figure} shows a screen shot
+of this button. This can be useful if part way through
+running a long macro, you realize that the macro isn't
+doing the right thing. It is sometimes a little difficult to 
+push the button and have it actually stop the program, especially 
+when the program gets frozen up running long calculations like an 
+intensity integration, but if you are diligent and push it a couple 
+of times, it will eventually stop the macro. 
+
+\begin{SCfigure}[1][hbtp]
+    \centering
+    \includegraphics[scale=.75]{figures/abort_button.eps}
+    \caption{The \gui{Abort} button can be used to abort
+    out of a running macro.}
+    \label{abort_button}
+\end{SCfigure}
 
 \section{\texorpdfstring{The \gui{Set As Initialization} Option}
     {The ``Set As Initialization'' Option}}
@@ -276,6 +296,9 @@ decimal and 00 to ff in hexadecimal. For example, \#ff0000 is red.
     when the macro item is selected through the menu bar. The
     only exceptions are items that can only be accessed
     that way.
+    \item The program will create folders if necessary in
+    order to save files out into folders that are specified
+    but that do not yet exist.
 \end{itemize}
 
 

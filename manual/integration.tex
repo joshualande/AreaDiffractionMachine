@@ -39,6 +39,17 @@ with $Im$ the measured intensity.  The $2\theta$
 and $\chi$ values correspond to the particular 
 value that is being corrected.
 
+Finally, if no pixels were put into a particular
+intensity bin, the bin's intensity is set to -1 as
+a flag that the bin doesn't contain any data.
+To avoid ambiguity, the program will
+set all bins with negative intensities to have
+an intensity of zero. If the diffraction data contains 
+pixels with negative values, this could cause problems. 
+But this is rarely the case. This clipping of negative 
+values was added in version 2 of the program.
+
+
 \section{Integrating with the Program}
 
 The program requires one or more diffraction images and

@@ -46,7 +46,12 @@ not perpendicular to the incoming x-rays. We will present a
 theory of tilted detectors first developed by Abhik Kumar\cite{Kumar05}.
 \index{Abhik Kumar} Our derivation will result in 
 different formulas because of different assumptions
-about how the detector is tilted. 
+about how the detector is tilted. This is actually a very important
+point because version 1 of the program uses Abhik's formulas for
+geometric transforms whereas the equations derived in the manual
+were only implemented in version 2 of the program.
+Section~\ref{note_about_versions} discusses this situation in
+more detail.
 
 We are interested in relating
 coordinates on a tilted detector 
@@ -288,7 +293,28 @@ of a beam, is
 \begin{equation}\label{2thetatermsr}
     \tan2\theta = \frac{r}{d} = \frac{\sqrt{x^2+y^2}}{d}.
 \end{equation}
-$\chi$, the angle around the beam, is calculated as
+$\chi$, the angle around the beam, is calculated 
+as\footnote{Actually, it is a little more complicated
+then just this formula. Really, when viewing the diffraction
+pattern from where the sample is, we want $\chi$ to equal 0 
+pointing directly to the right and we want for it to 
+increase in a 
+counterclockwise direction. This is just like the 
+definition of $\theta$ in Cartesian coordinates. 
+To make $\chi=0$ to the right, we need to account for the 
+fact that a rotation by angle $R$ will offset where $\chi$ 
+equals 0 by adding the value of $R$ to $\chi$.
+Then, our previous definition of $\chi$ makes $\chi$ 
+increase in a
+clockwise direction. (The reason is because we define $y$
+to increase as you go down the detector). To make $\chi$ 
+increase in the counterclockwise direction, we need to 
+multiply by negative 1. When we do this, our real $\chi$ is 
+related to the chi derived above by $-1\times(\chi+R)$
+It would probably be cleaner to get rid of this final
+multiplication by changing the definition so
+that $y$ increased as you go up the detector, but this
+way is good enough.}
 \begin{equation}\label{chitermsyx}
     \tan\chi = \frac{y}{x}.
 \end{equation}
@@ -327,41 +353,215 @@ A discussion of how these detector parameters can be
 determined experimentally
 is given in section~\ref{calibration}.
 
-%\section{Implementation In Code}
-%
-%For reference, this section present the C source 
-%code used in the computer program to perform the 
-%transformation from pixel values on a tilted 
-%detector to $(Q,\chi)$ and back again. 
-%Listing~\ref{getTwoThetaChi} presents the function
-%\code{getTwoThetaChi()} which converts real pixel
-%coordinates $(x_d,y_d)$, called \code{xPixel}
-%and \code{yPixel}, into the values $2\theta$ and $\chi$, 
-%called \code{twoTheta} and \code{chi} using the 
-%transformation described above. In order to perform 
-%this transformation, the program must be given
-%the values $x_c$, $y_c$, $ps$, $d$, 
-%$\alpha$, $\beta$, and $R$. For $x_c$ and $y_c$, 
-%the function takes in the variables $xCenter$ and
-%$yCenter$. The program takes in \code{pixelLength} 
-%and \code{pixelHeight} for $ps$ to identify the
-%width and height of each pixel (which should be the 
-%same). The program takes in the sines and cosines
-%of $\alpha$, $\beta$, and $R$ to allow for increased
-%efficiency. These variables are called \code{ cos\_beta}
-%\code{sin\_beta},\code{cos\_alpha},\code{sin\_alpha},
-%\code{cos\_rotation}, and \code{sin\_rotation}. 
-%Note that this function calculates $2\theta$ instead
-%of $Q$ or $D$ but it takes a trivial amount of work
-%to the additional conversion.
-%\begin{lstlisting}
-%The Code will go here one of these days...
-%\end{lstlisting}
-%Listing~\ref{getXY} presents the function \code{getXY()} 
-%which does the inverse transformation of 
-%function~\ref{getTwoThetaChi}. It uses the same
-%terminology for parameters as that function.
-%
-%\begin{lstlisting}
-%Other code will go here one of these days...
-%\end{lstlisting}
+\section{A Note About Versions}\label{note_about_versions}
+
+Version 1 of the program uses the equations derived
+by Abhik in \cite{Kumar05}. For reference, Abhik's 
+derivation is different in that 
+equation~\ref{ytermsydoubleprime} and \ref{xtermsxdoubleprime} 
+are replaced with the equations
+\begin{align}
+    x &= \frac{dx''cos\beta}{d+y''\sin\alpha+x''\sin\beta}, &
+    y &= \frac{dy'''\cos\alpha}{d+y''\sin\alpha+x''\sin\beta}.
+\end{align}
+These equations must also be inverted to replace \ref{invertx}
+and \ref{inverty}. But other that,
+the rest of the discussion above is exactly the same using Abhiks' 
+method.
+
+Beginning with version 2 of the program, 
+equation~\ref{ytermsydoubleprime} and \ref{xtermsxdoubleprime}
+derived earlier are used for the transforms.
+So technically, version 1 and version 2 of the program are not
+interchangeable and certain quantities calculated with one of
+the versions of the program, such as calibration parameters,
+can not be used in the other version of the program.
+But in practice, both sets of equations reduce to each other in the 
+small $\alpha$ and $\beta$ limit which is almost always the case when
+performing powder diffraction. So it is very unlikely that this
+switch between version 1 and version 2 would cause any difficulty.
+
+
+\section{Implementation In Code}
+
+For reference, this section present the C source 
+code used in the computer program to perform the 
+transformation from pixel values on a tilted 
+detector to $(Q,\chi)$ and back again. 
+This code uses the equations derived in this manual
+for the geometric transforms and the code was introduced 
+in version 2 of the program. Version 1 uses different
+code using Abhik's formulas for the geometric transform.
+
+Below is the function
+\code{getTwoThetaChi()} which converts real pixel
+coordinates $(x_d,y_d)$, called \code{xPixel}
+and \code{yPixel} on the detector, into the values 
+$2\theta$ and $\chi$, called \code{twoTheta} and 
+\code{chi} using the equations described above. 
+\begin{lstlisting}
+/*
+ * This transformation is done using Josh's equations derived
+ * in the software manual. The notation in the manual 
+ * corresponds to the variable names by:
+ *   xMeasured = x'''
+ *   yMeasured = y'''
+ *   xPhysical = x_d
+ *   yPhysical = y_d
+ */
+void getTwoThetaChi(double xCenter,double yCenter,
+        double distance,double xPixel,double yPixel,
+        double pixelLength,double pixelHeight,
+        double rotation,double cos_beta,double sin_beta,
+        double cos_alpha,double sin_alpha,
+        double cos_rotation,double sin_rotation,
+        double *twoTheta,double *chi) {
+
+    double pixelLength_mm,pixelHeight_mm;
+    double xMeasured,yMeasured;
+    double bottom;
+    double xPhysical,yPhysical;
+
+    // pixellength comes in in units of micron
+    // We convert pixelLength & pixelHeight into mm units so 
+    // that they are comparable with distance (in units of 
+    //  millimeters)
+    pixelLength_mm = pixelLength/1000.0;
+    pixelHeight_mm = pixelHeight/1000.0;
+    
+    xMeasured = (xPixel-xCenter)*pixelLength_mm;
+    yMeasured = (yPixel-yCenter)*pixelHeight_mm;
+
+    bottom = distance+(xMeasured*cos_rotation+ 
+            yMeasured*sin_rotation)*sin_beta+
+            (-xMeasured*sin_rotation+
+            yMeasured*cos_rotation)*sin_alpha*cos_beta;
+    
+    // calculate the x y coordinates on the imaginary 
+    // detector using fancy math
+    xPhysical = distance*((xMeasured*cos_rotation+
+            yMeasured*sin_rotation)*cos_beta
+            -(-xMeasured*sin_rotation+
+            yMeasured*cos_rotation)*sin_alpha)/bottom;
+
+    yPhysical = distance*(-xMeasured*sin_rotation+
+            yMeasured*cos_rotation)*cos_alpha/bottom;
+
+    *twoTheta = atan2(sqrt(xPhysical*xPhysical+
+            yPhysical*yPhysical),distance);
+    // Convert to radians
+    *twoTheta = *twoTheta * 180.0/PI;
+
+    // explicitly convert chi to degrees
+    *chi=atan2(yPhysical,xPhysical)*180.0/PI;
+    
+    // then add rotation to it so that chi always points 
+    // to the right. Also, we have to multiply chi by -1 
+    // because we have been defining our angles the inverse 
+    // of the way they should be. There is a probably a 
+    // better way to do this if I really thought through 
+    // exactly how chi is defined. For the moment, through, 
+    // this does exactly the right thing.
+    *chi = (*chi + rotation)*(-1);
+
+    // make sure that chi is b/n 0 and 360
+    *chi = mod(*chi, 360.0);
+}
+\end{lstlisting}
+As described above, the program must be given
+the values $x_c$, $y_c$, $ps$, $d$, $\alpha$, 
+$\beta$, and $R$ in order to perform the 
+transformations.  
+For $x_c$ and $y_c$, 
+the function takes in the variables $xCenter$ and
+$yCenter$. The program takes in \code{pixelLength} 
+and \code{pixelHeight} for $pl$ and $ph$. The program 
+takes in the sines and cosines of $\alpha$, $\beta$, and 
+$R$ so that the sin of $\alpha$ can be cached for increased
+efficiency. This function calculates $2\theta$ instead
+of $Q$ or $D$ but it is trivial to do the conversion.
+
+The listing below presents the function \code{getXY()} 
+which does the inverse transformation of 
+the above function. It uses the same
+terminology for parameters above:
+\begin{lstlisting}
+/*
+ * This transformation is done using Josh's equations derived
+ * in the software manual. The notation in the manual 
+ * corresponds to the variable names by:
+ *   xMeasured = x'''
+ *   yMeasured = y'''
+ *   xPhysical = x_d
+ *   yPhysical = y_d
+ */
+void getXY(double xCenter,double yCenter,double distance,
+        double energy,double q,double chi,double pixelLength,
+        double pixelHeight,double rotation,double cos_beta,
+        double sin_beta,double cos_alpha,double sin_alpha,
+        double cos_rotation,double sin_rotation,
+        double * xPixel,double * yPixel) {
+
+    double wavelength;
+    double twoTheta;
+    double xPhysical,yPhysical;
+    double bottom;
+    double pixelLength_mm,pixelHeight_mm;
+    double xMeasured,yMeasured;
+
+    double tan_chi;
+
+    wavelength = 12398.4172/energy;
+
+    // rotate chi back to point whatever way it is supposed 
+    // to point
+    chi = chi*(-1) - rotation;
+
+    chi = mod(chi, 360.0);
+    
+    // explicitly convert chi to radians
+    chi*=PI/180.0;
+
+    twoTheta = 2.0*asin(wavelength*q/(4.0*PI));
+
+    tan_chi = tan(chi);
+    xPhysical = fabs(distance*tan(twoTheta)/sqrt(1.0+
+            tan_chi*tan_chi));
+
+    // one must determine explicitly the sign of xPhysical 
+    // by inspecting the diagram. This is b/c at one point 
+    // we take a sqrt in our derivation.
+    if (chi>PI/2.0 && chi<3.0*PI/2.0) 
+        xPhysical = -1.0*xPhysical;
+
+    yPhysical=fabs(xPhysical*tan_chi);
+
+    // set the sign of y explicitly
+    if (chi > PI && chi < 2.0*PI)
+        yPhysical = -1.0*fabs(yPhysical);
+
+    // I should worry about cos_alpha being 0
+    bottom = distance*cos_beta-xPhysical*sin_beta-
+            cos_beta*(xPhysical*cos_beta+distance)/(
+            (xPhysical*cos_alpha)/(yPhysical*sin_alpha)+1);
+
+    xMeasured = (distance*xPhysical*cos_rotation-
+            distance*xPhysical*cos_beta*sin_rotation/
+            (xPhysical*cos_alpha/yPhysical+sin_alpha))/
+            bottom;
+
+    yMeasured = (distance*xPhysical*sin_rotation+ 
+            distance*xPhysical*cos_beta*cos_rotation/
+            (xPhysical*cos_alpha/yPhysical+sin_alpha))/
+            bottom;
+
+    // convert pixelLength & pixelHeight into mm units so 
+    // that they are comparable with distance (in units of 
+    // millimeters)
+    pixelLength_mm = pixelLength/1000.0;
+    pixelHeight_mm = pixelHeight/1000.0;
+
+    *xPixel = xMeasured/pixelLength_mm + xCenter;
+    *yPixel = yMeasured/pixelHeight_mm + yCenter;
+}
+\end{lstlisting}

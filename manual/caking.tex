@@ -36,6 +36,14 @@ that part of the caked array with a particular
 negative value. When the caked data is displayed,
 these negative values are shown a with special color.
 
+Finally, in order to insure there is not an ambiguity between
+negative intensity values and these special negative values, the 
+program will always set the intensity of all bins whose intensity is 
+less then zero to equal zero. If the diffraction data contains pixels 
+with negative values, this could cause problems. But this is rarely
+the case. This clipping of negative values was added in version 2
+of the program.
+
 The program can perform a polarization correction of
 the caked data. The polarization 
 correction is
