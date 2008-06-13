@@ -24,6 +24,38 @@ the \gui{Stop Record Macro} option will save the macro to
 a file. The \gui{Run Saved Macro} option in the \gui{Macro}
 menu will run all the commands in a saved macro. 
 
+
+\section{\texorpdfstring{The \gui{Set As Initialization} Option}
+    {The ``Set As Initialization'' Option}}
+
+Version 2 of the Area Diffraction Machine introduces the
+feature \gui{Set As Initialization}. It can be used to run
+a particular Macro file ever time the Area Diffraction Machine
+is opened. This is a useful way to make the program always open
+with certain options selected and certain inputs set to particular
+values (like setting the \gui{Stddev?} input to 7).
+The best way to do this is to open the program, start recording a macro
+set the program in the desired state, and instead of pushing
+the \gui{Stop Record Macro} button push the 
+\gui{Set As Initialization} option. This will save the recorded macro to
+the file \gui{InitializationMacro.dat} in the folder
+\gui{Preferences/} next to the executable.\footnote{It
+is a little bit harder to find this file on the Macintosh.
+To find it, right click on the application and 
+select the \gui{Show Package Contents}
+option. Inside of the \gui{Contents/} folder is the folder 
+\gui{Resources/} which contains the \gui{Preferences/} folder where
+you can find the file}. If desired, the \gui{InitializationMacro.dat}
+file can be modified by hand to change the macro file. 
+
+To get the program to no longer run a macro whenever the program opens,
+either push the \gui{Clear Initialization} option next to the
+\gui{Set As Initialization} option. Alternately, push the
+\gui{Start Record Macro} option and then immediately push the 
+\gui{Set As Initialization} option. Alternately, simply
+delete the \gui{InitializationMacro.dat} file.
+
+
 \section{The Macro File Format}
 
 A macro file is a list of commands, each on their own line, that tells the 
