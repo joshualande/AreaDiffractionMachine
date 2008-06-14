@@ -8,6 +8,18 @@ import string
 from Exceptions import UserInputException
 
 
+def num_equals(data,number):
+    """ Returns the number of values in a numeric
+        array named data with the value number. """
+    temp =(data==number*Numeric.ones(data.shape))
+    return sum([sum(temp[i]) \
+            for i in range(data.shape[0])])
+
+
+def splitAverage(string):
+    return avgList([float(i) for i in string.split()])
+
+
 def createFolderForFile(filename):
     path = os.path.split(filename)[0]
     if path == '':
