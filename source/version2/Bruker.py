@@ -106,9 +106,11 @@ class Bruker:
 
             if (noverfl != General.num_equals(temp,255)):
                 print "Warning, cannot read in the overflow \
-pixels in Bruker file %s because the header field NOVERFL does \
-not match the number of pixels in the data with value equal to \
-exactly 255 (the value overloaded pixels are set to)." % filename
+pixels in Bruker file %s because the header field NOVERFL \
+(%s) does not match the number of pixels in the data with value \
+equal to exactly 255 (%s). All overloaded pixels must be set in \
+the data to 255)." % (filename,noverfl,General.num_equals(temp,255))
+
                 doOverflow = 0
 
         elif npixelb == 2:
@@ -117,9 +119,11 @@ exactly 255 (the value overloaded pixels are set to)." % filename
 
             if (noverfl != General.num_equals(temp,65535)):
                 print "Warning, cannot read in the overflow \
-pixels in Bruker file %s because the header field NOVERFL does \
-not match the number of pixels in the data with value equal to \
-exactly 65535 (the value overloaded pixels are set to)." % filename
+pixels in Bruker file %s because the header field NOVERFL \
+(%s) does not match the number of pixels in the data with value \
+equal to exactly 65535 (%s). All overloaded pixels must be set in \
+the data to 65535)." % (filename,noverfl,General.num_equals(temp,65535))
+
                 doOverflow = 0
 
         elif npixelb == 4:
