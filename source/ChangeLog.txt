@@ -43,6 +43,9 @@ Changes in the Betas
     -   Macros will now create folders if necessary in order to
         save files specified to go into folders that don't yet 
         exist.
+    -   New 'Select The Center' button in the 'Calibration' Menu
+        can be used to select from the diffraction image the 
+        coordinates of the center of the image.
 
     Minor 
     -   The size of the inputs in the GUI have been increased so 
