@@ -135,6 +135,7 @@ class FancyErrors:
             with all the excess formatting using an error message. This 
             function also prints out the error to the command line for 
             good measure. """
+        print string
         setstatus(self.status,'Error...')
         # Try to remove the recording macro text box, 
         # this will only work if an error was thrown when
@@ -912,6 +913,11 @@ class Main:
         calibrationmenu.add_cascade(label='Standard Q',
                 menu=self.qmenu)
         self.addStandardQ(self.qmenu)
+
+        calibrationmenu.add_separator()
+
+        calibrationmenu.add_command(label='Select The Center',
+                command=self.beginMouseSelectCenterDiffractionImage)
 
         calibrationmenu.add_separator()
 
@@ -3765,6 +3771,29 @@ file until there are polygons to save.")
             self.macroMode.explicitMacroRecordTwoLines(
                     'Save Mask','\t %s' % filename)
 
+    def beginMouseSelectCenterDiffractionImage(self):
+        self.maindisp.imframe.bind(sequence="<ButtonPress>", 
+                func=self.endMouseSelectCenterDiffractionImage)
+
+    def endMouseSelectCenterDiffractionImage(self,event):
+        x,y = self.getRealDiffractionImageCoordinates(event.x,event.y)
+ 
+        # put the new x,y values into the calibration data,
+        # then update the GUI
+
+        if self.calibrationData == []:
+            # if no calibration data yet, create a new one
+            self.calibrationData.append(CalibrationData())
+            self.calibrationData[-1].setCenterX(x)
+
+        self.centerX.ef.setentry(x)
+        self.centerY.ef.setentry(y)
+
+        # change bindings back
+        self.addZoomAndPanBindingsDiffractionImage()
+
+        self.updatebothNoComplain()
+        
 
     def toggleAddRemovePolygonMaskBindings(self,whichButton,onOff):
         if whichButton == 'Add Polygon':
