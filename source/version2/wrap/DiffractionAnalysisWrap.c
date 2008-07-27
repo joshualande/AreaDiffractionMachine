@@ -514,7 +514,6 @@ static PyObject * DiffractionAnalysisWrap_integrate(PyObject *self, PyObject *ar
                             ((int)x)*diffractionData->strides[0] + 
                             ((int)y)*diffractionData->strides[1]); 
 
-                    total[qBin]+=1;
                     if (doPolarizationCorrection)
                         intensity = polarizationCorrection(intensity,P,twoTheta,chi);
 
@@ -527,6 +526,7 @@ static PyObject * DiffractionAnalysisWrap_integrate(PyObject *self, PyObject *ar
                             polygonBeginningsIndex,polygonNumberOfItems,x,y)))
                         continue;
 
+                    total[qBin]+=1;
                     *(double *)(integratedIntensity->data + 
                             qBin*integratedIntensity->strides[0]) += intensity;
                 }
@@ -550,7 +550,6 @@ static PyObject * DiffractionAnalysisWrap_integrate(PyObject *self, PyObject *ar
                             ((int)x)*diffractionData->strides[0] + 
                             ((int)y)*diffractionData->strides[1]); 
 
-                    total[twoThetaBin]+=1;
                     if (doPolarizationCorrection) 
                         intensity = polarizationCorrection(intensity,P,twoTheta,chi);
 
@@ -563,6 +562,7 @@ static PyObject * DiffractionAnalysisWrap_integrate(PyObject *self, PyObject *ar
                             polygonBeginningsIndex,polygonNumberOfItems,x,y)))
                         continue;
 
+                    total[twoThetaBin]+=1;
                     *(double *)(integratedIntensity->data + 
                             twoThetaBin*integratedIntensity->strides[0]) += (double)intensity;
 
@@ -600,7 +600,6 @@ static PyObject * DiffractionAnalysisWrap_integrate(PyObject *self, PyObject *ar
                             (int)x*diffractionData->strides[0] + 
                             ((int)y)*diffractionData->strides[1]); 
 
-                    total[chiBin]+=1;
                     if (doPolarizationCorrection) 
                         intensity = polarizationCorrection(intensity,P,twoTheta,chi);
 
@@ -613,11 +612,11 @@ static PyObject * DiffractionAnalysisWrap_integrate(PyObject *self, PyObject *ar
                             polygonBeginningsIndex,polygonNumberOfItems,x,y)))
                         continue;
 
+                    total[chiBin]+=1;
                     *(double *)(integratedIntensity->data + 
                             chiBin*integratedIntensity->strides[0]) += intensity;
                 }
             }
-
         }
     }
 
@@ -636,7 +635,6 @@ static PyObject * DiffractionAnalysisWrap_integrate(PyObject *self, PyObject *ar
             // -1 means nothing was put into the bin
             *(double *)(integratedIntensity->data + i*integratedIntensity->strides[0]) = -1;
         }
-
     }
 
     // free the array we created so that we do not cause a memory leak
