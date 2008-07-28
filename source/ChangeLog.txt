@@ -75,9 +75,12 @@ Changes in the Betas
 
 Change Log for version 1 of the Area Diffraction Machine
 
-Changes for upcoming version
+Changes for version 1.0.5 - (The SVN revision for it is r236)
 
-    -   Fixed a minor bug where an error would be raised when you
+    -  	Fixed a bug in the integration which would cause the
+    	integration to not properly calcluate averages when
+	masking pixels.
+    -   Fixed a bug where an error would be raised when you
         tried to finish drawing adding a polygon before adding any
         nodes to it.
     
