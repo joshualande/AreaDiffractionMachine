@@ -235,11 +235,11 @@ class Display:
         Below the data is an "Update Image" button. Below that are
         displays for the selected value of X, Y, Q, D, chi, and I.
         """
+
     def __init__(self,master,imageWidth,imageHeight,
             axisSize,ufunc,colorMaps,title,invertVar,
-            logScaleVar):
-        """
-            Initializes the Display object.
+            logScaleVar,doScaleFactorVar,setMinMaxVar):
+        """ Initializes the Display object.
 
             Parameters:
                 master - the main Tk object
@@ -291,8 +291,11 @@ class Display:
                 height = axisSize, side = "bottom")
         self.bottomAxis.grid(row=1,column=0,sticky=N+W)
 
-        fr=Frame(nf)
-        fr.grid(row=0,column=1,sticky=N+E)
+        rightFrame = Frame(nf)
+        rightFrame.grid(row=0,column=1,sticky=N+E)
+
+        fr=Frame(rightFrame)
+        fr.grid(row=0,column=0,sticky=N+E)
         lab=Label(fr,text='Low',width=3,anchor=N+E)
         lab.pack(side=TOP,fill='both')
         self.intenvarlo=DoubleVar()
@@ -302,8 +305,8 @@ class Display:
                 resolution=0.001,length=250,command=DISABLED)
         self.intensitylo.pack(side=TOP,fill=Y)
 
-        fr=Frame(nf)
-        fr.grid(row=0,column=2,sticky=N+E)
+        fr=Frame(rightFrame)
+        fr.grid(row=0,column=1,sticky=N+E)
         lab=Label(fr,text='Hi',width=3,anchor=N+E)
         lab.pack(side=TOP,fill='both')
         self.intenvarhi=DoubleVar()
@@ -318,6 +321,41 @@ class Display:
                 func=self.updateimageNoComplain)
         self.intensityhi.bind(sequence="<ButtonRelease>",
                 func=self.updateimageNoComplain)
+
+        fr=Frame(rightFrame)
+        fr.grid(row=1,column=0,columnspan=2,sticky=N+E)
+
+
+        self.doScaleFactor=Checkbutton(fr,text="Do Scale Factor? ", 
+                variable=doScaleFactorVar,
+                command=self.updateimageNoComplain)
+        self.doScaleFactor.pack(side=TOP)
+
+        #load data file and display
+        self.scaleFactor=Pmw.EntryField(fr,validate={'validator':'real','min':0},
+                command=self.updateimageNoComplain) 
+        self.scaleFactor.pack(side=TOP)
+
+        self.setMinMax=Checkbutton(fr,text="Set Min/Max? ", 
+                variable=setMinMaxVar,
+                command=self.updateimageNoComplain)
+        self.setMinMax.pack(side=TOP)
+
+        #load data file and display
+        self.maxIntensity=Pmw.EntryField(fr,validate={'validator':'real'},
+                label_text="Max Intensity",
+                labelpos=N,
+                command=self.updateimageNoComplain) 
+        self.maxIntensity.pack(side=TOP)
+
+        #load data file and display
+        self.minIntensity=Pmw.EntryField(fr,validate={'validator':'real'},
+                label_text="Min Intensity",
+                labelpos=N,
+                command=self.updateimageNoComplain) 
+        self.minIntensity.pack(side=TOP)
+
+
 
         #coordinates
         botfr=Frame(nf)        
@@ -802,6 +840,17 @@ class Main:
     logVarIntegration = IntVar()
     logVarIntegration.set(0)
 
+    doScaleFactorVarDiffraction = IntVar()
+    doScaleFactorVarDiffraction.set(0) 
+
+    setMinMaxVarDiffraction = IntVar()
+    setMinMaxVarDiffraction.set(0)
+
+    doScaleFactorVarCake = IntVar()
+    doScaleFactorVarCake.set(0) 
+
+    setMinMaxVarCake = IntVar()
+    setMinMaxVarCake.set(0)
 
     constrainWithRangeOnRight = IntVar()
     constrainWithRangeOnRight.set(0)
@@ -834,7 +883,9 @@ class Main:
                 ufunc=self.drawDiffractionImage,
                 title="Diffraction Data",
                 invertVar=self.invertVarDiffraction,
-                logScaleVar=self.logVarDiffraction)
+                logScaleVar=self.logVarDiffraction,
+                doScaleFactorVar=self.doScaleFactorVarDiffraction,
+                setMinMaxVar=self.setMinMaxVarDiffraction)
         self.maindisp.main.withdraw()
 
         self.cakedisp=Display(self.xrdwin,colorMaps=self.colorMaps,
@@ -844,7 +895,9 @@ class Main:
                 ufunc=self.doCake,
                 title="Cake Data",
                 invertVar=self.invertVarCake,
-                logScaleVar=self.logVarCake)
+                logScaleVar=self.logVarCake,
+                doScaleFactorVar=self.doScaleFactorVarCake,
+                setMinMaxVar=self.setMinMaxVarCake)
         self.cakedisp.main.withdraw()
 
         self.integratedisp=GraphDisplay(self.xrdwin,
@@ -2851,6 +2904,35 @@ The upper bound must be between 0 and 1.")
         logScale = self.logVarDiffraction.get()
         invert = self.invertVarDiffraction.get()
 
+        doScaleFactor=self.doScaleFactorVarDiffraction.get() 
+        if doScaleFactor:
+            try:
+                scaleFactor=float(self.maindisp.scaleFactor.getvalue())
+            except:
+                raise UserInputException("The scale factor must be a valid number.")
+        else:
+            # won't be used
+            scaleFactor=0
+
+        setMinMax=self.setMinMaxVarDiffraction.get() 
+        if setMinMax:
+            try:
+                minIntensity=float(self.maindisp.minIntensity.getvalue())
+                maxIntensity=float(self.maindisp.maxIntensity.getvalue())
+            except:
+                raise UserInputException("The minimum and maximum intensity must \
+be valid numbers.")
+            if minIntensity >= maxIntensity:
+                raise UserInputException("The maximum intensity must be greater than \
+the minimum intensity.")
+
+        else:
+            # won't be used
+            minIntensity=0
+            maxIntensity=0
+
+
+
         self.addMaskedPixelInfoToObject(
                 operationString="draw the diffraction image")
 
@@ -2858,10 +2940,18 @@ The upper bound must be between 0 and 1.")
             self.maindisp.image = self.diffractionData.getDiffractionImage(
                     height=self.diffractionImageSize, 
                     width=self.diffractionImageSize,
-                    lowerBound=lower,upperBound=upper,
-                    logScale = logScale,invert = invert,
-                    colorMaps=self.colorMaps,colorMapName=colorMapName, 
-                    maskedPixelInfo = self.maskedPixelInfo)
+                    lowerBound=lower,
+                    upperBound=upper,
+                    logScale = logScale,
+                    invert = invert,
+                    colorMaps=self.colorMaps,
+                    colorMapName=colorMapName, 
+                    maskedPixelInfo = self.maskedPixelInfo,
+                    doScaleFactor=doScaleFactor,
+                    scaleFactor=scaleFactor,
+                    setMinMax=setMinMax,
+                    minIntensity=minIntensity,
+                    maxIntensity=maxIntensity)
         else:
             self.maindisp.image = self.diffractionData.getDiffractionImage(
                     height=self.diffractionImageSize, 
@@ -2870,10 +2960,18 @@ The upper bound must be between 0 and 1.")
                     pixel1Y=self.diffractionImageZoomPixels[-1][0]['y'],
                     pixel2X=self.diffractionImageZoomPixels[-1][1]['x'],
                     pixel2Y=self.diffractionImageZoomPixels[-1][1]['y'],
-                    lowerBound=lower,upperBound=upper,
-                    logScale =logScale,invert = invert,
-                    colorMaps=self.colorMaps,colorMapName=colorMapName, 
-                    maskedPixelInfo = self.maskedPixelInfo)
+                    lowerBound=lower,
+                    upperBound=upper,
+                    logScale =logScale,
+                    invert = invert,
+                    colorMaps=self.colorMaps,
+                    colorMapName=colorMapName, 
+                    maskedPixelInfo = self.maskedPixelInfo,
+                    doScaleFactor=doScaleFactor,
+                    scaleFactor=scaleFactor,
+                    setMinMax=setMinMax,
+                    minIntensity=minIntensity,
+                    maxIntensity=maxIntensity)
  
         # keep a copy for reference (weird Tk bug)
         self.maindisp.imageTk = ImageTk.PhotoImage(self.maindisp.image) 

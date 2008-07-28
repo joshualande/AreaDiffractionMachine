@@ -9,7 +9,11 @@ import DrawWrap
 
 
 def getDiffractionImage(data,lowerBound,upperBound,logScale,
-        colorMaps,colorMapName,maskedPixelInfo,invert=None):
+        colorMaps,colorMapName,maskedPixelInfo,
+        doScaleFactor,scaleFactor,
+        setMinMax,minIntensity,
+        maxIntensity,invert=None):
+
     mode = "RGB"
 
     if maskedPixelInfo.doLessThanMask:
@@ -45,7 +49,7 @@ def getDiffractionImage(data,lowerBound,upperBound,logScale,
         polygonNumberOfItems = Numeric.array([])
 
     palette = colorMaps.getPalette(colorMapName,invert=invert)
-    string = DrawWrap.getDiffractionImageString(data, lowerBound,
+    string = DrawWrap.getDiffractionImageString(data,lowerBound,
             upperBound, 
             logScale, 
             palette, 
@@ -66,7 +70,12 @@ def getDiffractionImage(data,lowerBound,upperBound,logScale,
             polygonNumberOfItems,
             polygonMaskColorR,
             polygonMaskColorG,
-            polygonMaskColorB)
+            polygonMaskColorB,
+            doScaleFactor,
+            scaleFactor,
+            setMinMax,
+            minIntensity,
+            maxIntensity)
 
     img = Image.fromstring(mode,(data.shape[0],data.shape[1]),string)
     img = img.rotate(90)

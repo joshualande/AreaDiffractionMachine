@@ -71,7 +71,13 @@ static PyObject * DrawWrap_getDiffractionImageString(PyObject *self, PyObject *a
 
     logUpperPixel = logLowerPixel = scaledVal = 0; // to stop those annoying warnings
 
-    PyArg_ParseTuple(args,"O!ddiO!idiiiidiiiiO!O!O!O!iii",
+    int doScaleFactor = 0;
+    double scaleFactor = 0;
+    int setMinMax = 0;
+    double minIntensity = 0;
+    double maxIntensity = 0;
+
+    PyArg_ParseTuple(args,"O!ddiO!idiiiidiiiiO!O!O!O!iiiididd",
             &PyArray_Type,&diffractionData,
             &lowerBound,&upperBound,&doLogScale,
             &PyArray_Type,&palette,
@@ -88,10 +94,22 @@ static PyObject * DrawWrap_getDiffractionImageString(PyObject *self, PyObject *a
             &PyArray_Type,&polygonNumberOfItems,
             &polygonMaskColorR,
             &polygonMaskColorG,
-            &polygonMaskColorB);
+            &polygonMaskColorB,
+            &doScaleFactor,
+            &scaleFactor,
+            &setMinMax,
+            &minIntensity,
+            &maxIntensity);
 
 
     getAlmostMinMax(diffractionData,&realMin,&realMax);
+
+    if(doScaleFactor) {
+        realMax /= scaleFactor;
+    } else if (setMinMax) {
+        realMin = minIntensity;
+        realMax = maxIntensity;
+    }
 
     lowerPixel = realMin + lowerBound*(realMax-realMin);
     upperPixel = realMin + upperBound*(realMax-realMin);

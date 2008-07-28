@@ -110,6 +110,12 @@ class DiffractionData:
 
     lastFitString = None
 
+    lastDoScaleFactor = None
+    lastScaleFactor = None
+    lastSetMinMax = None
+    lastMinIntensity = None
+    lastMaxIntensity = None
+
     def __init__(self,filenames,extension = None):
         """ Does everything to initialize the object. 
             Either you can pass in the type of file that you are using
@@ -280,7 +286,9 @@ file extension" % filename )
     def getDiffractionImage(self,colorMaps,colorMapName,
             maskedPixelInfo,pixel1X=None,pixel1Y=None,
             pixel2X=None,pixel2Y=None,width=None,height=None,
-            lowerBound=0,upperBound=1,logScale=0,invert=None):
+            lowerBound=0,upperBound=1,logScale=0,invert=None,
+            doScaleFactor=None,scaleFactor=None,setMinMax=None,
+            minIntensity=None,maxIntensity=None):
 
         # only create new image if it hasn't been made yet or if any
         # of the intensity bounds or if the log scale has changed,
@@ -291,7 +299,12 @@ file extension" % filename )
                 self.lastLogScaleDiffractionImage != logScale or \
                 colorMapName != self.lastColorMapNameDiffractionImage or \
                 invert != self.lastInvert or \
-                maskedPixelInfo != self.lastMaskedPixelInfo:
+                maskedPixelInfo != self.lastMaskedPixelInfo or \
+                doScaleFactor != self.lastDoScaleFactor or \
+                scaleFactor != self.lastScaleFactor or \
+                setMinMax != self.lastSetMinMax or \
+                minIntensity != self.lastMinIntensity or \
+                maxIntensity != self.lastMaxIntensity:
 
             self.theImage = MakeDiffractionImage.getDiffractionImage(
                     self.theDiffractionData.data,
@@ -301,7 +314,12 @@ file extension" % filename )
                     colorMaps = colorMaps,
                     colorMapName=colorMapName,
                     invert=invert, 
-                    maskedPixelInfo = maskedPixelInfo)
+                    maskedPixelInfo = maskedPixelInfo,
+                    doScaleFactor=doScaleFactor,
+                    scaleFactor=scaleFactor,
+                    setMinMax=setMinMax,
+                    minIntensity=minIntensity,
+                    maxIntensity=maxIntensity)
 
             self.lastLowerBoundDiffractionImage=lowerBound
             self.lastUpperBoundDiffractionImage=upperBound
@@ -312,6 +330,12 @@ file extension" % filename )
             # only do a shallow copy because the weird widget 
             # in the object can't be copied
             self.lastMaskedPixelInfo = copy.copy(maskedPixelInfo)
+
+            self.lastDoScaleFactor = doScaleFactor 
+            self.lastScaleFactor = scaleFactor 
+            self.lastSetMinMax = setMinMax 
+            self.lastMinIntensity = minIntensity 
+            self.lastMaxIntensity = maxIntensity
 
         # by default, return entire image
         if pixel1X==None or pixel1Y==None or pixel2X==None or pixel2Y==None:
