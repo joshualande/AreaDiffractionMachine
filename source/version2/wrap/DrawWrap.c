@@ -41,7 +41,8 @@ void getAlmostMinMax(PyArrayObject * data,int * almostMin,int * almostMax) {
 
 
 static PyObject * DrawWrap_getDiffractionImageString(PyObject *self, PyObject *args) {
-    int realMin,realMax;
+    int temp1,temp2;
+    double realMin,realMax;
     int x,y;
     double lowerBound,upperBound;
     double lowerPixel,upperPixel,logLowerPixel,logUpperPixel;
@@ -101,8 +102,9 @@ static PyObject * DrawWrap_getDiffractionImageString(PyObject *self, PyObject *a
             &minIntensity,
             &maxIntensity);
 
-
-    getAlmostMinMax(diffractionData,&realMin,&realMax);
+    getAlmostMinMax(diffractionData,&temp1,&temp2);
+    realMin = (double)temp1;
+    realMax = (double)temp2;
 
     if(doScaleFactor) {
         realMax /= scaleFactor;
@@ -203,7 +205,9 @@ static PyObject * DrawWrap_getDiffractionImageString(PyObject *self, PyObject *a
 
 
 static PyObject * DrawWrap_getCakeImageString(PyObject *self, PyObject *args) {
-    int realMin,realMax,i,j;
+    int temp1,temp2;
+    double realMin,realMax;
+    int i,j;
     double lowerBound,upperBound;
     double lowerPixel,upperPixel,logLowerPixel,logUpperPixel;
     double intensity; 
@@ -228,7 +232,14 @@ static PyObject * DrawWrap_getCakeImageString(PyObject *self, PyObject *args) {
 
     logUpperPixel = logLowerPixel = 0; // to stop those annoying warnings
 
-    PyArg_ParseTuple(args,"O!O!ddiO!idiiiidiiiiiii",&PyArray_Type,&cake,
+    int doScaleFactor = 0;
+    double scaleFactor = 0;
+    int setMinMax = 0;
+    double minIntensity = 0;
+    double maxIntensity = 0;
+
+    PyArg_ParseTuple(args,"O!O!ddiO!idiiiidiiiiiiiididd",
+            &PyArray_Type,&cake,
             &PyArray_Type,&diffractionData,&lowerBound,&upperBound,
             &doLogScale,&PyArray_Type,&palette,
             &doLessThanMask,&lessThanMask,&lessThanMaskColorR,
@@ -239,10 +250,24 @@ static PyObject * DrawWrap_getCakeImageString(PyObject *self, PyObject *args) {
             &doPolygonMask,
             &polygonMaskColorR,
             &polygonMaskColorG,
-            &polygonMaskColorB);
+            &polygonMaskColorB,
+            &doScaleFactor,
+            &scaleFactor,
+            &setMinMax,
+            &minIntensity,
+            &maxIntensity);
 
     // get the minimum value from the diffractionData
-    getAlmostMinMax(diffractionData,&realMin,&realMax);
+    getAlmostMinMax(diffractionData,&temp1,&temp2);
+    realMin = (double)temp1;
+    realMax = (double)temp2;
+
+    if(doScaleFactor) {
+        realMax /= scaleFactor;
+    } else if (setMinMax) {
+        realMin = minIntensity;
+        realMax = maxIntensity;
+    }
 
     lowerPixel = realMin + lowerBound*(realMax-realMin);
     upperPixel = realMin + upperBound*(realMax-realMin);

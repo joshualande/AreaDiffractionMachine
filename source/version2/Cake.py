@@ -144,7 +144,8 @@ for the parameter type either 'Q', or '2theta'")
 
 
     def getImage(self,lowerBound,upperBound,logScale,
-            colorMaps,colorMapName,invert):
+            colorMaps,colorMapName,invert,doScaleFactor,
+            scaleFactor,setMinMax,minIntensity,maxIntensity):
         mode = "RGB"
 
         if self.maskedPixelInfo.doLessThanMask:
@@ -196,7 +197,12 @@ for the parameter type either 'Q', or '2theta'")
                 self.maskedPixelInfo.doPolygonMask,
                 polygonMaskColorR,
                 polygonMaskColorG,
-                polygonMaskColorB)
+                polygonMaskColorB,
+                doScaleFactor,
+                scaleFactor,
+                setMinMax,
+                minIntensity,
+                maxIntensity)
 
         img = Image.fromstring(mode,(self.cakeData.shape[1],
                 self.cakeData.shape[0]),string)

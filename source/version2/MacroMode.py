@@ -159,7 +159,15 @@ class MacroMode:
             {'name':'Integration Data Log Scale?',
                     'widget':self.GUI.integratedisp.collog,
                     'move to page':moveToIntegratedisp,
-                    'var':self.GUI.logVarIntegration}
+                    'var':self.GUI.logVarIntegration},
+            {'name':'Cake Data Do Scale Factor?',
+                    'widget':self.GUI.cakedisp.doScaleFactor,
+                    'move to page':moveToCakedisp,
+                    'var':self.GUI.doScaleFactorVarCake},
+            {'name':'Cake Data Set Min/Max?',
+                    'widget':self.GUI.cakedisp.setMinMax,
+                    'move to page':moveToMaindisp,
+                    'var':self.GUI.setMinMaxVarCake},
         ]
         for widget in self.allCheckBoxes:
             widget['clean name'] = cleanstring(widget['name'])
@@ -264,13 +272,22 @@ class MacroMode:
                     'move to page':moveToIntegrate},
             {'name':'Diffraction Data Scale Factor',
                     'widget':self.GUI.maindisp.scaleFactor,
-                    'move to page':moveToCalibration},
+                    'move to page':moveToMaindisp},
             {'name':'Diffraction Data Min Intensity',
                     'widget':self.GUI.maindisp.minIntensity,
-                    'move to page':moveToCalibration},
+                    'move to page':moveToMaindisp},
             {'name':'Diffraction Data Max Intensity',
                     'widget':self.GUI.maindisp.maxIntensity,
-                    'move to page':moveToCalibration},
+                    'move to page':moveToMaindisp},
+            {'name':'Cake Data Scale Factor',
+                    'widget':self.GUI.cakedisp.scaleFactor,
+                    'move to page':moveToCakedisp},
+            {'name':'Cake Data Min Intensity',
+                    'widget':self.GUI.cakedisp.minIntensity,
+                    'move to page':moveToCakedisp},
+            {'name':'Cake Data Max Intensity',
+                    'widget':self.GUI.cakedisp.maxIntensity,
+                    'move to page':moveToCakedisp},
         ]
         for widget in self.allEntryFieldsRequiringFloat:
             widget['clean name'] = cleanstring(widget['name'])

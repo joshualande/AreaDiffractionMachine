@@ -210,12 +210,13 @@ type" % filename)
 
 
     def saveDiffractionImage(self,filename,colorMaps,colorMapName,
-            maskedPixelInfo,
+            maskedPixelInfo,doScaleFactor,scaleFactor,setMinMax,
+            minIntensity,maxIntensity,
             pixel1X=None,pixel1Y=None, pixel2X=None, pixel2Y=None, 
-            lowerBound=0, upperBound=1, logScale = None, invert = None, 
+            lowerBound=0, upperBound=1, logScale=None, invert=None, 
             drawQLines=None,drawdQLines=None,QData=None,calibrationData=None,
-            drawPeaks=None,peakList=None, qLinesColor = None, dQLinesColor = None,
-            peakLinesColor = None):
+            drawPeaks=None,peakList=None, qLinesColor=None, dQLinesColor=None,
+            peakLinesColor=None):
 
         # save EDF data specially
         if getextension(filename) == ".edf":
@@ -230,11 +231,25 @@ type" % filename)
 
         # otherwise, try to save it using the PIL
 
-        image = self.getDiffractionImage(colorMaps,colorMapName,
-                maskedPixelInfo,
-                None,None,None,None,None,None,
-                lowerBound,upperBound,logScale,invert)
- 
+        image = self.getDiffractionImage(
+                colorMaps=colorMaps,
+                colorMapName=colorMapName,
+                maskedPixelInfo=maskedPixelInfo,
+                pixel1X=None,
+                pixel1Y=None,
+                pixel2X=None,
+                pixel2Y=None,
+                width=None,
+                height=None,
+                lowerBound=lowerBound,
+                upperBound=upperBound,
+                logScale=logScale,
+                invert=invert,
+                doScaleFactor=doScaleFactor,
+                scaleFactor=scaleFactor,
+                setMinMax=setMinMax,
+                minIntensity=minIntensity,
+                maxIntensity=maxIntensity)
 
         if drawQLines or drawdQLines:
             if QData == None:
@@ -574,32 +589,43 @@ covariance matrix (I think these are uncertainties)\n"
             qOrTwoThetaLower, qOrTwoThetaUpper, numQOrTwoTheta, 
             chiLower, chiUpper,numChi,
             doPolarizationCorrection,P,maskedPixelInfo,
-            colorMaps, colorMapName, lowerBound, upperBound,type,logScale = None,
-            invert = None, drawQOrTwoThetaLines = None, drawdQOrTwoThetaLines = None, 
-            QData = None, drawPeaks = None, peakList = None,
-            qOrTwoThetaLinesColor = None, dQOrTwoThetaLinesColor = None, 
-            peakLinesColor = None):
+            colorMaps, colorMapName, lowerBound, upperBound,type,
+            doScaleFactor,
+            scaleFactor,
+            setMinMax,
+            minIntensity,
+            maxIntensity,
+            logScale=None,
+            invert=None, drawQOrTwoThetaLines=None, drawdQOrTwoThetaLines=None, 
+            QData=None, drawPeaks=None, peakList=None,
+            qOrTwoThetaLinesColor=None, dQOrTwoThetaLinesColor=None, 
+            peakLinesColor=None):
 
         image = self.getCakeImage(
-                calibrationData = calibrationData,
-                qOrTwoThetaLower = qOrTwoThetaLower,
-                qOrTwoThetaUpper = qOrTwoThetaUpper,
-                numQOrTwoTheta = numQOrTwoTheta,
-                chiLower = chiLower,
-                chiUpper = chiUpper,
-                numChi = numChi,
-                doPolarizationCorrection = doPolarizationCorrection,
-                P = P,
-                maskedPixelInfo = maskedPixelInfo,
-                width = None,
-                height = None,
-                colorMaps = colorMaps,
-                colorMapName = colorMapName,
-                lowerBound = lowerBound,
-                upperBound = upperBound,
-                logScale = logScale,
-                invert = invert,
-                type = type)
+                calibrationData=calibrationData,
+                qOrTwoThetaLower=qOrTwoThetaLower,
+                qOrTwoThetaUpper=qOrTwoThetaUpper,
+                numQOrTwoTheta=numQOrTwoTheta,
+                chiLower=chiLower,
+                chiUpper=chiUpper,
+                numChi=numChi,
+                doPolarizationCorrection=doPolarizationCorrection,
+                P=P,
+                maskedPixelInfo=maskedPixelInfo,
+                width=None,
+                height=None,
+                colorMaps=colorMaps,
+                colorMapName=colorMapName,
+                lowerBound=lowerBound,
+                upperBound=upperBound,
+                logScale=logScale,
+                invert=invert,
+                type=type,
+                doScaleFactor=doScaleFactor,
+                scaleFactor=scaleFactor,
+                setMinMax=setMinMax,
+                minIntensity=minIntensity,
+                maxIntensity=maxIntensity)
 
         if drawQOrTwoThetaLines or drawdQOrTwoThetaLines:
             if QData == None:
@@ -675,7 +701,11 @@ unknown file extension" % filename )
             qOrTwoThetaUpper,numQOrTwoTheta,chiLower,
             chiUpper,numChi,doPolarizationCorrection,P,maskedPixelInfo,
             width,height,colorMaps,colorMapName,
-            lowerBound,upperBound,type,logScale=None,invert=None):
+            lowerBound,upperBound,type,
+            doScaleFactor,
+            scaleFactor,
+            setMinMax,minIntensity,maxIntensity,
+            logScale=None,invert=None):
 
         data = Cake.Cake(
             diffractionData = self.theDiffractionData.data,
@@ -692,7 +722,12 @@ unknown file extension" % filename )
             type = type)
 
         image = data.getImage(lowerBound,upperBound,logScale,
-                colorMaps,colorMapName,invert)
+                colorMaps,colorMapName,invert,
+                doScaleFactor,
+                scaleFactor,
+                setMinMax,
+                minIntensity,
+                maxIntensity)
 
         # change width and height of image
         if width==None or height==None:

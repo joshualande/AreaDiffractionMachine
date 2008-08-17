@@ -4,9 +4,10 @@ Change Log for the Area Diffraction Machine
 
 Change log for Version 2 (version 2 has all the version 1 changes in it):
 
-Changes in the Betas
-
     Major
+	-	Adding the options "Do Scale Factor?" and "Set Min/Max?" to the 
+		Diffraction display and Cake display for fine tuning of the
+		intensity scale.
     -   Adding support for Bruker data files.
     -   The program now uses Josh's formuals for the geometric
     	transform derived in the software manual instead of

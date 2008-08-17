@@ -323,37 +323,40 @@ class Display:
                 func=self.updateimageNoComplain)
 
         fr=Frame(rightFrame)
-        fr.grid(row=1,column=0,columnspan=2,sticky=N+E)
+        fr.grid(row=1,column=0,columnspan=2,sticky=N+E,pady=10)
 
 
-        self.doScaleFactor=Checkbutton(fr,text="Do Scale Factor? ", 
+        self.doScaleFactor=Checkbutton(fr,text="Do Scale Factor?", 
                 variable=doScaleFactorVar,
                 command=self.updateimageNoComplain)
-        self.doScaleFactor.pack(side=TOP)
+        self.doScaleFactor.pack(side=TOP,anchor=E)
 
         #load data file and display
         self.scaleFactor=Pmw.EntryField(fr,validate={'validator':'real','min':0},
+                entry_width=15,
                 command=self.updateimageNoComplain) 
-        self.scaleFactor.pack(side=TOP)
+        self.scaleFactor.pack(side=TOP,anchor=E)
 
-        self.setMinMax=Checkbutton(fr,text="Set Min/Max? ", 
+        self.setMinMax=Checkbutton(fr,text="Set Min/Max?", 
                 variable=setMinMaxVar,
                 command=self.updateimageNoComplain)
-        self.setMinMax.pack(side=TOP)
+        self.setMinMax.pack(side=TOP,anchor=E)
 
         #load data file and display
         self.maxIntensity=Pmw.EntryField(fr,validate={'validator':'real'},
-                label_text="Max Intensity",
+                entry_width=15,
+                label_text="Max Intensity:",
                 labelpos=N,
                 command=self.updateimageNoComplain) 
-        self.maxIntensity.pack(side=TOP)
+        self.maxIntensity.pack(side=TOP,anchor=E)
 
         #load data file and display
         self.minIntensity=Pmw.EntryField(fr,validate={'validator':'real'},
-                label_text="Min Intensity",
+                entry_width=15,
+                label_text="Min Intensity:",
                 labelpos=N,
                 command=self.updateimageNoComplain) 
-        self.minIntensity.pack(side=TOP)
+        self.minIntensity.pack(side=TOP,anchor=E)
 
 
 
@@ -2931,8 +2934,6 @@ the minimum intensity.")
             minIntensity=0
             maxIntensity=0
 
-
-
         self.addMaskedPixelInfoToObject(
                 operationString="draw the diffraction image")
 
@@ -3094,6 +3095,33 @@ to the image until the calibration parameters are set.")
         logScale = self.logVarDiffraction.get()
         invert = self.invertVarDiffraction.get()
 
+        doScaleFactor=self.doScaleFactorVarDiffraction.get() 
+        if doScaleFactor:
+            try:
+                scaleFactor=float(self.maindisp.scaleFactor.getvalue())
+            except:
+                raise UserInputException("The scale factor must be a valid number.")
+        else:
+            # won't be used
+            scaleFactor=0
+
+        setMinMax=self.setMinMaxVarDiffraction.get() 
+        if setMinMax:
+            try:
+                minIntensity=float(self.maindisp.minIntensity.getvalue())
+                maxIntensity=float(self.maindisp.maxIntensity.getvalue())
+            except:
+                raise UserInputException("The minimum and maximum intensity must \
+be valid numbers.")
+            if minIntensity >= maxIntensity:
+                raise UserInputException("The maximum intensity must be greater than \
+the minimum intensity.")
+
+        else:
+            # won't be used
+            minIntensity=0
+            maxIntensity=0
+
         self.addMaskedPixelInfoToObject(
                 operationString="save the diffraction image")
 
@@ -3116,7 +3144,12 @@ to the image until the calibration parameters are set.")
                 qLinesColor = self.qLinesColor.get(),
                 dQLinesColor = self.dQLinesColor.get(),
                 peakLinesColor = self.peakLinesColor.get(),
-                maskedPixelInfo = self.maskedPixelInfo)
+                maskedPixelInfo = self.maskedPixelInfo,
+                doScaleFactor=doScaleFactor,
+                scaleFactor=scaleFactor,
+                setMinMax=setMinMax,
+                minIntensity=minIntensity,
+                maxIntensity=maxIntensity)
 
         setstatus(self.status,'Done') 
 
@@ -3518,6 +3551,34 @@ must be less then the largest possible 2theta value.")
         logScale = self.logVarCake.get()
         invert = self.invertVarCake.get()
 
+        doScaleFactor=self.doScaleFactorVarCake.get() 
+        if doScaleFactor:
+            try:
+                scaleFactor=float(self.cakedisp.scaleFactor.getvalue())
+            except:
+                raise UserInputException("The scale factor must be a valid number.")
+        else:
+            # won't be used
+            scaleFactor=0
+
+        setMinMax=self.setMinMaxVarCake.get() 
+        if setMinMax:
+            try:
+                minIntensity=float(self.cakedisp.minIntensity.getvalue())
+                maxIntensity=float(self.cakedisp.maxIntensity.getvalue())
+            except:
+                raise UserInputException("The minimum and maximum intensity must \
+be valid numbers.")
+            if minIntensity >= maxIntensity:
+                raise UserInputException("The maximum intensity must be greater than \
+the minimum intensity.")
+
+        else:
+            # won't be used
+            minIntensity=0
+            maxIntensity=0
+
+
         self.imageCake = self.diffractionData.getCakeImage(
                 self.calibrationData[-1],
                 qOrTwoThetaLower = self.cakeRange[-1]['qOrTwoThetaLower'],
@@ -3532,7 +3593,12 @@ must be less then the largest possible 2theta value.")
                 colorMaps=self.colorMaps,colorMapName=colorMapName,
                 lowerBound = lower, upperBound = upper,
                 logScale = logScale, invert = invert,
-                type = type)
+                type = type,
+                doScaleFactor=doScaleFactor,
+                scaleFactor=scaleFactor,
+                setMinMax=setMinMax,
+                minIntensity=minIntensity,
+                maxIntensity=maxIntensity)
    
         # keep a copy for reference (weird Tk bug)
         self.imageCakeTk = ImageTk.PhotoImage(self.imageCake)
@@ -3704,6 +3770,33 @@ either Q or 2theta mode.")
         logScale = self.logVarCake.get()
         invert = self.invertVarCake.get()
 
+        doScaleFactor=self.doScaleFactorVarCake.get() 
+        if doScaleFactor:
+            try:
+                scaleFactor=float(self.cakedisp.scaleFactor.getvalue())
+            except:
+                raise UserInputException("The scale factor must be a valid number.")
+        else:
+            # won't be used
+            scaleFactor=0
+
+        setMinMax=self.setMinMaxVarCake.get() 
+        if setMinMax:
+            try:
+                minIntensity=float(self.cakedisp.minIntensity.getvalue())
+                maxIntensity=float(self.cakedisp.maxIntensity.getvalue())
+            except:
+                raise UserInputException("The minimum and maximum intensity must \
+be valid numbers.")
+            if minIntensity >= maxIntensity:
+                raise UserInputException("The maximum intensity must be greater than \
+the minimum intensity.")
+
+        else:
+            # won't be used
+            minIntensity=0
+            maxIntensity=0
+
         self.diffractionData.saveCakeImage(
                 filename = filename,
                 calibrationData = self.calibrationData[-1],
@@ -3730,7 +3823,12 @@ either Q or 2theta mode.")
                 qOrTwoThetaLinesColor = self.qLinesColor.get(),
                 dQOrTwoThetaLinesColor = self.dQLinesColor.get(),
                 peakLinesColor = self.peakLinesColor.get(),
-                type=type)
+                type=type,
+                doScaleFactor=doScaleFactor,
+                scaleFactor=scaleFactor,
+                setMinMax=setMinMax,
+                minIntensity=minIntensity,
+                maxIntensity=maxIntensity)
 
         setstatus(self.status,'Ready')
 
