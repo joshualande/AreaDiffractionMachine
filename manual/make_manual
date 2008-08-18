@@ -44,3 +44,4 @@ rm AreaDiffractionMachineManual.idx
 rm AreaDiffractionMachineManual.blg
 rm AreaDiffractionMachineManual.ind
 rm AreaDiffractionMachineManual.bbl
+rm title_page.aux
