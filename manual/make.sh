@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # This is to fix a bug in LatexDraw
 # where the code improperly ouputs numbers
 # close to 0 in scientific notation and
