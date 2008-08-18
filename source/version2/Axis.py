@@ -162,7 +162,7 @@ class Axis:
                 self.getNiceRange(self.lowestValue,self.highestValue)
 
         if self.side == "bottom":
-            self.allIDs.append(self.axis.create_line(0,1,self.width,1) )
+            self.allIDs.append(self.axis.create_line(0,0,self.width,0) )
         else:
             self.allIDs.append(self.axis.create_line(
                     0,self.height,self.width,self.height) )
