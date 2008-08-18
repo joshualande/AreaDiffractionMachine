@@ -67,16 +67,21 @@ diffraction data. The window can be used to:
     the most intense pixel value that is mapped to the highest 
     part of the color map.  This feature is can make more
     visible certain intensity ranges in the image.
-    \item {\em \gui{Do Scale Factor} and \gui{Set Min/Max?}} -- Version 2 of
-    the program introduced the feature \gui{Do Scale Factor?} and
-    \gui{Set Min/Max?}. These can be used to override the minimum
-    and maximum pixel value used by the Low and Hi sliders. The
-    scale factor will simply divide the maximum intensity by this value.
+    \item {\em ``Do Scale Factor'' and ``Set Min/Max?''} -- Version
+    2 of the program introduced the feature \gui{Do Scale Factor?}
+    and \gui{Set Min/Max?}. These can be used to override the minimum
+    and maximum pixel value used by the Low and Hi sliders. The scale
+    factor will simply divide the maximum intensity by this value.
     So if the intensity scale by default goes from 0 to 10000, a
-    scale factor of 10 will make the scale instead go from 0 to 
-    1000. The \gui{Set Min/Max?} option can instead be used to set
-    directly the minimum and maximum intensity. This is a little confusing,
-    but note that all this sets is the 
+    scale factor of 10 will make the scale instead go from 0 to 1000.
+    This feature is especially useful when just a few pixels have
+    incredibly large values but the rest have very small values.
+    The slides still let you pick a range between 0 and 1000, the
+    scale factor simply change what maximum value the slider will
+    correspond to. The \gui{Set Min/Max?} option can be used instead
+    to set directly the minimum and maximum intensity. To set these
+    persistently, use the \gui{Set As Initialization} option described
+    in section~\ref{setAsInitializationSection}.
 \end{itemize}
 
 \section{File Formats}
