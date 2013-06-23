@@ -64,6 +64,6 @@ Fully automate the program using a rich macro language.
 
 # Questions?
 
-There is a Discussion Group for the program at [http://groups.google.com/group/area-diffraction-machine here]. If you have any comments, questions, or suggestions, feel free to post them to the group by emailing [mailto:area-diffraction-machine@googlegroups.com area-diffraction-machine@googlegroups.com]. If you have any issues with the program, please submit them to the issue tracker.
+There is a Discussion Group for the program at [http://groups.google.com/group/area-diffraction-machine here]. If you have any comments, questions, or suggestions, feel free to post them to the group by emailing [area-diffraction-machine@googlegroups.com](mailto:area-diffraction-machine@googlegroups.com). If you have any issues with the program, please submit them to the issue tracker.
 
 ![icon](https://raw.github.com/joshualande/AreaDiffractionMachine/master/media_files/icon.jpg)
