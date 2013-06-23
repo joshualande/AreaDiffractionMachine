@@ -1,3 +1,5 @@
+# NOTE, this project is also hosten on Google Code at areadiffractionmachine.googlecode.com. The source code is hosted here. The executables, documentation, wiki, and issue tracker are hosted there.
+
 # The Area Diffraction Machine
 
 The Area Diffraction Machine analyzes two dimensional powder diffraction data. It is free open source software. It is still in development so check back frequently for updates.
