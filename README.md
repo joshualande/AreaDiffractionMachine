@@ -1,4 +1,4 @@
-Note: The Area Diffraction Machine was previously hosted on Google Code at areadiffractionmachine.googlecode.com.
+Note: The Area Diffraction Machine was previously hosted on Google Code at http://areadiffractionmachine.googlecode.com.
 
 # The Area Diffraction Machine
 
