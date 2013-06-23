@@ -8,7 +8,7 @@ The Area Diffraction Machine analyzes two dimensional powder diffraction data. I
 
 Load in mar2300, mar3450, marCCD, tiff, and now edf diffraction data.
 
-http://areadiffractionmachine.googlecode.com/files/file-formats-with-edf.jpg
+![file-formats-with-edf](http://areadiffractionmachine.googlecode.com/files/file-formats-with-edf.jpg)
 
 Change the intensity scale or color map.
 
