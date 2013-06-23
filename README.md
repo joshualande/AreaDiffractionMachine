@@ -1,4 +1,6 @@
-# NOTE, this project is also hosten on Google Code at areadiffractionmachine.googlecode.com. The source code is hosted here. The executables, documentation, wiki, and issue tracker are hosted there.
+# NOTE about Google Code
+
+The Area Diffraction Machine is also hosten on Google Code at areadiffractionmachine.googlecode.com. The source code is hosted here. The executables, documentation, wiki, and issue tracker are hosted there.
 
 # The Area Diffraction Machine
 
