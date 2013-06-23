@@ -7,7 +7,7 @@ The Area Diffraction Machine analyzes two dimensional powder diffraction data. I
 # Get It 
 
 Download Mac and Windows executables and documentation [here](https://github.com/joshualande/AreaDiffractionMachine/tree/master/Downloads).
-You can also run the program [from source on Linux](https://github.com/joshualande/AreaDiffractionMachine/wiki/BuildOnLinux:-How-to-get-the-program-running-on-Debian-Ubuntu).
+You can also run the program [from source on Linux](https://github.com/joshualande/AreaDiffractionMachine/wiki/Build-On-Linux).
 
 # What Does it Do?
 
