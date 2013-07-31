@@ -4,7 +4,7 @@ Note: The Area Diffraction Machine was previously hosted on Google Code at http:
 
 The Area Diffraction Machine analyzes two dimensional powder diffraction data. It is free open source software.
 
-# Get It 
+# Get It!
 
 Download Mac and Windows executables and documentation [here](https://github.com/joshualande/AreaDiffractionMachine/tree/master/Downloads).
 You can also run the program [from source on Linux](https://github.com/joshualande/AreaDiffractionMachine/wiki/Build-On-Linux).
